@@ -1,0 +1,451 @@
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+      width:700px; /* New width for default modal */
+    }
+
+    .modal-md {
+      width:600px; /* New width for small modal */
+    }
+
+    .modal-sm {
+      width:400px; /* New width for small modal */
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .modal-lg {
+      width:950px; /* New width for large modal */
+    }
+}
+
+.modal {
+  /* background-color: #3b0210 !important; */
+  background: url(../images/home/tmi_building.png) no-repeat center center fixed;
+  -webkit-background-size: 100% 100%;
+  -moz-background-size: 100% 100%;
+  -o-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+
+.modal .modal-dialog .modal-content{  background-color: #2b2d34; }
+
+[class*="fontawesome-"]:before {
+  font-family: 'FontAwesome', sans-serif;
+}
+
+/* ---------- GENERAL ---------- */
+/* body {
+  color: #606468;
+  font: 87.5%/1.5em 'Open Sans', sans-serif;
+  font-size: 12px;
+  margin: 0;
+
+  /* Background Color */
+  /* background: #dddddd; /* Old browsers */
+  /* background: -moz-radial-gradient(center, ellipse cover,  #dddddd 1%, #808080 100%); /* FF3.6+ */
+  /* background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#dddddd), color-stop(100%,#808080)); Chrome,Safari4+
+  background: -webkit-radial-gradient(center, ellipse cover,  #dddddd 1%, #808080 100%); /* Chrome10+,Safari5.1+ */
+  /* background: -o-radial-gradient(center, ellipse cover,  #dddddd 1%, #808080 100%); /* Opera 12+ */
+  /* background: -ms-radial-gradient(center, ellipse cover,  #dddddd 1%, #808080 100%); /* IE10+ */
+  /* background: radial-gradient(ellipse at center,  #dddddd 1%, #808080 100%); /* W3C */
+  /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#808080',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+/* } */ 
+
+/* Make the main container full-screen and center its content */
+.main {
+    height: 100vh; /* full viewport height */
+    display: flex;
+    justify-content: center; /* horizontal centering */
+    align-items: center;     /* vertical centering */
+    background: url(../images/background.webp) no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* Transparent white centered box */
+.center-box {
+    background-color: rgba(255, 255, 255, 0.5); /* semi-transparent white */
+    padding: 30px 25px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column; /* stack header, profile, row */
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2); /* softer shadow for white */
+    max-width: 560px;
+
+    position: relative; /* allows absolute positioning of child elements */
+    height: auto;       /* keep as needed */
+}
+
+/* Inner row (form + logo) stays side by side */
+.cellcenter {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #940700;
+  font-weight: bold;
+}
+
+input {
+  border: none;
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  padding: 0;
+}
+
+/* ---------- LOGIN ---------- */
+
+.login-form form {
+    width: 100%;
+    padding: 0 25px 0;
+}
+
+form span.fa {
+  background-color: #fff;
+  border-radius: 3px 0px 0px 3px;
+  color: #000;
+  display: block;
+  float: left;
+  height: 50px;
+  font-size:24px;
+  line-height: 50px;
+  text-align: center;
+  width: 50px;
+}
+
+form input {
+  height: 50px;
+}
+
+form input[type="text"], input[type="password"] {
+  background-color: #fff;
+  border-radius: 0px 3px 3px 0px;
+  color: #000;
+  margin-bottom: 1em;
+  padding: 0 5px;
+  width: 250px;
+}
+
+form input[type="submit"] {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #000000;
+  color: #eee;
+  font-weight: bold;
+  /* margin-bottom: 2em; 
+  text-transform: uppercase; */
+  padding: 5px 10px;
+  height: 40px;
+  width: 160px;
+}
+
+form input[type="submit"]:hover {
+  border: 1px solid #000;
+  background-color: #bbb;
+  color: #000;
+}
+
+/* Wrap each icon + input pair in a flex container */
+form p {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 1em 0; /* keep spacing between fields */
+
+  /* Add shadow */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+form p:focus {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  outline: none;
+}
+
+/* Adjust the icon */
+form span.fa {
+  background-color: #fff;
+  border-radius: 3px 0 0 3px;
+  color: #000;
+  height: 40px;
+  width: 40px;
+  font-size: 20px;
+  line-height: 40px;
+  text-align: center;
+  flex-shrink: 0; /* prevent icon from shrinking */
+}
+
+/* Adjust the textboxes */
+form input[type="text"],
+form input[type="password"] {
+  background-color: #fff;
+  border-radius: 0 3px 3px 0;
+  color: #000;
+  height: 40px;
+  padding: 0 10px;
+  margin: 0;
+  box-sizing: border-box; /* keep consistent width */
+  width: 100%;
+}
+
+.login-form form {
+  width: 100%;
+  max-width: 350px;
+}
+
+.middle {
+  /* Center slide text vertically */
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.cellcenter {
+  /* Center slide text vertically */
+	display: inline-flex;
+	-webkit-box-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	align-items: center;
+  text-align: left;
+}
+
+.login-form {
+  padding: 0px 0px;
+   /* Center slide text vertically */
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.login-logo {
+  padding: 0px 0px;
+   /* Center slide text vertically */
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+  margin: 0 0 40px;
+}
+
+.login-img {
+  width: 100%;
+  height: auto;
+}
+
+.profile-img {
+  width: 100x;
+  height: 100px;
+  margin: 0 auto 30px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: 3px solid red;
+}
+
+.btn-eye {
+  width:30px;
+  height:30px;
+  padding:1px;
+  font-size:20px;
+  text-align:center;
+  vertical-align:middle;
+  display:inline-block;
+}
+
+/*========================
+  Custom Fonts
+========================*/
+@font-face {
+  font-family: ToyotaType-Black;
+  src: url(../fonts/ToyotaType-Black.ttf);
+}
+
+@font-face {
+  font-family: Instink;
+  src: url(../fonts/Instink.ttf);
+}
+
+@font-face {
+  font-family: Stretch-Pro;
+  src: url(../fonts/Stretch-Pro.ttf);
+}
+
+/*========================
+  TMIA Gradient Animation
+========================*/
+.animate-charcter {
+  text-transform: uppercase;
+  background-image: linear-gradient(-225deg, #231557 0%, #44107a 29%, #ff1361 67%, #fff800 100%);
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 2s linear infinite;
+  display: inline-block;
+  font-family: ToyotaType-Black;
+  font-size: clamp(4rem, 10vw, 8rem);
+  margin: 0;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/*========================
+  Wave Text “System”
+========================*/
+.wave-text {
+  margin: 0;
+}
+
+.wave-text span {
+  font-family: Instink;
+  display: inline-block;
+  font-size: clamp(4rem, 10vw, 9rem);
+  animation: wave 2s ease-in-out infinite;
+  color: #333;
+}
+
+.wave-text span:nth-child(1) { animation-delay: 0.1s; }
+.wave-text span:nth-child(2) { animation-delay: 0.2s; }
+.wave-text span:nth-child(3) { animation-delay: 0.3s; }
+.wave-text span:nth-child(4) { animation-delay: 0.4s; }
+.wave-text span:nth-child(5) { animation-delay: 0.5s; }
+.wave-text span:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/*========================
+  Flip Animation Container
+========================*/
+#flip {
+  height: 2rem; /* match font size of flip-inner div */
+  overflow: hidden;
+  width: 100%;
+  margin: 0.3rem 0;
+}
+
+.flip-inner {
+  display: flex;
+  flex-direction: column;
+  animation: flip 12s linear infinite;
+}
+
+.flip-inner div {
+  height: 2rem; /* same as container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: Stretch-Pro;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Assign different background colors for each line */
+.flip-inner div:nth-child(1) { background: #DC143C; }   /* TOYOTA - Crimson */
+.flip-inner div:nth-child(2) { background: #0353ff; }   /* MAKATI - Blue */
+.flip-inner div:nth-child(3) { background: #42c58a; }   /* AND - Green */
+.flip-inner div:nth-child(4) { background: #ff4901; }   /* BICUTAN - Orange */
+.flip-inner div:nth-child(5) { background: #EFBF04; }   /* INSURANCE - Gold */
+.flip-inner div:nth-child(6) { background: #8A2BE2; }   /* AGENCY - Purple */
+
+/* Flip keyframes for 6 lines */
+@keyframes flip {
+  0%, 15%   { transform: translateY(0); }       /* TOYOTA */
+  16%, 30%  { transform: translateY(-2rem); }   /* MAKATI */
+  31%, 45%  { transform: translateY(-4rem); }   /* AND */
+  46%, 60%  { transform: translateY(-6rem); }   /* BICUTAN */
+  61%, 75%  { transform: translateY(-8rem); }   /* INSURANCE */
+  76%, 90%  { transform: translateY(-10rem); }  /* AGENCY */
+  91%, 100% { transform: translateY(0); }       /* loop back */
+}
+
+/*========================
+  Wave Container Styling
+========================*/
+.wave-container {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+/* Optional: Make the header fully responsive */
+.row.text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  gap: 0.5rem;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* When screen width is 800px or smaller: stack vertically */
+@media screen and (max-width: 991px) {
+    .cellcenter {
+        flex-direction: column; /* stack form & logo */
+    }
+
+    .login-form {
+        margin-right: 0;
+        margin-bottom: 20px; /* spacing between form and logo */
+    }
+
+    .login-logo {
+        margin-left: 0;
+    }
+
+    .login-img {
+        max-width: 300px; /* optional: smaller logo on mobile */
+        width: 100%;
+        height: auto;
+    }
+}

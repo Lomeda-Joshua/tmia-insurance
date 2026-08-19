@@ -1,0 +1,1818 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1; /* fill remaining height below content-header */
+  display: flex; 
+  flex-direction: column;
+}
+
+.main-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #d2d6de;
+}
+
+.skin-black .main-header .navbar{background-color:#222222; color: #fff;}
+.skin-black .main-header .navbar .sidebar-toggle:hover{background-color:#dddddd;border-color:#222222;color:#fff}
+@media (max-width:767px){.skin-black .main-header .navbar .dropdown-menu li a:hover{background:#fff}}
+.skin-black .main-header .logo{background-color:#fff;color:#fff;border-bottom:0 solid transparent}
+.skin-black .main-header .logo:hover{background-color:#dddddd}
+.skin-black .main-header .navbar .nav>li>a {color: #fff}
+.skin-black .main-header .navbar .nav>li>a:hover {color: #000;}
+.skin-black .main-header .navbar .nav>li>a>img {border: 1px solid #ccc;}
+.skin-black .main-header .navbar .nav>li>a>img:hover {border: 1px solid #222;}
+.skin-black .main-header li.user-header>p{background:#222222;color:#fff !important}
+.skin-black .main-header .navbar>.sidebar-toggle {color: #fff;}
+.skin-black .main-header .navbar>.sidebar-toggle:hover {color: #000;};
+.navbar-custom-menu>.navbar-nav>li>.dropdown-menu{border: 3px solid #ddd; color: #fff;}
+.navbar-nav>.user-menu>.dropdown-menu>.user-footer .btn-default .btn-flat {
+  color: #ffff;
+  background-color: #dddddd;
+}
+.navbar-nav>.user-menu>.dropdown-menu>.user-footer .btn-default .btn-flat:hover {
+  background-color: #222222;
+}
+.skin-black .wrapper, .skin-black .main-sidebar, .skin-black .left-side {background-color: #222;}
+.skin-black .sidebar-menu>li.header {
+  color: #ccc;
+  background: #000;
+}
+.sidebar-mini.sidebar-collapse .sidebar-menu>li>a>span,
+.sidebar-mini.sidebar-collapse .sidebar-menu>li>.treeview-menu {
+  width: 225px !important;
+}
+.sidebar-mini.sidebar-collapse .sidebar-menu li>a>.fa-angle-left, 
+.sidebar-mini.sidebar-collapse .sidebar-menu li>a>.pull-right-container>.fa-angle-left {
+  margin-right: -30px !important;
+}
+.skin-black .sidebar-menu>li>a {color: #fff;}
+.skin-black .sidebar-menu>li:hover>a,
+.skin-black .sidebar-menu>li.active>a{color:#fff;background:#505050;border-left-color:#fff;font-weight:bold;}
+.skin-black .treeview-menu>li>a{
+  border-left: 3px solid transparent;
+  padding-left: 25px;
+  color: #fff;
+  width: auto !important;
+} 
+.skin-black .treeview-menu>li.active>a, 
+.skin-black .treeview-menu>li>a:hover {
+  color: #000;
+  background: #dddddd;
+  font-weight: bold;
+  border-left: 3px solid #fff;
+  width: auto !important;
+}
+.skin-black .treeview-menu {
+  padding: 0;
+  margin: 0 !important;
+  background: #222 !important;
+  width: auto !important;
+}
+.skin-black .main-header .logo-mini img {
+  width: 50px !important;
+  height: auto !important;
+}
+.skin-black .main-header .logo-lg img {
+  width: 200px !important;
+  height: auto !important;
+}
+.skin-black .content-header {
+  background: #fff;
+  color: #000;
+}
+
+body {
+  color: #000 !important;
+}
+
+input, select, textarea{
+    color: #000 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #000 !important;
+}
+
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.content {
+  margin: 0;
+  padding: 0;
+}
+.box.box-warning {
+  border-top-color: #505050 !important;
+}
+
+.btnactionud {
+  margin-bottom: 5px;
+}
+
+section.home {
+  flex: 1;                          /* occupy the remaining space */
+  display: flex;
+  justify-content: center;          /* center vertically */
+  /* align-items: center;      */
+}
+
+/* Container for the background */
+#bg {
+  position: fixed; /* Fixed to cover viewport */
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
+  z-index: -1; /* Push behind other content */
+}
+
+/* Background image */
+#bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover; /* Ensures full coverage without distortion */
+  opacity: 0.4;      /* Optional transparency */
+  pointer-events: none; /* So it doesn't block clicks */
+}
+
+#bg-logo {
+  display: flex;               /* enables flexbox */
+  justify-content: center;     /* horizontal center */
+  align-items: center;         /* vertical center */
+  width: 100% !important;                 /* full width of parent */
+  max-height: 100% !important;                /* full height of parent */
+}
+
+#bg-logo img {
+  height: auto;               /* or any size you want */
+  width: 60%;                 /* keeps aspect ratio */
+  padding: 0 30px;
+}
+
+@media (max-width:768px) {
+  #bg-logo img {
+    height: auto;               /* or any size you want */
+    width: 100%;                 /* keeps aspect ratio */
+    padding: 0 30px;
+  }
+}
+
+span.info-box-icon {
+  cursor: pointer;
+}
+
+#mymenu li {
+  white-space: normal;
+  float: left;
+  width: 100%;
+  height: auto;
+  word-wrap: break-word;
+}
+
+.help-block {
+  margin-top: 1px; 
+  margin-bottom: 4px;
+}
+
+.pull-down-container {
+ position: absolute;
+}
+
+.popover .popover-title {
+  font-weight: bold;
+  z-index: 99999;
+}
+
+.tooltip {
+  z-index: 99999;
+}
+
+.btn-item {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  font-size: 14px;
+  text-align:center;
+  vertical-align:middle;
+  display:inline-block;
+}
+
+.btn-action {
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  margin-left: 0.5px;
+  margin-right: 0.5px;
+  text-align:center;
+  vertical-align:middle;
+  display:inline-block;
+}
+
+.btn-action i {
+  font-size: 14px;
+  vertical-align: middle;
+ } 
+
+.btn-eye {
+  width:30px;
+  height:30px;
+  padding:1px;
+  font-size:16px;
+  text-align:center;
+  vertical-align:middle;
+  display:inline-block;
+}
+
+.btn {
+  background-color: #dddddd;
+  border-color: #222222;
+  color: #000;
+}
+
+.btn:focus, .btn:active, .btn:hover {
+  background-color: #222222 !important;
+  border-color: #dddddd !important;
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+.i { line-height: inherit;}
+
+.file-input .file-preview .fileinput-remove {
+  top: 5px;
+  right: 5px;
+  font-size: 30px;
+}
+
+/* Shrink each preview thumbnail */
+.file-preview .file-preview-frame {
+  width: 145px !important;   /* Thumbnail width */
+  height: 150px !important;  /* Thumbnail height */
+  margin: 10px 10px 35px 10px !important;    /* Spacing between thumbs */
+  padding: 5px !important;
+}
+
+/* Shrink the icon inside */
+.file-preview .file-preview-frame .kv-file-content {
+  max-height: 95px !important;
+}
+
+.file-preview .file-preview-frame .file-preview-image,
+.file-preview .file-preview-frame .file-preview-other-icon {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+/* Make file footer text smaller */
+.file-preview .file-footer-caption {
+  font-size: 11px !important;
+  margin-bottom: 20px;
+}
+
+.file-drop-zone {
+  min-height: 200px;
+}
+
+.krajee-default.file-preview-frame .file-thumbnail-footer {
+  height: 50px;
+}
+
+/* Reduce buttons size */
+.file-preview .file-preview-frame .file-footer-buttons .btn {
+  padding: 2px 6px !important;
+  font-size: 12px !important;
+}
+
+.krajee-default .file-caption-info, .krajee-default .file-size-info {
+  width: auto;
+}
+
+.krajee-default .file-drag-handle, .krajee-default .file-upload-indicator {
+  margin-top: 4px;
+}
+
+.krajee-default.file-preview-frame .kv-file-content {
+  width: 100% !important;
+  height: 100% !important;
+}
+.kv-avatar .krajee-default.file-preview-frame,.kv-avatar .krajee-default.file-preview-frame:hover {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  text-align: center;
+  height: 100% !important;
+  width: 100% !important;
+}
+.kv-avatar {
+  display: inline-block;
+}
+.kv-avatar .file-input {
+  display: table-cell;
+}
+.kv-avatar img {
+  height: 100% !important;
+  width: 100% !important;
+}
+.kv-avatar .kv-reqd {
+  color: red;
+  font-family: monospace;
+  font-weight: normal;
+}
+.kv-avatar .file-drop-zone {
+  margin: 0 !important;
+}
+.kv-avatar .krajee-default .file-footer-caption {
+  margin-bottom: 0 !important;
+}
+.kv-avatar .krajee-default .file-upload-indicator {
+  display: none;
+}
+.kv-avatar .krajee-default .file-thumbnail-footer {
+  height: 35px !important;
+}
+
+.kv-avatar .text-muted:hover {
+  color: #000;
+}
+
+table.dataTable th{
+  font-size: 0.85em !important;
+}
+
+table.dataTable td {
+  font-size: 0.8em !important;
+  color: #000 !important;
+}
+
+table.dataTable tbody tr {
+  text-align: center;
+}
+
+table.dataTable tbody tr.selected td {
+  color:white !important;
+  background-color:#b80404 !important;
+}
+
+table.dataTable {
+  cursor:pointer !important;
+}
+
+table.dataTable tr th.select-checkbox.selected::after {
+    content: "✔";
+    margin-top: -11px;
+    margin-left: -4px;
+    text-align: center;
+    text-shadow: rgb(176, 190, 217) 1px 1px, rgb(176, 190, 217) -1px -1px, rgb(176, 190, 217) 1px -1px, rgb(176, 190, 217) -1px 1px;
+}
+
+table.dataTable thead th, table.dataTable thead td  {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.dataTable tfoot th, table.dataTable tfoot td {
+  background-color: #f4f4f4;
+  /*padding: 8px 10px;*/
+}
+
+div.dataTables_scrollFootInner {
+  padding: 0px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: #dddddd !important;
+  border-color: #222222 !important;
+  color: #666 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background: #222222 !important;
+  border-color: #dddddd !important;
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+/* Custom styling to center the buttons */
+.dt-buttons {
+  text-align: center;  /* Centers the button within its container */
+}
+
+.dt-button {
+  padding: 2px 8px !important;  /* Centers the button within its container */
+  font-size: 14px !important;
+}
+
+
+/* Optional: To adjust the positioning of the length control and buttons */
+.dataTables_length {
+  display: inline-block;  /* Keeps the length control inline with the table */
+  margin-right: 20px;  /* Adjust space between length control and buttons */
+}
+
+img.mfp-img {
+  padding: 2px;
+  border: 2px solid #505050;
+  border-radius: 20px;
+  background-color: #aaa;
+}
+
+.mfp-image-holder .mfp-close, .mfp-iframe-holder .mfp-close {
+  color: #222222;
+  right: 0px;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.nav-tabs > li.active > a {
+  font-size:16px;
+  font-weight:bold;
+}
+
+.cellborder {
+  border:1px solid;
+  border-width:2px;
+  border-color:#222222;
+  padding:5px;
+}
+
+.cellcenter {
+  /* Center slide text vertically */
+	display: flex;
+	-webkit-box-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	align-items: center;
+  text-align: left;
+}
+
+.vcenter {
+  display:flex;
+  align-items:center;
+}
+
+.select2-dropdown {
+  z-index: 99999;
+}
+
+.select2-container .select2-selection--single {
+  height:30px !important;
+  font-size:12px !important;
+  font-weight:normal;
+}
+
+.select2-results{
+  font-size:12px !important;
+}
+
+.sweet-alert button.cancel {
+  background-color: #dddddd !important;
+  border-color: 222222 !important;
+}
+
+hr.newline {
+  border: 1px solid #222222;
+  /*border-radius: 5px;*/
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+/*
+html {
+  --top-spacing: 80px;
+}
+*/
+
+.iziModal-header {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.iziModal-content {
+  padding: 5px !important;
+}
+
+.iziModal .iziModal-header-title, .iziModal .iziModal-header-subtitle {
+  color: #000;
+}
+
+/*
+.iziModal.isFullscreen {
+  margin-top: var(--top-spacing) !important;
+}
+*/
+
+svg.svg-inline--fa.iziModal-header-icon {
+  width: auto;
+  height: 40px;
+}
+
+.datepicker table tr td.active.active,
+.datepicker table tr td.active.highlighted.active {
+  background-color: green;
+}
+
+.datepicker table tr td.active.active:hover,
+.datepicker table tr td.active.highlighted.active:hover
+.datepicker table tr td.active.active.focus,
+.datepicker table tr td.active.highlighted.active.focus {
+  background-color:red;
+}
+
+.modal {
+  z-index: 99999;
+}
+
+.datepicker {
+  z-index: 99999 !important;
+}
+
+.sweet-alert {
+  z-index: 999999;
+}
+
+#modalsaving, #timeout, #modal-custom {
+  z-index: 999999 !important; 
+}
+
+#modalsaving div.modal-body {
+  padding: 10px;
+}
+
+#modalsaving hr {
+  margin: 10px 0;
+}
+
+.modal-box{ font-family: 'Poppins', sans-serif; }
+.modal-box .show-modal{
+    color: #fff;
+    background-color: #dddddd;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: capitalize;
+    padding: 12px 20px;
+    margin: 80px auto 0;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 0 15px -5px #dddddd;
+    display: block;
+    transition: all 0.3s ease 0s;
+}
+.modal-box .show-modal:hover{
+    color: #fff;
+    box-shadow: none;
+}
+.modal-box .show-modal:focus{
+    background-color: #dddddd;
+    outline: none;
+}
+.modal-backdrop.in{ opacity: 0; }
+.modal-box .modal-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  padding-right: 17px;
+}
+.modal-box .modal-dialog .modal-content{
+    background: #fff;
+    text-align: center;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 0 15px -4px #dddddd;
+}
+.modal-box .modal-dialog .modal-content .close{
+    color: #dddddd;
+    font-size: 30px;
+    font-weight: 400;
+    text-shadow: none;
+    line-height: 17px;
+    height: 17px;
+    width: 17px;
+    overflow: hidden;
+    opacity: 1;
+    position: absolute;
+    left: auto;
+    right: 12px;
+    top: 12px;
+    z-index: 1;
+    transition: all 0.3s ease 0s;
+}
+.modal-box .modal-dialog .modal-content .close:hover{ color: #484C44; }
+.modal-box .modal-dialog .modal-content .close:focus{ outline: none; }
+.modal-box .modal-dialog .modal-content .modal-body{ padding: 25px !important; }
+
+@media only screen and (max-width: 576px){
+    .modal-dialog{ width: 95% !important; }
+}
+@media only screen and (max-width: 479px){
+    .modal-box .modal-dialog .modal-content .modal-body{ padding: 40px 20px !important; }
+    #bg img {
+      width: 100%;
+      height: auto;
+    }
+}
+
+.box {
+  margin-bottom: 0px;
+}
+
+/* Container centers everything */
+.loader-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+
+/* Spinning circle */
+.loader1 {
+  border: 12px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 12px solid blue;
+  border-right: 12px solid green;
+  border-bottom: 12px solid red;
+  border-left: 12px solid pink;
+  width: 60px;
+  height: 60px;
+  text-align: middle;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin:auto;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  position:relative;
+}
+
+.loader {
+  border: 12px solid #f3f3f3;
+  border-top: 12px solid blue;
+  border-right: 12px solid green;
+  border-bottom: 12px solid red;
+  border-left: 12px solid pink;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Percentage in the center, stays still */
+.loader-text {
+  position: absolute;
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+  pointer-events: none;
+  user-select: none;
+}
+
+/*Clearable text inputs*/
+.clearable, .clearable-s {
+  background: #fff url(../images/x.webp) no-repeat right -10px center;
+  border: 1px solid #999;
+  padding: 3px 18px 3px 4px; /* Use the same right padding (18) in jQ! */
+  border-radius: 3px;
+  transition: background 0.4s;
+}
+.clearable.x, .clearable-s.x { background-position: right 5px center; } /* (jQ) Show icon */
+.clearable.onX, .clearable-s.onX { cursor: pointer; } /* (jQ) hover cursor style */
+.clearable::-ms-clear, .clearable-s::-ms-clear {display: none; width:0; height:0;} /* Remove IE default X */
+
+input[type=checkbox] + label {
+  display: block;
+  cursor: pointer;
+  padding: 0;
+}
+
+input[type=checkbox] {
+  display: none;
+}
+
+input[type=checkbox] + label:before {
+  content: "\2714";
+  border: 0.1em solid rgb(210, 214, 222);
+  border-radius: 0.3em;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left: 2px;
+  margin-right: 2px;
+  vertical-align: bottom;
+  text-align: center;
+  color: transparent;
+  transition: .2s;
+}
+
+input[type=checkbox] + label:active:before {
+  transform: scale(0);
+}
+
+input[type=checkbox]:checked + label:before {
+  background-color: MediumSeaGreen;
+  border-color: MediumSeaGreen;
+  color: #fff;
+}
+
+input[type=checkbox]:disabled + label:before {
+  transform: scale(1);
+  border-color: #aaa;
+  background-color: #e7e8e5;
+}
+
+input[type=checkbox]:checked:disabled + label:before {
+  transform: scale(1);
+  background-color: #bfb;
+  border-color: #bfb;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#timeout {
+  display:none;
+}
+
+#countdown {
+  font-weight:bold;
+  text-align:center;
+  font-size:30px;
+}
+
+/** PASSWORD EXPIRED **/
+.pwd-content {
+    max-width: 350px;
+    min-height: 500px;
+    margin: 80px auto;
+    padding: 40px 30px 30px 30px;
+    background-color: #ecf0f3;
+    border-radius: 15px;
+    color: #000;
+}
+
+.pwd-content .logo {
+    width: 80px;
+    margin: auto;
+}
+
+.pwd-content .logo img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px #5f5f5f,
+        0px 0px 0px 5px #ecf0f3,
+        8px 8px 15px #a7aaa7,
+        -8px -8px 15px #fff;
+}
+
+.pwd-content .name {
+    font-weight: 1000;
+    font-size: 15px;
+    letter-spacing: 1.3px;
+    padding-left: 10px;
+    color: #000;
+}
+
+.pwd-content .form-field input {
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 14px;
+    color: #000;
+    padding: 10px 15px 10px 10px;
+    /* border: 1px solid red; */
+}
+
+.pwd-content .form-field {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+}
+
+.pwd-content .form-field .fas {
+    color: #555;
+}
+
+.pwd-content .btn {
+    box-shadow: none;
+    width: 100%;
+    height: 40px;
+    background-color: #dddddd;
+    border-color: #222222;
+    color: #000;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1,
+        -3px -3px 3px #fff;
+    letter-spacing: 1.3px;
+}
+
+/* .pwd-content .btn:hover {
+    background-color: #039BE5;
+} */
+
+.text-center {
+    text-align: center !important;
+}
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+
+.p-3 {
+    padding: 1rem !important;
+}
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+.d-flex {
+    display: flex !important;
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Styling for the popup */
+.hover-popup {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  max-width: 300px;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+#chart-container {
+  height: 250px;
+}
+
+#chart-container2 {
+  display: flex;
+  flex-direction: column; /* Stack chart and legend vertically */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.chart-wrapper {
+  width: 100%;
+  position: relative;
+  height: 380px; /* Adjust height as needed */
+}
+
+/* Legend below chart in 2 columns */
+#legend-container {
+  margin-top: 5px;
+}
+
+.legend-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.legend-columns {
+  display: flex;
+  gap: 40px; /* space between columns */
+  flex-wrap: wrap;
+}
+
+.legend-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.legend-header {
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.legend-item.hidden {
+  opacity: 0.4;
+}
+
+.legend-box {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 2px;
+}
+
+.legend-label {
+  font-size: 11px;
+}
+
+.alphabet-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.alphabet-buttons button {
+  background-color: #dddddd;
+  border: 1px solid #222222;
+  color: #000;
+  padding: 5px 12px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.alphabet-buttons button.active {
+  background-color: #222222;
+  color: white;
+  border: 2px solid #dddddd;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+/* ----------------- Stepper ----------------- */
+.stepper {
+    display: flex;
+    justify-content: space-between; /* optional, can also use flex-start */
+    margin-bottom: 10px;
+    flex-wrap: nowrap;
+    gap: 0; /* remove gap between steps */
+}
+
+.step {
+    position: relative;
+    flex: 1;
+    background: #d62828;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 50%, calc(100% - 22px) 100%, 0 100%, 22px 50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: #000;
+}
+
+.step-number {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.step .icon {
+    font-size: 28px;
+    margin-bottom: 5px;
+    width: 50px;       /* circle width */
+    height: 50px;      /* circle height */
+    line-height: 50px; /* center the icon vertically */
+    border: 2px solid white; /* stroke color */
+    border-radius: 50%;       /* make it circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent; /* optional, keep transparent inside */
+    box-sizing: border-box;
+}
+
+.step.active .icon {
+    border-color: #ffd700; /* e.g., gold when active */
+}
+
+.step-text {
+    font-size: 12px;
+}
+
+.progress {
+    height: 6px;
+    margin-bottom: 20px;
+    background-color: #d62828;
+}
+
+.progress-bar {
+    background-color: #000;
+}
+
+.page {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.page.active {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .stepper {
+        flex-direction: column;
+        align-items: stretch; 
+    }
+    .step {
+        flex: unset;
+        width: 100%;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* simple rectangle */
+        margin-bottom: 10px; /* spacing between steps */
+    }
+}
+
+@media (max-width: 790px) {
+    .step .step-text {
+        white-space: normal;   /* allow wrapping */
+        word-break: break-word; /* break words if needed */
+        font-size: 11px;        /* optional: smaller font for small screens */
+    }
+}
+
+/*------------- Small Boxes -----------*/
+.small-box {
+  border-radius: 2px;
+  position: relative;
+  display: block;
+  margin-bottom: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* ensure footer doesn't overflow */
+}
+
+.small-box:hover {
+  text-decoration: none;
+  color: #000000;
+}
+
+.small-box>.inner {
+  padding: 10px 20px 0;
+}
+
+/* Icon styling */
+.small-box .icon {
+  transition: all 0.3s linear;
+  position: absolute;
+  top: 50%;                   /* vertical center */
+  right: 10px;                /* keep right alignment */
+  transform: translateY(-50%); /* adjust vertical center */
+  font-size: 60px;            /* smaller size */
+  color: rgba(0, 0, 0, 0.15);
+  z-index: 0;
+}
+
+.small-box:hover .icon {
+  font-size: 65px;            /* slightly bigger on hover */
+}
+
+/*------------- Footer Slide Effect -----------*/
+.small-box > .small-box-footer {
+  position: absolute; /* position at bottom of box */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #3a3a3a;
+  text-align: center;
+  padding: 10px 0;
+  transform: translateY(100%); /* hidden by default */
+  transition: transform 0.3s ease, background 0.3s ease;
+  color: #fff;
+  font-weight: normal;
+  text-decoration: none;
+  z-index: 1;
+}
+
+.small-box:hover > .small-box-footer {
+  transform: translateY(0); /* slide into view */
+  background: #eb0a1e;
+}
+
+.small-box:hover > .small-box-footer:hover {
+  font-weight: bold;
+}
+
+/*------------- Customer Info -----------*/
+.customer-info {
+  background: #fff;
+  border-radius: 5px;
+  padding: 24px 10px 32px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+/*------------- Vehicle Info -----------*/
+.vehicle-info {
+  background: #fff;
+  border-radius: 5px;
+  padding: 24px 10px 32px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+/*------------- Payment Info -----------*/
+.payment-info {
+  background: #fff;
+  border-radius: 5px;
+  padding: 24px 10px 32px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+/*------------- Insurer Info -----------*/
+.insurer-info {
+  background: #fff;
+  border-radius: 5px;
+  padding: 24px 10px 32px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+
+/*------------- Insurance Calculation -----------*/
+.insurance-calc {
+  background: #fff;
+  border-radius: 5px;
+  padding: 24px 10px 32px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.insurance-calc table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+.insurance-calc th, .insurance-calc td {
+  padding: 10px;
+  text-align: left;
+}
+.insurance-calc th {
+  font-weight: bold;
+  text-align: center;
+}
+.insurance-calc td label {
+  font-weight: normal;
+}
+.insurance-calc input[type="text"] {
+  width: 95%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 6px;
+  background: transparent;
+  font-size: 1.5rem;
+  box-sizing: border-box;
+}
+.insurance-calc td:first-child {
+  text-align: right;
+  width: 180px;
+}
+@media (max-width: 600px) {
+  .insurance-calc table, .insurance-calc thead, .insurance-calc tbody, 
+  .insurance-calc th, .insurance-calc td, .insurance-calc tr { display: block; }
+  .insurance-calc thead tr { display: none; }
+  .insurance-calc tr { margin-bottom: 15px; }
+  .insurance-calc td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .insurance-calc td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    text-align: left;
+    font-weight: bold;
+  }
+  .insurance-calc input[type="text"] { width: 100%; }
+  .insurance-calc td:empty {
+    display: none;
+  }
+  .insurance-calc .installment-section td {
+    /* padding-left: 0%; */
+    padding: 0 10px;
+  }
+}
+
+/* Hide the default checkbox */
+.insurance-calc input[type="checkbox"] {
+  display: none;
+}
+
+/* Style the custom checkbox container */
+.insurance-calc .custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Style the custom checkbox icon */
+.insurance-calc .checkbox-icon {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  background-color: white;
+  position: relative;
+  margin-right: 10px; /* Space between checkbox and label */
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* When the checkbox is checked, change the background color to red */
+.insurance-calc input[type="checkbox"]:checked + .checkbox-icon {
+  background-color: red;
+}
+
+/* Style for the white checkmark icon */
+.insurance-calc .checkbox-icon::before {
+  content: '\2714'; /* Unicode for check mark */
+  font-size: 12px;
+  color: white;
+  opacity: 0; /* Initially invisible */
+  transition: opacity 0.2s ease;
+}
+
+/* When checked, make the check mark visible */
+.insurance-calc input[type="checkbox"]:checked + .checkbox-icon::before {
+  opacity: 1;
+}
+
+/* Style for the label text */
+.insurance-calc .checkbox-label {
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+}
+
+/*------------- Insurer Info -----------*/
+/* Custom radio button styling */
+.radio-group {
+    display: flex;
+    gap: 24px;
+    margin-top: 8px;
+    align-items: center;
+}
+.radio-group label {
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.custom-radio {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
+.custom-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkmark {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    height: 18px;
+    width: 18px;
+    background-color: #fff;
+    border: 2px solid #000000;
+    border-radius: 50%;
+}
+.custom-radio input:checked ~ .checkmark {
+    background-color: #fff;
+    border: 2px solid #000000;
+}
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.custom-radio input:checked ~ .checkmark:after {
+    display: block;
+}
+.custom-radio .checkmark:after {
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e30000;
+}
+
+/* New Business Insurance Modify */
+.nvi-modify .box {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  padding: 5px 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.nvi-modify .box:hover {
+  box-shadow: 0 18px 25px rgba(0, 0, 0, 0.25);
+  transform: translateY(-5px);
+}
+
+.nvi-modify .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.nvi-modify .header-actions {
+  display: flex;
+  gap: 12px; /* space between Add & Edit buttons */
+}
+
+.nvi-modify .title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nvi-modify .title svg {
+  width: 26px;
+  height: 26px;
+  fill: #000;
+}
+
+.nvi-modify .edit-btn {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: red;
+  text-decoration: none;
+  padding: 6px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nvi-modify .edit-btn:hover {
+  color: #000 !important;
+  font-weight: 900 !important;
+}
+
+.nvi-modify .edit-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Fields grid */
+.nvi-modify .customer-info .fields, .nvi-modify .vehicle-info .fields, .nvi-modify .insurer-info .fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px 48px;
+  margin-bottom: 20px;
+}
+
+/* Each field */
+.nvi-modify .customer-info .field, .nvi-modify .vehicle-info .field, .nvi-modify .insurer-info .field {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 0;   /* adjust spacing */
+  align-items: center;  /* vertical center */
+}
+
+/* Label */
+.nvi-modify .customer-info .label, .nvi-modify .vehicle-info .label, .nvi-modify .insurer-info .label {
+  width: 140px;
+  font-weight: 700;
+  color: #7a8fa6;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  flex-shrink: 0;
+  white-space: normal;       /* allows wrapping */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+  padding: .2em .5em .3em;
+}
+
+/* Value text: horizontal center within its flex space */
+.nvi-modify .customer-info .value, .nvi-modify .vehicle-info .value, .nvi-modify .insurer-info .value {
+  font-weight: 600;
+  color: #2e3a59;
+  font-size: 1.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;    /* vertical center */
+  justify-content: center; /* horizontal center */
+}
+
+/* Wide field (Main Address) */
+@media (min-width: 700px) {
+  .nvi-modify .customer-info .wide-field, .nvi-modify .vehicle-info .wide-field {
+    grid-column: span 2;
+  }
+}
+
+/* Remove border from last field */
+.nvi-modify .customer-info .field:last-child, .nvi-modify .vehicle-info .field:last-child, .nvi-modify .insurer-info .field:last-child {
+  /* border-bottom: none; */
+  padding-bottom: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .nvi-modify .customer-info .field, .nvi-modify .vehicle-info .field, .nvi-modify .insurer-info .field {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nvi-modify .customer-info .label, .nvi-modify .vehicle-info .label, .nvi-modify .insurer-info .label {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+}
+
+/*----- Insurance Calculation -----*/
+.nvi-modify .insurance-calc .calc-table {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.nvi-modify .insurance-calc .calc-row {
+  display: grid;
+  /* grid-template-columns: 40% 20% 20% 20%; */
+  grid-template-columns: 33.33% 33.33% 33.33%;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.nvi-modify .insurance-calc .calc-head {
+  font-weight: bold;
+  background: #fafafa;
+  border-bottom: 2px solid #ddd;
+}
+
+/* .nvi-modify .insurance-calc .calc-col:nth-child(2),
+.nvi-modify .insurance-calc .calc-col:nth-child(3),
+.nvi-modify .insurance-calc .calc-col:nth-child(4) {
+  text-align: right; /* Align text to the right for these columns */
+/*} */
+
+.nvi-modify .insurance-calc .calc-col {
+  padding: 6px 10px;
+  color: #2e3a59;
+  font-size: 1.5rem;
+}
+
+.nvi-modify .insurance-calc .label {
+  font-weight: 700;
+  color: #7a8fa6;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  flex-shrink: 0;
+  white-space: normal;       /* allows wrapping */
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+}
+
+.nvi-modify .insurance-calc .net-row {
+  background: #f8f8f8;
+  font-weight: bold;
+}
+
+.nvi-modify .insurance-calc .calc-options {
+  display: flex;               /* Use flexbox for the layout */
+  align-items: center;         /* Vertically center all elements inside this container */
+  justify-content: flex-start; /* Align elements to the left */
+  gap: 15px;                   /* Optional: space between checkbox and other content */
+  height: 100%;   
+}
+
+.nvi-modify .insurance-calc .calc-options .calc-col:nth-child(2),
+.nvi-modify .insurance-calc .calc-options .calc-col:nth-child(3),
+.nvi-modify .insurance-calc .calc-options .calc-col:nth-child(4) {
+  text-align: left; /* Align text to the right for these columns */
+}
+
+/* Label for the checkbox */
+.nvi-modify .insurance-calc .calc-options .checkbox-label {
+  font-size: inherit;        /* Inherit font size from .calc-col label */
+  font-weight: inherit;      /* Inherit font weight from .calc-col label */
+  color: inherit;            /* Inherit text color */
+  vertical-align: middle;    /* Vertically align the label with the checkbox */
+}
+
+
+/* Adjust the size of the column that contains the checkbox (Installment Payment) */
+.nvi-modify .insurance-calc .calc-row .calc-col:first-child {
+  width: 300px;  /* Adjust the width to make room for the checkbox */
+}
+
+
+/* ---------------- MOBILE ------------------- */
+@media (max-width: 768px) {
+  .nvi-modify .insurance-calc .calc-head {
+    display: none; /* Hide header */
+  }
+
+  .nvi-modify .insurance-calc .calc-row {
+    grid-template-columns: 100%;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+
+  .nvi-modify .insurance-calc .calc-col {
+    display: block;
+    padding-left: 110px; /* space for labels */
+    position: relative;
+    margin-bottom: 0;
+  }
+
+  /* Hide empty Rate, Coverage, Premium columns in mobile */
+  .nvi-modify .insurance-calc .calc-col[data-label="Rate (%)"]:empty,
+  .nvi-modify .insurance-calc .calc-col[data-label="Coverage"]:empty,
+  .nvi-modify .insurance-calc .calc-col[data-label="Premium"]:empty {
+    display: none;
+  }
+
+  /* Show labels in mobile */
+  .nvi-modify .insurance-calc .calc-col::before {
+    content: attr(data-label);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    width: 100px;
+    color: #333;
+  }
+
+  /* Adjust the layout of the calc-options container to stack vertically on mobile */
+  .nvi-modify .insurance-calc .calc-options {
+    flex-direction: column;    /* Stack items vertically */
+    gap: 15px;                  /* Add space between elements */
+    align-items: flex-start;    /* Align to the left */
+  }
+
+  /* Ensure the checkbox has a fixed size */
+  .nvi-modify .insurance-calc .custom-checkbox input {
+    width: auto;   /* Ensure the checkbox itself doesn't stretch */
+    height: auto;  /* Ensure the checkbox size is consistent */
+  }
+
+  /* Hide empty .calc-col columns that don't contain content (excluding input/checkbox) */
+  .nvi-modify .insurance-calc .calc-col:not(:has(input, checkbox)) {
+    display: none;
+  }
+
+  /* Ensure the terms input field and monthly input stay aligned correctly */
+  .nvi-modify .insurance-calc .calc-col {
+    display: block;
+    width: 100%;             /* Ensure form fields take full width */
+    padding-left: 0;         /* Reset any padding added for desktop */
+    margin-bottom: 10px;     /* Add space between form elements */
+  }
+}
+
+.credit-card, .post-dated-check{
+  margin-bottom: 10px;
+}
+
+.credit-card h3, .post-dated-check h3 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.cc-header, .pdc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cc-icons, .pdc-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.cc-icons img {
+    height: 1.5em;          /* matches the h1 font size */
+    width: auto;          /* keeps aspect ratio */
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.pdc-icons img {
+    height: auto;          /* matches the h1 font size */
+    width:  3.5em;          /* keeps aspect ratio */
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.cc-icons img:hover, .pdc-icons img:hover, .ew-icons img:hover {
+    filter: brightness(0.5);
+}
+
+.ew-icons-col {
+    height: 54px;            /* make sure it fills parent height */
+}
+
+.ew-icons {
+    display: flex;
+    align-items: center;    /* vertical centering */
+    justify-content: center; /* horizontal centering */
+    gap: 12px;               /* space between images */
+    height: 100%;            /* make sure it fills parent height */
+}
+
+.ew-icons img {
+    height: 1.5em;          /* matches the h1 font size */
+    width: auto;          /* keeps aspect ratio */
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.4em 0.65em;
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.8rem; /* rounded-pill for more round: 10rem */
+}
+
+.badge-lg {
+    display: inline-block;
+    padding: 0.5em 0.65em 0.4em;
+    font-size: 1.2em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 2rem; /* rounded-pill for more round: 10rem */
+}
+
+/* ================== NOTIFICATIONS ================== */
+/* Unread notification */
+.unread-notification {
+    background-color: #f0f8ff;
+    font-weight: bold;
+}
+
+/* Hover effect */
+.notifications-menu .menu li a {
+    transition: background-color 0.3s;
+}
+
+.notifications-menu .menu li a:hover {
+    background-color: #e0e0e0;
+}
+
+/* Title & Message */
+.notification-title {
+    display: block;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+.notification-message {
+    margin: 0;
+    font-size: 12px;
+    color: #888;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Bell ring animation */
+@keyframes bell-ring {
+  0%   { transform: rotate(0); }
+  10%  { transform: rotate(15deg); }
+  20%  { transform: rotate(-15deg); }
+  30%  { transform: rotate(10deg); }
+  40%  { transform: rotate(-10deg); }
+  50%  { transform: rotate(5deg); }
+  60%  { transform: rotate(-5deg); }
+  70%  { transform: rotate(0); }
+  100% { transform: rotate(0); }
+}
+
+.bell-ring {
+  animation: bell-ring 0.8s ease-in-out;
+  transform-origin: top center;
+}
+
+/* Infinite ring for danger notifications */
+.bell-ring-infinite {
+  animation: bell-ring 0.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* Badge pulse for new notifications */
+@keyframes badge-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.badge-pulse {
+  animation: badge-pulse 0.6s ease-in-out;
+}
+
+/* Optional: subtle divider */
+.notifications-menu .menu li {
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+}

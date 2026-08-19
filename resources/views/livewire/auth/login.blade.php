@@ -72,45 +72,181 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
-    <x-auth-header title="Log in to your account" description="Enter your email and password below to log in" />
+<div class="container center-box">
 
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+    <!-- Header -->
+    <div class="row text-center">
+        <div class="wave-container">
+            <h3 class="animate-charcter">TMIA</h3>
 
-    <form wire:submit="login" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input wire:model="email" label="{{ __('Email address') }}" type="email" name="email" required autofocus autocomplete="email" placeholder="email@example.com" />
+            <div id="flip">
+                <div class="flip-inner">
+                    <div>T O Y O T A</div>
+                    <div>M A K A T I</div>
+                    <div>A N D</div>
+                    <div>B I C U T A N</div>
+                    <div>I N S U R A N C E</div>
+                    <div>A G E N C Y</div>
+                </div>
+            </div>
 
-        <!-- Password -->
-        <div class="relative">
-            <flux:input
-                wire:model="password"
-                label="{{ __('Password') }}"
-                type="password"
-                name="password"
-                required
-                autocomplete="current-password"
-                placeholder="Password"
+            <h1 class="wave-text">
+                <span>S</span>
+                <span>y</span>
+                <span>s</span>
+                <span>t</span>
+                <span>e</span>
+                <span>m</span>
+            </h1>
+        </div>
+    </div>
+
+    <!-- Profile Image -->
+    <div class="row">
+        <div class="center-block">
+            <img
+                class="profile-img"
+                src="{{ asset('tmia-assets/images/user.png') }}"
+                alt="User"
+            >
+        </div>
+    </div>
+
+    <!-- Form + Logo -->
+    <div class="row cellcenter">
+
+        <!-- Login Form -->
+        <div class="col-md-6 login-form">
+
+            <!-- Session Status -->
+            <x-auth-session-status
+                class="text-center"
+                :status="session('status')"
             />
 
-            @if (Route::has('password.request'))
-                <x-text-link class="absolute right-0 top-0" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </x-text-link>
-            @endif
+            <form wire:submit="login">
+                <fieldset>
+
+                    <!-- Email / Username -->
+                    <p>
+                        <span class="fa fa-user"></span>
+
+                        <input
+                            wire:model="email"
+                            type="email"
+                            id="txtuname"
+                            name="email"
+                            placeholder="Email"
+                            required
+                            autofocus
+                            autocomplete="email"
+                        >
+                    </p>
+
+                    @error('email')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <!-- Password -->
+                    <p>
+                        <span class="fa fa-lock"></span>
+
+                        <input
+                            wire:model="password"
+                            type="password"
+                            id="txtpword"
+                            name="password"
+                            placeholder="Password"
+                            required
+                            autocomplete="current-password"
+                        >
+                    </p>
+
+                    @error('password')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                
+
+                    <!-- Login Button -->
+                    <center>
+                        <div>
+                            <span>
+                                <input
+                                    type="submit"
+                                    value="Log In"
+                                    id="btnlogin"
+                                >
+                            </span>
+                        </div>
+                    </center>
+
+                </fieldset>
+            </form>
+
         </div>
 
-        <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" label="{{ __('Remember me') }}" />
-
-        <div class="flex items-center justify-end">
-            <flux:button variant="primary" type="submit" class="w-full">{{ __('Log in') }}</flux:button>
+        <!-- Logo -->
+        <div class="col-md-6 login-logo">
+            <img
+                class="login-img"
+                src="{{ asset('tmia-assets/images/logo.png') }}"
+                alt="TMIA Logo"
+            >
         </div>
-    </form>
 
-    <div class="space-x-1 text-center text-sm text-zinc-600 dark:text-zinc-400">
-        Don't have an account?
-        <x-text-link href="{{ route('register') }}">Sign up</x-text-link>
     </div>
+
+    <!-- Modal Recover Account -->
+    <div id="modalrecover" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+        <div class="modal-header text-center">
+            <button type="button" class="close" data-dismiss="modal" style="color:white;"><p><strong>×</strong></p></button>
+            <h3 class="modal-title"><strong>ACCOUNT RECOVERY</strong></h3>
+        </div>
+        <!--/modal-header-->
+        <div class="modal-body">
+            <div class="pad" id="infopanel">
+            <div class="form-horizontal">
+                <div class="controls">
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="txtrecemailaddress" style="color:gray;">Recovery E-Mail Address *</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                            <i class="fa fa-envelope"></i>
+                            </span>
+                            <input type="text" id="txtrecemailaddress" class="form-control input-sm" placeholder="Enter Email Address." required="required" data-error="Email Address is required.">
+                        </div>
+                        <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <!--/pad-->
+        </div>
+        <!--/modal-body-->
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success" id="btnrecback"><i class="fa fa-arrow-circle-left"></i> Back to Login</button>
+            <button type="submit" class="btn btn-success" id="btnrecsubmit"><i class="fa fa-send"></i> Submit</button>
+        </div>
+        </div>
+        <!--/modal-content-->
+    </div>
+    <!-- /modal-dialog -->
+    </div>
+<!-- END Modal Recover Account -->
 </div>
+
+
+

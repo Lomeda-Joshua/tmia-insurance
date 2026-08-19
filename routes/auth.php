@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
-    Volt::route('login', 'auth.login')
+    Volt::route('/', 'auth.login')
         ->name('login');
 
     Volt::route('register', 'auth.register')
@@ -16,7 +16,6 @@ Route::middleware('guest')->group(function () {
 
     Volt::route('reset-password/{token}', 'auth.reset-password')
         ->name('password.reset');
-
 });
 
 Route::middleware('auth')->group(function () {
