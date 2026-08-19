@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "codex"
+    ],
+    "cloud": false,
+    "skills": [
+        "infer-conventions",
+        "laravel-best-practices",
+        "fluxui-development",
+        "volt-development",
+        "pest-testing",
+        "tailwindcss-development"
+    ]
+}
