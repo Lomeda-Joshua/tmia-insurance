@@ -13,15 +13,34 @@ class User extends Authenticatable // implements MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'user';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'User_ID',
+        'Last_Name',
+        'First_Name',
+        'Middle_Name',
+        'Suffix_Name',
+        'Display_Name',
+        'User_Name',
+        'Encrypt_Password',
+        'Contact_No',
+        'Email_Address',
+        'User_Level_ID',
+        'Register_Date',
+        'Approved_Date',
+        'Enable2FA',
+        'Google2FAKey',
+        'ExpireDate',
+        'Log_Date',
+        'Log_Time',
+        'Active',
+        'Dealer_ID'
     ];
 
     /**

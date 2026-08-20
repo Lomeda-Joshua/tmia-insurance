@@ -45,20 +45,20 @@
             <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="{{ asset('tmia-assets/images/user.png') }}" class="user-image" alt="User Image">
-                <span class="hidden-xs"><b><font size="2px" face="arial black">{{ Auth::user()->name }}</font></b></span>
+                
             </a>
             <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
                 <img src="{{ asset('tmia-assets/images/user.png') }}" class="img-circle" alt="User Image">
                 <p>
-                    {{ Auth::user()->name }}
+                    
                 </p>
                 <p>
                     <b></b>
                     <br>
 
-                    <small>Member since {{ Auth::user()->created_at }}</small>
+                    
                 </p>
                 </li>
                 <!-- Menu Footer-->
@@ -79,4 +79,3 @@
         </div>
     </nav>
 </header>
-<!-- =============================================== -->
