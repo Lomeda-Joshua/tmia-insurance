@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeDashboardController;
+use App\Http\Controllers\NewBusinessController;
 use Livewire\Volt\Volt;
 
 Route::get('/', function () {
@@ -20,8 +21,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     // New Business Insurance
-    Route::get('/new-business', [TransactionController::class, 'newBusiness'])->name('new_business');
-    Route::get('/new-business/modify', [TransactionController::class, 'newBusinessModify'])->name('new_business_modify');
+    Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business');
+    Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
 
     // Renewal Business Insurance
     Route::get('/renewal-business', [TransactionController::class, 'renewalBusiness'])->name('renewal_business');

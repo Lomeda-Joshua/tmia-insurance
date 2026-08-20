@@ -3,20 +3,8 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-      New Business Insurance
-    </h1>
-    <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
-      <li class="active"><i class="fa-solid fa-car"></i> New Business Insurance</li>
-    </ol>
-  </section>
 
-  <!-- ========================================================================================================== -->
-  <!-- Main content -->
+    <!-- Main content -->
   <section class="content">
     <!-- box -->
     <div class="box box-warning">
@@ -762,9 +750,9 @@
                                       <div class="cc-header">
                                         <h3>Credit Card Details</h3>
                                         <div class="cc-icons">
-                                          <img src="../assets/images/credit/visa.svg" alt="visa">
-                                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
-                                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
+                                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -812,7 +800,7 @@
                                       <div class="pdc-header">
                                         <h3>Post-Dated Check (PDC) Details</h3>
                                         <div class="pdc-icons">
-                                          <img src="../assets/images/credit/check.png" alt="cheque">
+                                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -872,9 +860,9 @@
                                     </div>
                                     <div class="col-md-8 ew-icons-col">
                                       <div class="ew-icons">
-                                        <img id="pgcash-n" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
-                                        <img id="pmaya-n" src="../assets/images/e-wallet/maya.svg" alt="maya">
-                                        <img id="ptwallet-n" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
+                                        <img id="pgcash-n" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                                        <img id="pmaya-n" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                                        <img id="ptwallet-n" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                                       </div>
                                     </div>
                                   </div>
@@ -1342,7 +1330,7 @@
                       <div class="pdc-header">
                         <h3>Post-Dated Check (PDC) Details</h3>
                         <div class="pdc-icons">
-                          <img src="../assets/images/credit/check.png" alt="cheque">
+                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
                         </div>
                       </div>
                       <div class="row">
@@ -1739,10 +1727,8 @@
     </div>
     <!-- END MODAL CALL LOGS -->
   </section>
-</div>
 <!-- /.content-wrapper -->
-
-<?php include_once __DIR__ . '/../includes/footer.php'; ?>
+</div>
 
 <script>
   // Function to hide empty <td> elements in mobile view
@@ -1773,4 +1759,6 @@
   window.onresize = hideEmptyCellsOnMobile;
 </script>
 
-<script type="text/javascript" src="../assets/js/new_business.js"></script>
+<script type="text/javascript" src="{{ asset('tmia-assets/js/new_business.js') }}"></script>
+
+@endsection

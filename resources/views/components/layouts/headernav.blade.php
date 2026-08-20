@@ -4,7 +4,17 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><img src="{{ asset('tmia-assets/images/logo-mini.png') }}" style="width:50px;height:20px;"></span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><img src="{{ asset('tmia-assets/images/logo.png') }}" style="width:100px;height:100px;"></span>
+        <span class="logo-lg">
+            <img 
+                src="{{ asset('tmia-assets/images/logo.png') }}" 
+                alt="Logo" 
+                style="width: 100px; height: 100px;" 
+                width="100" 
+                height="100" 
+                fetchpriority="high" 
+                loading="eager"
+            >
+        </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

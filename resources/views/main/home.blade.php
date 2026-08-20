@@ -3,6 +3,7 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+  
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
@@ -198,100 +199,100 @@
     <!--end::Row-->
 
     <!-- BIRTH DAY AND ANNIVERSARRY -->
-<div class="box">
-  <div class="box-body dashboard-container">
-    
-    <header class="dashboard-header">
-      <h1>Client Milestones Overview</h1>
-      <p>March 2026 • Personal & Asset Milestones</p>
-    </header>
+    <div class="box">
+      <div class="box-body dashboard-container">
+        
+        <header class="dashboard-header">
+          <h1>Client Milestones Overview</h1>
+          <p>March 2026 • Personal & Asset Milestones</p>
+        </header>
 
-    <div class="row">
+        <div class="row">
 
-      <!-- Birthdays -->
-      <div class="col-md-5">
-        <div class="panel">
-          <div class="panel-header">
-            <h6><i class="fa fa-birthday-cake text-yellow"></i> Monthly Birthdays</h6>
+          <!-- Birthdays -->
+          <div class="col-md-5">
+            <div class="panel">
+              <div class="panel-header">
+                <h6><i class="fa fa-birthday-cake text-yellow"></i> Monthly Birthdays</h6>
+              </div>
+
+              <div class="table-responsive">
+                <table id="birthTable" class="table table-hover w-100">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Client</th>
+                      <th>Turning Age</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="badge badge-muted">Mar 04</span></td>
+                      <td>
+                        <span class="client-name">Jonathan Wick</span>
+                        <span class="client-id">UID: 4402</span>
+                      </td>
+                      <td>45</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge badge-muted">Mar 12</span></td>
+                      <td>
+                        <span class="client-name">Elena Rodriguez</span>
+                        <span class="client-id">UID: 3912</span>
+                      </td>
+                      <td>32</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
-          <div class="table-responsive">
-            <table id="birthTable" class="table table-hover w-100">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Client</th>
-                  <th>Turning Age</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="badge badge-muted">Mar 04</span></td>
-                  <td>
-                    <span class="client-name">Jonathan Wick</span>
-                    <span class="client-id">UID: 4402</span>
-                  </td>
-                  <td>45</td>
-                </tr>
-                <tr>
-                  <td><span class="badge badge-muted">Mar 12</span></td>
-                  <td>
-                    <span class="client-name">Elena Rodriguez</span>
-                    <span class="client-id">UID: 3912</span>
-                  </td>
-                  <td>32</td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Vehicle Anniversaries -->
+          <div class="col-md-7">
+            <div class="panel">
+              <div class="panel-header">
+                <h6><i class="fa fa-car text-black"></i> Vehicle Purchase Anniversaries</h6>
+              </div>
+
+              <div class="table-responsive">
+                <table id="anniTable" class="table table-hover w-100">
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Vehicle</th>
+                      <th>Purchase Date</th>
+                      <th>Years Owned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <span class="client-name">Thomas Miller</span>
+                        <span class="client-id">UID: 8821</span>
+                      </td>
+                      <td class="text-muted">2021 Toyota RAV4</td>
+                      <td><span class="badge badge-muted">Mar 02, 2021</span></td>
+                      <td><span class="badge badge-info">5 yrs</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="client-name">Gregory House</span>
+                        <span class="client-id">UID: 1042</span>
+                      </td>
+                      <td class="text-muted">2016 BMW X5</td>
+                      <td><span class="badge badge-muted">Mar 22, 2016</span></td>
+                      <td><span class="badge badge-info">10 yrs</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
-
-      <!-- Vehicle Anniversaries -->
-      <div class="col-md-7">
-        <div class="panel">
-          <div class="panel-header">
-            <h6><i class="fa fa-car text-black"></i> Vehicle Purchase Anniversaries</h6>
-          </div>
-
-          <div class="table-responsive">
-            <table id="anniTable" class="table table-hover w-100">
-              <thead>
-                <tr>
-                  <th>Client</th>
-                  <th>Vehicle</th>
-                  <th>Purchase Date</th>
-                  <th>Years Owned</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <span class="client-name">Thomas Miller</span>
-                    <span class="client-id">UID: 8821</span>
-                  </td>
-                  <td class="text-muted">2021 Toyota RAV4</td>
-                  <td><span class="badge badge-muted">Mar 02, 2021</span></td>
-                  <td><span class="badge badge-info">5 yrs</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="client-name">Gregory House</span>
-                    <span class="client-id">UID: 1042</span>
-                  </td>
-                  <td class="text-muted">2016 BMW X5</td>
-                  <td><span class="badge badge-muted">Mar 22, 2016</span></td>
-                  <td><span class="badge badge-info">10 yrs</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</div>
 
     <!-- MODAL PASSWORD EXPIRED -->
     <div id="modalpwdexpired" class="modal">
@@ -352,6 +353,7 @@
     </div>
     <!-- END MODAL TIME OUT -->
   </section>
+
 </div>
 <!-- /.content-wrapper -->
 

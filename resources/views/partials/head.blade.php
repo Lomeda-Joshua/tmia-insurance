@@ -72,3 +72,5 @@
 
 <!-- Customized Style -->
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/css/style.css') }}"/>
+
+<link rel="preload" as="image" href="{{ asset('tmia-assets/images/logo.png') }}" type="image/png">

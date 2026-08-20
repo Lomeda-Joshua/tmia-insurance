@@ -57,8 +57,8 @@
 <script type="text/javascript" src="{{ asset('tmia-assets/plugins/jszip/jszip.min.js') }}"></script>
 
 <!-- PDFMake (required for PDF export) -->
-<script type="text/javascript" src="{{ asset('tmia-assets/plugins/pdfmake/pdfmake.min.js') }}" defer></script>
-<script type="text/javascript" src="{{ asset('tmia-assets/plugins/pdfmake/vfs_fonts.js') }}" defer></script>
+<script type="text/javascript" src="{{ asset('tmia-assets/plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('tmia-assets/plugins/pdfmake/vfs_fonts.js') }}"></script>
 
 <!-- Buttons (required for export) -->
 <script type="text/javascript" src="{{ asset('tmia-assets/plugins/buttons/buttons.html5.min.js') }}"></script>
