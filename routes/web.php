@@ -21,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     // New Business Insurance
-    Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business');
+    Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
     Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
 
     // Renewal Business Insurance

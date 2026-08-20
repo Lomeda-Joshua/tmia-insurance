@@ -1731,6 +1731,25 @@
 </div>
 
 <script>
+
+  $(document).ready(function() {
+      $('#table_trans').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: {
+              url: "{{ route('new_business.index') }}",
+              type: "GET"
+          },
+          columns: [
+              { data: 'User_ID', name: 'User_ID' },
+              { data: 'Email_Address', name: 'Email_Address' },
+              { data: 'action', name: 'action', orderable: false, searchable: false }
+          ],
+          order: [[0, 'desc']]
+      });
+  });
+
+  
   // Function to hide empty <td> elements in mobile view
   function hideEmptyCellsOnMobile() {
     // Check if the screen width is less than or equal to 600px (mobile view)
