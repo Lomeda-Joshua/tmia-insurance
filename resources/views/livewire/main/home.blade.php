@@ -1,6 +1,4 @@
-@extends('components.layouts.main')
-@section('content')
-
+<x-layouts.main>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   
@@ -356,5 +354,4 @@
 
 </div>
 <!-- /.content-wrapper -->
-
-@endsection
+</x-layouts.main>

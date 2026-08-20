@@ -1,8 +1,18 @@
-@extends('components.layouts.main')
-@section('content')
-
+<x-layouts.main>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+
+<!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      New Business Insurance
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
+      <li class="active"><i class="fa-solid fa-car"></i> New Business Insurance</li>
+    </ol>
+  </section>
 
     <!-- Main content -->
   <section class="content">
@@ -86,11 +96,13 @@
             </div>
           </div>
         </div>
+        @if(Auth::user()->User_Level_ID == 1)
         <div class="row">
-          <div class="btnactionud pull-right" hidden>
+          <div class="btnactionud pull-right">
             <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa fa-plus"></i> Add New</button>
           </div>
         </div>
+        @endif
       </div>
       <div class="box-body" style="max-width:100%;">
         <table id="table_trans" class="table table-striped table-bordered table-hover">
@@ -1808,4 +1820,4 @@ $(document).ready(function() {
 
 @endpush
 
-@endsection
+</x-layouts.main>

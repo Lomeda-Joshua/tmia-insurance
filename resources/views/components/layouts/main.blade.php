@@ -8,7 +8,7 @@
     <div class="wrapper">
         @include('components.layouts.headernav')
         @include('components.layouts.sidebar')
-        @yield('content')
+        {{ $slot }}
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
                 <b>Version</b> 0.0.1

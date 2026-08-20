@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class NewBusiness extends Model
 {
+    use HasFactory;
+
     protected $table = "transactions_nb";
 
     protected $fillable = [
@@ -34,4 +37,10 @@ class NewBusiness extends Model
         'ISE_No',
         'User_ID'
     ];
+
+    public function customerInformation()
+    {
+        return $this->belongsTo(CustomerInformation::class, 'Customer_No', 'Customer_No');
+    }
+
 }

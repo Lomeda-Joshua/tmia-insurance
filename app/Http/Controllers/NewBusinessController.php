@@ -11,7 +11,10 @@ class NewBusinessController extends Controller
     public function index(Request $request){
         if ($request->ajax()) {
             // Build base query without executing ->get()
-            $query = NewBusiness::select([
+            $query = NewBusiness::with(['customerInformation' => function ($q){
+                    $q->select('Customer_No');
+                }
+            ])->select([
                 'Insurance_No',
                 'Trans_Date',
                 'Trans_Status',
