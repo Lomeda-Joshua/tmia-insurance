@@ -45,7 +45,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        $this->redirectIntended(default: route('dashboard', absolute: false));
     }
 
     /**
@@ -78,181 +78,186 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="container center-box">
+<x-layouts.auth.simple>
+    <div class="main"> 
+        <div class="container center-box">
 
-    <!-- Header -->
-    <div class="row text-center">
-        <div class="wave-container">
-            <h3 class="animate-charcter">TMIA</h3>
+            <!-- Header -->
+            <div class="row text-center">
+                <div class="wave-container">
+                    <h3 class="animate-charcter">TMIA</h3>
 
-            <div id="flip">
-                <div class="flip-inner">
-                    <div>T O Y O T A</div>
-                    <div>M A K A T I</div>
-                    <div>A N D</div>
-                    <div>B I C U T A N</div>
-                    <div>I N S U R A N C E</div>
-                    <div>A G E N C Y</div>
+                    <div id="flip">
+                        <div class="flip-inner">
+                            <div>T O Y O T A</div>
+                            <div>M A K A T I</div>
+                            <div>A N D</div>
+                            <div>B I C U T A N</div>
+                            <div>I N S U R A N C E</div>
+                            <div>A G E N C Y</div>
+                        </div>
+                    </div>
+
+                    <h1 class="wave-text">
+                        <span>S</span>
+                        <span>y</span>
+                        <span>s</span>
+                        <span>t</span>
+                        <span>e</span>
+                        <span>m</span>
+                    </h1>
                 </div>
             </div>
 
-            <h1 class="wave-text">
-                <span>S</span>
-                <span>y</span>
-                <span>s</span>
-                <span>t</span>
-                <span>e</span>
-                <span>m</span>
-            </h1>
-        </div>
-    </div>
+            <!-- Profile Image -->
+            <div class="row">
+                <div class="center-block">
+                    <img
+                        class="profile-img"
+                        src="{{ asset('tmia-assets/images/user.png') }}"
+                        alt="User"
+                    >
+                </div>
+            </div>
 
-    <!-- Profile Image -->
-    <div class="row">
-        <div class="center-block">
-            <img
-                class="profile-img"
-                src="{{ asset('tmia-assets/images/user.png') }}"
-                alt="User"
-            >
-        </div>
-    </div>
+            <!-- Form + Logo -->
+            <div class="row cellcenter">
 
-    <!-- Form + Logo -->
-    <div class="row cellcenter">
+                <!-- Login Form -->
+                <div class="col-md-6 login-form">
 
-        <!-- Login Form -->
-        <div class="col-md-6 login-form">
+                    <!-- Session Status -->
+                    <x-auth-session-status
+                        class="text-center"
+                        :status="session('status')"
+                    />
 
-            <!-- Session Status -->
-            <x-auth-session-status
-                class="text-center"
-                :status="session('status')"
-            />
+                    <form wire:submit="login">
+                        <fieldset>
 
-            <form wire:submit="login">
-                <fieldset>
+                            <!-- Email / Username -->
+                            <p>
+                                <span class="fa fa-user"></span>
 
-                    <!-- Email / Username -->
-                    <p>
-                        <span class="fa fa-user"></span>
-
-                        <input
-                            wire:model="email"
-                            type="email"
-                            id="txtuname"
-                            name="email"
-                            placeholder="Email"
-                            required
-                            autofocus
-                            autocomplete="email"
-                        >
-                    </p>
-
-                    @error('email')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                    <!-- Password -->
-                    <p>
-                        <span class="fa fa-lock"></span>
-
-                        <input
-                            wire:model="password"
-                            type="password"
-                            id="txtpword"
-                            name="password"
-                            placeholder="Password"
-                            required
-                            autocomplete="current-password"
-                        >
-                    </p>
-
-                    @error('password')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-
-                
-
-                    <!-- Login Button -->
-                    <center>
-                        <div>
-                            <span>
                                 <input
-                                    type="submit"
-                                    value="Log In"
-                                    id="btnlogin"
+                                    wire:model="email"
+                                    type="email"
+                                    id="txtuname"
+                                    name="email"
+                                    placeholder="Email"
+                                    required
+                                    autofocus
+                                    autocomplete="email"
                                 >
-                            </span>
+                            </p>
+
+                            @error('email')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <!-- Password -->
+                            <p>
+                                <span class="fa fa-lock"></span>
+
+                                <input
+                                    wire:model="password"
+                                    type="password"
+                                    id="txtpword"
+                                    name="password"
+                                    placeholder="Password"
+                                    required
+                                    autocomplete="current-password"
+                                >
+                            </p>
+
+                            @error('password')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        
+
+                            <!-- Login Button -->
+                            <center>
+                                <div>
+                                    <span>
+                                        <input
+                                            type="submit"
+                                            value="Log In"
+                                            id="btnlogin"
+                                        >
+                                    </span>
+                                </div>
+                            </center>
+
+                        </fieldset>
+                    </form>
+
+                </div>
+
+                <!-- Logo -->
+                <div class="col-md-6 login-logo">
+                    <img
+                        class="login-img"
+                        src="{{ asset('tmia-assets/images/logo.png') }}"
+                        alt="TMIA Logo"
+                    >
+                </div>
+
+            </div>
+
+            <!-- Modal Recover Account -->
+            <div id="modalrecover" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white;"><p><strong>×</strong></p></button>
+                    <h3 class="modal-title"><strong>ACCOUNT RECOVERY</strong></h3>
+                </div>
+                <!--/modal-header-->
+                <div class="modal-body">
+                    <div class="pad" id="infopanel">
+                    <div class="form-horizontal">
+                        <div class="controls">
+                        <div class="row">
+                            <div class="col-md-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                <label for="txtrecemailaddress" style="color:gray;">Recovery E-Mail Address *</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                    <i class="fa fa-envelope"></i>
+                                    </span>
+                                    <input type="text" id="txtrecemailaddress" class="form-control input-sm" placeholder="Enter Email Address." required="required" data-error="Email Address is required.">
+                                </div>
+                                <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                    </center>
-
-                </fieldset>
-            </form>
-
-        </div>
-
-        <!-- Logo -->
-        <div class="col-md-6 login-logo">
-            <img
-                class="login-img"
-                src="{{ asset('tmia-assets/images/logo.png') }}"
-                alt="TMIA Logo"
-            >
-        </div>
-
-    </div>
-
-    <!-- Modal Recover Account -->
-    <div id="modalrecover" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-        <div class="modal-header text-center">
-            <button type="button" class="close" data-dismiss="modal" style="color:white;"><p><strong>×</strong></p></button>
-            <h3 class="modal-title"><strong>ACCOUNT RECOVERY</strong></h3>
-        </div>
-        <!--/modal-header-->
-        <div class="modal-body">
-            <div class="pad" id="infopanel">
-            <div class="form-horizontal">
-                <div class="controls">
-                <div class="row">
-                    <div class="col-md-12">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                        <label for="txtrecemailaddress" style="color:gray;">Recovery E-Mail Address *</label>
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                            <i class="fa fa-envelope"></i>
-                            </span>
-                            <input type="text" id="txtrecemailaddress" class="form-control input-sm" placeholder="Enter Email Address." required="required" data-error="Email Address is required.">
-                        </div>
-                        <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     </div>
+                    <!--/pad-->
+                </div>
+                <!--/modal-body-->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="btnrecback"><i class="fa fa-arrow-circle-left"></i> Back to Login</button>
+                    <button type="submit" class="btn btn-success" id="btnrecsubmit"><i class="fa fa-send"></i> Submit</button>
                 </div>
                 </div>
+                <!--/modal-content-->
             </div>
+            <!-- /modal-dialog -->
             </div>
-            <!--/pad-->
+            <!-- END Modal Recover Account -->
         </div>
-        <!--/modal-body-->
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-success" id="btnrecback"><i class="fa fa-arrow-circle-left"></i> Back to Login</button>
-            <button type="submit" class="btn btn-success" id="btnrecsubmit"><i class="fa fa-send"></i> Submit</button>
-        </div>
-        </div>
-        <!--/modal-content-->
+
     </div>
-    <!-- /modal-dialog -->
-    </div>
-<!-- END Modal Recover Account -->
-</div>
+</x-layouts.auth.simple>
 
 
 

@@ -78,7 +78,10 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                 <div class="pull-right">
-                    <a class="btn btn-default btn-flat btnsignout"><i class="fa fa-sign-out"></i>Sign out</a>
+                     <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <button class="btn btn-default btn-flat btnsignout" type="s"><i class="fa fa-sign-out"></i>Sign out</button>
+                    </form>
                 </div>
                 </li>
             </ul>

@@ -45,6 +45,13 @@ class User extends Authenticatable // implements MustVerifyEmail
     ];
 
     /**
+     * Disable Eloquent automatic timestamps.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
@@ -80,7 +87,19 @@ class User extends Authenticatable // implements MustVerifyEmail
     }
 
     /**
-     * Override default password column name for authentication.
+     * Get the name of the password column for the user.
+     *
+     * @return string
+     */
+    public function getAuthPasswordName()
+    {
+        return 'Encrypt_Password';
+    }
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
      */
     public function getAuthPassword(): string
     {
