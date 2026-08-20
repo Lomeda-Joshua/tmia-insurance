@@ -28,8 +28,8 @@
                     </span>
                 </a>
                 <ul class="treeview-menu" id="mymenuchild0">
-                    <li class="{{ request()->routeIs('new_business*') ? 'active' : '' }}" >
-                        <a href="{{ route('new_business') }}"><i class="fa-solid fa-car"></i> New Business Insurance</a>
+                    <li class="{{ request()->routeIs('new_business.index*') ? 'active' : '' }}" >
+                        <a href="{{ route('new_business.index') }}"><i class="fa-solid fa-car"></i> New Business Insurance</a>
                     </li>
                     <li class="{{ request()->routeIs('renewal_business*') ? 'active' : '' }}" >
                         <a href="{{ route('renewal_business') }}"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a>

@@ -23,4 +23,7 @@ yarn-error.log
 /.vscode
 /.zed
 
+/.agents/
+/.github/
+
 /public/tmia-assets/plugins

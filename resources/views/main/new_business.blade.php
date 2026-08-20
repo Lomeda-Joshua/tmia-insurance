@@ -95,28 +95,27 @@
       <div class="box-body" style="max-width:100%;">
         <table id="table_trans" class="table table-striped table-bordered table-hover">
           <thead>
-            <tr class="tableheader">
-              <th>No.</th>
-              <th>Insurance No.</th>
-              <th>Trans. Date & Time</th>
-              <th>Status</th>
-              <th>Customer No.</th>
-              <th>Customer Name</th>
-              <th>Contact No.</th>
-              <th>VIN</th>
-              <th>CS No.</th>
-              <th>Plate No.</th>
-              <th>Model</th>
-              <th>Variant</th>
-              <th>Insurance Partner</th>
-              <th>I.S.E</th>
-              <th>MP Name</th>
-              <th>Action</th>
-            </tr>
+              <tr class="tableheader">
+                  <th>No.</th>
+                  <th>Insurance No.</th>
+                  <th>Trans. Date & Time</th>
+                  <th>Status</th>
+                  <th>Customer No.</th>
+                  <th>Customer Name</th>
+                  <th>Contact No.</th>
+                  <th>VIN</th>
+                  <th>CS No.</th>
+                  <th>Plate No.</th>
+                  <th>Model</th>
+                  <th>Variant</th>
+                  <th>Insurance Partner</th>
+                  <th>I.S.E</th>
+                  <th>MP Name</th>
+              </tr>
           </thead>
           <tbody>
           </tbody>
-        </table>
+      </table>
       </div>
     </div>
     
@@ -1280,9 +1279,9 @@
                       <div class="cc-header">
                         <h3>Credit Card Details</h3>
                         <div class="cc-icons">
-                          <img src="../assets/images/credit/visa.svg" alt="visa">
-                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
-                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
+                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                         </div>
                       </div>
                       <div class="row">
@@ -1390,9 +1389,9 @@
                     </div>
                     <div class="col-md-8 ew-icons-col">
                       <div class="ew-icons">
-                        <img id="pgcash" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
-                        <img id="pmaya" src="../assets/images/e-wallet/maya.svg" alt="maya">
-                        <img id="ptwallet" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
+                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                        <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                        <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                       </div>
                     </div>
                   </div>
@@ -1730,20 +1729,47 @@
 <!-- /.content-wrapper -->
 </div>
 
+@push('scripts')
 <script>
 
-  $(document).ready(function() {
-      $('#table_trans').DataTable({
+$(document).ready(function() {
+  var transTable = $('#table_trans').DataTable({
           processing: true,
           serverSide: true,
           ajax: {
               url: "{{ route('new_business.index') }}",
-              type: "GET"
+              type: "GET",
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              error: function(xhr, error, code){
+                console.error('DataTables AJAX Error:', xhr.responseText);
+              }
           },
           columns: [
-              { data: 'User_ID', name: 'User_ID' },
-              { data: 'Email_Address', name: 'Email_Address' },
-              { data: 'action', name: 'action', orderable: false, searchable: false }
+              { 
+                  data: null, 
+                  name: 'DT_RowIndex', 
+                  orderable: false, 
+                  searchable: false,
+                  render: function (data, type, row, meta) {
+                      return meta.row + meta.settings._iDisplayStart + 1; 
+                  }
+              },
+              { data: 'Insurance_No', name: 'Insurance_No' },                                      // 2. Insurance No.
+              { data: 'Trans_Date', name: 'Trans_Date' },                                          // 3. Trans. Date & Time
+              { data: 'Trans_Status', name: 'Trans_Status' },                                      // 4. Status
+              { data: 'Customer_No', name: 'Customer_No' },                                        // 5. Customer No.
+              { data: 'Customer_Name', name: 'Customer_Name', defaultContent: '' },                // 6. Customer Name
+              { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },                      // 7. Contact No.
+              { data: 'VIN', name: 'VIN' },                                                         // 8. VIN
+              { data: 'CS_No', name: 'CS_No', defaultContent: '' },                                // 9. CS No.
+              { data: 'Plate_No', name: 'Plate_No', defaultContent: '' },                          // 10. Plate No.
+              { data: 'Model', name: 'Model', defaultContent: '' },                                // 11. Model
+              { data: 'Variant', name: 'Variant', defaultContent: '' },                            // 12. Variant
+              { data: 'Insurance_Company', name: 'Insurance_Company' },                            // 13. Insurance Partner
+              { data: 'ISE_No', name: 'ISE_No' },                                                  // 14. I.S.E
+              { data: 'User_ID', name: 'User_ID' }
           ],
           order: [[0, 'desc']]
       });
@@ -1779,5 +1805,7 @@
 </script>
 
 <script type="text/javascript" src="{{ asset('tmia-assets/js/new_business.js') }}"></script>
+
+@endpush
 
 @endsection

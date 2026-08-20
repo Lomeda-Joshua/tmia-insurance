@@ -19,4 +19,6 @@
     </div>
 </body>
     @include('partials.footer')
+    <!-- Stack target for view-specific scripts -->
+    @stack('scripts')
 </html>
