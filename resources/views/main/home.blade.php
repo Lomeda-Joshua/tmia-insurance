@@ -1,6 +1,5 @@
-
-<!-- Customized Style -->
-<link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/assets/css/home.css') }}">
+@extends('components.layouts.main')
+@section('content')
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -355,3 +354,5 @@
   </section>
 </div>
 <!-- /.content-wrapper -->
+
+@endsection
