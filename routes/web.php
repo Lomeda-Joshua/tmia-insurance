@@ -20,6 +20,10 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
+    Route::get('/lockscreen', function(){
+        return view('main.lockscreen');
+    })->name('new_business_modify');
+
     // New Business Insurance
     Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
     Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');

@@ -41,7 +41,7 @@
                 align-items: center;        /* center vertically */
                 height: 100vh;              /* full page height */
                 margin: 0;
-                background: url("../assets/images/background.jpg") no-repeat center center fixed;
+                background: url("{{ asset('tmia-assets/images/background.jpg') }}") no-repeat center center fixed;
                 background-size: cover;
             }
 
@@ -100,7 +100,7 @@
 
             /* Add background here */
             body.lockscreen {
-                background: url("../assets/images/background.webp") no-repeat center center fixed;
+                background: url("{{ asset('tmia-assets/images/background.webp') }}") no-repeat center center fixed;
                 background-size: cover;
             }
         </style>
@@ -110,7 +110,7 @@
         <div class="lockscreen-wrapper">
         <div class="lockscreen-container">
             <div class="lockscreen-logo">
-            <IMG SRC="{{ assets('tmia-assets/images/logo.png') }}" style="width:340px;height:190px;">
+            <IMG SRC="{{ asset('tmia-assets/images/logo.png') }}" style="width:340px;height:190px;">
             </div>
             <!-- User name -->
             <div class="lockscreen-name" id="lockscreenname">User Login Name</div>
@@ -119,7 +119,7 @@
             <div class="lockscreen-item">
             <!-- lockscreen image -->
             <div class="lockscreen-image">
-                <img src="{{ assets('tmia-assets/images/user.png') }}" alt="User Image">
+                <img src="{{ asset('tmia-assets/images/user.png') }}" alt="User Image">
             </div>
             <!-- /.lockscreen-image -->
 
@@ -166,15 +166,15 @@
 
         <!--============<******* JAVA SCRIPT (JS) *******>============-->
         <!-- jQuery v3.7.1  -->
-        <script type="text/javascript" src="{{ assets('tmia-assets/plugins/jquery/dist/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('tmia-assets/plugins/jquery/dist/jquery.min.js') }}"></script>
         <!-- Bootstrap 3.3.6 -->
-        <script type="text/javascript" src="{{ assets('tmia-assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('tmia-assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
         <!-- SweetAlert -->
-        <script type="text/javascript" src="{{ assets('tmia-assets/plugins/sweetalert/sweetalert.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('tmia-assets/plugins/sweetalert/sweetalert.min.js') }}"></script>
         <!-- Bootstrap-notify -->
-        <script type="text/javascript" src="{{ assets('tmia-assets/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('tmia-assets/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
-        <script type="text/javascript" src="{{ assets('tmia-assets/js/lockscreen.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('tmia-assets/js/lockscreen.js') }}"></script>
         <script>
             $('.lnksite').css({
             "cursor": "pointer",
