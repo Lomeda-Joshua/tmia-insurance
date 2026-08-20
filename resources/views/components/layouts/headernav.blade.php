@@ -45,22 +45,26 @@
             <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="{{ asset('tmia-assets/images/user.png') }}" class="user-image" alt="User Image">
-                
+                <span class="hidden-xs"><b><font size="2px" face="arial black">{{ Auth::user()->Display_Name }}</font></b></span>
             </a>
             <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                <img src="{{ asset('tmia-assets/images/user.png') }}" class="img-circle" alt="User Image">
-                <p>
-                    
-                </p>
-                <p>
-                    <b></b>
-                    <br>
-
-                    
-                </p>
-                </li>
+                    <img src="{{ asset('tmia-assets/images/user.png') }}" class="img-circle" alt="User Image">
+                    <p>
+                      @if( Auth::user()->User_ID != null )
+                        <b>ID No.:</b>
+                            &nbsp;
+                            <span id="userid" aria-label="User ID"><b>{{ Auth::user()->User_ID }}</b></span>
+                      @endif
+                    </p>
+                    <p>
+                      <b>{{ Auth::user()->Display_Name }}</b>
+                      <br>
+                      {{ Auth::user()->User_Level_ID }}
+                      <small>Member since {{ Auth::user()->Register_Date?->format('F j, Y') }}</small>
+                    </p>
+                  </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
                 <div class="pull-right">

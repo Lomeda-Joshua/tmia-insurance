@@ -14,6 +14,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     use HasFactory, Notifiable;
 
     protected $table = 'user';
+    protected $primaryKey = 'User_ID';
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +64,7 @@ class User extends Authenticatable // implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'Register_Date' => 'date', // or 'datetime' if it includes a time component
         ];
     }
 
@@ -76,4 +78,13 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
+
+    /**
+     * Override default password column name for authentication.
+     */
+    public function getAuthPassword(): string
+    {
+        return $this->Encrypt_Password;
+    }
+    
 }

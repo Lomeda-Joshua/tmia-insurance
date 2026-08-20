@@ -28,7 +28,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        // Map input properties to custom database columns
+        $credentials = [
+            'Email_Address' => $this->email,
+            'password'      => $this->password, // 'password' key is consumed by Auth provider, not queried directly
+        ];
+
+        if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

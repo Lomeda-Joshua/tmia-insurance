@@ -46,15 +46,10 @@
 
 <!-- DataTables -->
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/jquery.dataTables.min.css') }}"/>
-
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/select.dataTables.min.css') }}"/>
-
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/dataTables.checkboxes.css') }}"/>
-
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/fixedColumns.dataTables.min.css') }}"/>
-
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/extensions/Responsive/css/dataTables.responsive.css') }}"/>
-
 <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/datatables/dataTables.buttons.min.css') }}"/>
 
 <!-- SweetAlert style -->
