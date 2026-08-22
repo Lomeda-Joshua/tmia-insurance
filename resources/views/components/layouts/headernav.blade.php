@@ -71,7 +71,7 @@
                     <p>
                       <b>{{ Auth::user()->Display_Name }}</b>
                       <br>
-                      {{ Auth::user()->User_Level_ID }}
+                      {{ Auth::user()->userLevel->User_Level_Description }}
                       <small>Member since {{ Auth::user()->Register_Date?->format('F j, Y') }}</small>
                     </p>
                   </li>

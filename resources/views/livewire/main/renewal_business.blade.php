@@ -1,20 +1,20 @@
 <x-layouts.main>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-
-<!-- Content Header (Page header) -->
+  <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      New Business Insurance
+      Renewal Business Insurance
     </h1>
     <ol class="breadcrumb">
       <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
-      <li class="active"><i class="fa-solid fa-car"></i> New Business Insurance</li>
+      <li class="active"><i class="fa-solid fa-car"></i> Renewal Business Insurance</li>
     </ol>
   </section>
 
-    <!-- Main content -->
+  <!-- ========================================================================================================== -->
+  <!-- Main content -->
   <section class="content">
     <!-- box -->
     <div class="box box-warning">
@@ -30,10 +30,7 @@
             <div class="icon">
               <i class="fa-solid fa-clock-rotate-left"></i>
             </div>
-            {{-- <label id="viewpending" class="btn small-box-footer">View <i class="fa-solid fa-angles-right"></i></label> --}}
-            <button type="button" id="viewpending" class="btn small-box-footer">
-                View <i class="fa-solid fa-angles-right"></i>
-            </button>
+            <label id="viewpending" class="btn small-box-footer">View <i class="fa-solid fa-angles-right"></i></label>
           </div>
         </div>
         <!-- ./col -->
@@ -99,47 +96,39 @@
             </div>
           </div>
         </div>
-        @if(Auth::user()->User_Level_ID == 1)
         <div class="row">
-          <div class="btnactionud pull-right">
-            <button
-                  type="button"
-                  id="btnadd"
-                  class="btn btn-box-tool"
-                  data-user-id="{{ Auth::user()->User_ID }}"
-                  data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}"
-                >
-                <i class="fa fa-plus"></i> Add New
-            </button>
+          <div class="btnactionud pull-right" hidden>
+            <button type="button" id="btnnblist" class="btn btn-box-tool" style="font-size: 15px !important;" data-toggle="tooltip" title="New Business Expired & Expiring Soon (90Days)"><i class="fa fa-list"></i> NB Expired & 90D</button>
+            <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i class="fa fa-plus"></i> Add New</button>
           </div>
         </div>
-        @endif
       </div>
       <div class="box-body" style="max-width:100%;">
         <table id="table_trans" class="table table-striped table-bordered table-hover">
           <thead>
-              <tr class="tableheader">
-                  <th>No.</th>
-                  <th>Insurance No.</th>
-                  <th>Trans. Date & Time</th>
-                  <th>Status</th>
-                  <th>Customer No.</th>
-                  <th>Customer Name</th>
-                  <th>Contact No.</th>
-                  <th>VIN</th>
-                  <th>CS No.</th>
-                  <th>Plate No.</th>
-                  <th>Model</th>
-                  <th>Variant</th>
-                  <th>Insurance Partner</th>
-                  <th>I.S.E</th>
-                  <th>MP Name</th>
-                  <th>Action</th>
-              </tr>
+            <tr class="tableheader">
+              <th>No.</th>
+              <th>Insurance No.</th>
+              <th>Trans. Date & Time</th>
+              <th>Status</th>
+              <th>Customer No.</th>
+              <th>Customer Name</th>
+              <th>Contact No.</th>
+              <th>VIN</th>
+              <th>CS No.</th>
+              <th>Plate No.</th>
+              <th>Model</th>
+              <th>Variant</th>
+              <th>Insurance Partner</th>
+              <th>I.S.E</th>
+              <th>MP Name</th>
+              <th>Call Attempts</th>
+              <th>Action</th>
+            </tr>
           </thead>
           <tbody>
           </tbody>
-      </table>
+        </table>
       </div>
     </div>
     
@@ -697,23 +686,23 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtcommission">Commission *</label>
-                              <input type="text" id="txtcommission" class="form-control input-sm" value="0.00" style="font-weight: bold; background: #F3F3F3;" required="required" data-error="Commission is required."  disabled>
+                              <input type="text" id="txtcommission" class="form-control input-sm" value="0.00" style="font-weight: bold; background: #F3F3F3;" required="required" data-error="Commission is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
                         </div>
                         <hr>
-                        <div class="row">
+                        <div class="row" hidden>
                           <div class="col-md-12">
                             <label>Option Type</label>
                             <div class="radio-group">
                               <label class="custom-radio">
-                                <input type="radio" name="rdoptiontype" value="FREE" checked>
+                                <input type="radio" name="rdoptiontype" value="FREE">
                                 <span class="checkmark"></span>
                                 FREE
                               </label>
                               <label class="custom-radio">
-                                <input type="radio" name="rdoptiontype" value="PAID">
+                                <input type="radio" name="rdoptiontype" value="PAID" checked>
                                 <span class="checkmark"></span>
                                 PAID
                               </label>
@@ -773,9 +762,9 @@
                                       <div class="cc-header">
                                         <h3>Credit Card Details</h3>
                                         <div class="cc-icons">
-                                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
-                                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
+                                          <img src="../assets/images/credit/visa.svg" alt="visa">
+                                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
+                                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -823,7 +812,7 @@
                                       <div class="pdc-header">
                                         <h3>Post-Dated Check (PDC) Details</h3>
                                         <div class="pdc-icons">
-                                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
+                                          <img src="../assets/images/credit/check.png" alt="cheque">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -883,9 +872,9 @@
                                     </div>
                                     <div class="col-md-8 ew-icons-col">
                                       <div class="ew-icons">
-                                        <img id="pgcash-n" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                                        <img id="pmaya-n" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                                        <img id="ptwallet-n" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
+                                        <img id="pgcash-n" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
+                                        <img id="pmaya-n" src="../assets/images/e-wallet/maya.svg" alt="maya">
+                                        <img id="ptwallet-n" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
                                       </div>
                                     </div>
                                   </div>
@@ -1060,6 +1049,29 @@
                               <div class="form-group">
                                 <label for="cbomortgage">Mortgage *</label>
                                 <select id="cbomortgage" class="form-control input-sm" required="required" data-error="Mortgage is required.">
+                                  <option Value="">PLEASE SELECT</option>
+                                </select>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <label>Policy Action</label>
+                              <div class="radio-group">
+                                <label class="custom-radio">
+                                  <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
+                                  <span class="checkmark"></span>
+                                  RETAIN
+                                </label>
+                                <label class="custom-radio">
+                                  <input type="radio" name="rdpolicyaction" value="TRANSFER">
+                                  <span class="checkmark"></span>
+                                  TRANSFER
+                                </label>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="cboprevinsco">Previous Insurance Company *</label>
+                                <select id="cboprevinsco" class="form-control input-sm" required="required" data-error="Previous Insurance Company is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1303,9 +1315,9 @@
                       <div class="cc-header">
                         <h3>Credit Card Details</h3>
                         <div class="cc-icons">
-                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
-                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
+                          <img src="../assets/images/credit/visa.svg" alt="visa">
+                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
+                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
                         </div>
                       </div>
                       <div class="row">
@@ -1353,7 +1365,7 @@
                       <div class="pdc-header">
                         <h3>Post-Dated Check (PDC) Details</h3>
                         <div class="pdc-icons">
-                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
+                          <img src="../assets/images/credit/check.png" alt="cheque">
                         </div>
                       </div>
                       <div class="row">
@@ -1413,9 +1425,9 @@
                     </div>
                     <div class="col-md-8 ew-icons-col">
                       <div class="ew-icons">
-                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                        <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                        <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
+                        <img id="pgcash" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
+                        <img id="pmaya" src="../assets/images/e-wallet/maya.svg" alt="maya">
+                        <img id="ptwallet" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
                       </div>
                     </div>
                   </div>
@@ -1749,121 +1761,47 @@
       </div>
     </div>
     <!-- END MODAL CALL LOGS -->
+    <!-- MODAL NB LIST -->
+    <div id="modal-nblist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+      <div class="box">
+        <div class="box-body">
+          <table id="table_nblist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
+            <thead>
+              <tr class="tableheader">
+                <th>No.</th>
+                <th>Insurance No.</th>
+                <th>Trans. Date & Time</th>
+                <th>Status</th>
+                <th>Customer No.</th>
+                <th>Customer Name</th>
+                <th>Contact No.</th>
+                <th>VIN</th>
+                <th>CS No.</th>
+                <th>Plate No.</th>
+                <th>Model</th>
+                <th>Variant</th>
+                <th>Insurance Partner</th>
+                <th>I.S.E</th>
+                <th>Expiration Date</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="box-footer with-border">
+          <div class="pull-right">
+            <button type="button" id="btnnbselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+          </div>
+        </div>  
+      </div>
+    </div>
+    <!-- END MODAL NB LIST -->
   </section>
-<!-- /.content-wrapper -->
 </div>
+<!-- /.content-wrapper -->
 
-@push('scripts')
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-      const table = $('#table_trans').DataTable({
-          processing: true,
-          serverSide: true,
-          deferLoading: 0,
-          responsive: true,
-          autoWidth: false,
-          pageLength: 10,
-          order: [[2, 'desc']],
-          ajax: {
-              url: @json(route('new_business.data')),
-              data: function (data) {
-                  data.viewpending = window.viewpending === true;
-                  data.viewexpiring = window.viewexpiring ?? true;
-                  data.searchval = $('#txtsearch').val().trim();
-                  data.datefrom = $('#dpdatefrom').val();
-                  data.dateto = $('#dpdateto').val();
-              }
-          },
-          columns: [
-              {
-                  data: 'DT_RowIndex',
-                  name: 'DT_RowIndex',
-                  searchable: false,
-                  orderable: false
-              },
-              { data: 'Insurance_No', name: 'Insurance_No' },
-              { data: 'Trans_Date', name: 'Trans_Date' },
-              { data: 'Trans_Status', name: 'Trans_Status' },
-              { data: 'Customer_No', name: 'Customer_No' },
-              { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
-              { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
-              { data: 'VIN', name: 'VIN', defaultContent: '' },
-              { data: 'CS_No', name: 'CS_No', defaultContent: '' },
-              { data: 'Plate_No', name: 'Plate_No', defaultContent: '' },
-              { data: 'Model', name: 'Model', defaultContent: '' },
-              { data: 'Variant', name: 'Variant', defaultContent: '' },
-              { data: 'Insurance_Company', name: 'Insurance_Company', defaultContent: '' },
-              { data: 'ISE_Name', name: 'ISE_Name', defaultContent: '' },
-              { data: 'MP_Name', name: 'MP_Name', defaultContent: '' },
-              {
-                  data: 'button',
-                  name: 'button',
-                  searchable: false,
-                  orderable: false
-              }
-          ]
-      });
-
-      $('#btnfind').on('click', function () {
-          window.viewpending = false;
-          window.viewexpiring = false;
-          table.ajax.reload();
-      });
-
-      $('#btnrefresh').on('click', function () {
-          $('#txtsearch').val('');
-          table.ajax.reload();
-      });
-
-      $('#viewpending').on('click', function () {
-          window.viewpending = true;
-          window.viewexpiring = false;
-          table.ajax.reload();
-      });
-
-      $('#viewexpiring').on('click', function () {
-          window.viewpending = false;
-          window.viewexpiring = true;
-          table.ajax.reload();
-      });
-
-      $('#dpdatefrom, #dpdateto').on('change', function () {
-          table.ajax.reload();
-      });
-
-      $('#txtsearch').on('keydown', function (event) {
-          if (event.key === 'Enter') {
-              event.preventDefault();
-
-              window.viewpending = false;
-              window.viewexpiring = false;
-
-              table.ajax.reload();
-          }
-      });
-
-
-  });
-</script>
+<?php include_once __DIR__ . '/../includes/footer.php'; ?>
 
 <script>
-
-// Seting up date to and from on New Business page date range picker
-const dateTo = new Date();
-const dateFrom = new Date();
-dateFrom.setDate(dateFrom.getDate() - 30);
-
-$('#dpdatefrom, #dpdateto').datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy',
-    todayHighlight: true
-});
-
-$('#dpdatefrom').datepicker('setDate', dateFrom);
-$('#dpdateto').datepicker('setDate', dateTo);
-
-
-
   // Function to hide empty <td> elements in mobile view
   function hideEmptyCellsOnMobile() {
     // Check if the screen width is less than or equal to 600px (mobile view)
@@ -1890,27 +1828,8 @@ $('#dpdateto').datepicker('setDate', dateTo);
 
   // Run again on window resize to adjust the behavior when resizing the screen
   window.onresize = hideEmptyCellsOnMobile;
-
-
-  fetch(@json(route('new_business.counts')))
-      .then(response => response.json())
-      .then(data => {
-          $('#pending-counts').text(
-              Number(data.Pending_Counts).toLocaleString()
-          );
-
-          $('#expiring-counts').text(
-              Number(data.Expiring_Counts).toLocaleString()
-          );
-      })
-      .catch(error => {
-          console.error('Unable to load policy counts:', error);
-      });
-
 </script>
 
-{{-- <script type="text/javascript" src="{{ asset('tmia-assets/js/new_business.js') }}"></script> --}}
-<script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>
-@endpush
+<script type="text/javascript" src="../assets/js/renewal_business.js"></script>
 
 </x-layouts.main>

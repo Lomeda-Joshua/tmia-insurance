@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use App\Models\UserLevel;
 
 class User extends Authenticatable // implements MustVerifyEmail
 {
@@ -104,6 +105,12 @@ class User extends Authenticatable // implements MustVerifyEmail
     public function getAuthPassword(): string
     {
         return $this->Encrypt_Password;
+    }
+
+
+    public function userLevel()
+    {
+        return $this->belongsTo(UserLevel::class, 'User_Level_ID', 'User_Level_ID');
     }
     
 }
