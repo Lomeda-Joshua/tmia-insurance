@@ -1,3 +1,46 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Layout;
+use Livewire\Volt\Component;
+
+new #[Layout('components.layouts.auth')] class extends Component {
+    public string $password = '';
+
+    public function unlock(): void
+    {
+        $user = Auth::user();
+
+        if (! $user || ! Auth::validate([
+            'Email_Address' => $user->Email_Address,
+            'password' => $this->password,
+        ])) {
+            $this->password = '';
+
+            throw ValidationException::withMessages([
+                'password' => 'Invalid password.',
+            ]);
+        }
+
+        Session::regenerate();
+
+        $this->redirect(route('dashboard', absolute: false));
+    }
+
+    public function signInAsAnotherUser(): void
+    {
+        Auth::logout();
+
+        Session::invalidate();
+        Session::regenerateToken();
+
+        $this->redirect(route('login', absolute: false));
+    }
+};
+?>
+
 <!DOCTYPE html>
   <head>
         <meta charset="utf-8"/>
@@ -113,7 +156,7 @@
             <IMG SRC="{{ asset('tmia-assets/images/logo.png') }}" style="width:340px;height:190px;">
             </div>
             <!-- User name -->
-            <div class="lockscreen-name" id="lockscreenname">User Login Name</div>
+            <div class="lockscreen-name" id="lockscreenname">   {{ Auth::user()->Display_Name ?? 'User Login Name'  }}</div>
             <br>
             <!-- START LOCK SCREEN ITEM -->
             <div class="lockscreen-item">
@@ -126,11 +169,16 @@
             <!-- lockscreen credentials (contains the form) -->
             <form class="lockscreen-credentials" action="javascript:void(0);" method="POST">
                 <div class="input-group">
-                <input type="password" id="txtpword" class="form-control" placeholder="password">
-                <input type="hidden" id="txtuname">
-                <div class="input-group-btn">
-                    <button type="submit" id="btnlogin" class="btn"><i class="fa-regular fa-circle-right text-muted"></i></button>
-                </div>
+                    <input type="password" id="txtpword" class="form-control" placeholder="password">
+                    <input type="hidden" id="txtuname">
+                    <div class="input-group-btn">
+                        <button type="submit" id="btnlogin" class="btn"><i class="fa-regular fa-circle-right text-muted"></i></button>
+                    </div>
+                    @error('password')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
             </form>
             <!-- /.lockscreen credentials -->
@@ -175,6 +223,7 @@
         <script type="text/javascript" src="{{ asset('tmia-assets/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
 
         <script type="text/javascript" src="{{ asset('tmia-assets/js/lockscreen.js') }}"></script>
+        
         <script>
             $('.lnksite').css({
             "cursor": "pointer",

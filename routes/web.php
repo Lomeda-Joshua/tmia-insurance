@@ -28,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Lockscreen route
     Route::get('/lockscreen', function(){
-        return view('main.lockscreen');
+        return view('livewire.main.lockscreen');
     })->name('new_business_modify');
 
     // New Business Insurance
