@@ -13,7 +13,47 @@ Route::get('/dashboard', [HomeDashboardController::class,'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+
 Route::middleware(['auth'])->group(function () {
+    // Lockscreen route
+    Route::get('/lockscreen', function(){
+        return view('livewire.main.lockscreen');
+    });
+
+    // New Business Insurance
+    Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
+    Route::get('/new-business/data', [NewBusinessController::class, 'newBusinessDatatable'])->name('new_business.data');
+    Route::get('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
+    Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
+    Route::get('/new-business/insurance-staff', [NewBusinessController::class,'insuranceStaff',])->name('new_business.insurance_staff');
+    Route::get('/new-business/customers', [NewBusinessController::class,'customers',])->name('new_business.customers');
+    Route::get('/new-business/vehicles', [NewBusinessController::class,'vehicles',])->name('new_business.vehicles');
+    Route::get('/new-business/payments', [NewBusinessController::class,'payments',])->name('new_business.payments');
+    Route::get('/new-business/call-logs', [NewBusinessController::class,'callLogs',])->name('new_business.call_logs');
+
+    // Renewal Business Insurance
+    Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
+    Route::get('/renewal-business/data', [RenewalBusinessTransactionController::class, 'renewalBusinessDatatable'])->name('renewal_business.data');
+    Route::get('/renewal-business/modify', [RenewalBusinessTransactionController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
+
+    // // Lists
+    // Route::get('/customers', [TransactionController::class, 'customerList'])->name('customer_list');
+    // Route::get('/vehicles', [TransactionController::class, 'vehicleList'])->name('vehicle_list');
+
+    // Route::get('/reports/nbrb', [ReportController::class, 'nbrbReport'])->name('nbrb_report');
+
+    // User settings    
+    Route::get('/users', [UserController::class, 'index'])->name('user');
+    Route::get('/account', [UserController::class, 'account'])->name('user_account');
+    Route::get('/users/data', [UserController::class,'userData'])->name('users.data');
+    Route::get('/users/levels', [UserController::class,'levels'])->name('users.levels');
+    Route::get('/users/{userId}', [UserController::class,'show'])->whereNumber('userId')->name('users.show');
+    Route::post('/users', [UserController::class,'store'])->name('users.store');
+    Route::delete('/users/{userId}', [UserController::class, 'destroy',])->whereNumber('userId')->name('users.destroy');
+
+    // Account settings
+    Route::get('/account', [UserController::class,'account'])->name('user_account');
+    Route::put('/account', [UserController::class,'updateAccount'])->name('user_account.update');
 
     // Laravel default account settings routes
     Route::redirect('settings', 'settings/profile');
@@ -21,43 +61,6 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
-    // Lockscreen route
-    Route::get('/lockscreen', function(){
-        return view('livewire.main.lockscreen');
-    })->name('new_business_modify');
-
-    // New Business Insurance
-    Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-    Route::get('/new-business/data', [NewBusinessController::class, 'newBusinessDatatable'])->name('new_business.data');
-    Route::get('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
-    Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
-
-    Route::get('/new-business/insurance-staff', [NewBusinessController::class,'insuranceStaff',])->name('new_business.insurance_staff');
-
-    Route::get('/new-business/customers', [NewBusinessController::class,'customers',])->name('new_business.customers');
-
-    Route::get('/new-business/vehicles', [NewBusinessController::class,'vehicles',])->name('new_business.vehicles');
-
-    Route::get('/new-business/payments', [NewBusinessController::class,'payments',])->name('new_business.payments');
-
-    Route::get('/new-business/call-logs', [NewBusinessController::class,'callLogs',])->name('new_business.call_logs');
-
-    // Renewal Business Insurance
-    Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
-
-    Route::get('/renewal-business/data', [RenewalBusinessTransactionController::class, 'renewalBusinessDatatable'])->name('renewal_business.data');
-
-    Route::get('/renewal-business/modify', [RenewalBusinessTransactionController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
-
-    // // Lists
-    // Route::get('/customers', [TransactionController::class, 'customerList'])->name('customer_list');
-    // Route::get('/vehicles', [TransactionController::class, 'vehicleList'])->name('vehicle_list');
-
-    // Settings Sub-Routes
-    Route::get('/users', [UserController::class, 'index'])->name('user');
-    Route::get('/account', [UserController::class, 'account'])->name('user_account');
-
-    // Route::get('/reports/nbrb', [ReportController::class, 'nbrbReport'])->name('nbrb_report');
 });
 
 require __DIR__.'/auth.php';

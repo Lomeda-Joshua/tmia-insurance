@@ -16,6 +16,8 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     protected $table = 'user';
     protected $primaryKey = 'User_ID';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     /**
      * The attributes that are mass assignable.

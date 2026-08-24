@@ -313,4 +313,217 @@
 </div>
 <!-- /.content-wrapper -->
 
+@push('scripts')
+<script>  
+  (function ($) {
+    'use strict';
+
+    $(function () {
+        const modal = $('#modal-modify');
+
+        modal.iziModal({
+            title: 'User Account Information Maintenance',
+            subtitle: 'Fill out all required user details.',
+            width: 900,
+            padding: 20,
+            fullscreen: false,
+            overlay: true,
+            overlayClose: false,
+            zindex: 9999
+        });
+
+        const table = $('#table_user').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            autoWidth: false,
+            pageLength: 10,
+            ajax: {
+                url: '/users/data',
+                method: 'GET'
+            },
+            columns: [
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                { data: 'User_ID', name: 'User_ID' },
+                { data: 'Full_Name', name: 'Full_Name' },
+                { data: 'User_Name', name: 'User_Name' },
+                {
+                    data: 'User_Level_Description',
+                    name: 'User_Level_Description'
+                },
+                { data: 'Active', name: 'Active' },
+                { data: 'Enable2FA', name: 'Enable2FA' },
+                { data: 'ExpireDate', name: 'ExpireDate' },
+                {
+                    data: 'button',
+                    name: 'button',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: [8],
+                    orderable: false
+                }
+            ]
+        });
+
+        loadUserLevels();
+
+        $('#btnadd').on('click', function () {
+            clearForm();
+
+            $('#appmethod').val('N');
+            $('#txtid').val('0');
+            $('#modal-modify').iziModal('open');
+        });
+
+        $(document).on('click', '.btnedit', function () {
+            const userId = $(this).data('uid');
+
+            clearForm();
+
+            $.get(`/users/${userId}`, function (user) {
+                $('#appmethod').val('E');
+                $('#txtid').val(user.User_ID);
+                $('#txtlname').val(user.Last_Name);
+                $('#txtfname').val(user.First_Name);
+                $('#txtmname').val(user.Middle_Name || '');
+                $('#txtsname').val(user.Suffix_Name);
+                $('#txtdname').val(user.Display_Name);
+                $('#txtcontactno').val(user.Contact_No);
+                $('#txtemailadd').val(user.Email_Address);
+                $('#txtuname').val(user.User_Name);
+                $('#cboulevel').val(user.User_Level_ID).trigger('change');
+                $('#cbouseractive').val(user.Active).trigger('change');
+                $('#chk2fa').prop('checked', user.Enable2FA === 'YES');
+
+                if (user.ExpireDate) {
+                    const date = new Date(user.ExpireDate);
+
+                    $('#dppwdexpdate')
+                        .datepicker('setDate', date);
+                }
+
+                modal.iziModal('open');
+            });
+        });
+
+        $('#btnsave').on('click', function () {
+            const formData = new FormData();
+
+            formData.append('_token', csrfToken());
+            formData.append('_method', 'POST');
+
+            formData.append('uid', $('#txtid').val());
+            formData.append('lname', $('#txtlname').val().trim());
+            formData.append('fname', $('#txtfname').val().trim());
+            formData.append('mname', $('#txtmname').val().trim());
+            formData.append('sname', $('#txtsname').val().trim());
+            formData.append('dname', $('#txtdname').val().trim());
+            formData.append('contactno', $('#txtcontactno').val().trim());
+            formData.append('email', $('#txtemailadd').val().trim());
+            formData.append('uname', $('#txtuname').val().trim());
+            formData.append('pword', $('#txtpass').val());
+            formData.append('ulevel', $('#cboulevel').val());
+            formData.append('useractive', $('#cbouseractive').val());
+            formData.append('pwdexpdate', $('#dppwdexpdate').val());
+            formData.append(
+                'chk2fa',
+                $('#chk2fa').is(':checked') ? 'YES' : 'NO'
+            );
+
+            $.ajax({
+                url: '/users',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    modal.iziModal('close');
+                    table.ajax.reload(null, false);
+                },
+                error: function (xhr) {
+                    const errors = xhr.responseJSON?.errors;
+
+                    if (errors) {
+                        alert(Object.values(errors).flat().join('\n'));
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.btndelete', function () {
+            const userId = $(this).data('uid');
+
+            if (!window.confirm('Delete this user?')) {
+                return;
+            }
+
+            $.ajax({
+                url: `/users/${userId}`,
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken()
+                },
+                success: function () {
+                    table.ajax.reload(null, false);
+                }
+            });
+        });
+
+        $('#btncancel').on('click', function () {
+            modal.iziModal('close');
+        });
+
+        function loadUserLevels() {
+            $.get('/users/levels', function (response) {
+                const select = $('#cboulevel');
+
+                select.empty().append(
+                    $('<option>', {
+                        value: '',
+                        text: 'PLEASE SELECT'
+                    })
+                );
+
+                response.data.forEach(function (level) {
+                    select.append(
+                        $('<option>', {
+                            value: level.User_Level_ID,
+                            text: level.User_Level_Description
+                        })
+                    );
+                });
+            });
+        }
+
+        function clearForm() {
+            $('#txtid').val('0');
+            $('#txtlname, #txtfname, #txtmname, #txtsname').val('');
+            $('#txtdname, #txtcontactno, #txtemailadd, #txtuname').val('');
+            $('#txtpass, #txtrpass, #dppwdexpdate').val('');
+
+            $('#cboulevel').val('');
+            $('#cbouseractive').val('YES');
+            $('#chk2fa').prop('checked', false);
+        }
+
+        function csrfToken() {
+            return document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute('content');
+        }
+    });
+})(jQuery);
+  
+</script>
+@endpush
+
 </x-layouts.main>
