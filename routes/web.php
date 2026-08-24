@@ -53,7 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Account settings
     Route::get('/account', [UserController::class,'account'])->name('user_account');
-    Route::put('/account', [UserController::class,'updateAccount'])->name('user_account.update');
+    Route::put('/update-account', [UserController::class,'updateAccount'])->name('user_account.update');
 
     // Laravel default account settings routes
     Route::redirect('settings', 'settings/profile');

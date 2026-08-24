@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NewBusinessDatatableRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class NewBusinessDatatableRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return auth()->check();
     }
 
     /**
@@ -22,12 +23,19 @@ class NewBusinessDatatableRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->user()->User_ID;
         return [
-            'viewpending' => ['nullable', 'boolean'],
-            'viewexpiring' => ['nullable', 'boolean'],
-            'searchval' => ['nullable', 'string', 'max:100'],
-            'datefrom' => ['nullable', 'date_format:d-m-Y'],
-            'dateto' => ['nullable', 'date_format:d-m-Y', 'after_or_equal:datefrom'],
+            'last_name'            => ['required', 'string', 'max:255'],
+            'first_name'           => ['required', 'string', 'max:255'],
+            'middle_name'          => ['nullable', 'string', 'max:255'],
+            'suffix_name'          => ['nullable', 'string', 'max:50'],
+            'display_name'         => ['required', 'string', 'max:255'],
+            'contact_no'           => ['nullable', 'string', 'max:50'],
+            'email'                => ['required', 'email', 'max:255', Rule::unique('users', 'Email_Address')->ignore($userId, 'User_ID')],
+            'username'             => ['required', 'string', 'max:255', Rule::unique('users', 'User_Name')->ignore($userId, 'User_ID')],
+            'password'             => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password_expire_date' => ['nullable', 'date_format:d/m/Y'],
+            'enable_2fa'           => ['nullable', 'boolean'],
         ];
     }
 

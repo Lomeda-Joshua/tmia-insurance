@@ -197,14 +197,14 @@ class UserController extends Controller
                 : null;
 
             $user->Email_Address = trim($data['email']);
-            $user->User_Name = trim($data['uname']);
+            $user->User_Name = trim($data['username']);
 
-            $user->Enable2FA = !empty($data['chk2fa']);
+            $user->Enable2FA = !empty($data['enable_2fa']);
 
-            $user->ExpireDate = !empty($data['pwdexpdate'])
+            $user->ExpireDate = !empty($data['password_expire_date'])
                 ? Carbon::createFromFormat(
                     'd/m/Y',
-                    $data['pwdexpdate']
+                    $data['password_expire_date']
                 )->toDateString()
                 : null;
 
@@ -212,8 +212,8 @@ class UserController extends Controller
             * Only change the password if the user actually
             * entered a new password.
             */
-            if (!empty($data['pword'])) {
-                $user->Encrypt_Password = Hash::make($data['pword']);
+            if (!empty($data['password'])) {
+                $user->Encrypt_Password = Hash::make($data['password']);
             }
 
             $user->save();

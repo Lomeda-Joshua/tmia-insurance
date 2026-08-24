@@ -31,7 +31,7 @@
       <div class="box-body">
         <div class="box-header with-border">
           <h3 class="box-title">User Accounts Information</h3>
-          <button type="submit" class="btn btn-success pull-right" id="btnedit"><i class="fa fa-edit"></i> Click Here To Modify!</button>
+          <button class="btn btn-success pull-right" id="btnedit"><i class="fa fa-edit"></i> Click Here To Modify!</button>
         </div>
       </div>
       <div class="box-body" style="max-width:100%;">
@@ -43,6 +43,10 @@
                     <div class="box center">
                       <!-- /.box-header -->
                       <!-- form start -->
+                      <form id="frmUserProfile" action="{{ route('user_account.update', $user->User_ID) }}" method="POST">
+                          @csrf
+                          @method('PUT')
+
                       <div class="box-body">
                         <div class="form-horizontal">
                           <div class="controls">
@@ -299,6 +303,7 @@
                         <button type="button" class="btn btn-success" id="btnsave"><i class="fa fa-save"></i> Save</button>
                         <button type="button" class="btn btn-success" id ="btncancel"><i class="fa fa-remove"></i> Cancel</button>
                       </div>
+                    </form>
                     </div>
                 
                 <!-- /.box -->
@@ -403,7 +408,7 @@ $(document).ready(function () {
     // Form Enable / Disable Helper
     // -------------------------------------------------------------------------
     function toggleFormState(disabled) {
-        // Core Editable Fields
+        // 1. Target fields explicitly
         const $editableFields = $(
             "#txtlname, #txtfname, #txtmname, #txtsname, #txtdname, " +
             "#txtcontactno, #txtemailadd, #txtuname, #txtpass, #txtrpass"
@@ -411,18 +416,18 @@ $(document).ready(function () {
 
         $editableFields.prop("disabled", disabled);
 
-        // Role-restricted Fields
-        if (userLevel === "ADMINISTRATOR") {
+        // 2. Role-restricted Fields (Case-insensitive check)
+        if (typeof userLevel !== "undefined" && String(userLevel).toUpperCase() === "ADMINISTRATOR") {
             $("#dppwdexpdate, #chk2fa").prop("disabled", disabled);
         }
 
-        // Action Buttons Toggle
+        // 3. Action Buttons & HTML hidden attribute handling
         if (disabled) {
             $("#btnedit").show();
-            $(".actionbtn").hide();
+            $(".actionbtn").hide().prop("hidden", true);
         } else {
             $("#btnedit").hide();
-            $(".actionbtn").show();
+            $(".actionbtn").show().removeAttr("hidden");
             $("#txtlname").focus();
         }
     }
