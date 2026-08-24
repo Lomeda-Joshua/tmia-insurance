@@ -3,7 +3,7 @@
 <head>
     @include('partials.head')
 </head>
-<body class="hold-transition skin-black sidebar-mini" onload="StartTimers();">
+<body class="hold-transition skin-black sidebar-mini {{ request()->routeIs('dashboard') ? '' : 'sidebar-collapse' }}" onload="StartTimers();">
     <!-- Site wrapper -->
     <div class="wrapper">
         @include('components.layouts.headernav')

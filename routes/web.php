@@ -6,17 +6,10 @@ use App\Http\Controllers\NewBusinessController;
 use App\Http\Controllers\RenewalBusinessTransactionController;
 use Livewire\Volt\Volt;
 
-// Set root as login
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-
 // Home dashboard route
-Route::get('dashboard', [HomeDashboardController::class,'index'])
+Route::get('/dashboard', [HomeDashboardController::class,'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-
-
 
 Route::middleware(['auth'])->group(function () {
 

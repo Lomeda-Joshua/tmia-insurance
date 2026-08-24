@@ -11,8 +11,10 @@ use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    #[Validate('required|string|max:30')]
+    
+    // public string $email = '';
+    public string $username = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -30,22 +32,25 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         // Map input properties to custom database columns
         $credentials = [
-            'Email_Address' => $this->email,
-            'password'      => $this->password, // 'password' key is consumed by Auth provider, not queried directly
+            'User_Name' => $this->username,
+            'Active' => 'YES',
+            'password' => $this->password,
         ];
 
         if (! Auth::attempt($credentials, $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'username' => __('auth.failed'),
             ]);
         }
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false));
+        $this->redirect(
+            route('dashboard', absolute: false),
+        );
     }
 
     /**
@@ -62,7 +67,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
+            'username' => __('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -74,8 +79,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(
+            Str::lower($this->username).'|'.request()->ip()
+        );
     }
+
+    
 }; ?>
 
 <x-layouts.auth.simple>
@@ -140,18 +149,18 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                 <span class="fa fa-user"></span>
 
                                 <input
-                                    wire:model="email"
-                                    type="email"
+                                    wire:model="username"
+                                    type="text"
                                     id="txtuname"
-                                    name="email"
-                                    placeholder="Email"
+                                    name="username"
+                                    placeholder="Username"
                                     required
                                     autofocus
-                                    autocomplete="email"
+                                    autocomplete="username"
                                 >
                             </p>
 
-                            @error('email')
+                            @error('username')
                                 <div class="text-danger">
                                     {{ $message }}
                                 </div>
