@@ -15,7 +15,7 @@ use App\Models\InsuranceStaff;
 class NewBusinessController extends Controller
 {
     public function index(NewBusinessDatatableRequest $request){
-        return view('livewire.main.new_business');
+        return view('livewire.main.transactions.new_business');
     }
 
 

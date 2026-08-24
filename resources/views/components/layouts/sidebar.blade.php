@@ -42,7 +42,7 @@
                     </li> --}}
                 </ul>
             </li>
-            {{-- <li class="treeview {{ request()->routeIs(['user', 'user_account']) ? 'active menu-open' : '' }}">
+            <li class="treeview {{ request()->routeIs('settings.*') ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-gears"></i>
                     <span>Settings</span>
@@ -59,7 +59,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview {{ request()->routeIs('nbrb_report') ? 'active menu-open' : '' }}">
+            {{-- <li class="treeview {{ request()->routeIs('nbrb_report') ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
                     <span>Reports</span>

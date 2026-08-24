@@ -1,4 +1,12 @@
 <x-layouts.main>
+
+  @push('styles')
+<link
+    rel="stylesheet"
+    href="{{ asset('tmia-assets/css/home.css') }}"
+>
+@endpush
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   

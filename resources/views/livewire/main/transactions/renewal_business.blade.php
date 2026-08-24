@@ -1799,7 +1799,115 @@
 </div>
 <!-- /.content-wrapper -->
 
-<?php include_once __DIR__ . '/../includes/footer.php'; ?>
+
+@push('scripts')
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const table = $('#table_trans').DataTable({
+        processing: true,
+        serverSide: true,
+        deferLoading: 0,
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        order: [[2, 'desc']],
+        ajax: {
+            url: @json(route('renewal_business.data')),
+            data: function (data) {
+                data.viewpending = window.viewpending === true;
+                data.viewexpiring = window.viewexpiring === true;
+                data.searchval = $('#txtsearch').val().trim();
+                data.datefrom = $('#dpdatefrom').val();
+                data.dateto = $('#dpdateto').val();
+            }
+        },
+        columns: [
+            {
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            { data: 'Insurance_No', name: 'Insurance_No' },
+            { data: 'Trans_Date', name: 'Trans_Date' },
+            { data: 'Trans_Status', name: 'Trans_Status' },
+            { data: 'Customer_No', name: 'Customer_No' },
+            { data: 'Full_Name', name: 'Full_Name' },
+            { data: 'Contact_No', name: 'Contact_No' },
+            { data: 'VIN', name: 'VIN' },
+            { data: 'CS_No', name: 'CS_No' },
+            { data: 'Plate_No', name: 'Plate_No' },
+            { data: 'Model', name: 'Model' },
+            { data: 'Variant', name: 'Variant' },
+            { data: 'Insurance_Company', name: 'Insurance_Company' },
+            { data: 'ISE_Name', name: 'ISE_Name' },
+            { data: 'MP_Name', name: 'MP_Name' },
+            {
+                data: 'Call_Attempts',
+                name: 'Call_Attempts',
+                searchable: false
+            },
+            {
+                data: 'button',
+                name: 'button',
+                orderable: false,
+                searchable: false
+            }
+        ]
+    });
+
+    window.viewpending = false;
+    window.viewexpiring = false;
+
+    $('#viewpending').on('click', function () {
+        window.viewpending = true;
+        window.viewexpiring = false;
+
+        table.ajax.reload();
+    });
+
+    $('#viewexpiring').on('click', function () {
+        window.viewpending = false;
+        window.viewexpiring = true;
+
+        table.ajax.reload();
+    });
+
+    $('#btnfind').on('click', function () {
+        window.viewpending = false;
+        window.viewexpiring = false;
+
+        table.ajax.reload();
+    });
+
+    $('#txtsearch').on('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+
+            window.viewpending = false;
+            window.viewexpiring = false;
+
+            table.ajax.reload();
+        }
+    });
+
+    $('#btnrefresh').on('click', function () {
+        $('#txtsearch').val('');
+        window.viewpending = false;
+        window.viewexpiring = false;
+
+        table.ajax.reload();
+    });
+
+    $('#dpdatefrom, #dpdateto').on('changeDate change', function () {
+        window.viewpending = false;
+        window.viewexpiring = false;
+
+        table.ajax.reload();
+    });
+});
+</script>
+
 
 <script>
   // Function to hide empty <td> elements in mobile view
@@ -1830,6 +1938,9 @@
   window.onresize = hideEmptyCellsOnMobile;
 </script>
 
-<script type="text/javascript" src="../assets/js/renewal_business.js"></script>
+
+
+{{-- <script type="text/javascript" src="{{ asset("tmia-assets/js/renewal_business.js") }}"></script> --}}
+@endpush
 
 </x-layouts.main>

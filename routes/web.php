@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
+
 use App\Http\Controllers\HomeDashboardController;
 use App\Http\Controllers\NewBusinessController;
 use App\Http\Controllers\RenewalBusinessTransactionController;
-use Livewire\Volt\Volt;
+use App\Http\Controllers\UserController;
 
 // Home dashboard route
 Route::get('/dashboard', [HomeDashboardController::class,'index'])
@@ -42,15 +44,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Renewal Business Insurance
     Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
+
+    Route::get('/renewal-business/data', [RenewalBusinessTransactionController::class, 'renewalBusinessDatatable'])->name('renewal_business.data');
+
     Route::get('/renewal-business/modify', [RenewalBusinessTransactionController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
     // // Lists
     // Route::get('/customers', [TransactionController::class, 'customerList'])->name('customer_list');
     // Route::get('/vehicles', [TransactionController::class, 'vehicleList'])->name('vehicle_list');
 
-    // // Settings Sub-Routes
-    // Route::get('/users', [UserController::class, 'index'])->name('user');
-    // Route::get('/account', [UserController::class, 'account'])->name('user_account');
+    // Settings Sub-Routes
+    Route::get('/users', [UserController::class, 'index'])->name('user');
+    Route::get('/account', [UserController::class, 'account'])->name('user_account');
 
     // Route::get('/reports/nbrb', [ReportController::class, 'nbrbReport'])->name('nbrb_report');
 });
