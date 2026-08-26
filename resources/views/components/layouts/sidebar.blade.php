@@ -34,12 +34,12 @@
                     <li class="{{ request()->routeIs('renewal_business*') ? 'active' : '' }}" >
                         <a href="{{ route('renewal_business') }}"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a>
                     </li>
-                    {{-- <li class="{{ request()->routeIs('customer_list') ? 'active' : '' }}" >
+                     <li class="{{ request()->routeIs('customer_list') ? 'active' : '' }}" >
                         <a href="{{ route('customer_list') }}"><i class="fa fa-list-alt"></i> Customer List</a>
                     </li>
                     <li class="{{ request()->routeIs('vehicle_list') ? 'active' : '' }}" >
                         <a href="{{ route('vehicle_list') }}"><i class="fa fa-list-alt"></i> Vehicle List</a>
-                    </li> --}}
+                    </li> 
                 </ul>
             </li>
             <li class="treeview {{ request()->routeIs('settings.*') ? 'active menu-open' : '' }}">

@@ -14,7 +14,7 @@
     </ol>
   </section>
 
-    <!-- Main content -->
+  <!-- Main content -->
   <section class="content">
     <!-- box -->
     <div class="box box-warning">
@@ -99,6 +99,7 @@
             </div>
           </div>
         </div>
+
         @if(Auth::user()->User_Level_ID == 1)
         <div class="row">
           <div class="btnactionud pull-right">
@@ -114,6 +115,7 @@
           </div>
         </div>
         @endif
+
       </div>
       <div class="box-body" style="max-width:100%;">
         <table id="table_trans" class="table table-striped table-bordered table-hover">
@@ -1750,165 +1752,10 @@
     </div>
     <!-- END MODAL CALL LOGS -->
   </section>
-<!-- /.content-wrapper -->
+  <!-- /.content-wrapper -->
 </div>
 
 @push('scripts')
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-      const table = $('#table_trans').DataTable({
-          processing: true,
-          serverSide: true,
-          deferLoading: 0,
-          responsive: true,
-          autoWidth: false,
-          pageLength: 10,
-          order: [[2, 'desc']],
-          ajax: {
-              url: @json(route('new_business.data')),
-              data: function (data) {
-                  data.viewpending = window.viewpending === true;
-                  data.viewexpiring = window.viewexpiring ?? true;
-                  data.searchval = $('#txtsearch').val().trim();
-                  data.datefrom = $('#dpdatefrom').val();
-                  data.dateto = $('#dpdateto').val();
-              }
-          },
-          columns: [
-              {
-                  data: 'DT_RowIndex',
-                  name: 'DT_RowIndex',
-                  searchable: false,
-                  orderable: false
-              },
-              { data: 'Insurance_No', name: 'Insurance_No' },
-              { data: 'Trans_Date', name: 'Trans_Date' },
-              { data: 'Trans_Status', name: 'Trans_Status' },
-              { data: 'Customer_No', name: 'Customer_No' },
-              { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
-              { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
-              { data: 'VIN', name: 'VIN', defaultContent: '' },
-              { data: 'CS_No', name: 'CS_No', defaultContent: '' },
-              { data: 'Plate_No', name: 'Plate_No', defaultContent: '' },
-              { data: 'Model', name: 'Model', defaultContent: '' },
-              { data: 'Variant', name: 'Variant', defaultContent: '' },
-              { data: 'Insurance_Company', name: 'Insurance_Company', defaultContent: '' },
-              { data: 'ISE_Name', name: 'ISE_Name', defaultContent: '' },
-              { data: 'MP_Name', name: 'MP_Name', defaultContent: '' },
-              {
-                  data: 'button',
-                  name: 'button',
-                  searchable: false,
-                  orderable: false
-              }
-          ]
-      });
-
-      $('#btnfind').on('click', function () {
-          window.viewpending = false;
-          window.viewexpiring = false;
-          table.ajax.reload();
-      });
-
-      $('#btnrefresh').on('click', function () {
-          $('#txtsearch').val('');
-          table.ajax.reload();
-      });
-
-      $('#viewpending').on('click', function () {
-          window.viewpending = true;
-          window.viewexpiring = false;
-          table.ajax.reload();
-      });
-
-      $('#viewexpiring').on('click', function () {
-          window.viewpending = false;
-          window.viewexpiring = true;
-          table.ajax.reload();
-      });
-
-      $('#dpdatefrom, #dpdateto').on('change', function () {
-          table.ajax.reload();
-      });
-
-      $('#txtsearch').on('keydown', function (event) {
-          if (event.key === 'Enter') {
-              event.preventDefault();
-
-              window.viewpending = false;
-              window.viewexpiring = false;
-
-              table.ajax.reload();
-          }
-      });
-
-
-  });
-</script>
-
-<script>
-
-// Seting up date to and from on New Business page date range picker
-const dateTo = new Date();
-const dateFrom = new Date();
-dateFrom.setDate(dateFrom.getDate() - 30);
-
-$('#dpdatefrom, #dpdateto').datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy',
-    todayHighlight: true
-});
-
-$('#dpdatefrom').datepicker('setDate', dateFrom);
-$('#dpdateto').datepicker('setDate', dateTo);
-
-
-
-  // Function to hide empty <td> elements in mobile view
-  function hideEmptyCellsOnMobile() {
-    // Check if the screen width is less than or equal to 600px (mobile view)
-    if (window.innerWidth <= 600) {
-      // Get all td elements in the table
-      const cells = document.querySelectorAll('.insurance-calc .calculation-section td');
-
-      // Loop through each td
-      cells.forEach(cell => {
-        // Check if the cell has no visible text or no child elements
-        if (!cell.textContent.trim() && !cell.querySelector('*')) {
-          // Hide the td element if it's empty
-          cell.style.display = 'none';
-        } else {
-          // Ensure it's visible if it contains something
-          cell.style.display = '';
-        }
-      });
-    }
-  }
-
-  // Run on page load
-  window.onload = hideEmptyCellsOnMobile;
-
-  // Run again on window resize to adjust the behavior when resizing the screen
-  window.onresize = hideEmptyCellsOnMobile;
-
-
-  fetch(@json(route('new_business.counts')))
-      .then(response => response.json())
-      .then(data => {
-          $('#pending-counts').text(
-              Number(data.Pending_Counts).toLocaleString()
-          );
-
-          $('#expiring-counts').text(
-              Number(data.Expiring_Counts).toLocaleString()
-          );
-      })
-      .catch(error => {
-          console.error('Unable to load policy counts:', error);
-      });
-
-</script>
-
 {{-- <script type="text/javascript" src="{{ asset('tmia-assets/js/new_business.js') }}"></script> --}}
 <script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>
 @endpush

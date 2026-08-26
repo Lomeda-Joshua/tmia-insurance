@@ -339,7 +339,7 @@
             autoWidth: false,
             pageLength: 10,
             ajax: {
-                url: '/users/data',
+                url: '/settings/users/data',
                 method: 'GET'
             },
             columns: [
@@ -440,7 +440,7 @@
             );
 
             $.ajax({
-                url: '/users',
+                url: '/users/store',
                 method: 'POST',
                 data: formData,
                 processData: false,

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\UserView;
 
 use App\Http\Requests\UpdateAccountRequest;
+use App\Http\Requests\UserDataRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -99,6 +100,8 @@ class UserController extends Controller
 
     public function store(UserDataRequest $request): JsonResponse
     {
+
+        dd($request);
         $data = $request->validated();
 
         $user = $request->filled('uid')

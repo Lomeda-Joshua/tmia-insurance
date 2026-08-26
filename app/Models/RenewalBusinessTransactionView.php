@@ -10,12 +10,8 @@ class RenewalBusinessTransactionView extends Model
     use HasFactory;
     
     protected $table = 'vw_transactions_rb';
-
     protected $primaryKey = 'Insurance_No';
-
     public $incrementing = false;
-
     protected $keyType = 'string';
-
     public $timestamps = false;
 }
