@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureLockscreenIsUnlocked
 {
-    private const IDLE_TIMEOUT = 180;
+    private const IDLE_TIMEOUT = 3600;
 
     public function handle(Request $request, Closure $next): Response
     {

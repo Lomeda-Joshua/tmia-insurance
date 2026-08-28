@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class CustomerInformation extends Model
 {
-    protected $table = 'customer_information';
+    protected $table = 'vw_customer_information';
+
+    // Override the default 'id' primary key
+    protected $primaryKey = 'Customer_No';
+
+    // Specify primary key type if string (e.g. 'CUST-0001')
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    // Views are read-only; disable timestamps
+    public $timestamps = false;
 
     protected $fillable = [
         'Customer_No',
@@ -27,7 +37,10 @@ class CustomerInformation extends Model
         'BrgyCode',
         'Zip_Code',
         'Country',
+        'Full_Address',
         'Upload_Cust_No',
+        'NBCount',
+        'RBCount',
         'Remarks',
         'Active_Status',
         'Inactive_Date'

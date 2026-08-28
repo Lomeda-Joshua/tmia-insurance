@@ -27,7 +27,7 @@ new #[Layout('components.layouts.auth')] class extends Component
             $this->signInAsAnotherUser();
             return;
         }        
-            
+        
 
         if (! Hash::check($this->password, $user->getAuthPassword())) {
 
@@ -59,9 +59,10 @@ new #[Layout('components.layouts.auth')] class extends Component
         //     'intended' => Session::get('url.intended'),
         // ]);
 
+        // In your Livewire Volt lockscreen component
         $this->redirect(
-            url: route('dashboard'),
-            navigate: true
+            url: session()->get('url.intended', route('dashboard', absolute: true)),
+            navigate: false // Forces a full browser reload to apply updated session state
         );
     }
 
@@ -120,22 +121,22 @@ new #[Layout('components.layouts.auth')] class extends Component
     <!--============<******* PAGES FAVICON LOGO *******>============-->
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("tmia-assets/images/favicon/apple-touch-icon.png") }}"/>
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset("tmia-assets/images/favicon/favicon-32x32.png") }}"/>
-    <link rel="icon" type="image/png" sizes="16x16" href="tmia-assets/images/favicon/favicon-16x16.png"/>
-    <link rel="manifest" href="../assets/images/favicon/site.webmanifest"/>
-    <link rel="mask-icon" href="../assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset("tmia-assets/images/favicon/favicon-16x16.png") }}"/>
+    <link rel="manifest" href="{{ asset("tmia-assets/images/favicon/site.webmanifest") }}"/>
+    <link rel="mask-icon" href="{{ asset("tmia-assets/images/favicon/safari-pinned-tab.svg") }}" color="#5bbad5"/>
     <meta name="msapplication-TileColor" content="#da532c"/>
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff"/>
 
     <!--============<******* CASCADING STYLE SHEETS (CSS) *******>============-->
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" type="text/css" href="../plugins/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/plugins/bootstrap/css/bootstrap.min.css") }}"/>
     <!-- Font Awesome -->
-    <link rel="stylesheet" type="text/css" href="../plugins/fontawesome/css/all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/plugins/fontawesome/css/all.min.css") }}"/>
     <!-- Theme style -->
-    <link rel="stylesheet" type="text/css" href="../assets/css/AdminLTE.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/css/AdminLTE.min.css") }}"/>
     <!-- SweetAlert style -->
-    <link rel="stylesheet" type="text/css" href="../plugins/sweetalert/sweetalert.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/plugins/sweetalert/sweetalert.css") }}"/>
     <style type="text/css">
       body {
         color: #000000;
@@ -148,7 +149,7 @@ new #[Layout('components.layouts.auth')] class extends Component
         align-items: center;        /* center vertically */
         height: 100vh;              /* full page height */
         margin: 0;
-        background: url(" {{ asset('tmia-assets/images/background.jpg') }} ") no-repeat center center fixed;
+        background: url(" {{ asset('tmia-assets/images/background.webp') }} ") no-repeat center center fixed;
         background-size: cover;
       }
 
@@ -313,7 +314,7 @@ new #[Layout('components.layouts.auth')] class extends Component
             All rights reserved.
 
             <div class="hidden-xs">
-                <b>Version</b> 0.0.1
+                <b>Version</b> 1.8.14
             </div>
         </div>
 

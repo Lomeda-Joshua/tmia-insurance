@@ -9,6 +9,7 @@ use App\Http\Controllers\RenewalBusinessTransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\OverallDataController;
 use Illuminate\Http\Request;
 
 
@@ -44,24 +45,20 @@ Route::middleware(['auth'])->group(function () {
 // ==========================================
 // 2. Protected Application Routes (Must be Unlocked)
 // ==========================================
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(function () {
 
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
 
     // Transactions Group
     Route::prefix('transactions')->group(function () {
+
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::get('/new-business/data', [NewBusinessController::class, 'newBusinessDatatable'])->name('new_business.data');
+        Route::get('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::get('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
-        Route::get('/new-business/insurance-staff', [NewBusinessController::class, 'insuranceStaff'])->name('new_business.insurance_staff');
-        Route::get('/new-business/customers', [NewBusinessController::class, 'customers'])->name('new_business.customers');
-        Route::get('/new-business/vehicles', [NewBusinessController::class, 'vehicles'])->name('new_business.vehicles');
-        Route::get('/new-business/payments', [NewBusinessController::class, 'payments'])->name('new_business.payments');
-        Route::get('/new-business/call-logs', [NewBusinessController::class, 'callLogs'])->name('new_business.call_logs');
-
+        
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
         Route::get('/renewal-business/data', [RenewalBusinessTransactionController::class, 'renewalBusinessDatatable'])->name('renewal_business.data');
@@ -69,19 +66,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer_list');
+        Route::get('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
+        Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
-        // Data API Endpoints for DataTables / AJAX
-        Route::get('/api/customers', [CustomerController::class, 'getCustomers'])->name('customers.data');
-        Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
 
+        // Data API Endpoints for DataTables - AJAX
+        Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
+        
 
-
-
-        Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicle_list');
+        Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
+        Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
+        Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
+        Route::get('/payments/data', [OverallDataController::class, 'getPayments'])->name('payments.data');
+        Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
     });
 
     // Settings Group

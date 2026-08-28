@@ -18,10 +18,12 @@ class NewBusinessController extends Controller
         return view('livewire.main.transactions.new_business');
     }
 
-
-    public function newBusinessDatatable(NewBusinessDatatableRequest $request): JsonResponse
+    /**
+     * Fetch New business data for DataTables AJAX.
+    */
+    public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();        
+        $filters = $request->validated();
    
         $query = NewBusinessTransactionView::query()
             ->select([
@@ -130,11 +132,12 @@ class NewBusinessController extends Controller
             ->rawColumns(['Trans_Status', 'button'])
             ->setRowId('Insurance_No')
             ->make(true);
-
-
     }
 
 
+    /**
+     * For commencing the data retriveal on New Business pending counts.
+    */
     public function nbPendingCounts(): JsonResponse
     {
         $counts = NewBusiness::query()
@@ -156,37 +159,5 @@ class NewBusinessController extends Controller
         ]);
     }
 
-    
-    public function insuranceStaff(): JsonResponse
-    {
-        $staff = InsuranceStaff::query()
-            ->orderBy('ISE_Name')
-            ->get([
-                'ISE_No',
-                'ISE_Name',
-            ]);
-
-        return response()->json($staff);
-    }
-
-    public function customers(CustomerListRequest $request): JsonResponse
-    {
-        // Customer list.
-    }
-
-    public function vehicles(VehicleListRequest $request): JsonResponse
-    {
-        // Vehicle list for selected customer.
-    }
-
-    public function payments(NewBusinessPaymentRequest $request): JsonResponse
-    {
-        // Payment list.
-    }
-
-    public function callLogs(NewBusinessCallLogRequest $request): JsonResponse
-    {
-        
-    }
 
 }

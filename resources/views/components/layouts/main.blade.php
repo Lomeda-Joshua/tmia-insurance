@@ -18,8 +18,31 @@
             <!-- <strong>Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="http://toyotabicutan.com.ph/" target="_blank">Toyota Bicutan Parañaque</a>.</strong> All rights reserved. -->
         </footer>
     </div>
+    
+        @include('partials.footer')
+         @push('scripts')
+            <script>
+                let idleTimer;
+
+                function resetIdleTimer() {
+                    clearTimeout(idleTimer);
+                    // Lock screen after 15 minutes (900,000 ms) of inactivity
+                    idleTimer = setTimeout(() => {
+                        window.location.href = "{{ route('lock') }}";
+                        console.log("hello");
+                    }, 3600); 
+                }
+
+                // Listen for user activity
+                ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+                    window.addEventListener(event, resetIdleTimer, false);
+                });
+
+                resetIdleTimer();
+            </script>
+        @endpush
+        <!-- Stack target for view-specific scripts -->
+        @stack('scripts')
+       
 </body>
-    @include('partials.footer')
-    <!-- Stack target for view-specific scripts -->
-    @stack('scripts')
 </html>

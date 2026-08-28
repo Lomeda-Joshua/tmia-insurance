@@ -52,6 +52,7 @@
         </div>
         <!-- ./col -->
       </div>
+
       <!-- Search, Date Filter and Add New -->
       <div class="box-header with-border">
         <div class="row">
@@ -1727,24 +1728,29 @@
         </div> -->
         <div class="box-body">
           <div class="col-md-12">
-            <table id="table_logs" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
+            <table id="table_trans" class="table table-striped table-bordered table-hover">
               <thead>
                 <tr class="tableheader">
                   <th>No.</th>
-                  <th>Call Log ID</th>
-                  <th>Call Log Date</th>
                   <th>Insurance No.</th>
+                  <th>Trans. Date & Time</th>
+                  <th>Status</th>
+                  <th>Customer No.</th>
                   <th>Customer Name</th>
                   <th>Contact No.</th>
                   <th>VIN</th>
-                  <th>Mode of Comm.</th>
-                  <th>Call Status</th>
-                  <th>Reason Desc</th>
-                  <th>Promised Pay Date</th>
-                  <th>Call Remarks</th>
-                  <th>User Name</th>
+                  <th>CS No.</th>
+                  <th>Plate No.</th>
+                  <th>Model</th>
+                  <th>Variant</th>
+                  <th>Insurance Partner</th>
+                  <th>I.S.E</th>
+                  <th>MP Name</th>
+                  <th>Action</th>
                 </tr>
               </thead>
+              <tbody>
+              </tbody>
             </table>
           </div>
         </div>
@@ -1756,8 +1762,18 @@
 </div>
 
 @push('scripts')
-{{-- <script type="text/javascript" src="{{ asset('tmia-assets/js/new_business.js') }}"></script> --}}
+<script>
+    window.LaravelRoutes = {
+      csrfToken: "{{ csrf_token() }}",
+      newBusinessData: @json(route('newbusiness.data')),
+      insuranceStaffData: @json(route('insurance_staff.data')),
+      customerData: @json(route('customers.data')),
+      customerTypeData: @json(route('customers_type.data'))
+    };
+
+</script>
+
 <script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>
-@endpush
+@endpush      
 
 </x-layouts.main>
