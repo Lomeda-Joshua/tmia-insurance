@@ -23,115 +23,121 @@ class NewBusinessController extends Controller
     */
     public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();
-   
-        $query = NewBusinessTransactionView::query()
-            ->select([
-                'Insurance_No',
-                'Trans_Date',
-                'Trans_Status',
-                'Customer_No',
-                'Full_Name',
-                'Contact_No',
-                'VIN',
-                'CS_No',
-                'Plate_No',
-                'Model',
-                'Variant',
-                'Insurance_Company',
-                'ISE_Name',
-                'MP_Name',
-                'Option_Type',
-                'Policy_Expiration',
+    $filters = $request->validated();
+
+    logger($filters);
+
+    $query = NewBusinessTransactionView::query()
+        ->select([
+            'Insurance_No',
+            'Trans_Date',
+            'Trans_Status',
+            'Customer_No',
+            'Full_Name',
+            'Contact_No',
+            'VIN',
+            'CS_No',
+            'Plate_No',
+            'Model',
+            'Variant',
+            'Insurance_Company',
+            'ISE_Name',
+            'MP_Name',
+            'Option_Type',
+            'Policy_Expiration',
+        ]);
+
+        // 1. Pending Filter (Priority 1)
+        if (! empty($filters['viewpending'])) {
+            $query->where('Trans_Status', 'PENDING');
+
+        // 2. Expiring Filter (Priority 2)
+        } elseif (! empty($filters['viewexpiring'])) {
+            $query->whereBetween('Policy_Expiration', [
+                now()->startOfDay(),
+                now()->addDays(90)->endOfDay(),
             ]);
 
-            if ($request->boolean('viewpending')) {
-                $query->where('Trans_Status', 'PENDING');
-            } elseif ($request->boolean('viewexpiring')) {
-                $query->whereBetween('Policy_Expiration', [
-                    now()->startOfDay(),
-                    now()->addDays(90)->endOfDay(),
-                ]);
-            } elseif (! empty($filters['searchval'])) {
-                $search = '%' . $filters['searchval'] . '%';
+        // 3. Search Filter (Priority 3)
+        } elseif (! empty($filters['searchval'])) {
+            $search = '%' . $filters['searchval'] . '%';
 
-                $query->where(function ($query) use ($search) {
-                    $query
-                        ->where('Insurance_No', 'like', $search)
-                        ->orWhere('VIN', 'like', $search)
-                        ->orWhere('CS_No', 'like', $search)
-                        ->orWhere('Plate_No', 'like', $search)
-                        ->orWhere('Customer_No', 'like', $search)
-                        ->orWhere('Full_Name', 'like', $search);
-                });
-            } elseif (
-                ! empty($filters['datefrom']) &&
-                ! empty($filters['dateto'])
-            ) {
-                $query->whereBetween('Trans_Date', [
-                    Carbon::createFromFormat('d-m-Y', $filters['datefrom'])
-                        ->startOfDay(),
+            $query->where(function ($q) use ($search) {
+                $q->where('Insurance_No', 'like', $search)
+                ->orWhere('VIN', 'like', $search)
+                ->orWhere('CS_No', 'like', $search)
+                ->orWhere('Plate_No', 'like', $search)
+                ->orWhere('Customer_No', 'like', $search)
+                ->orWhere('Full_Name', 'like', $search);
+            });
 
-                    Carbon::createFromFormat('d-m-Y', $filters['dateto'])
-                        ->endOfDay(),
-                ]);
-            } else {
-                $query->whereRaw('1 = 0');
+        // 4. Date Range Filter (Priority 4 - Only when chkall is 0/false)
+        } elseif (
+            empty($filters['chkall']) && 
+            ! empty($filters['datefrom']) && 
+            ! empty($filters['dateto'])
+        ) {
+            $query->whereBetween('Trans_Date', [
+                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            ]);
+        }
+
+        
+        return DataTables::eloquent($query)
+        ->addIndexColumn() // Provides DT_RowIndex / urutan
+        ->editColumn('Trans_Date', function (NewBusinessTransactionView $transaction): string {
+            return $transaction->Trans_Date
+                ? Carbon::parse($transaction->Trans_Date)->format('d-M-Y H:i:s')
+                : '';
+        })
+        ->editColumn('Trans_Status', function (NewBusinessTransactionView $transaction): string {
+            $status = strtoupper(trim((string) $transaction->Trans_Status));
+
+            // Modern Bootstrap 5 badge mapping
+            $class = match ($status) {
+                'COMPLETED' => 'success',
+                'CANCELLED' => 'danger',
+                'PENDING'   => 'warning',
+                default     => 'secondary',
+            };
+
+            return '<span class="badge text-bg-' . $class . '">'
+                . e($status)
+                . '</span>';
+        })
+        ->addColumn('button', function (NewBusinessTransactionView $transaction): string {
+            $insuranceNo = e($transaction->Insurance_No);
+
+            $buttons = '';
+
+            if ($transaction->Option_Type === 'PAID') {
+                $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnpay me-1" '
+                    . 'data-insurance-no="' . $insuranceNo . '" title="Payment">'
+                    . '<i class="fa-solid fa-peso-sign"></i></button>';
             }
 
+            $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnnetrem me-1" '
+                . 'data-insurance-no="' . $insuranceNo . '" title="Gross Premium / Net Rem">'
+                . '<i class="fa-solid fa-money-bill-transfer"></i></button>';
 
-            return DataTables::eloquent($query)
-            ->addIndexColumn()
-            ->editColumn('Trans_Date', function (NewBusinessTransactionView $transaction): string {
-                return $transaction->Trans_Date
-                    ? Carbon::parse($transaction->Trans_Date)->format('d-M-Y H:i:s')
-                    : '';
-            })
-            ->editColumn('Trans_Status', function (NewBusinessTransactionView $transaction): string {
-                $status = strtoupper(trim((string) $transaction->Trans_Status));
+            $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnstatus me-1" '
+                . 'data-insurance-no="' . $insuranceNo . '" title="Change Status">'
+                . '<i class="fa-solid fa-chart-bar"></i></button>';
 
-                $class = match ($status) {
-                    'COMPLETED' => 'success',
-                    'CANCELLED' => 'danger',
-                    default => 'secondary',
-                };
+            $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnedit me-1" '
+                . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
+                . '<i class="fa fa-edit"></i></button>';
 
-                return '<span class="badge text-bg-' . $class . '">'
-                    . e($status)
-                    . '</span>';
-            })
-            ->addColumn('button', function (NewBusinessTransactionView $transaction): string {
-                $insuranceNo = e($transaction->Insurance_No);
+            $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
+                . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
+                . '<i class="fa-regular fa-trash-can"></i></button>';
 
-                $buttons = '';
-
-                if ($transaction->Option_Type === 'PAID') {
-                    $buttons .= '<button type="button" class="btn btn-success btn-action btnpay" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="Payment">'
-                        . '<i class="fa-solid fa-peso-sign"></i></button>';
-                }
-
-                $buttons .= '<button type="button" class="btn btn-success btn-action btnnetrem" '
-                    . 'data-insurance-no="' . $insuranceNo . '" title="Gross Premium / Net Rem">'
-                    . '<i class="fa-solid fa-money-bill-transfer"></i></button>';
-
-                $buttons .= '<button type="button" class="btn btn-success btn-action btnstatus" '
-                    . 'data-insurance-no="' . $insuranceNo . '" title="Change Status">'
-                    . '<i class="fa-solid fa-chart-bar"></i></button>';
-
-                $buttons .= '<button type="button" class="btn btn-success btn-action btnedit" '
-                    . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
-                    . '<i class="fa fa-edit"></i></button>';
-
-                $buttons .= '<button type="button" class="btn btn-success btn-action btndelete" '
-                    . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
-                    . '<i class="fa-regular fa-trash-can"></i></button>';
-
-                return $buttons;
-            })
-            ->rawColumns(['Trans_Status', 'button'])
-            ->setRowId('Insurance_No')
-            ->make(true);
+            return $buttons;
+        })
+        ->rawColumns(['Trans_Status', 'button'])
+        ->setRowId('Insurance_No')
+        ->make(true);
     }
 
 

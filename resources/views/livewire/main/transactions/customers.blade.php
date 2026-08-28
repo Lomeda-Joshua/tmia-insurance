@@ -775,46 +775,46 @@
 @push('scripts')
 <script>
 
-    const container = document.getElementById('alphabet-container');
-
-    // Function to create a button
-    function createButton(label, isActive = false) {
-      const button = document.createElement('button');
-      button.textContent = label;
-      if (isActive) {
-        button.classList.add('active');
-      }
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        // You can add your custom action here (e.g., filter items)
-        btnselect = `${label}`;
-        // LoadCustomerData();
-      });
-      return button;
-    }
-
-    // Add "All" button first
-    container.appendChild(createButton("ALL"));
-
-    // Add A-Z buttons
-    for (let i = 65; i <= 90; i++) {
-      const letter = String.fromCharCode(i);
-      const isActive = letter === 'A'; // Set "A" as default
-      container.appendChild(createButton(letter, isActive));
-    }
-
-    // Add Other button first
-    container.appendChild(createButton("[0-9]"));
-    container.appendChild(createButton("[SPECIAL CHAR]"));
-
-    btnselect = 'A';
-    // LoadCustomerData();
-
-
     $(document).ready(function() {
 
-        /* MODAL MODIFY */
+        const container = document.getElementById('alphabet-container');
+
+        // Function to create a button
+        function createButton(label, isActive = false) {
+          const button = document.createElement('button');
+          button.textContent = label;
+          if (isActive) {
+            button.classList.add('active');
+          }
+          button.addEventListener('click', () => {
+            document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            // You can add your custom action here (e.g., filter items)
+            btnselect = `${label}`;
+            // LoadCustomerData();
+          });
+          return button;
+        }
+
+        // Add "All" button first
+        container.appendChild(createButton("ALL"));
+
+        // Add A-Z buttons
+        for (let i = 65; i <= 90; i++) {
+          const letter = String.fromCharCode(i);
+          const isActive = letter === 'A'; // Set "A" as default
+          container.appendChild(createButton(letter, isActive));
+        }
+
+        // Add Other button first
+        container.appendChild(createButton("[0-9]"));
+        container.appendChild(createButton("[SPECIAL CHAR]"));
+
+        btnselect = 'A';
+        // LoadCustomerData();
+
+
+          /* MODAL MODIFY */
         $("#modal-modify").iziModal({
           title: 'Customer Information Details',
           subtitle: 'Fill out all details required here.',
@@ -847,9 +847,11 @@
           afterRender: function(modal){
             // modal.open();
           }
+
         });
 
-        $(document).on( "click", "#btnadd", function () {
+
+         $(document).on( "click", "#btnadd", function () {
           // newdata = true;
           // transid = '';
           // editinfo = true;
@@ -862,7 +864,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('customer.data') }}", // Update to your defined route name
+                url: "{{ route('customers.data') }}", // Update to your defined route name
                 type: "GET",
                 data: function (d) {
                     // Attach custom request parameters for search and letter filtering
@@ -919,42 +921,41 @@
 
             // 4. Reset form validation UI state
             $('.box-body').validator('reset');
-        }
+        };
 
-        
-        const userLevel = {{ Auth::user()?->User_Level_ID ?? 'null' }}; 
+          const userLevel = "{{ Auth::user()?->User_Level_ID ?? 'null' }}";
+           function FormDisable(val) {
 
-        function FormDisable(val) {
-            // 1. Role-restricted view toggles (e.g., 1 = Administrator, 7 = Insurance Staff)
-            if (userLevel === 1 || userLevel === 7) {
-                if (val) {
-                    $("#viewaction").show().removeAttr("hidden");
-                    $("#viewaction1").hide();
-                } else {
-                    $("#viewaction").hide();
-                    $("#viewaction1").show().removeAttr("hidden");
-                }
-            }
+              // 1. Role-restricted view toggles (e.g., 1 = Administrator, 7 = Insurance Staff)
+              if (userLevel === 1 || userLevel === 7) {
+                  if (val) {
+                      $("#viewaction").show().removeAttr("hidden");
+                      $("#viewaction1").hide();
+                  } else {
+                      $("#viewaction").hide();
+                      $("#viewaction1").show().removeAttr("hidden");
+                  }
+              }
 
-            // 2. Dynamic button visibility check
-            if (typeof newdata !== 'undefined' && newdata === true) {
-                $("#btncancel").hide();
-                $("#btnclose").show().removeAttr("hidden");
-            } else {
-                $("#btncancel").show().removeAttr("hidden");
-                $("#btnclose").hide();
-            }
+              // 2. Dynamic button visibility check
+              if (typeof newdata !== 'undefined' && newdata === true) {
+                  $("#btncancel").hide();
+                  $("#btnclose").show().removeAttr("hidden");
+              }else {
+                  $("#btncancel").show().removeAttr("hidden");
+                  $("#btnclose").hide();
+              }
 
-            // 3. Disable/Enable all modal form fields at once (Replaces 20+ individual lines)
-            $('#modal-modify').find('input, select, textarea').prop('disabled', val);
+              // 3. Disable/Enable all modal form fields at once (Replaces 20+ individual lines)
+              $('#modal-modify').find('input, select, textarea').prop('disabled', val);
+              // 4. Reset validation UI state
 
-            // 4. Reset validation UI state
-            $('.box-body').validator('reset');
-        }
+              $('.box-body').validator('reset');
 
-
+          } 
 
     });
+
 </script>
 @endpush
 

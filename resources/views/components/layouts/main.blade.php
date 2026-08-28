@@ -20,7 +20,7 @@
     </div>
     
         @include('partials.footer')
-         @push('scripts')
+        {{-- @push('scripts')
             <script>
                 let idleTimer;
 
@@ -40,7 +40,7 @@
 
                 resetIdleTimer();
             </script>
-        @endpush
+        @endpush --}}
         <!-- Stack target for view-specific scripts -->
         @stack('scripts')
        

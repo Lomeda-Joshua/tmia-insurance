@@ -27,10 +27,7 @@ Route::middleware(['auth'])->group(function () {
         // Save current URL for redirect after unlock
         $previousUrl = url()->previous();
 
-        if (
-            $previousUrl &&
-            $previousUrl !== route('lockscreen')
-        ) {
+        if ( $previousUrl && $previousUrl !== route('lockscreen')) {
             session()->put('url.intended', $previousUrl);
         }
         // Use ONE session key consistently
@@ -55,8 +52,8 @@ Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(fun
 
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::get('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
-        Route::get('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
+        Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
+        Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         
         // Renewal Business Insurance
@@ -65,7 +62,7 @@ Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(fun
         Route::get('/renewal-business/modify', [RenewalBusinessTransactionController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
         // Lists        
-        Route::get('/customers', [CustomerController::class, 'index'])->name('customer_list');
+        Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
         Route::get('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');

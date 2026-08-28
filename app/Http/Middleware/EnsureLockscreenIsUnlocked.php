@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureLockscreenIsUnlocked
 {
-    private const IDLE_TIMEOUT = 3600;
+    private const IDLE_TIMEOUT = 36000;
 
     public function handle(Request $request, Closure $next): Response
     {
@@ -24,7 +24,7 @@ class EnsureLockscreenIsUnlocked
         /*
          * Allow the actual lockscreen page.
          */
-        if ($request->routeIs('lockscreen')) {
+        if ($request->routeIs('lock')) {
             return $next($request);
         }
 
@@ -69,7 +69,7 @@ class EnsureLockscreenIsUnlocked
                     true
                 );                
 
-                return redirect()->route('lockscreen');
+                return redirect()->route('lock');
             }
         }
 
@@ -85,7 +85,7 @@ class EnsureLockscreenIsUnlocked
 
             
 
-            return redirect()->route('lockscreen');
+            return redirect()->route('lock');
         }
 
         /*

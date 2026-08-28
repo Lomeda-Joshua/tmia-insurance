@@ -1204,7 +1204,7 @@ $.ajaxSetup({
 function LoadStatusCounts() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb_counts.php",
+    url:window.LaravelRoutes.nbpendingcounts,
     dataType: "json",
     success: function(data) {
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
@@ -1232,9 +1232,13 @@ function LoadTransactionData() {
     chkall: chkall
   };
 
-  if ($.fn.dataTable.isDataTable('#table_trans')) {
-    $('#table_trans').DataTable().clear().destroy();               
-  }
+  console.log(value);
+
+    if ($.fn.DataTable.isDataTable('#table_trans')) {
+      // Dynamically reload existing table instance without destroying DOM
+      $('#table_trans').DataTable().ajax.reload();
+      return;
+    }
 
     const table = $('#table_trans').DataTable({
         language: {
@@ -1247,16 +1251,20 @@ function LoadTransactionData() {
         autoWidth: false,
         pageLength: 10,
         order: [[2, 'desc']], // Orders by Trans_Date descending
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Mandatory for POST
+        },
         ajax: {
             url: window.LaravelRoutes.newBusinessData,
-            type: "GET",
+            type: "POST",
             data: function (d) {
                 // Pass custom request parameters to controller
                 d.viewpending = window.viewpending === true;
                 d.viewexpiring = window.viewexpiring ?? true;
                 d.searchval = $('#txtsearch').val().trim();
-                d.datefrom = $('#dpdatefrom').val();
-                d.dateto = $('#dpdateto').val();
+                d.datefrom = value.datefrom;
+                d.dateto = value.dateto;
+                d.chkall = value.chkall;
             },
             error: function (xhr, error, code) {
                 console.error('DataTables AJAX Error:', xhr.responseText);
@@ -5698,7 +5706,7 @@ function FormClearCall() {
 function formatDate(input) {
   if (!input) return "";
 
-  // Handle format like "09-August-2025"
+  // Handle input format like "09-August-2025"
   const months = {
     January: "01", February: "02", March: "03",
     April: "04", May: "05", June: "06",
@@ -5716,7 +5724,8 @@ function formatDate(input) {
   const month = months[monthName];
   if (!month) return "";
 
-  return `${year}-${month}-${day}`; // Output: YYYY-MM-DD
+  // Aligned Output: DD-MM-YYYY (e.g., "09-08-2025")
+  return `${day}-${month}-${year}`; 
 }
 
 function getAmPmTime(twentyFourHourString) {
