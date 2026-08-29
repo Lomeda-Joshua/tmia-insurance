@@ -16,7 +16,7 @@
 
                 <footer class="main-footer">
                     <div class="pull-right hidden-xs">
-                        <b>Version</b> 0.0.1
+                        <b>Version</b> 1.8.14
                     </div>
                     <strong>Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="http://toyotamakati.com.ph/" target="_blank">Toyota Makati, Inc</a>.</strong> All rights reserved.
                     <!-- <strong>Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="http://toyotabicutan.com.ph/" target="_blank">Toyota Bicutan Parañaque</a>.</strong> All rights reserved. -->
@@ -25,6 +25,7 @@
         
             @include('partials.footer')
             @push('scripts')
+                
                 <script>
                         (function () {
                             const IDLE_TIMEOUT = 10000; // 10 seconds (testing threshold)
@@ -57,6 +58,8 @@
                             resetTimer();
                         })();
                 </script>
+
+                
             @endpush
             @stack('scripts')
     </body>

@@ -47,7 +47,7 @@
 
       /* Center box container */
       .lockscreen-container {
-        background-color: rgba(255, 255, 255, 0.5); /* semi-transparent white */
+        background-color: rgba(255, 255, 255); /* semi-transparent white */
         padding: 40px 30px;
         width: 100%;
         max-width: 420px;
@@ -120,61 +120,19 @@
             >
         </div>
 
-        <div class="lockscreen-name" id="lockscreenname">
-            {{ Auth::user()->Display_Name ?? Auth::user()->User_Name ?? 'User Login Name' }}
-        </div>
 
-        <br>
 
         <div class="lockscreen-item">
 
-            <div class="lockscreen-image">
-                <img
-                    src="{{ asset('tmia-assets/images/user.png') }}"
-                    alt="User Image"
-                >
-            </div>
+         
 
-            <form class="lockscreen-credentials" method="POST" action="{{ route('lockscreen.unlock') }}" >
-                @csrf
-                <div class="input-group">
-                    <input
-                        type="password"
-                        id="txtpword"
-                        name="txtpword"
-                        class="form-control @error('password') is-invalid @enderror"
-                        placeholder="password"
-                        autofocus
-                    >
-
-                    <div class="input-group-btn">
-                        <button type="submit" id="btnlogin" class="btn"><i class="fa-regular fa-circle-right text-muted"></i></button>
-                    </div>
-
-                </div>
-
-                @error('password')
-                    <div
-                        class="text-danger mt-1 text-left"
-                        style="font-size:12px;color:#ff4d4d;"
-                    >
-                        {{ $message }}
-                    </div>
-                @enderror
-
-            </form>
+            <h1>404 PAGE NOT FOUND</h1>
 
 
 
         </div>
 
-        <div class="help-block text-center">
-            Enter your password to retrieve your session
-        </div>
-
-        <div class="text-center">
-            <a href="{{ route('login') }}" style="cursor:pointer;">Or sign in as a different user</a>
-        </div>
+    
 
         <div
             class="lockscreen-footer text-center"

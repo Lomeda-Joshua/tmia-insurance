@@ -16,7 +16,7 @@ class EnsureLockscreenIsUnlocked
         /*
          * Not authenticated.
          */
-        if (! Auth::check() ) {
+        if (! Auth::check() || $request->routeIs('lockscreen*')) {
             return $next($request);
         }
 
@@ -37,6 +37,11 @@ class EnsureLockscreenIsUnlocked
             return redirect()->route('lockscreen');
         }
 
-        return $next($request);
+
+        return $next($request)->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+                        ->header('Pragma', 'no-cache')
+                        ->header('Expires', 'Sun, 02 Jan 1990 00:00:00 GMT');
+
+        
     }
 }

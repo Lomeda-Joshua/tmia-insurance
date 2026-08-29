@@ -266,6 +266,26 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
 
     </div>
+
+    @push('scripts')
+    <script>
+        (function () {
+            // 1. Force a full page reload if loaded from the browser's back-forward cache (bfcache)
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    // Forces browser to hit Laravel server, triggering your EnsureScreenUnlocked middleware
+                    window.location.reload();
+                }
+            });
+
+            // 2. Intercept browser back/forward navigation actions
+            window.addEventListener('popstate', function () {
+                // Check session/lock status via endpoint or force direct redirect
+                window.location.href = "{{ route('lockscreen') }}";
+            });
+        })();
+    </script>
+    @endpush
 </x-layouts.auth.simple>
 
 
