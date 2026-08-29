@@ -1221,7 +1221,7 @@ function LoadTransactionData() {
   const chkall = $("#chkall").is(":checked") ? 1 : 0;
 
   const datefrom = formatDate(datefromRaw);
-  const dateto = formatDate(datetoRaw);
+  const dateto = formatDate(datetoRaw);  
 
   const value = {
     viewpending: viewpending,
@@ -1230,9 +1230,7 @@ function LoadTransactionData() {
     datefrom: datefrom,
     dateto: dateto,
     chkall: chkall
-  };
-
-  console.log(value);
+  };  
 
     if ($.fn.DataTable.isDataTable('#table_trans')) {
       // Dynamically reload existing table instance without destroying DOM
@@ -1404,49 +1402,53 @@ function LoadCustomerData() {
 
 //============== Customer List FROM DAF/SAP ============//
 function LoadCustomerDataEDAFSAP() {
-  const searchval = $("#txtcustomersearch").val().trim();
-  if (typeof btnselect === 'undefined') { btnselect = '';}
-
-  const value = {
-    searchval:searchval,
-    btnselect:btnselect
-  };
-
-  if ($.fn.dataTable.isDataTable('#table_customerlistupload')) {
-    $('#table_customerlistupload').DataTable().clear().destroy();               
+  if ($.fn.DataTable.isDataTable('#table_customerlistupload')) {
+    // Dynamically reload existing table instance without destroying DOM
+    $('#table_customerlistupload').DataTable().ajax.reload();
+    return;
   }
 
-  table = $('#table_customerlistupload').DataTable({
+  const table = $('#table_customerlistupload').DataTable({
     language: {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true, // Enabled for Yajra DataTables
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "fetch_upload_customers.php",
+      url: window.LaravelRoutes.uploadCustomers, // Named Laravel Route
       type: "POST",
-      data: value
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF Token for POST requests
+      },
+      data: function (d) {
+        // Pass dynamic input parameters on every request
+        d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
+        d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
+      },
+      error: function (xhr, error, code) {
+        console.error('Customer Table AJAX Error:', xhr.responseText);
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "Customer_No" },
-      { data: "Group" },
-      { data: "Full_Name" },
-      { data: "Birth_Date" },
-      { data: "Contact_No" },
-      { data: "Email_Address" },
-      { data: "Address" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Variant" },
+      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+      { data: "Customer_No", name: "Customer_No" },
+      { data: "Group", name: "Group" },
+      { data: "Full_Name", name: "Full_Name" },
+      { data: "Birth_Date", name: "Birth_Date" },
+      { data: "Contact_No", name: "Contact_No" },
+      { data: "Email_Address", name: "Email_Address" },
+      { data: "Address", name: "Address" },
+      { data: "VIN", name: "VIN" },
+      { data: "CS_No", name: "CS_No" },
+      { data: "Plate_No", name: "Plate_No" },
+      { data: "Variant", name: "Variant" }
     ],
     columnDefs: [
       {
-        targets: [3, 7, 11],
+        targets: [3, 7, 11], // Truncates long strings with title tooltips
         render: function(data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
@@ -1459,27 +1461,30 @@ function LoadCustomerDataEDAFSAP() {
     ]
   });
 
-  // ✅ Bind row click for selection AFTER table initialization
+  // Bind single-click row selection (uses DataTables API row data)
   $('#table_customerlistupload tbody').off('click', 'tr').on('click', 'tr', function () {
-    // Remove selection from any previously selected row
-    table.$('tr.selected').removeClass('selected');
+    if ($(this).hasClass('selected')) {
+      $(this).removeClass('selected');
+    } else {
+      table.$('tr.selected').removeClass('selected');
+      $(this).addClass('selected');
+    }
 
-    // Highlight clicked row
-    $(this).addClass('selected');
+    const rowData = table.row(this).data();
+    if (rowData) {
+      window.xcustno = '';
+      window.xcustnoupload = rowData.Customer_No ?? '';
+      window.xvin = rowData.VIN ?? '';
+      window.xcsno = rowData.CS_No ?? '';
+      window.xplateno = rowData.Plate_No ?? '';
 
-    // Optional: get Customer_No
-    xcustno = '';
-    xcustnoupload = table.cell(this, 1).data();
-    console.log('Selected Customer No:', xcustnoupload);
-
-    xvin = table.cell(this, 8).data();
-    xcsno = table.cell(this, 9).data();
-    xplateno = table.cell(this, 10).data();
+      console.log('Selected Customer No:', window.xcustnoupload);
+    }
   });
 
-  // ✅ Bind row click for selection AFTER table initialization
+  // Bind double-click action to trigger select button
   $('#table_customerlistupload tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btncustselect').trigger("click");
+    $('#btncustselect').trigger("click");
   });
 }
 

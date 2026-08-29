@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Livewire;
-
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 
-class Customer extends Component
+new class extends Component
 {
     use WithPagination;
 
@@ -19,9 +18,9 @@ class Customer extends Component
     public $selectedAlphabet = 'ALL';
 
     // Modal Control State
-    public $showModifyModal = false;
-    public $isEditMode = false;
-    public $isNewRecord = false;
+    public $showModifyModal;
+    public $isEditMode;
+    public $isNewRecord;
 
     // Form Fields
     public $customerNo = '';
@@ -75,8 +74,10 @@ class Customer extends Component
         $this->resetPage();
     }
 
-    public function openNewCustomerModal()
+    #[On('open-new-customer-modal')]
+    public function openNewCustomerModal($isEditMode )
     {
+        logger($isEditMode);
         $this->resetForm();
         $this->isNewRecord = true;
         $this->isEditMode = true;
@@ -185,13 +186,10 @@ class Customer extends Component
             'brgy', 'zipCode', 'remarks'
         ]);
         $this->country = 'PHILIPPINES';
-        $this->resetValidation();
+        $this->resetValidation();        
     }
 
-    public function render()
-    {
         // $query = DB::table('customer_information');        
-
         // // Alphabet Filtering
         // if ($this->selectedAlphabet !== 'ALL') {
         //     if ($this->selectedAlphabet === '[0-9]') {
@@ -215,7 +213,7 @@ class Customer extends Component
 
         // $customers = $query->paginate(10);
 
-        return view('livewire.main.demo');
+        
+};
+?>
 
-    }
-}

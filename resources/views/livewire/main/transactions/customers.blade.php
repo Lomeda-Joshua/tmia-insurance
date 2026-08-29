@@ -1,4 +1,5 @@
 <x-layouts.main>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -20,16 +21,16 @@
     <div class="box box-warning">
       <div class="box-body">
         <div class="box-body" style="max-width:100%;">
-          
-          @if (Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 )
+
+          @if (Auth::user()->User_Level_ID == 1 ||Auth::user()->User_Level_ID == 7)
             <div class="row btnactionud">
-              <div class="col-md-12">
-                <button type="submit" class="btn btn-success pull-left" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
-                <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: block;"><i class="fa fa-upload"></i> Import Excel File</button>
-              </div>
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-success pull-left" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
+                  <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: block;"><i class="fa fa-upload"></i> Import Excel File</button>
+                </div>
             </div>
           @endif
-          
+
           <div class="box center">
             <div class="box-body">
               <div class="row">
@@ -773,190 +774,15 @@
 <!-- /.content-wrapper -->
 
 @push('scripts')
+
 <script>
-
-    $(document).ready(function() {
-
-        const container = document.getElementById('alphabet-container');
-
-        // Function to create a button
-        function createButton(label, isActive = false) {
-          const button = document.createElement('button');
-          button.textContent = label;
-          if (isActive) {
-            button.classList.add('active');
-          }
-          button.addEventListener('click', () => {
-            document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            // You can add your custom action here (e.g., filter items)
-            btnselect = `${label}`;
-            // LoadCustomerData();
-          });
-          return button;
-        }
-
-        // Add "All" button first
-        container.appendChild(createButton("ALL"));
-
-        // Add A-Z buttons
-        for (let i = 65; i <= 90; i++) {
-          const letter = String.fromCharCode(i);
-          const isActive = letter === 'A'; // Set "A" as default
-          container.appendChild(createButton(letter, isActive));
-        }
-
-        // Add Other button first
-        container.appendChild(createButton("[0-9]"));
-        container.appendChild(createButton("[SPECIAL CHAR]"));
-
-        btnselect = 'A';
-        // LoadCustomerData();
-
-
-          /* MODAL MODIFY */
-        $("#modal-modify").iziModal({
-          title: 'Customer Information Details',
-          subtitle: 'Fill out all details required here.',
-          headerColor: 'linear-gradient(0deg, #505050, #bbb, #505050)',
-          icon: 'fa-regular fa-circle-user',
-          iconColor: '#000',
-          zindex: 9999,
-          width: 600,
-          padding: 20,
-          radius: 10,
-          focusInput: true,
-          loop: true,
-          arrowKeys: true,
-          navigateCaption: true,
-          navigateArrows: true, // Boolean, 'closeToModal', 'closeScreenEdge'
-          //history: true,
-          //restoreDefaultContent: true,
-          fullscreen: true,
-          // openFullscreen: true,
-          overlay: true,
-          overlayClose: false,
-          overlayColor: 'rgba(0, 0, 0, 0.4)',
-          transitionIn: 'bounceInDown',
-          transitionOut: 'bounceOutDown',
-          transitionInOverlay: 'fadeIn',
-          transitionOutOverlay: 'fadeOut',
-          onResize: function(modal){
-            // console.log(modal.modalHeight);
-          },
-          afterRender: function(modal){
-            // modal.open();
-          }
-
-        });
-
-
-         $(document).on( "click", "#btnadd", function () {
-          // newdata = true;
-          // transid = '';
-          // editinfo = true;
-          // FormClear();
-          // FormDisable(false);
-          $('#modal-modify').iziModal('open');
-        });
-
-        $('#table_trans').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "{{ route('customers.data') }}", // Update to your defined route name
-                type: "GET",
-                data: function (d) {
-                    // Attach custom request parameters for search and letter filtering
-                    d.search = $('#txtsearch').val(); 
-                    d.letter = $('#selected_letter').val(); 
-                }
-            },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                { data: 'Customer_No', name: 'Customer_No' },
-                { data: 'Group', name: 'Group', defaultContent: '' },
-                { data: 'Full_Name', name: 'Full_Name' },
-                { data: 'Birth_Date', name: 'Birth_Date', defaultContent: '' },
-                { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
-                { data: 'Email_Address', name: 'Email_Address', defaultContent: '' },
-                { data: 'Address', name: 'Address', defaultContent: '' },
-                { data: 'Remarks', name: 'Remarks', defaultContent: '' },
-                { data: 'Active_Status', name: 'Active_Status', defaultContent: 'INACTIVE' },
-                { data: 'Inactive_Date', name: 'Inactive_Date', defaultContent: '' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
-            ],
-            order: [[1, 'asc']]
-        });
-
-        // Handler for View Vehicle button click (.btnvehicle)
-        $(document).on('click', '.btnvehicle', function () {
-            var custNo = $(this).attr('custno');
-            console.log('View Vehicle for Customer No:', custNo);
-            // Add your legacy vehicle modal or redirection logic here
-        });
-
-        // Handler for View & Modify button click (.btnedit)
-        $(document).on('click', '.btnedit', function () {
-            var custNo = $(this).attr('custno');
-            console.log('View & Modify Customer No:', custNo);
-            // Add your legacy edit modal or redirection logic here
-        });
-
-        // Re-bind Bootstrap Tooltips every time DataTables redraws
-        $('#table_trans').on('draw.dt', function () {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-
-
-        function FormClear() {
-            // 1. Reset all text/number inputs, textareas, and default native selects inside the container
-            $('#modal-modify').find('input, textarea, select').val('');
-
-            // 2. Clear & trigger updates for all Select2 dropdowns at once
-            $('#modal-modify select').val('').trigger('change.select2');
-
-            // 3. Set default fallback value for country
-            $('#cbocountry').val('PHILIPPINES').trigger('change.select2');
-
-            // 4. Reset form validation UI state
-            $('.box-body').validator('reset');
-        };
-
-          const userLevel = "{{ Auth::user()?->User_Level_ID ?? 'null' }}";
-           function FormDisable(val) {
-
-              // 1. Role-restricted view toggles (e.g., 1 = Administrator, 7 = Insurance Staff)
-              if (userLevel === 1 || userLevel === 7) {
-                  if (val) {
-                      $("#viewaction").show().removeAttr("hidden");
-                      $("#viewaction1").hide();
-                  } else {
-                      $("#viewaction").hide();
-                      $("#viewaction1").show().removeAttr("hidden");
-                  }
-              }
-
-              // 2. Dynamic button visibility check
-              if (typeof newdata !== 'undefined' && newdata === true) {
-                  $("#btncancel").hide();
-                  $("#btnclose").show().removeAttr("hidden");
-              }else {
-                  $("#btncancel").show().removeAttr("hidden");
-                  $("#btnclose").hide();
-              }
-
-              // 3. Disable/Enable all modal form fields at once (Replaces 20+ individual lines)
-              $('#modal-modify').find('input, select, textarea').prop('disabled', val);
-              // 4. Reset validation UI state
-
-              $('.box-body').validator('reset');
-
-          } 
-
-    });
-
+    window.LaravelRoutes = {
+      csrfToken: "{{ csrf_token() }}",
+      customerTypeData: @json(route('customers_type.data.2')),
+    }
 </script>
+
+<script src="{{ asset('tmia-assets/js/laravel/customer_laravel.js') }}"></script>
 @endpush
 
 </x-layouts.main>

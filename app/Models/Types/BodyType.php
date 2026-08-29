@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class RenewalBusinessTransactionView extends Model
+class BodyType extends Model
 {
     use HasFactory;
-    protected $table = 'vw_transactions_rb';
-    protected $primaryKey = 'Insurance_No';
+    protected $table = 'body_type';
+    protected $primaryKey = 'Body_TID';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

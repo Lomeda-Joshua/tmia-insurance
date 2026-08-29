@@ -11,7 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\OverallDataController;
 use Illuminate\Http\Request;
-
+use App\Livewire\Customer;
 
 // ==========================================
 // 1. Lockscreen Routes (Bypass Unlocked Check)
@@ -34,9 +34,9 @@ Route::middleware(['auth'])->group(function () {
         session()->put('lockscreen_locked', true);
         return redirect()->route('lockscreen');
     })->name('lock');
-
-
 });
+
+Route::get("/demo", Customer::class)->name('demo.livewire');
 
 
 // ==========================================
@@ -74,12 +74,13 @@ Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(fun
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
         
-
         Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
+        Route::post('/customertype/data2', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
         Route::get('/payments/data', [OverallDataController::class, 'getPayments'])->name('payments.data');
         Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
+        Route::post('/uploadedcustomer/data', [OverallDataController::class, 'getUploadedCustomer'])->name('uploaded.customer');
     });
 
     // Settings Group

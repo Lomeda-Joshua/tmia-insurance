@@ -8,6 +8,9 @@
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
 
+<!-- 1. Add CSRF Token Meta Tag -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <!--============<******* PAGES FAVICON LOGO *******>============-->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('tmia-assets/images/favicon/apple-touch-icon.png') }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('tmia-assets/images/favicon/favicon-32x32.png') }}">

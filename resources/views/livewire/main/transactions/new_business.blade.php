@@ -102,19 +102,19 @@
         </div>
 
         @if(Auth::user()->User_Level_ID == 1)
-        <div class="row">
-          <div class="btnactionud pull-right">
-            <button
-                  type="button"
-                  id="btnadd"
-                  class="btn btn-box-tool"
-                  data-user-id="{{ Auth::user()->User_ID }}"
-                  data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}"
-                >
-                <i class="fa fa-plus"></i> Add New
-            </button>
+          <div class="row">
+            <div class="btnactionud pull-right">
+              <button
+                    type="button"
+                    id="btnadd"
+                    class="btn btn-box-tool"
+                    data-user-id="{{ Auth::user()->User_ID }}"
+                    data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}"
+                  >
+                  <i class="fa fa-plus"></i> Add New
+              </button>
+            </div>
           </div>
-        </div>
         @endif
 
       </div>
@@ -177,7 +177,9 @@
       </div>
     </div>
     <!-- END MODAL MODIFY ISE -->
-    <!-- MODAL ADD -->
+
+
+    <!-- MODAL CUSTOMER ADD -->
     <div id="modal-add" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
         <div class="box-body" style="max-width:100%;">
@@ -1110,6 +1112,8 @@
       </div>
     </div>
     <!-- END MODAL ADD -->
+
+
     <!-- MODAL CUSTOMER LIST -->
     <div id="modal-customerlist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box">
@@ -1769,9 +1773,9 @@
       insuranceStaffData: @json(route('insurance_staff.data')),
       customerData: @json(route('customers.data')),
       customerTypeData: @json(route('customers_type.data')),
-      nbpendingcounts: @json(route('new_business.counts'))
-    };
-
+      nbpendingcounts: @json(route('new_business.counts')),
+      uploadCustomers: @json(route('uploaded.customer'))
+    }
 </script>
 
 <script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>

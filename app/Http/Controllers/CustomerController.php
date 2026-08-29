@@ -14,9 +14,13 @@ use App\Models\CustomerInformation;
 
 class CustomerController extends Controller
 {
-    public function index(){
+
+    public function index(){ 
+
         return view('livewire.main.transactions.customers');
     }
+
+
 
     /**
      * Fetch customer data for DataTables AJAX.
@@ -49,9 +53,7 @@ class CustomerController extends Controller
         // Handle alphabetical filter
         if ($request->filled('letter') && $request->letter !== 'ALL') {
             $query->where('Last_Name', 'like', "{$request->letter}%");
-        }
-
-        logger($request->filled('letter'));
+        }        
 
         return DataTables::of($query)
         ->addIndexColumn()
@@ -69,16 +71,19 @@ class CustomerController extends Controller
         ->addColumn('action', function ($row) {
             $custNoEscaped = e($row->Customer_No);
             $button  = '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
+            $button .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" data-placement="top" title="View & Modify"><i class="fa fa-edit"></i></label>';
             $button .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
 
             return $button;
         })
         ->rawColumns(['action'])
         ->make(true);
-
-        
     }
 
+
+    /**
+     * Fetch customer data for DataTables AJAX.
+    */
     public function show($custno)
     {
         $customer = CustomerInformation::where('Customer_No', $custno)->firstOrFail();
@@ -106,6 +111,7 @@ class CustomerController extends Controller
         return response()->json(['success' => true, 'data' => $customer]);
     }
 
+    
     /**
      * Show single customer for edit modal.
      */
@@ -113,6 +119,7 @@ class CustomerController extends Controller
     // {
     //     return response()->json($customer);
     // }
+
 
     /**
      * Update customer.

@@ -3,7 +3,8 @@
 <head>
     @include('partials.head')
     @stack('styles')
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])z
+    @livewireStyles
 </head>
     <body class="hold-transition skin-black sidebar-mini {{ request()->routeIs('dashboard') ? '' : 'sidebar-collapse' }}" onload="StartTimers();">
             <!-- Site wrapper -->
@@ -45,6 +46,8 @@
                     resetIdleTimer();
                 </script>
             @endpush --}}
+            <!-- Stack target for view-specific scripts -->
+            @livewireScripts
             @stack('scripts')
     </body>
 </html>

@@ -23,9 +23,7 @@ class NewBusinessController extends Controller
     */
     public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
     {
-    $filters = $request->validated();
-
-    logger($filters);
+    $filters = $request->validated();    
 
     $query = NewBusinessTransactionView::query()
         ->select([

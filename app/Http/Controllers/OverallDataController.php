@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+
 use App\Models\InsuranceStaff;
 use App\Models\CustomerType;
+use App\Models\UploadedCustomer;
+use App\Models\Region;
+use App\Models\BodyType;
 
 
 class OverallDataController extends Controller
@@ -37,6 +41,42 @@ class OverallDataController extends Controller
             ]);
 
         return response()->json($customerTypes);
+    }
+
+    public function getUploadedCustomer(Request $request){
+        $uploadedCustomer = UploadedCustomer::query()
+            ->orderBy('Customer_Type', 'asc')
+            ->get([
+                'Customer_TID',
+                'Customer_Type',
+            ]);
+
+        return response()->json($uploadedCustomer);
+    }
+
+    public function getBodyType(Request $request){
+        $uploadedCustomer = BodyType::query()
+            ->orderBy('Body_TID', 'asc')
+            ->get([
+                'Body_TID',
+                'Body_Type',
+            ]);
+
+        return response()->json($uploadedCustomer);
+    }
+
+
+
+    public function getRegion(Request $request){
+        $getRegion = Region::query()
+                    ->orderBy('Customer_Type', 'asc')
+                    ->get([
+                        'RegCode',
+                        'Region',
+                        'PSGCode',
+                    ]);
+
+        return response()->json($getRegion);
     }
 
 
