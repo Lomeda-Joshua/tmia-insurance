@@ -765,7 +765,7 @@ $.ajaxSetup({
   //======= Region =====//
   $.ajax({
     type:"POST",
-    url:"fetch_region.php",
+    url:window.DataRoutes.regionData,
     success: function(data) {
       $("#cboregion").html(data);
     }
@@ -819,7 +819,7 @@ $.ajaxSetup({
   //======= Body Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_body_type.php",
+    url:window.DataRoutes.bodyTypeData,
     success: function(data) {
       $("#cbobodytype").html(data);
     }
@@ -836,7 +836,7 @@ $.ajaxSetup({
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_fuel_type.php",
+    url:window.DataRoutes.fuelTypeData,
     success: function(data) {
       $("#cbofueltype").html(data);
     }
@@ -853,7 +853,7 @@ $.ajaxSetup({
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:"fetch_product_class.php",
+    url:window.DataRoutes.productClassData,
     success: function(data) {
       $("#cboprodclass").html(data);
     }
@@ -870,7 +870,7 @@ $.ajaxSetup({
    //======= Owner Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_customer_type.php",
+    url:window.DataRoutes.cutomerTypeData,
     success: function(data) {
       $("#cboowntype").html(data);
     }
@@ -888,7 +888,7 @@ $.ajaxSetup({
   //======= Payment Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_payment_type.php",
+    url: window.DataRoutes.paymentTypeData,
     success: function(data) {
       $("#cbopaytype, #cbopaytype-n").html(data);
     }
@@ -905,7 +905,7 @@ $.ajaxSetup({
   //======= E-Wallet Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_ewallet_type.php",
+    url:window.DataRoutes.ewalletTypeData,
     success: function(data) {
       $("#cboewallet, #cboewallet-n").html(data);
     }
@@ -923,7 +923,7 @@ $.ajaxSetup({
   //======= Insurance Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_type.php",
+    url:window.DataRoutes.insuranceTypeData,
     success: function(data) {
       $("#cboinstype").html(data);
     }
@@ -940,7 +940,7 @@ $.ajaxSetup({
   //======= Insurance =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_co.php",
+    url:window.DataRoutes.insuranceCoData,
     success: function(data) {
       $("#cboinsco").html(data);
     }
@@ -957,7 +957,7 @@ $.ajaxSetup({
   //======= Bank =====//
   $.ajax({
     type:"POST",
-    url:"fetch_banks.php",
+    url: window.DataRoutes.bankData,
     success: function(data) {
       $("#cbomortgage").html(data);
     }
@@ -976,7 +976,7 @@ $.ajaxSetup({
   $.ajax({
     type:"POST",
     data:{ businesstype: "NEW BUSINESS" },
-    url:"fetch_transaction_status.php",
+    url:window.DataRoutes.transactionStatusData,
     success: function(data) {
       $("#cbotransstatus").html(data);
     }
@@ -994,7 +994,7 @@ $.ajaxSetup({
   //======= Communication Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_communication_type.php",
+    url:window.DataRoutes.communicationTypeData,
     success: function(data) {
       $("#cbomodecomm").html(data);
     }
@@ -1011,7 +1011,7 @@ $.ajaxSetup({
   //======= Call Status Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_call_status.php",
+    url:window.DataRoutes.callStatusData,
     success: function(data) {
       $("#cbocallstatus").html(data);
     }
@@ -1249,9 +1249,6 @@ function LoadTransactionData() {
         autoWidth: false,
         pageLength: 10,
         order: [[2, 'desc']], // Orders by Trans_Date descending
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Mandatory for POST
-        },
         ajax: {
             url: window.LaravelRoutes.newBusinessData,
             type: "POST",

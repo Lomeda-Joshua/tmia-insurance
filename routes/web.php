@@ -8,44 +8,38 @@ use App\Http\Controllers\NewBusinessController;
 use App\Http\Controllers\RenewalBusinessTransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\OverallDataController;
-use Illuminate\Http\Request;
-use App\Livewire\Customer;
+use App\Http\Middleware\EnsureLockscreenIsUnlocked;
+use App\Http\Controllers\LockscreenController;
 
-// ==========================================
-// 1. Lockscreen Routes (Bypass Unlocked Check)
-// ==========================================
+
+
 Route::middleware(['auth'])->group(function () {
-
-    // Livewire Volt lockscreen component
-    Volt::route('/lockscreen', 'main.lockscreen')->name('lockscreen');
-
-    // Manually trigger lockscreen
-    Route::get('/lock', function () {
-
-        // Save current URL for redirect after unlock
-        $previousUrl = url()->previous();
-
-        if ( $previousUrl && $previousUrl !== route('lockscreen')) {
-            session()->put('url.intended', $previousUrl);
-        }
-        // Use ONE session key consistently
-        session()->put('lockscreen_locked', true);
-        return redirect()->route('lockscreen');
-    })->name('lock');
+    Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
+    Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
+    Route::post('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
 });
 
-Route::get("/demo", Customer::class)->name('demo.livewire');
-
-
-// ==========================================
-// 2. Protected Application Routes (Must be Unlocked)
-// ==========================================
-Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(function () {
+Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
 
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
+
+    // Data Group
+    Route::post('/bodytype/data', [OverallDataController::class, 'getBodyType'])->name('bodytype.data');
+    Route::post('/communicationtype/data', [OverallDataController::class, 'getCommunicationType'])->name('communicationtype.data');
+    Route::post('/ewalletype/data', [OverallDataController::class, 'getEwalletType'])->name('ewalletype.data');
+    Route::post('/fueltype/data', [OverallDataController::class, 'getFuelType'])->name('fueltype.data');
+    Route::post('/insurancetype/data', [OverallDataController::class, 'getInsuranceType'])->name('insurancetype.data');
+    Route::post('/paymenttype/data', [OverallDataController::class, 'getPaymentType'])->name('paymenttype.data');
+    Route::post('/banks/data', [OverallDataController::class, 'getBank'])->name('banks.data');
+    Route::post('/callstatus/data', [OverallDataController::class, 'getCallStatus'])->name('callstatus.data');
+    Route::post('/insuranceco/data', [OverallDataController::class, 'getInsuranceCo'])->name('insuranceco.data');
+    Route::post('/region/data', [OverallDataController::class, 'getRegion'])->name('region.data');
+    Route::post('/productclass/data', [OverallDataController::class, 'getProductClass'])->name('productclass.data');
+    Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
+
+
 
     // Transactions Group
     Route::prefix('transactions')->group(function () {
@@ -78,7 +72,7 @@ Route::middleware(['auth', 'verified', 'EnsureLockscreenIsUnlocked'])->group(fun
         Route::post('/customertype/data2', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
-        Route::get('/payments/data', [OverallDataController::class, 'getPayments'])->name('payments.data');
+        Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');
         Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
         Route::post('/uploadedcustomer/data', [OverallDataController::class, 'getUploadedCustomer'])->name('uploaded.customer');
     });

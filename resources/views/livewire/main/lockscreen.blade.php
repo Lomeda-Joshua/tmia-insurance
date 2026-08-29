@@ -1,111 +1,3 @@
-<?php
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
-use Livewire\Component;
-
-new #[Layout('components.layouts.auth')] class extends Component
-{
-    #[Validate('required|string')]
-    public string $password = '';
-
-    public function unlock(): void
-    {
-        $this->validate();
-
-        $this->ensureIsNotRateLimited();        
-
-        $user = Auth::user();        
-
-        if (! $user) {
-            $this->signInAsAnotherUser();
-            return;
-        }        
-        
-
-        if (! Hash::check($this->password, $user->getAuthPassword())) {
-
-            RateLimiter::hit($this->throttleKey());
-
-            $this->password = '';
-
-            throw ValidationException::withMessages([
-                'password' => __('auth.failed'),
-            ]);
-        }
-
-        RateLimiter::clear($this->throttleKey());
-
-        // Unlock session
-        Session::forget('lockscreen_locked');
-
-        // Clear password
-        $this->password = '';
-
-        // Regenerate session ID
-        Session::regenerate();
-
-        // Debug temporarily
-        // dd([
-        //     'auth' => Auth::check(),
-        //     'user_id' => Auth::id(),
-        //     'lockscreen_locked' => Session::get('lockscreen_locked'),
-        //     'intended' => Session::get('url.intended'),
-        // ]);
-
-        // In your Livewire Volt lockscreen component
-        $this->redirect(
-            url: session()->get('url.intended', route('dashboard', absolute: true)),
-            navigate: false // Forces a full browser reload to apply updated session state
-        );
-    }
-
-    public function signInAsAnotherUser(): void
-    {
-        Auth::logout();
-
-        Session::invalidate();
-        Session::regenerateToken();
-
-        $this->redirect(
-            route('login'),
-            navigate: false
-        );
-    }
-
-    protected function ensureIsNotRateLimited(): void
-    {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            return;
-        }
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
-        throw ValidationException::withMessages([
-            'password' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
-    }
-
-    protected function throttleKey(): string
-    {
-        $username = Auth::user()?->User_Name ?? 'guest';
-
-        return Str::transliterate(
-            Str::lower($username) . '|' . request()->ip()
-        );
-    }
-};
-?>
-
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -215,6 +107,7 @@ new #[Layout('components.layouts.auth')] class extends Component
 </head>
 
 <body class="hold-transition lockscreen">
+    
 <div class="lockscreen-wrapper">
 
     <div class="lockscreen-container">
@@ -242,12 +135,9 @@ new #[Layout('components.layouts.auth')] class extends Component
                 >
             </div>
 
-            <form
-                class="lockscreen-credentials"
-                wire:submit="unlock"
-            >
+            <form class="lockscreen-credentials" method="POST" action="{{ route('lockscreen.unlock') }}" >
+                @csrf
                 <div class="input-group">
-
                     <input
                         type="password"
                         id="txtpword"
@@ -258,13 +148,7 @@ new #[Layout('components.layouts.auth')] class extends Component
                     >
 
                     <div class="input-group-btn">
-                        <button
-                            type="submit"
-                            id="btnlogin"
-                            class="btn"
-                        >
-                            <i class="fa-regular fa-circle-right text-muted"></i>
-                        </button>
+                        <button type="submit" id="btnlogin" class="btn"><i class="fa-regular fa-circle-right text-muted"></i></button>
                     </div>
 
                 </div>
@@ -280,6 +164,8 @@ new #[Layout('components.layouts.auth')] class extends Component
 
             </form>
 
+
+
         </div>
 
         <div class="help-block text-center">
@@ -287,13 +173,7 @@ new #[Layout('components.layouts.auth')] class extends Component
         </div>
 
         <div class="text-center">
-            <a
-                class="lnksite"
-                wire:click="signInAsAnotherUser"
-                style="cursor:pointer;"
-            >
-                Or sign in as a different user
-            </a>
+            <a class="lnksite" wire:click="signInAsAnotherUser" style="cursor:pointer;">Or sign in as a different user</a>
         </div>
 
         <div

@@ -17,7 +17,7 @@ var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
-    
+  console.log(window.LaravelRoutes.customerTypeData);
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -415,6 +415,7 @@ $(document).ready( function () {
         'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
     },
     success: function(data) {
+      
       $("#cbogroup").html(data);
     }
   });

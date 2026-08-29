@@ -1767,6 +1767,7 @@
 
 @push('scripts')
 <script>
+
     window.LaravelRoutes = {
       csrfToken: "{{ csrf_token() }}",
       newBusinessData: @json(route('newbusiness.data')),
@@ -1776,6 +1777,27 @@
       nbpendingcounts: @json(route('new_business.counts')),
       uploadCustomers: @json(route('uploaded.customer'))
     }
+
+    window.DataRoutes = {
+      bodyTypeData: @json(route('bodytype.data')),
+      fuelTypeData: @json(route('fueltype.data')),
+      productClassData: @json(route('productclass.data')),
+      communicationTypeData: @json(route('communicationtype.data')),
+      regionData: @json(route('region.data')),
+      customerTypeDataPost: @json(route('customers_type.data.2')),
+      paymentTypeData: @json(route('payments.data')),
+      ewalletTypeData: @json(route('ewalletype.data')),
+      insuranceTypeData: @json(route('insurancetype.data')),
+      insuranceCoData: @json(route('insuranceco.data')),
+      bankData: @json(route('banks.data')),
+      callStatusData: @json(route('callstatus.data')),
+      transactionStatusData: @json(route('transactionstatus.data'))
+    }
+    
+    console.log(window.DataRoutes.transactionStatusData);
+
+
+    
 </script>
 
 <script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>

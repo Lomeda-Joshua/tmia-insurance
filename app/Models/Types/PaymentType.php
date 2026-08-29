@@ -4,12 +4,11 @@ namespace App\Models\Types;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class FuelType extends Model
+class PaymentType extends Model
 {
     use HasFactory;
-    protected $table = 'fuel_type';
-    protected $primaryKey = 'Fuel_TID';
+    protected $table = 'Payment_type';
+    protected $primaryKey = 'PayTID';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

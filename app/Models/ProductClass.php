@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\Types;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FuelType extends Model
+class ProductClass extends Model
 {
     use HasFactory;
-    protected $table = 'fuel_type';
-    protected $primaryKey = 'Fuel_TID';
+    protected $table = 'product_classification';
+    protected $primaryKey = 'Prod_Class_ID';
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;

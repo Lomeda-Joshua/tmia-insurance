@@ -24,27 +24,40 @@
             </div>
         
             @include('partials.footer')
-            {{-- @push('scripts')
+            @push('scripts')
                 <script>
-                    let idleTimer;
+                        (function () {
+                            const IDLE_TIMEOUT = 10000; // 10 seconds (testing threshold)
+                            let idleTimer = null;
 
-                    function resetIdleTimer() {
-                        clearTimeout(idleTimer);
-                        // Lock screen after 15 minutes (900,000 ms) of inactivity
-                        idleTimer = setTimeout(() => {
-                            window.location.href = "{{ route('lock') }}";
-                            console.log("hello");
-                        }, 3600); 
-                    }
+                            function sendLockSignal() {
+                                fetch("{{ route('lockscreen.lock') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                    }
+                                }).then(() => {
+                                    window.location.href = "{{ route('lockscreen') }}";
+                                });
+                            }
 
-                    // Listen for user activity
-                    ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
-                        window.addEventListener(event, resetIdleTimer, false);
-                    });
+                            function resetTimer() {
+                                clearTimeout(idleTimer);
+                                idleTimer = setTimeout(sendLockSignal, IDLE_TIMEOUT);
+                            }
 
-                    resetIdleTimer();
+                            // DOM Events indicating activity
+                            const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+                            activityEvents.forEach(event => {
+                                window.addEventListener(event, resetTimer, false);
+                            });
+
+                            // Initialize timer on layout load
+                            resetTimer();
+                        })();
                 </script>
-            @endpush --}}
+            @endpush
             @stack('scripts')
     </body>
 </html>

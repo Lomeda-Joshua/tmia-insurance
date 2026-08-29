@@ -9,92 +9,33 @@ use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureLockscreenIsUnlocked
-{
-    private const IDLE_TIMEOUT = 36000;
+{    
 
     public function handle(Request $request, Closure $next): Response
-    {
+    {        
         /*
          * Not authenticated.
          */
-        if (! Auth::check()) {
+        if (! Auth::check() ) {
             return $next($request);
         }
-
-        /*
-         * Allow the actual lockscreen page.
-         */
-        if ($request->routeIs('lock')) {
-            return $next($request);
-        }
-
-        /*
-         * IMPORTANT:
-         *
-         * Do not run the lockscreen redirect logic against
-         * Livewire requests coming from the lockscreen itself.
-         *
-         * Otherwise typing/submitting the password can cause
-         * Livewire to receive a redirect instead of its expected
-         * Livewire response.
-         */
-        if ($request->hasHeader('X-Livewire') && Session::get('lockscreen_locked', false) === true) 
-        {
-            return $next($request);
-        }
-
-
-        /*
-         * Check inactivity.
-         */
-        $now = now()->timestamp;
-
-        $lastActivity = Session::get('last_activity_at');
 
         
-
-        if ($lastActivity !== null) {
-
-            $idleTime = $now - (int) $lastActivity;
-
-            if ($idleTime >= self::IDLE_TIMEOUT) {
-
-                Session::put(
-                    'url.intended',
-                    $request->fullUrl()
-                );
-
-                Session::put(
-                    'lockscreen_locked',
-                    true
-                );                
-
-                return redirect()->route('lock');
-            }
+        // Initialize session state if missing
+        if (! $request->session()->has('lockscreen')) {
+            $request->session()->put('lockscreen', false);
         }
 
-        /*
-         * Already locked.
-         */
-        if (Session::get('lockscreen_locked', false) === true) {
-
-            Session::put(
-                'url.intended',
-                $request->fullUrl()
-            );
-
-            
-
-            return redirect()->route('lock');
+        
+        // Allow access to lockscreen routes to avoid infinite redirect loops
+        if ($request->routeIs('lockscreen') || $request->routeIs('lockscreen.unlock') || $request->routeIs('lockscreen.lock')) {
+            return $next($request);
         }
 
-        /*
-         * User is active.
-         */
-        Session::put(
-            'last_activity_at',
-            $now
-        );
+        // If locked, restrict access to all protected application routes
+        if ($request->session()->get('lockscreen') === true) {
+            return redirect()->route('lockscreen');
+        }
 
         return $next($request);
     }
