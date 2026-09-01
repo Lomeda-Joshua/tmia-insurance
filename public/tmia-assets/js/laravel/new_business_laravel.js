@@ -1762,9 +1762,13 @@ function LoadCustomerInfo() {
 function LoadCustomerEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_upload_customer_info.php",
+    url: window.Populate.getCustomerDetails,
     data:{custno:xcustnoupload},
     success: function(data){
+
+      console.log("hello");
+      console.log(data);
+
       var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 

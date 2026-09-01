@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\CustomerInformation;
+use App\Models\UploadedCustomer;
 
 
 class CustomerController extends Controller
@@ -17,8 +18,7 @@ class CustomerController extends Controller
         return view('livewire.main.transactions.customers');
     }
 
-
-
+    
     /**
      * Fetch customer data for DataTables AJAX.
     */
@@ -143,5 +143,37 @@ class CustomerController extends Controller
         $customer->delete();
 
         return response()->json(['success' => true]);
+    }
+
+
+    public function getCustomerDetails(Request $request)
+    {
+        $custNo = trim($request->input('custno'));
+
+        if (empty($custNo)) {
+            return response()->json([]);
+        }
+
+        // 1. Primary Lookup: Active Customer View
+        $data = CustomerInformation::where('Upload_Cust_No', $custNo)->get();
+
+        if ($data->isNotEmpty()) {
+            $data->transform(function ($item) {
+                $item->Cust_Exist = true;
+                return $item;
+            });
+
+            return response()->json($data);
+        }
+
+        // 2. Fallback Lookup: Upload/Staging Table
+        $data = UploadedCustomer::where('Customer_No', $custNo)->get();
+
+        $data->transform(function ($item) {
+            $item->Cust_Exist = false;
+            return $item;
+        });
+
+        return response()->json($data);
     }
 }

@@ -40,7 +40,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
 
 
-
     // Transactions Group
     Route::prefix('transactions')->group(function () {
 
@@ -64,6 +63,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
+
+        Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
 
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');

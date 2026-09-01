@@ -1790,10 +1790,10 @@
       callStatusData: @json(route('callstatus.data')),
       transactionStatusData: @json(route('transactionstatus.data'))
     }
-    
-    console.log(window.DataRoutes.transactionStatusData);
 
-
+    window.Populate = {
+        getCustomerDetails: @json(route("getcustomers.data"))
+    }
     
 </script>
 
