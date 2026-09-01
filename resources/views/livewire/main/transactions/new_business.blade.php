@@ -1790,8 +1790,12 @@
       callStatusData: @json(route('callstatus.data')),
       transactionStatusData: @json(route('transactionstatus.data'))
     }
-    
-    console.log(window.DataRoutes.transactionStatusData);
+
+
+    window.getData = {
+      customerInfo : @json(route('customerinfo.data')),
+      vehicleInfo: @json(route('customercvehicleinfo.data')),
+    }
 
 
     
