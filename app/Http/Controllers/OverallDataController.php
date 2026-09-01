@@ -21,7 +21,7 @@ use App\Models\Bank;
 use App\Models\ProductClass;
 use App\Models\CallStatus;
 use App\Models\TransactionStatus;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class OverallDataController extends Controller
 {
@@ -44,13 +44,43 @@ class OverallDataController extends Controller
 
     public function getUploadedCustomer(Request $request){
         $uploadedCustomer = UploadedCustomer::query()
-            ->orderBy('Customer_Type', 'asc')
+            ->orderBy('Customer_No', 'asc')
             ->get([
-                'Customer_TID',
-                'Customer_Type',
+                "Customer_No",
+                "Group",
+                "Full_Name",
+                "First_Name",
+                "Middle_Name",
+                "Last_Name",
+                "Suffix_Name",
+                "Birth_Date",
+                "TIN",
+                "Contact_No",
+                "Email_Address",
+                "Address",
+                "RegCode",
+                "ProvCode",
+                "CMCode",
+                "BrgyCode",
+                "Zip_Code",
+                "Country",
+                "VIN",
+                "Variant",
+                "Make",
+                "Model",
+                "Model_Year",
+                "Color",
+                "Engine_No",
+                "CS_No",
+                "Plate_No",
+                "Order_No",
             ]);
 
-        return response()->json($uploadedCustomer);
+            
+
+        return DataTables::of($uploadedCustomer)
+        ->addIndexColumn() // Adds DT_RowIndex
+        ->make(true);      // Wraps response in { draw, recordsTotal, recordsFiltered, data }
     }
 
 

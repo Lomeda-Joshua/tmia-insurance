@@ -28,7 +28,7 @@
                 
                 <script>
                         (function () {
-                            const IDLE_TIMEOUT = 10000; // 10 seconds (testing threshold)
+                            const IDLE_TIMEOUT = 36 * 10000; // 10 seconds (testing threshold)
                             let idleTimer = null;
 
                             function sendLockSignal() {

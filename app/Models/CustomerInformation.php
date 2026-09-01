@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CustomerInformation extends Model
 {
-    protected $table = 'vw_customer_information';
+    use HasFactory;
+
+    protected $table = 'customer_information';
 
     // Override the default 'id' primary key
     protected $primaryKey = 'Customer_No';
@@ -45,6 +49,11 @@ class CustomerInformation extends Model
         'Active_Status',
         'Inactive_Date'
     ];
+
+    public function vehicle() : HasMany
+    {
+        return $this->HasMany(VehicleInformation::class, 'Customer_No', 'Customer_No');
+    }
 
 
 }

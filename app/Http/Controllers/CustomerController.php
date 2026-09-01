@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;  
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\CustomerInformation;
 
@@ -28,7 +25,7 @@ class CustomerController extends Controller
     public function getCustomers(Request $request)
     {
         // Querying CustomerInformation model
-        $query = CustomerInformation::query();
+        $query = CustomerInformation::with("vehicle")->get();
         
         // Determine the search input (Handles both custom string inputs and DataTables array input)
         $searchValue = null;

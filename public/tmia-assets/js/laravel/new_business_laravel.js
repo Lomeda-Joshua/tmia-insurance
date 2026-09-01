@@ -1315,7 +1315,7 @@ function LoadCustomerData() {
   };
 
   if ($.fn.dataTable.isDataTable('#table_customerlist')) {
-    $('#table_customerlist').DataTable().clear().destroy();               
+    $('#table_customerlist').DataTable().reload();               
   }
 
     const tableCustomerList = $('#table_customerlist').DataTable({
@@ -1332,42 +1332,53 @@ function LoadCustomerData() {
             url: window.LaravelRoutes.customerData, // Uses named route matching Laravel setup
             type: "GET",
             data: function (d) {
-                d.searchval = $('#txtsearch_customer').val() ? $('#txtsearch_customer').val().trim() : '';
+                d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
+                d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
             },
             error: function (xhr, error, code) {
                 console.error('Customer DataTables AJAX Error:', xhr.responseText);
             }
         },
         columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false },
-            { data: 'Customer_No', name: 'Customer_No', defaultContent: '' },
-            { data: 'Group', name: 'Group', defaultContent: '' },
-            { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
-            { data: 'Birth_Date', name: 'Birth_Date', defaultContent: '' },
-            { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
-            { data: 'Email_Address', name: 'Email_Address', defaultContent: '' },
-            { data: 'Full_Address', name: 'Full_Address', defaultContent: '' },
-            { data: 'Upload_Cust_No', name: 'Upload_Cust_No', defaultContent: '' },
-            { data: 'TIN', name: 'TIN', defaultContent: '' },
-            { data: 'Active_Status', name: 'Active_Status', defaultContent: '' }
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false }, 
+            { data: 'Customer_No', name: 'Customer_No', defaultContent: '' },                    
+            { data: 'Group', name: 'Group', defaultContent: '' },                                
+            { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },                        
+            { data: 'Birth_Date', name: 'Birth_Date', defaultContent: '' },                      
+            { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },                      
+            { data: 'Email_Address', name: 'Email_Address', defaultContent: '' },                
+            { data: 'Address', name: 'Address', defaultContent: '' },                            
+            { data: 'Upload_Cust_No', name: 'Upload_Cust_No', defaultContent: '' },              
+            { 
+              data: 'vehicle.0.VIN', 
+              name: 'VIN', 
+              defaultContent: ' - - - ' 
+            },              
+            { 
+              data: 'vehicle.0.Variant', 
+              name: 'Variant', 
+              defaultContent: ' - - - ' 
+            },  
+            { 
+              data: 'vehicle.0.Plate_No', 
+              name: 'Plate No', 
+              defaultContent: ' - - - ' 
+            },                                                                                     
+         
         ],
         columnDefs: [
             {
-                // Truncate long strings for: Full_Name (3), Email_Address (6), Full_Address (7)
+                // Truncate long strings for: Full_Name (3), Email_Address (6), Address (7)
                 targets: [3, 6, 7],
-                render: function(data, type, row, meta) {
-                    const maxLength = 30;
-                    if (typeof data === 'string' && data.length > maxLength) {
-                        const truncated = data.substring(0, maxLength) + '...';
-                        return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+                render: function (data, type, row, meta) {
+                    if (type === 'display' && typeof data === 'string') {
+                        const maxLength = 30;
+                        if (data.length > maxLength) {
+                            const truncated = data.substring(0, maxLength) + '...';
+                            return `<span class="popup-data" data-toggle="tooltip" title="${data}">${truncated}</span>`;
+                        }
                     }
                     return data || '';
-                }
-            },
-            {
-                targets: [10], // Format Active_Status
-                render: function (data) {
-                    return data == "1" || data == "ACTIVE" ? "ACTIVE" : "INACTIVE";
                 }
             }
         ]
@@ -1376,31 +1387,49 @@ function LoadCustomerData() {
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('click', 'tr').on('click', 'tr', function () {
     // Remove selection from any previously selected row
-    table.$('tr.selected').removeClass('selected');
+    tableCustomerList.$('tr.selected').removeClass('selected');
 
     // Highlight clicked row
-    $(this).addClass('selected');
+    $(this).addClass('selected');    
 
-    // Optional: get Customer_No
-    xcustno = table.cell(this, 1).data();
-    console.log('Selected Customer No:', xcustno);
+    // 3. Get the complete raw row object safely
+    const rowData = tableCustomerList.row(this).data();
 
-    xcustnoupload = table.cell(this, 8).data();
-    xvin = table.cell(this, 9).data();
-    xcsno = table.cell(this, 10).data();
-    xplateno = table.cell(this, 11).data();
+    if (rowData) {
+        // Access properties directly by name (immune to column index changes)
+        xcustno       = rowData.Customer_No || '';
+        xcustnoupload = rowData.Upload_Cust_No || '';
+        
+        // Safe access for HasMany vehicle relation array
+        xvin          = (rowData.vehicle && rowData.vehicle[0]) ? rowData.vehicle[0].VIN : '';
+        xcsno         = (rowData.vehicle && rowData.vehicle[0]) ? rowData.vehicle[0].CS_No : '';
+        xplateno      = (rowData.vehicle && rowData.vehicle[0]) ? rowData.vehicle[0].Plate_No : '';
+
+        console.log('Selected Customer No:', xcustno);
+        console.log('Selected Vehicle VIN:', xvin);
+    }
+
   });
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btncustselect').trigger("click");
+      console.log("here");
+      $('#btncustselect').trigger("click");
   });
 }
 
 //============== Customer List FROM DAF/SAP ============//
 function LoadCustomerDataEDAFSAP() {
+  const searchval = $("#txtcustomersearch").val().trim();
+  if (typeof btnselect === 'undefined') { btnselect = '';}
+
+  const value = {
+    searchval:searchval,
+    btnselect:btnselect
+  };
+
+
   if ($.fn.DataTable.isDataTable('#table_customerlistupload')) {
-    // Dynamically reload existing table instance without destroying DOM
     $('#table_customerlistupload').DataTable().ajax.reload();
     return;
   }
@@ -1410,52 +1439,54 @@ function LoadCustomerDataEDAFSAP() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: true, // Enabled for Yajra DataTables
-    pageLength: 10,
+    serverSide: true,
     responsive: true,
     autoWidth: false,
+    pageLength: 10,
+    order: [[1, 'asc']], // Orders by Customer_No ascending
     ajax: {
-      url: window.LaravelRoutes.uploadCustomers, // Named Laravel Route
+      url: window.LaravelRoutes.uploadCustomers,
       type: "POST",
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF Token for POST requests
-      },
-      data: function (d) {
-        // Pass dynamic input parameters on every request
-        d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
-        d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
-      },
-      error: function (xhr, error, code) {
-        console.error('Customer Table AJAX Error:', xhr.responseText);
-      }
+        data: function (d) {
+          d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
+          d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';        
+        },
+        error: function (xhr, error, code) {
+          console.error('Customer Table AJAX Error:', xhr.responseText);
+        },
     },
     columns: [
-      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-      { data: "Customer_No", name: "Customer_No" },
-      { data: "Group", name: "Group" },
-      { data: "Full_Name", name: "Full_Name" },
-      { data: "Birth_Date", name: "Birth_Date" },
-      { data: "Contact_No", name: "Contact_No" },
-      { data: "Email_Address", name: "Email_Address" },
-      { data: "Address", name: "Address" },
-      { data: "VIN", name: "VIN" },
-      { data: "CS_No", name: "CS_No" },
-      { data: "Plate_No", name: "Plate_No" },
-      { data: "Variant", name: "Variant" }
-    ],
-    columnDefs: [
-      {
-        targets: [3, 7, 11], // Truncates long strings with title tooltips
-        render: function(data, type, row, meta) {
-          const maxLength = 30;
-          if (typeof data === 'string' && data.length > maxLength) {
-            const truncated = data.substring(0, maxLength) + '...';
-            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
-          }
-          return data;
-        }
-      }
-    ]
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false }, // 0
+          { data: "Customer_No", name: "Customer_No" },                                     // 1
+          { data: "Full_Name", name: "Full_Name" },                                         // 3
+          { data: "Group", name: "Group" },                                                 // 2
+          { data: "Birth_Date", name: "Birth_Date" },                                       // 4
+          { data: "Contact_No", name: "Contact_No" },                                       // 5
+          { data: "Email_Address", name: "Email_Address" },                                 // 6
+          { data: "Address", name: "Address" },          
+          { data: "VIN", name: "VIN" },  
+          { data: "CS_No", name: "CS_No" },  
+          { data: "Plate_No", name: "Plate_No" },  
+          { data: "Variant", name: "Variant" },  
+      ],
+      // Set global fallback for missing payload keys
+      columnDefs: [
+            {
+                // Truncate long strings for: Full_Name (3), Email_Address (6), Address (7)
+                targets: [3, 6, 7],
+                render: function (data, type, row, meta) {
+                    if (type === 'display' && typeof data === 'string') {
+                        const maxLength = 30;
+                        if (data.length > maxLength) {
+                            const truncated = data.substring(0, maxLength) + '...';
+                            return `<span class="popup-data" data-toggle="tooltip" title="${data}">${truncated}</span>`;
+                        }
+                    }
+                    return data || '';
+                }
+            }
+      ],
+   
   });
 
   // Bind single-click row selection (uses DataTables API row data)
@@ -1483,6 +1514,8 @@ function LoadCustomerDataEDAFSAP() {
   $('#table_customerlistupload tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     $('#btncustselect').trigger("click");
   });
+
+
 }
 
 //============== Vehicle List ============//

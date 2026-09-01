@@ -1160,11 +1160,8 @@
                             <th>Address</th>
                             <th>Upload Cust. No</th>
                             <th>VIN</th>
-                            <th>CS No.</th>
-                            <th>Plate No.</th>
                             <th>Variant</th>
-                            <!-- <th>Status</th>
-                            <th>Inactive Date</th> -->
+                            <th>Plate No.</th>
                           </tr>
                         </thead>
                       </table>
@@ -1188,7 +1185,7 @@
                             <th>Customer Name</th>
                             <th>Birth Date</th>
                             <th>Contact No.</th>
-                            <th>Email Add</th>
+                            <th>Email Address</th>
                             <th>Address</th>
                             <th>VIN</th>
                             <th>CS No.</th>
