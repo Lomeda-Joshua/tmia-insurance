@@ -755,7 +755,7 @@ $.ajaxSetup({
     
       // Loop through the JSON array and build <option> tags
       $.each(data, function(index, item) {
-        options += `<option value="${item.Customer_Type}">${item.Customer_Type}</option>`;
+        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
       });
 
       // Inject options into the element and tell Select2 to refresh its UI
@@ -842,8 +842,19 @@ $.ajaxSetup({
     type:"POST",
     url:window.DataRoutes.bodyTypeData,
     success: function(data) {
-      $("#cbobodytype").html(data);
-    }
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
+    },
   });
 
   $("#cbobodytype").select2({
@@ -858,9 +869,23 @@ $.ajaxSetup({
   $.ajax({
     type:"POST",
     url:window.DataRoutes.fuelTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbofueltype").html(data);
-    }
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbofueltype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbofueltype").trigger('change.select2');
+    },
+
+
   });
 
   $("#cbofueltype").select2({
@@ -874,10 +899,21 @@ $.ajaxSetup({
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.productClassData,
+    url:window.DataRoutes.productClassData,   
     success: function(data) {
-      $("#cboprodclass").html(data);
-    }
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprodclass").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboprodclass").trigger('change.select2');
+    },
   });
 
   $("#cboprodclass").select2({
@@ -891,9 +927,21 @@ $.ajaxSetup({
    //======= Owner Type =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.cutomerTypeData,
+    url: window.LaravelRoutes.customerTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboowntype").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboowntype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboowntype").trigger('change.select2');
     }
   });
 
@@ -1225,8 +1273,10 @@ $.ajaxSetup({
   function createButton(label, isActive = false) {
     const button = document.createElement('button');
     button.textContent = label;
+
     if (isActive) {
       button.classList.add('active');
+
     }
     button.addEventListener('click', () => {
       document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
@@ -1234,7 +1284,7 @@ $.ajaxSetup({
       // You can add your custom action here (e.g., filter items)
       btnselect = `${label}`;
 
-      // activeCustTab = $('.customertab li.active a').attr('href');
+      activeCustTab = $('.customertab li.active a').attr('href');
 
       // console.log(activeCustTab); // #tmiatab or #uploadtab
 
@@ -1316,7 +1366,6 @@ function LoadTransactionData() {
         },
         processing: true,
         serverSide: true,
-        deferLoading: 0,
         responsive: true,
         autoWidth: false,
         pageLength: 10,
@@ -1326,11 +1375,11 @@ function LoadTransactionData() {
             type: "POST",
             data: function (d) {
                 // Pass custom request parameters to controller
+                d.datefrom = value.datefrom;
+                d.dateto = value.dateto;
                 d.viewpending = window.viewpending === true;
                 d.viewexpiring = window.viewexpiring ?? true;
                 d.searchval = $('#txtsearch').val().trim();
-                d.datefrom = value.datefrom;
-                d.dateto = value.dateto;
                 d.chkall = value.chkall;
             },
             error: function (xhr, error, code) {
@@ -1381,10 +1430,10 @@ function LoadCustomerData() {
   const searchval = $("#txtcustomersearch").val().trim();
   if (typeof btnselect === 'undefined') { btnselect = '';}
 
-  const value = {
-    searchval:searchval,
-    btnselect:btnselect
-  };
+  // const value = {
+  //   searchval:searchval,
+  //   btnselect:btnselect
+  // };
 
   if ($.fn.dataTable.isDataTable('#table_customerlist')) {
     $('#table_customerlist').DataTable().ajax.reload(null, false);
@@ -1405,7 +1454,6 @@ function LoadCustomerData() {
             url: window.LaravelRoutes.customerData, // Uses named route matching Laravel setup
             type: "GET",
             data: function (d) {
-                console.log(d);
                 d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
                 d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
             },
@@ -2253,8 +2301,6 @@ function updatePaymentTotals() {
     }
   }
 }
-
-console.log(insuranceno);
 
 function LoadNetRemData() {
   $.ajax({

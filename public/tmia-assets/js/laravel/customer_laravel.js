@@ -16,8 +16,11 @@ var editinfo = false;
 var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
-  console.log(window.LaravelRoutes.customerTypeData);
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+    }
+});  
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -431,9 +434,18 @@ $(document).ready( function () {
   //======= Region =====//
   $.ajax({
     type:"POST",
-    url:"fetch_region.php",
+    url:window.DataRoutes.regionData,
     success: function(data) {
       $("#cboregion").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.RegCode}">${item.Region}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cboregion").html(options).trigger('change.select2');
     }
   });
 
@@ -485,10 +497,21 @@ $(document).ready( function () {
   //======= Body Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_body_type.php",
+    url:window.DataRoutes.bodyTypeData,
     success: function(data) {
-      $("#cbobodytype").html(data);
-    }
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
+    },
   });
 
   $("#cbobodytype").select2({
@@ -502,9 +525,21 @@ $(document).ready( function () {
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_fuel_type.php",
+    url:window.DataRoutes.fuelTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbofueltype").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbofueltype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbofueltype").trigger('change.select2');
     }
   });
 
@@ -519,10 +554,21 @@ $(document).ready( function () {
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:"fetch_product_class.php",
+    url:window.DataRoutes.productClassData,   
     success: function(data) {
-      $("#cboprodclass").html(data);
-    }
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprodclass").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboprodclass").trigger('change.select2');
+    },
   });
 
   $("#cboprodclass").select2({
@@ -536,9 +582,21 @@ $(document).ready( function () {
    //======= Owner Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_customer_type.php",
+    url: window.LaravelRoutes.customerTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboowntype").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboowntype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboowntype").trigger('change.select2');
     }
   });
 

@@ -24,20 +24,40 @@ class CustomerController extends Controller
     */
     public function getCustomers(Request $request)
     {
-        // Querying CustomerInformation model
-        $query = CustomerInformation::with("vehicle")->get();
-        
-        // Determine the search input (Handles both custom string inputs and DataTables array input)
+        // 1. Return an Eloquent Query Builder (do NOT call ->get())
+        $query = CustomerInformation::with('vehicle');
+
+        // 2. Handle Alphabetical / Special Character Filter
+        // Accepts 'btnselect' or 'letter' from JS payload
+        $filter = $request->input('btnselect', $request->input('letter'));
+
+        if (!empty($filter) && $filter !== 'ALL') {
+            if ($filter === '[0-9]') {
+                // Match names starting with numbers
+                $query->whereRaw("Full_Name REGEXP '^[0-9]'");
+            } elseif ($filter === '[SPECIAL CHAR]') {
+                // Match names starting with non-alphanumeric characters
+                $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
+            } else {
+                // Match standard A-Z first letter
+                $query->where('Full_Name', 'like', "{$filter}%");
+            }
+        }   
+
+
+        // Determine and extract the search string safely
         $searchValue = null;
+        
         if ($request->filled('searchval')) {
-            $searchValue = $request->searchval;
-        } elseif ($request->has('search') && is_array($request->search)) {
+            $searchValue = $request->input('searchval');
+        } elseif ($request->has('search') && is_array($request->input('search'))) {
+            // Extract the string value from DataTables' search array: ['value' => 'term', 'regex' => false]
             $searchValue = $request->input('search.value');
-        } elseif ($request->filled('search')) {
-            $searchValue = $request->search;
+        } elseif ($request->filled('search') && is_string($request->input('search'))) {
+            $searchValue = $request->input('search');
         }
 
-        // Handle global search filter safely
+        // Handle global search filter safely using a string value
         if (!empty($searchValue)) {
             $query->where(function ($q) use ($searchValue) {
                 $q->where('Full_Name', 'like', "%{$searchValue}%")
@@ -45,12 +65,7 @@ class CustomerController extends Controller
                 ->orWhere('Contact_No', 'like', "%{$searchValue}%")
                 ->orWhere('Email_Address', 'like', "%{$searchValue}%");
             });
-        }   
-
-        // Handle alphabetical filter
-        if ($request->filled('letter') && $request->letter !== 'ALL') {
-            $query->where('Last_Name', 'like', "{$request->letter}%");
-        }        
+        }
 
         return DataTables::of($query)
         ->addIndexColumn()
