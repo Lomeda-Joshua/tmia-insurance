@@ -737,7 +737,6 @@ function LoadCustomerData() {
     },
     processing: true,
     serverSide: true,
-    deferLoading: 0,
     responsive: true,
     autoWidth: false,
     pageLength: 10,

@@ -67,7 +67,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
-        Route::get('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
+        Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
