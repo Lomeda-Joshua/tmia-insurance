@@ -27,9 +27,10 @@ var editcall = false;
 var editstatus = false;
 var activeCustTab;
 var activeVehTab;
+
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -750,7 +751,18 @@ $.ajaxSetup({
     type:"GET",
     url:window.LaravelRoutes.customerTypeData,
     success: function(data) {
-      $("#cbogroup").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.Customer_Type}">${item.Customer_Type}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cbogroup").html(options).trigger('change.select2');
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching customer types:", xhr.responseText);
     }
   });
 
@@ -768,6 +780,15 @@ $.ajaxSetup({
     url:window.DataRoutes.regionData,
     success: function(data) {
       $("#cboregion").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.RegCode}">${item.Region}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cboregion").html(options).trigger('change.select2');
     }
   });
 
@@ -924,8 +945,21 @@ $.ajaxSetup({
   $.ajax({
     type:"POST",
     url:window.DataRoutes.insuranceTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboinstype").html(data);
+
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboinstype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboinstype").trigger('change.select2');
     }
   });
 
@@ -940,10 +974,23 @@ $.ajaxSetup({
   //======= Insurance =====//
   $.ajax({
     type:"POST",
+    dataType: "json",
     url:window.DataRoutes.insuranceCoData,
     success: function(data) {
-      $("#cboinsco").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Insurance_ID}">${item.Insurance_Desc}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboinsco").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboinsco").trigger('change.select2');
     }
+
   });
 
   $("#cboinsco").select2({
@@ -958,8 +1005,20 @@ $.ajaxSetup({
   $.ajax({
     type:"POST",
     url: window.DataRoutes.bankData,
+    dataType: "json",
     success: function(data) {
-      $("#cbomortgage").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.BankID}">${item.BankDesc}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbomortgage").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbomortgage").trigger('change.select2');
     }
   });
 
@@ -1405,8 +1464,6 @@ function LoadCustomerData() {
         xcsno         = (rowData.vehicle && rowData.vehicle[0]) ? rowData.vehicle[0].CS_No : '';
         xplateno      = (rowData.vehicle && rowData.vehicle[0]) ? rowData.vehicle[0].Plate_No : '';
 
-        console.log('Selected Customer No:', xcustno);
-        console.log('Selected Vehicle VIN:', xvin);
     }
 
   });
@@ -1764,9 +1821,6 @@ function LoadCustomerEDAFSAPInfo() {
     url: window.Populate.getCustomerDetails,
     data:{custno:xcustnoupload},
     success: function(data){
-
-      console.log("hello");
-      console.log(data);
 
       var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
@@ -2471,19 +2525,35 @@ $(document).on("change", "#cbocity", function () {
     FetchBrgy(cmcode,'');
 });
 
-function FetchProv(regcode,provcode) {
-  if (regcode !== null) {
+function FetchProv(regcode, provcode) {
+  if (regcode !== null && regcode !== '') {
     $.ajax({
-      type:"POST",
-      data: {regcode:regcode},
-      url:"fetch_province.php",
+      type: "POST",
+      url: window.DataRoutes.provinceData,
+      data: { regcode: regcode },
+      dataType: "json",
       success: function(data) {
-        $("#cboprovince").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprovince").html(options);
+
+        // Pre-select province code if available
         if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
+          $("#cboprovince").val(provcode);
         }
+
+        // Force Select2 to refresh its display
+        $("#cboprovince").trigger('change.select2');
+      },
+
+      error: function(xhr, status, error) {
+        console.error("Error loading provinces:", xhr.responseText);
       }
     });
   }
@@ -2493,16 +2563,29 @@ function FetchCM(provcode,cmcode) {
   if (provcode !== null) {
     $.ajax({
       type:"POST",
+      url:window.DataRoutes.cityMunicipalData,
       data: {provcode:provcode},
-      url:"fetch_city_municipal.php",
+      dataType: "json",
       success: function(data) {
-        $("#cbocity").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbocity").html(options);
+
+        // Pre-select province code if available
         if (cmcode !== null && cmcode !== '') {
-          if ($("#cbocity").find("option[value='" + cmcode + "']").length) {
-            $("#cbocity").val(cmcode).trigger('change.select2');
-          } 
+          $("#cbocity").val(cmcode);
         }
-      }
+
+        // Force Select2 to refresh its display
+        $("#cbocity").trigger('change.select2');
+      },
+
     });
   }
 }
@@ -2512,15 +2595,26 @@ function FetchBrgy(cmcode,brgycode) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      url:"fetch_barangay.php",
+      url:window.DataRoutes.barangayData,
       success: function(data) {
-        $("#cbobrgy").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobrgy").html(options);
+
+        // Pre-select province code if available
         if (brgycode !== null && brgycode !== '') {
-          if ($("#cbobrgy").find("option[value='" + brgycode + "']").length) {
-            $("#cbobrgy").val(brgycode).trigger('change.select2');
-          } 
+          $("#cbobrgy").val(brgycode);
         }
-      }
+
+        // Force Select2 to refresh its display
+        $("#cbobrgy").trigger('change.select2');
+      },
     });
   }
 }
@@ -5212,7 +5306,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "new_business_save.php",
+    url: "new-business/save",
     method: "POST",
     data: formdata,
     processData: false,

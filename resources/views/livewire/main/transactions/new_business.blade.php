@@ -1780,7 +1780,6 @@
       fuelTypeData: @json(route('fueltype.data')),
       productClassData: @json(route('productclass.data')),
       communicationTypeData: @json(route('communicationtype.data')),
-      regionData: @json(route('region.data')),
       customerTypeDataPost: @json(route('customers_type.data.2')),
       paymentTypeData: @json(route('payments.data')),
       ewalletTypeData: @json(route('ewalletype.data')),
@@ -1788,7 +1787,11 @@
       insuranceCoData: @json(route('insuranceco.data')),
       bankData: @json(route('banks.data')),
       callStatusData: @json(route('callstatus.data')),
-      transactionStatusData: @json(route('transactionstatus.data'))
+      transactionStatusData: @json(route('transactionstatus.data')),
+      regionData: @json(route('region.data')),
+      provinceData: @json(route('province.data')),
+      cityMunicipalData: @json(route('citymunicipal.data')),
+      barangayData: @json(route('barangay.data')),
     }
 
 

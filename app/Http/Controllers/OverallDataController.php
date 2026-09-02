@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Locations\Barangay;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -9,6 +10,8 @@ use App\Models\InsuranceStaff;
 use App\Models\CustomerType;
 use App\Models\UploadedCustomer;
 use App\Models\Locations\Region;
+use App\Models\Locations\Province;
+use App\Models\Locations\CityMunicipal;
 
 use App\Models\Types\BodyType;
 use App\Models\Types\CommunicationType;
@@ -96,6 +99,39 @@ class OverallDataController extends Controller
                     ]);
 
         return response()->json($getRegion);
+    }
+
+    public function getProvince(Request $request) {
+        $regcode = $request->input('regcode');
+
+        $getProvince = Province::query()
+            ->where('RegCode', $regcode)
+            ->orderBy('ProvCode', 'asc')
+            ->get(['ProvCode', 'Province', 'PSGCode']);
+
+        return response()->json($getProvince);
+    }
+
+    public function getCityMunicipal(Request $request) {
+        $provcode = $request->input('provcode');
+
+        $getCityMunicipal = CityMunicipal::query()
+            ->where('ProvCode', $provcode)
+            ->orderBy('CMCode', 'asc')
+            ->get(['CMCode', 'CityMunicipal', 'PSGCode']);
+
+        return response()->json($getCityMunicipal);
+    }
+
+    public function getBarangay(Request $request) {
+        $cmcode = $request->input('cmcode');
+
+        $getBarangay = Barangay::query()
+            ->where('CMCode', $cmcode)
+            ->orderBy('BrgyCode', 'asc')
+            ->get(['BrgyCode', 'Barangay', 'PSGCode']);
+
+        return response()->json($getBarangay);
     }
 
 

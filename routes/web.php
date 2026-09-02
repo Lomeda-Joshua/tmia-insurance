@@ -35,7 +35,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/banks/data', [OverallDataController::class, 'getBank'])->name('banks.data');
     Route::post('/callstatus/data', [OverallDataController::class, 'getCallStatus'])->name('callstatus.data');
     Route::post('/insuranceco/data', [OverallDataController::class, 'getInsuranceCo'])->name('insuranceco.data');
+
     Route::post('/region/data', [OverallDataController::class, 'getRegion'])->name('region.data');
+    Route::post('/province/data', [OverallDataController::class, 'getProvince'])->name('province.data');
+    Route::post('/citymunicipal/data', [OverallDataController::class, 'getCityMunicipal'])->name('citymunicipal.data');
+    Route::post('/barangay/data', [OverallDataController::class, 'getBarangay'])->name('barangay.data');
+
+
     Route::post('/productclass/data', [OverallDataController::class, 'getProductClass'])->name('productclass.data');
     Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
 
@@ -50,6 +56,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
+        
+        Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
         
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
