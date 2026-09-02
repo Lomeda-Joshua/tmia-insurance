@@ -144,7 +144,6 @@ class NewBusinessController extends Controller
             ->make(true);
     }
 
-
     /**
      * For commencing the data retriveal on New Business pending counts.
     */
@@ -169,9 +168,11 @@ class NewBusinessController extends Controller
         ]);
     }
 
-
+    /**
+     * For saving data of New business.
+    */
     public function store(Request $request)
-    {
+    {        
         try {
             DB::beginTransaction();
 
@@ -379,6 +380,23 @@ class NewBusinessController extends Controller
                 'error'  => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    public function getTransactionsNB(Request $request){
+        $insuranceNo = $request->input('insuranceno');        
+
+        dd($insuranceNo);
+
+        if (!empty($insuranceNo)) {
+            // Using Eloquent ORM
+            $data = TransactionNBpayment::where('Insurance_No', $insuranceNo)->get();
+            
+            // Alternatively, using Query Builder:
+            // $data = \DB::table('transactions_nb')->where('Insurance_No', $insuranceNo)->get();
+        }
+
+        return response()->json($data);
     }
 
 

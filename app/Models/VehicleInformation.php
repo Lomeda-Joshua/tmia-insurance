@@ -10,7 +10,7 @@ class VehicleInformation extends Model
 {
     use HasFactory;
 
-    protected $table = 'vehicle_information';
+    protected $table = 'vehicle_information_copy';
 
     protected $primaryKey = 'VIN';
 

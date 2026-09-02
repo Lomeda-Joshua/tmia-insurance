@@ -910,8 +910,19 @@ $.ajaxSetup({
   $.ajax({
     type:"POST",
     url: window.DataRoutes.paymentTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbopaytype, #cbopaytype-n").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.PayTID}">${item.PayType}</option>`;
+      });
+
+       $("#cbopaytype, #cbopaytype-n").html(data);
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cbopaytype, #cbopaytype-n").html(options).trigger('change.select2');
     }
   });
 
@@ -1293,9 +1304,11 @@ function LoadTransactionData() {
 
     if ($.fn.DataTable.isDataTable('#table_trans')) {
       // Dynamically reload existing table instance without destroying DOM
-      $('#table_trans').DataTable().ajax.reload();
+      // Reload DataTables via AJAX without resetting pagination
+      $('#table_trans').DataTable().ajax.reload(null, false);
       return;
     }
+
 
     const table = $('#table_trans').DataTable({
         language: {
@@ -1374,7 +1387,8 @@ function LoadCustomerData() {
   };
 
   if ($.fn.dataTable.isDataTable('#table_customerlist')) {
-    $('#table_customerlist').DataTable().reload();               
+    $('#table_customerlist').DataTable().ajax.reload(null, false);
+    return;
   }
 
     const tableCustomerList = $('#table_customerlist').DataTable({
@@ -1391,6 +1405,7 @@ function LoadCustomerData() {
             url: window.LaravelRoutes.customerData, // Uses named route matching Laravel setup
             type: "GET",
             data: function (d) {
+                console.log(d);
                 d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
                 d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
             },
@@ -1470,7 +1485,6 @@ function LoadCustomerData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-      console.log("here");
       $('#btncustselect').trigger("click");
   });
 }
@@ -1487,7 +1501,7 @@ function LoadCustomerDataEDAFSAP() {
 
 
   if ($.fn.DataTable.isDataTable('#table_customerlistupload')) {
-    $('#table_customerlistupload').DataTable().ajax.reload();
+    $('#table_customerlistupload').DataTable().ajax.reload(null, false);
     return;
   }
 
@@ -1578,7 +1592,8 @@ function LoadCustomerDataEDAFSAP() {
 //============== Vehicle List ============//
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {
-    $('#table_vehiclelist').DataTable().clear().destroy();               
+    $('#table_vehiclelist').DataTable().ajax.reload(null, false);
+    return;
   }
 
   table = $('#table_vehiclelist').DataTable({
@@ -1586,43 +1601,45 @@ function LoadVehicleData() {
       processing: "Loading Vehicle List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "new_business_vehicles.php",
+      url: window.getData.vehicleInfo,
       type: "POST",
       data: {custno:xcustno}
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "VSI_Date" },
+      { data: "urutan", defaultContent: "" },
+      { data: "VIN", defaultContent: "" },
+      { data: "Model", defaultContent: "" },
+      { data: "Model_Year", defaultContent: "" },
+      { data: "Variant", defaultContent: "" },
+      { data: "Color", defaultContent: "" },
+      { data: "Engine_No", defaultContent: "" },
+      { data: "CS_No", defaultContent: "" },
+      { data: "Plate_No", defaultContent: "" },
+      { data: "VSI_Date", defaultContent: "" },
       {
         data: "SRP",
+        defaultContent: "0",
         render: function (data) {
-          return NumberFormat(data);
+          return typeof NumberFormat === 'function' ? NumberFormat(data) : data;
         }
       }
     ],
     columnDefs: [
       {
+        // Variant column is at index 4 (0-based)
         targets: [4],
         render: function(data, type, row, meta) {
           const maxLength = 30;
-          if (typeof data === 'string' && data.length > maxLength) {
+          if (type === 'display' && typeof data === 'string' && data.length > maxLength) {
             const truncated = data.substring(0, maxLength) + '...';
             return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
           }
-          return data;
+          return data || '';
         }
       }
     ]
@@ -1818,7 +1835,7 @@ function LoadCustomerInfo() {
 function LoadCustomerEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url: window.Populate.getCustomerDetails,
+    url: window.LaravelRoutes.uploadCustomers,
     data:{custno:xcustnoupload},
     success: function(data){
 
@@ -1977,7 +1994,7 @@ function LoadVehicleInfo() {
 function LoadVehicleEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_upload_info.php",
+    url:window.getData.vehicleInfo,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
       var data = jQuery.parseJSON(data);
@@ -2050,7 +2067,7 @@ function LoadVehicleEDAFSAPInfo() {
 function LoadPayData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:"/new-business/gettransactions",
     data:{insuranceno:insuranceno},
     success: function(data){
       var data = jQuery.parseJSON(data);
@@ -2237,13 +2254,16 @@ function updatePaymentTotals() {
   }
 }
 
+console.log(insuranceno);
+
 function LoadNetRemData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      // var data = jQuery.parseJSON(data);
+      console.log(data);
       $.each(data, function(i, value) {
         $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
         $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));
@@ -2454,7 +2474,18 @@ $('#table_trans tbody').on('click', 'tr', function(event) {
       console.log(x);
     }
   */
-  rowindex = table.row( this ).index();
+  // rowindex = table.row( this ).index();
+
+  // Access the DataTables API instance directly from the table ID
+  let table = $('#table_trans').DataTable();
+
+  // Get the row index
+  let rowindex = table.row(this).index();
+
+  // Get the full data object of the clicked row safely
+  let rowData = table.row(this).data();
+  console.log('Row Index:', rowindex);
+  console.log('Row Data:', rowData);
 });
 
 $('#table_trans tbody').on('click', '.btncall', function () {
@@ -4236,8 +4267,10 @@ $(document).ready( function () {
       $(".installment-section").fadeOut();
       $(".payment-new").fadeOut();
     } else {
-      $(".installment-section").fadeIn();
-      $(".payment-new").fadeIn();
+      $(".installment-section, .payment-new")
+      .prop("hidden", false)
+      .removeAttr("hidden")
+      .fadeIn();
     }
     $("#chkpayment").prop("checked", false).trigger('change');
     // $("#chknonvat").prop("checked", false).trigger('change');
@@ -5297,10 +5330,12 @@ $(document).on("click", "#btnsubmit", function () {
   // ======================================================
   $("#modalsaving").iziModal("open");
 
+  console.log(insurerFields);
+
   const formdata = new FormData();
   [customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
     Object.entries(group).forEach(([key, val]) => formdata.append(key, val));
-  });
+  });  
 
   // ======================================================
   // AJAX SUBMISSION
@@ -5314,7 +5349,7 @@ $(document).on("click", "#btnsubmit", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
+      let result = response;
 
       if (result.result == 1) {
         swal({

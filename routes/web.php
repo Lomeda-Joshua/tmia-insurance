@@ -58,6 +58,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
+        Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');

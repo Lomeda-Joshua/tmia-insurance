@@ -1618,7 +1618,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="txtinsuranceno">Insurance No.</label>
-                      <input type="text" id="txtinsuranceno" class="form-control input-sm" disabled>
+                      <input type="text" id="txtinsuranceno" class="form-control input-sm">
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
@@ -1798,6 +1798,10 @@
     window.getData = {
       customerInfo : @json(route('customerinfo.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
+    }
+
+    window.loadData = {
+        loadPaymentData : @json(route('getTransactionNB.data'))
     }
 
 

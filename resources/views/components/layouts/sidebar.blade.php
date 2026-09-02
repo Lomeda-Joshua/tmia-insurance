@@ -9,8 +9,7 @@
             </div>
             <div class="pull-left info">
                 <p>{{ Auth::user()->Display_Name }}</p>
-                <a href="#"><i class="fa fa-circle text-warning"></i> Online</a>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <a href="#" id="user-status"><i class="fa fa-circle text-warning"></i> Online</a>
             </div>
         </div>
 

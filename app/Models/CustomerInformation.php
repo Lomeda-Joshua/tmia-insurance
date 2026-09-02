@@ -10,7 +10,7 @@ class CustomerInformation extends Model
 {
     use HasFactory;
 
-    protected $table = 'customer_information';
+    protected $table = 'customer_information_copy';
 
     // Override the default 'id' primary key
     protected $primaryKey = 'Customer_No';

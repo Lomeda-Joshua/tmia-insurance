@@ -81,8 +81,6 @@ class OverallDataController extends Controller
                 "Order_No",
             ]);
 
-            
-
         return DataTables::of($uploadedCustomer)
         ->addIndexColumn() // Adds DT_RowIndex
         ->make(true);      // Wraps response in { draw, recordsTotal, recordsFiltered, data }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class TransactionsNb extends Model
 {
@@ -35,4 +36,11 @@ class TransactionsNb extends Model
         "ISE_No",
         "User_ID"
     ];
+
+    protected function mortgage(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => trim((string) $value),
+        );
+    }
 }
