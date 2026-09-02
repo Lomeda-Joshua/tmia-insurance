@@ -1682,12 +1682,11 @@ function fetchView(){
 function LoadCustomerInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_customer_info.php",
+    url:window.getData.customerInfo,
     data:{custno:xcustno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
-      $.each(data, function(i, value) {
 
+      $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -1851,10 +1850,10 @@ function LoadCustomerEDAFSAPInfo() {
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_info.php",
+    url:window.getData.vehicleInfo,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely

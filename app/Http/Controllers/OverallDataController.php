@@ -21,6 +21,8 @@ use App\Models\Bank;
 use App\Models\ProductClass;
 use App\Models\CallStatus;
 use App\Models\TransactionStatus;
+use App\Models\CustomerInformation;
+use App\Models\VehicleInformation;
 use Yajra\DataTables\Facades\DataTables;
 
 class OverallDataController extends Controller
@@ -250,6 +252,53 @@ class OverallDataController extends Controller
             ]);
 
         return response()->json($transactionStatus);
+    }
+
+    public function getCustomerInfoData(Request $request)
+    {
+        // 1. Retrieve the 'custno' input from POST/GET request
+        $custNo = $request->input('custno');
+
+        // 2. Return empty response array if no customer number was passed
+        if (empty($custNo)) {
+            return response()->json([]);
+        }
+
+        // 3. Query the vw_customer_information database view using the CustomerInformation model
+        $data = CustomerInformation::where('Customer_No', $custNo)->get();
+
+        // 4. Return as JSON response (Laravel automatically handles header encoding)
+        return response()->json($data);
+    }
+
+
+
+    public function getVehicleInfoData(Request $request)
+    {
+       // 1. Sanitize input strings
+        $vin     = trim($request->input('vin', ''));
+        $csno    = trim($request->input('csno', ''));
+        $plateno = trim($request->input('plateno', ''));
+
+        $data = collect();
+
+        // Priority 1: Check by VIN
+        if (!empty($vin)) {
+            $data = VehicleInformation::where('VIN', $vin)->get();
+        }
+
+        // Priority 2: Check by CS_No if VIN has no results
+        if ($data->isEmpty() && !empty($csno)) {
+            $data = VehicleInformation::where('CS_No', $csno)->get();
+        }
+
+        // Priority 3: Check by Plate_No if VIN & CS_No have no results
+        if ($data->isEmpty() && !empty($plateno)) {
+            $data = VehicleInformation::where('Plate_No', $plateno)->get();
+        }
+
+        // 2. Return JSON response
+        return response()->json($data);
     }
 
 

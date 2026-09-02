@@ -1791,9 +1791,13 @@
       transactionStatusData: @json(route('transactionstatus.data'))
     }
 
-    window.Populate = {
-        getCustomerDetails: @json(route("getcustomers.data"))
+
+    window.getData = {
+      customerInfo : @json(route('customerinfo.data')),
+      vehicleInfo: @json(route('customercvehicleinfo.data')),
     }
+
+
     
 </script>
 
