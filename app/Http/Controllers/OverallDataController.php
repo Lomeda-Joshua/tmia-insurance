@@ -145,6 +145,18 @@ class OverallDataController extends Controller
         return response()->json($customerTypes);
     }
 
+    public function getCustomerTypePost(): JsonResponse
+    {
+        $customerTypes = CustomerType::query()
+            ->orderBy('Customer_Type', 'asc')
+            ->get([
+                'Customer_TID',
+                'Customer_Type',
+            ]);
+
+        return response()->json($customerTypes);
+    }
+
 
     public function getBodyType(Request $request){
         $uploadedCustomer = BodyType::query()

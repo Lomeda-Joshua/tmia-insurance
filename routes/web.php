@@ -67,7 +67,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
-        Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
+        Route::get('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
@@ -76,12 +76,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
 
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
+        Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
 
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
         
         Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
-        Route::post('/customertype/data2', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data.2');
+        Route::get('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
         Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');

@@ -27,7 +27,6 @@ class LockScreenController extends Controller
 
     public function unlock(Request $request)
     {
-
         $request->validate([
             'txtpword' => ['required', 'string'],
         ]);
@@ -36,7 +35,6 @@ class LockScreenController extends Controller
         if (! Hash::check($request->txtpword, $request->user()->Encrypt_Password)) {
             return back()->withErrors(['password' => 'Invalid password.']);
         }
-
 
         // 1. Clear lock state
         $request->session()->put('lockscreen', false);

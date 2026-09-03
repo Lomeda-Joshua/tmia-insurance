@@ -384,19 +384,40 @@ class NewBusinessController extends Controller
 
 
     public function getTransactionsNB(Request $request){
-        $insuranceNo = $request->input('insuranceno');        
-
-        dd($insuranceNo);
-
+        $insuranceNo = $request->input('insuranceno');  
         if (!empty($insuranceNo)) {
             // Using Eloquent ORM
             $data = TransactionNBpayment::where('Insurance_No', $insuranceNo)->get();
-            
             // Alternatively, using Query Builder:
             // $data = \DB::table('transactions_nb')->where('Insurance_No', $insuranceNo)->get();
         }
 
         return response()->json($data);
+    }
+
+    public function getNewBusinessPayment(Request $request)
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json(['data' => []]);
+        }
+
+        $payments = TransactionNBpayment::where('Insurance_No', $insuranceNo)->get();
+
+        // Map collection to add 'urutan' and 'button' HTML
+        $data = $payments->values()->map(function ($row, $index) {
+            $payId = e($row->Payment_ID);
+
+            return array_merge($row->toArray(), [
+                'urutan' => $index + 1,
+                'button' => '<button type="button" data-payid="' . $payId . '" class="btn btn-sm btn-success btn-action btnremovepaysave" data-bs-toggle="tooltip" title="Remove">'
+                          . '<i class="fa-regular fa-trash-can"></i>'
+                          . '</button>',
+            ]);
+        });
+
+        return response()->json(['data' => $data]);
     }
 
 

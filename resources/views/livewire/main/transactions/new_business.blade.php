@@ -1801,7 +1801,8 @@
     }
 
     window.loadData = {
-        loadPaymentData : @json(route('getTransactionNB.data'))
+        loadPaymentData : @json(route('getTransactionNB.data')),
+        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data'))
     }
 
 
