@@ -5,7 +5,7 @@ use Livewire\Volt\Volt;
 
 use App\Http\Controllers\HomeDashboardController;
 use App\Http\Controllers\NewBusinessController;
-use App\Http\Controllers\RenewalBusinessTransactionController;
+use App\Http\Controllers\RenewalBusinessController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OverallDataController;
@@ -60,11 +60,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         
-        // Renewal Business Insurance
-        Route::get('/renewal-business', [RenewalBusinessTransactionController::class, 'index'])->name('renewal_business');
-        Route::get('/renewal-business/data', [RenewalBusinessTransactionController::class, 'renewalBusinessDatatable'])->name('renewal_business.data');
-        Route::get('/renewal-business/modify', [RenewalBusinessTransactionController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
-
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
@@ -80,7 +75,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
-        
         Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
         Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
@@ -88,13 +82,16 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');
         Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
         Route::post('/uploadedcustomer/data', [OverallDataController::class, 'getUploadedCustomer'])->name('uploaded.customer');
-
         Route::post('/userlevel/data', [UserController::class,'userlevels'])->name('userlevels.data');
+
+
+        // Renewal Business Insurance
+        Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
+        Route::get('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
+        Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
     });
 
 
-    
-    
 
     // Settings Group
     Route::prefix('settings')->group(function () {
