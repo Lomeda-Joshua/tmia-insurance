@@ -24,7 +24,7 @@ class UserController extends Controller
     }
 
     public function userData(){
-        $query = UserView::query()
+       $query = UserView::query()
             ->select([
                 'User_ID',
                 'Full_Name',
@@ -33,36 +33,43 @@ class UserController extends Controller
                 'Active',
                 'Enable2FA',
                 'ExpireDate',
-            ]);
+            ])->whereNotNull('User_ID');
 
         return DataTables::eloquent($query)
             ->addIndexColumn()
-            ->addColumn('button', function (UserView $user): string {
-                $id = e($user->User_ID);
-                $name = e($user->Full_Name);
-
-                return
-                    '<button type="button" class="btn btn-success btn-action btnedit" '
-                    . 'data-uid="' . $id . '" title="Edit">'
-                    . '<i class="fa fa-edit"></i></button> '
-
-                    . '<button type="button" class="btn btn-success btn-action btndelete" '
-                    . 'data-uid="' . $id . '" '
-                    . 'data-fullname="' . $name . '" title="Delete">'
-                    . '<i class="fa fa-remove"></i></button>';
+            ->editColumn('ExpireDate', function ($user): string {
+                return $user->ExpireDate 
+                    ? Carbon::parse($user->ExpireDate)->format('F d, Y') 
+                    : '<span style="color:red"> No Expiry date included </span>';
             })
-            ->editColumn('ExpireDate', function (UserView $user): string {
-                return $user->ExpireDate
-                    ? Carbon::parse($user->ExpireDate)->format('F d, Y')
-                    : '';
+            ->editColumn('Active', function ($user): string {
+                $status = strtoupper(trim((string) $user->Active));
+                $badgeClass = ($status === 'YES' || $status === '1') ? 'success' : 'danger';
+                return '<span class="badge text-bg-' . $badgeClass . '">' . e($user->Active) . '</span>';
             })
-            ->rawColumns(['button'])
-            ->setRowId('User_ID')
+            ->editColumn('Enable2FA', function ($user): string {
+                $enabled = strtoupper(trim((string) $user->Enable2FA));
+                $badgeClass = ($enabled === 'YES' || $enabled === '1') ? 'info' : 'secondary';
+                return '<span class="badge text-bg-' . $badgeClass . '">' . e($user->Enable2FA) . '</span>';
+            })
+            ->addColumn('button', function ($user): string {
+                $uid = e($user->User_ID);
+                $fullName = e($user->Full_Name);
+
+                return '<button type="button" class="btn btn-sm btn-success btn-action btnedit me-1" '
+                    . 'data-uid="' . $uid . '" data-bs-toggle="tooltip" title="Edit">'
+                    . '<i class="fa fa-edit"></i></button>'
+                    
+                    . '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
+                    . 'data-uid="' . $uid . '" data-fullname="' . $fullName . '" data-bs-toggle="tooltip" title="Delete">'
+                    . '<i class="fa fa-trash"></i></button>';
+            })
+            ->rawColumns(['Active', 'Enable2FA', 'button', 'ExpireDate'])
             ->make(true);
 
     }
 
-    public function levels(): JsonResponse
+    public function userlevels(): JsonResponse
     {
         return response()->json([
             'data' => \App\Models\UserLevel::query()

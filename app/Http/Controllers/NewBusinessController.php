@@ -60,7 +60,7 @@ class NewBusinessController extends Controller
                 $query->whereBetween('Policy_Expiration', [
                     now()->startOfDay(),
                     now()->addDays(90)->endOfDay(),
-                ]);
+            ]);
 
             // 3. Search Filter (Priority 3)
             } elseif (! empty($filters['searchval'])) {
@@ -90,41 +90,37 @@ class NewBusinessController extends Controller
             
             return DataTables::eloquent($query)
             ->addIndexColumn() // Provides DT_RowIndex / urutan
-            ->editColumn('Trans_Date', function (NewBusinessTransactionView $transaction): string {
-                return $transaction->Trans_Date
-                    ? Carbon::parse($transaction->Trans_Date)->format('d-M-Y H:i:s')
-                    : '';
-            })
-            ->editColumn('Trans_Status', function (NewBusinessTransactionView $transaction): string {
-                $status = strtoupper(trim((string) $transaction->Trans_Status));
+            // ->editColumn('Trans_Date', function (NewBusinessTransactionView $transaction): string {
+            //     return $transaction->Trans_Date
+            //         ? Carbon::parse($transaction->Trans_Date)->format('d-M-Y H:i:s')
+            //         : '';
+            // })
+            // ->editColumn('Trans_Status', function (NewBusinessTransactionView $transaction): string {
+            //     $status = strtoupper(trim((string) $transaction->Trans_Status));
 
-                // Modern Bootstrap 5 badge mapping
-                $class = match ($status) {
-                    'COMPLETED' => 'success',
-                    'CANCELLED' => 'danger',
-                    'PENDING'   => 'warning',
-                    default     => 'secondary',
-                };
+            //     // Modern Bootstrap 5 badge mapping
+            //     $class = match ($status) {
+            //         'COMPLETED' => 'success',
+            //         'CANCELLED' => 'danger',
+            //         'PENDING'   => 'warning',
+            //         default     => 'secondary',
+            //     };
 
-                return '<span class="badge text-bg-' . $class . '">'
-                    . e($status)
-                    . '</span>';
-            })
+            //     return '<span class="badge text-bg-' . $class . '">' . e($status) . '</span>';
+            // })
             ->addColumn('button', function (NewBusinessTransactionView $transaction): string {
                 $insuranceNo = e($transaction->Insurance_No);
-
                 $buttons = '';
-
+            
                 if ($transaction->Option_Type === 'PAID') {
                     $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnpay me-1" '
                         . 'data-insurance-no="' . $insuranceNo . '" title="Payment">'
                         . '<i class="fa-solid fa-peso-sign"></i></button>';
                 }
-
+                
                 $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnnetrem me-1" '
                     . 'data-insurance-no="' . $insuranceNo . '" title="Gross Premium / Net Rem">'
                     . '<i class="fa-solid fa-money-bill-transfer"></i></button>';
-
                 $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnstatus me-1" '
                     . 'data-insurance-no="' . $insuranceNo . '" title="Change Status">'
                     . '<i class="fa-solid fa-chart-bar"></i></button>';
@@ -132,7 +128,6 @@ class NewBusinessController extends Controller
                 $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnedit me-1" '
                     . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
                     . '<i class="fa fa-edit"></i></button>';
-
                 $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
                     . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
                     . '<i class="fa-regular fa-trash-can"></i></button>';

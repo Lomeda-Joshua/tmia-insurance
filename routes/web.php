@@ -88,14 +88,20 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');
         Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
         Route::post('/uploadedcustomer/data', [OverallDataController::class, 'getUploadedCustomer'])->name('uploaded.customer');
+
+        Route::post('/userlevel/data', [UserController::class,'userlevels'])->name('userlevels.data');
     });
+
+
+    
+    
 
     // Settings Group
     Route::prefix('settings')->group(function () {
         // User settings    
         Route::get('/users', [UserController::class, 'index'])->name('user');
-        Route::get('/users/data', [UserController::class, 'userData'])->name('users.data');
-        Route::get('/users/levels', [UserController::class, 'levels'])->name('users.levels');
+        Route::post('/users/data', [UserController::class, 'userData'])->name('users.data');
+        Route::post('/users/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
         Route::get('/users/{userId}', [UserController::class, 'show'])->whereNumber('userId')->name('users.show');
         Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
         Route::delete('/users/{userId}', [UserController::class, 'destroy'])->whereNumber('userId')->name('users.destroy');

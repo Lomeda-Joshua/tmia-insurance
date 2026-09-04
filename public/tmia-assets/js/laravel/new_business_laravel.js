@@ -725,14 +725,14 @@ $.ajaxSetup({
 
   /*--------------------- CHANGE STATUS --------------------*/ 
   //======= Transaction Status =====//
-  $.ajax({
-    type:"POST",
-    data:{ businesstype: "NEW BUSINESS" },
-    url:window.DataRoutes.transactionStatusData,
-    success: function(data) {
-      $("#cbotransstatus").html(data);
-    }
-  });
+  // $.ajax({
+  //   type:"POST",
+  //   data:{ businesstype: "NEW BUSINESS" },
+  //   url:window.DataRoutes.transactionStatusData,
+  //   success: function(data) {
+  //     $("#cbotransstatus").html(data);
+  //   }
+  // });
 
   $("#cbotransstatus").select2({
     allowClear: true,
@@ -957,17 +957,17 @@ $.ajaxSetup({
 
 //======= Function Load Master Data ============//
 //============== COUNTS PENDING ===============//
-function LoadStatusCounts() {
-  $.ajax({
-    type:"POST",
-    url:window.LaravelRoutes.nbpendingcounts,
-    dataType: "json",
-    success: function(data) {
-      $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
-      $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
-    }
-  });
-}
+// function LoadStatusCounts() {
+//   $.ajax({
+//     type:"POST",
+//     url:window.LaravelRoutes.nbpendingcounts,
+//     dataType: "json",
+//     success: function(data) {
+//       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
+//       $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
+//     }
+//   });
+// }
 
 //============== Transaction List ============//
 function LoadTransactionData() {
@@ -6109,7 +6109,7 @@ function LoadPaymentInfo(insuranceno) {
 
   
   let targetInsuranceNo = insuranceno || $('#txtinsuranceno').val() || '';
-
+//
   // Destroy existing table if present
   if ($.fn.dataTable.isDataTable('#table_payment')) {
     

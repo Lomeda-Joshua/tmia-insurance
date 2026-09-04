@@ -15,6 +15,36 @@
                 {{ $slot }}
 
 
+                <!-- MODAL TIME OUT -->
+                <div id="timeout" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-warning modal-sm">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <!--<button type="button" class="btn btn-outline close" data-dismiss="modal">×</button>-->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Session About To Timeout</h4>
+                        </div>
+                        <!--/modal-header-->
+                        <div class="modal-body">
+                            <p id="countdown"></p>
+                            <p>
+                                    You will be automatically logged out in 30 seconds.<br>
+                                To remain logged in move your mouse over this window.
+                            </p>
+                        </div>
+                        <!--/modal-body-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                        <!--/modal-content-->
+                    </div>
+                    <!-- /modal-dialog -->
+                </div>
+                <!-- END MODAL TIME OUT -->
+
+
                 <footer class="main-footer">
                     <div class="pull-right hidden-xs">
                         <b>Version</b> 0.0.1

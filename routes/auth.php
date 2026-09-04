@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\EnsureLockscreenIsUnlocked;
 use Livewire\Volt\Volt;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', EnsureLockscreenIsUnlocked::class])->group(function () {
     Volt::route('/', 'auth.login')
         ->name('login');
 
