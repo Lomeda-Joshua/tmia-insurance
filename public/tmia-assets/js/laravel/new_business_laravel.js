@@ -957,17 +957,17 @@ $.ajaxSetup({
 
 //======= Function Load Master Data ============//
 //============== COUNTS PENDING ===============//
-// function LoadStatusCounts() {
-//   $.ajax({
-//     type:"POST",
-//     url:window.LaravelRoutes.nbpendingcounts,
-//     dataType: "json",
-//     success: function(data) {
-//       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
-//       $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
-//     }
-//   });
-// }
+function LoadStatusCounts() {
+  $.ajax({
+    type:"POST",
+    url:window.LaravelRoutes.nbpendingcounts,
+    dataType: "json",
+    success: function(data) {
+        $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
+        $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
+    }
+  });
+}
 
 //============== Transaction List ============//
 function LoadTransactionData() {
@@ -993,8 +993,7 @@ function LoadTransactionData() {
       // Reload DataTables via AJAX without resetting pagination
       $('#table_trans').DataTable().ajax.reload(null, false);
       return;
-    }
-
+    }    
 
     const table = $('#table_trans').DataTable({
         language: {
@@ -1025,8 +1024,32 @@ function LoadTransactionData() {
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false },
             { data: 'Insurance_No', name: 'Insurance_No' },
-            { data: 'Trans_Date', name: 'Trans_Date' },
-            { data: 'Trans_Status', name: 'Trans_Status' },
+            { 
+                data: 'Trans_Date',
+                render: function (data) {
+                    if (!data) return '';
+
+                    return new Intl.DateTimeFormat('en-US', {
+                        month: 'long',
+                        day: '2-digit',
+                        year: 'numeric'
+                    }).format(new Date(data));
+                }
+            },
+            { 
+                  data: 'Trans_Status',
+                  render: function (data) {
+                      const status = String(data || '').trim().toUpperCase();
+
+                      const className = {
+                          COMPLETED: 'success',
+                          CANCELLED: 'danger',
+                          PENDING: 'warning'
+                      }[status] || 'secondary';
+
+                      return `<span class="badge text-bg-${className}">${status}</span>`;
+                  }
+            },
             { data: 'Customer_No', name: 'Customer_No' },
             { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
             { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
@@ -1089,7 +1112,7 @@ function LoadCustomerData() {
         order: [[1, 'asc']], // Orders by Customer_No ascending
         ajax: {
             url: window.LaravelRoutes.customerData, // Uses named route matching Laravel setup
-            type: "GET",
+            type: "POST",
             data: function (d) {
                 d.searchval = $("#txtcustomersearch").val() ? $("#txtcustomersearch").val().trim() : '';
                 d.btnselect = typeof window.btnselect !== 'undefined' ? window.btnselect : '';
@@ -1434,6 +1457,8 @@ function fetchView(){
   }
   return fetchview;
 }
+
+
 ///////////////////////// END FETCH VIEW OF DEVICE SCREEN ////////////////////////////////////
 
 /////////////////////// START LOAD DATA FUNCTION ///////////////////////
@@ -1458,7 +1483,7 @@ function LoadCustomerInfo() {
         }
 
         $("#txtcustno").val(value.Customer_No);
-        xcustnoupload = value.Upload_Cust_No;
+        // xcustnoupload = value.Upload_Cust_No;
         $("#txtcustnoupload").val(value.Upload_Cust_No);
         setSelectOption("#cbogroup", value.Group, value.Group);
         if (value.Group === "INDIVIDUAL") {
@@ -3853,24 +3878,24 @@ $(document).on( "click", "#btnadd", function (e) {
   
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
-  // $.ajax({
-  //   type:"GET",
-  //   url:window.LaravelRoutes.customerTypeData,
-  //   success: function(data) {
-  //     let options = '<option value="">PLEASE SELECT</option>';
+  $.ajax({
+    type:"GET",
+    url:window.LaravelRoutes.customerTypeData,
+    success: function(data) {
+      let options = '<option value="">PLEASE SELECT</option>';
     
-  //     // Loop through the JSON array and build <option> tags
-  //     $.each(data, function(index, item) {
-  //       options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
-  //     });
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+      });
 
-  //     // Inject options into the element and tell Select2 to refresh its UI
-  //     $("#cbogroup").html(options).trigger('change.select2');
-  //   },
-  //   error: function(xhr, status, error) {
-  //       console.error("Error fetching customer types:", xhr.responseText);
-  //   }
-  // });
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cbogroup").html(options).trigger('change.select2');
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching customer types:", xhr.responseText);
+    }
+  });
 
   $("#cbogroup").select2({
     allowClear: true,
@@ -5235,9 +5260,7 @@ $(document).on("click", "#btnsubmit", function () {
   // ======================================================
   // BUILD FORM DATA
   // ======================================================
-  $("#modalsaving").iziModal("open");
-
-  console.log(insurerFields);
+  $("#modalsaving").iziModal("open");  
 
   const formdata = new FormData();
   [customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
@@ -5394,7 +5417,7 @@ function FormDisable(val) {
   $("#cboise").attr("disabled",val);
 
   /*============== CUSTOMER INFO ===========*/
-  // $("#txtcustno").attr("disabled",val);
+  $("#txtcustno").attr("disabled",val);
   $("#cbogroup").attr("disabled",val);
   $("#txtcustname").attr("disabled",val);
   $("#txtcustfname").attr("disabled",val);
@@ -6087,7 +6110,6 @@ function LoadNetRemData() {
     data:{insuranceno:insuranceno},
     success: function(data){
       // var data = jQuery.parseJSON(data);
-      console.log(data);
       $.each(data, function(i, value) {
         $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
         $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));

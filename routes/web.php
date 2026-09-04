@@ -67,7 +67,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
-        Route::get('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
+        Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
@@ -82,7 +82,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
         
         Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
-        Route::get('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
+        Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
         Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');
@@ -107,8 +107,11 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::delete('/users/{userId}', [UserController::class, 'destroy'])->whereNumber('userId')->name('users.destroy');
 
         // Account settings
-        Route::get('/account', [UserController::class, 'account'])->name('user_account');
-        Route::put('/account', [UserController::class, 'updateAccount'])->name('user_account.update');
+        Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
+        Route::get('/useraccount/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
+        Route::post('/useraccount/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
+        Route::post('/user/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
+        Route::post('/useraccount/update', [UserController::class, 'updateUser'])->name('user_account.update');
     });
 
     // Laravel default Volt account settings routes

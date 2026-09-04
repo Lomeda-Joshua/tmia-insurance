@@ -9,6 +9,10 @@ use Illuminate\Support\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use App\Models\UserView;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Requests\UserDataRequest;
@@ -21,7 +25,7 @@ class UserController extends Controller
     public function index(): View
     {
         return view('livewire.main.settings.users');
-    }
+    } 
 
     public function userData(){
        $query = UserView::query()
@@ -184,54 +188,124 @@ class UserController extends Controller
         ]);
     }
 
-    public function updateAccount(UpdateAccountRequest $request): JsonResponse 
+    public function getSessionVariables(): JsonResponse
     {
-            $user = $request->user();
-            $data = $request->validated();
+        return response()->json([
+            'userid'     => Session::get('userid'),
+            'logname'    => Session::get('logname'),
+            'uname'      => Session::get('uname'),
+            'ulevel'     => Session::get('ulevel'),
+            'regdate'    => Session::get('regdate'),
+            'dealercode' => Session::get('dealercode'),
+            'signin'     => Session::get('signin', false),
+            'signout'    => Session::get('signout', false),
+        ]);
+    }
 
-            $user->Last_Name = strtoupper(trim($data['lname']));
-            $user->First_Name = strtoupper(trim($data['fname']));
+    public function getUserProfile(): JsonResponse
+    {
+        // Auth middleware ensures the user is signed in; retrieve the current user's ID
+        $uid = Auth::id();
 
-            $user->Middle_Name = !empty($data['mname'])
-                ? strtoupper(trim($data['mname']))
-                : null;
+        if (!$uid) {
+            return response()->json(['error' => 'Invalid or missing User ID'], 400);
+        }
 
-            $user->Suffix_Name = !empty($data['sname'])
-                ? strtoupper(trim($data['sname']))
-                : null;
+        $user = UserView::select([
+                'User_ID', 'Last_Name', 'First_Name', 'Middle_Name', 
+                'Suffix_Name', 'Display_Name', 'Contact_No', 'Email_Address', 
+                'User_Name', 'User_Level_Description', 'Active', 
+                'Enable2FA', 'Google2FAKey', 'ExpireDate'
+            ])
+            ->where('User_ID', $uid)
+            ->first();
 
-            $user->Display_Name = strtoupper(trim($data['dname']));
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
-            $user->Contact_No = !empty($data['contactno'])
-                ? trim($data['contactno'])
-                : null;
+        return response()->json($user);
+    }
 
-            $user->Email_Address = trim($data['email']);
-            $user->User_Name = trim($data['uname']);
+    /**
+     * Check if a username is already taken by another user.
+     */
+    public function checkUsername(Request $request): JsonResponse
+    {
+        $userId = $request->input('uid');
 
-            $user->Enable2FA = !empty($data['chk2fa']);
+        // Laravel validates uniqueness directly against the database table
+        $validator = \Validator::make($request->all(), [
+            'uname' => [
+                'required',
+                'string',
+                Rule::unique('user', 'User_Name')->ignore($userId, 'User_ID'),
+            ],
+        ]);
 
-            $user->ExpireDate = !empty($data['pwdexpdate'])
-                ? Carbon::createFromFormat(
-                    'd/m/Y',
-                    $data['pwdexpdate']
-                )->toDateString()
-                : null;
+        if ($validator->fails()) {
+            return response()->json(['result' => 1]); // Username exists/taken
+        }
 
-            /*
-            * Only change the password if the user actually
-            * entered a new password.
-            */
-            if (!empty($data['pword'])) {
-                $user->Encrypt_Password = Hash::make($data['pword']);
+        return response()->json(['result' => 0]); // Username available
+    }
+
+    public function updateUser(Request $request): JsonResponse 
+    {
+        $enable2fa = in_array(strtoupper((string) $request->input('chk2fa')), ['YES', 'TRUE', '1', 'ON'], true);
+        
+        // 1. Validate inputs (replaces manual post variable checks)
+        $validated = $request->validate([
+            'uid'        => ['required', 'integer'],
+            'lname'      => ['required', 'string', 'max:255'],
+            'fname'      => ['required', 'string', 'max:255'],
+            'mname'      => ['nullable', 'string', 'max:255'],
+            'sname'      => ['nullable', 'string', 'max:255'],
+            'dname'      => ['required', 'string', 'max:255'],
+            'contactno'  => ['nullable', 'string', 'max:50'],
+            'email'      => ['required', 'email', 'max:255'],
+            'uname'      => ['required', 'string', 'max:255'],
+            'pword'      => ['nullable', 'string', 'min:8'],
+            'pwdexpdate' => ['nullable', 'date'],
+            'chk2fa'     => ['nullable'],
+        ]);
+
+        try {
+            // 2. Prepare payload
+            $updateData = [
+                'Last_Name'     => $validated['lname'],
+                'First_Name'    => $validated['fname'],
+                'Middle_Name'   => $validated['mname'] ?? null,
+                'Suffix_Name'   => $validated['sname'] ?? null,
+                'Display_Name'  => $validated['dname'],
+                'User_Name'     => $validated['uname'],
+                'Contact_No'    => $validated['contactno'] ?? null,
+                'Email_Address' => $validated['email'],
+                'Enable2FA'     => $enable2fa ? 'YES' : 'NO',
+                'ExpireDate'    => $validated['pwdexpdate'] ?? null,
+            ];
+
+            // 3. Conditionally add hashed password if provided
+            if ($request->filled('pword')) {
+                // Adjust field name to 'password' or 'Encrypt_Password' to match your schema
+                $updateData['Encrypt_Password'] = Hash::make($validated['pword']); 
             }
 
-            $user->save();
+            // 4. Perform Update
+            $updated = DB::table('user')
+                ->where('User_ID', $validated['uid'])
+                ->update($updateData);
 
             return response()->json([
-                'success' => true,
-                'message' => 'Account updated successfully.',
+                'result' => 1,
             ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Database operation failed.',
+            ], 500);
+        }
     }
 
 

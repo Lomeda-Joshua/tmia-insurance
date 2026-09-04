@@ -80,15 +80,16 @@ class CustomerController extends Controller
                 ? 'ACTIVE' 
                 : 'INACTIVE';
         })
-        ->addColumn('action', function ($row) {
+        ->addColumn('button', function ($row) {
             $custNoEscaped = e($row->Customer_No);
-            $button  = '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
-            $button .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" data-placement="top" title="View & Modify"><i class="fa fa-edit"></i></label>';
-            $button .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
+            $buttons = '';
+            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
+            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" data-placement="top" title="View & Modify"><i class="fa fa-edit"></i></label>';
+            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
 
-            return $button;
+            return $buttons;
         })
-        ->rawColumns(['action'])
+        ->rawColumns(['button'])
         ->make(true);
     }
 

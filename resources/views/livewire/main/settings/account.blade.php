@@ -31,7 +31,10 @@
       <div class="box-body">
         <div class="box-header with-border">
           <h3 class="box-title">User Accounts Information</h3>
-          <button type="submit" class="btn btn-success pull-right" id="btnedit"><i class="fa fa-edit"></i> Click Here To Modify!</button>
+          <!-- Edit Button Header -->
+          <button type="button" class="btn btn-success pull-right" id="btnedit">
+              <i class="fa fa-edit"></i> Click Here To Modify!
+          </button>
         </div>
       </div>
       <div class="box-body" style="max-width:100%;">
@@ -295,10 +298,11 @@
                         </div>
                       </div>
                       <!-- /.box-body -->
-                      <div class="box-footer pull-right actionbtn" hidden>
-                        <button type="button" class="btn btn-success" id="btnsave"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" class="btn btn-success" id ="btncancel"><i class="fa fa-remove"></i> Cancel</button>
-                      </div>
+                        <!-- Action Buttons Footer -->
+                        <div class="box-footer pull-right actionbtn" hidden>
+                            <button type="button" class="btn btn-success" id="btnsave"><i class="fa fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-success" id="btncancel"><i class="fa fa-remove"></i> Cancel</button>
+                        </div>
                     </div>
                 
                 <!-- /.box -->
@@ -343,124 +347,15 @@
 
 @push('scripts')
 <script>
-$(document).ready(function () {
-    // Context variable passed from Laravel auth state
-    const userLevel = "{{ auth()->user()->User_Level_Description ?? '' }}";
-    
-    // Save state before editing for rollback on cancellation
-    let originalFormData = {};
-
-    // -------------------------------------------------------------------------
-    // Event Listeners: Modify, Save, Cancel
-    // -------------------------------------------------------------------------
-    $(document).on("click", "#btnedit", function (e) {
-        e.preventDefault();
-        captureFormState();
-        toggleFormState(false);
-    });
-
-    $(document).on("click", "#btncancel", function (e) {
-        e.preventDefault();
-        restoreFormState();
-        toggleFormState(true);
-    });
-
-    // -------------------------------------------------------------------------
-    // Field Auto-Formatting (Name concatenation & casing)
-    // -------------------------------------------------------------------------
-    $(document).on("blur", "#txtlname, #txtfname", function () {
-        let lname = $("#txtlname").val().toUpperCase().trim();
-        let fname = $("#txtfname").val().toUpperCase().trim();
-        
-        $("#txtlname").val(lname);
-        $("#txtfname").val(fname);
-
-        if (fname !== '' && lname !== '') {
-            $("#txtdname").val(`${fname} ${lname}`);
-        } else {
-            $("#txtdname").val(fname || lname);
-        }
-    });
-
-    $(document).on("blur", "#txtmname, #txtsname, #txtdname", function () {
-        $(this).val($(this).val().toUpperCase().trim());
-    });
-
-    // -------------------------------------------------------------------------
-    // Password Visibility Toggle
-    // -------------------------------------------------------------------------
-    $(document).on("click", "#btnpass, #btnrpass", function () {
-        const $input = $(this).closest(".input-group").find("input");
-        const $icon = $(this).find("i");
-
-        const isPassword = $input.attr("type") === "password";
-        $input.attr("type", isPassword ? "text" : "password");
-
-        $icon.toggleClass("fa-eye fa-eye-slash");
-    });
-
-    // -------------------------------------------------------------------------
-    // Form Enable / Disable Helper
-    // -------------------------------------------------------------------------
-    function toggleFormState(disabled) {
-        // Core Editable Fields
-        const $editableFields = $(
-            "#txtlname, #txtfname, #txtmname, #txtsname, #txtdname, " +
-            "#txtcontactno, #txtemailadd, #txtuname, #txtpass, #txtrpass"
-        );
-
-        $editableFields.prop("disabled", disabled);
-
-        // Role-restricted Fields
-        if (userLevel === "ADMINISTRATOR") {
-            $("#dppwdexpdate, #chk2fa").prop("disabled", disabled);
-        }
-
-        // Action Buttons Toggle
-        if (disabled) {
-            $("#btnedit").show();
-            $(".actionbtn").hide();
-        } else {
-            $("#btnedit").hide();
-            $(".actionbtn").show();
-            $("#txtlname").focus();
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // State Preservation Helpers
-    // -------------------------------------------------------------------------
-    function captureFormState() {
-        originalFormData = {
-            lname: $("#txtlname").val(),
-            fname: $("#txtfname").val(),
-            mname: $("#txtmname").val(),
-            sname: $("#txtsname").val(),
-            dname: $("#txtdname").val(),
-            contactno: $("#txtcontactno").val(),
-            email: $("#txtemailadd").val(),
-            uname: $("#txtuname").val(),
-            pwdexpdate: $("#dppwdexpdate").val(),
-            chk2fa: $("#chk2fa").is(":checked")
-        };
-    }
-
-    function restoreFormState() {
-        $("#txtlname").val(originalFormData.lname);
-        $("#txtfname").val(originalFormData.fname);
-        $("#txtmname").val(originalFormData.mname);
-        $("#txtsname").val(originalFormData.sname);
-        $("#txtdname").val(originalFormData.dname);
-        $("#txtcontactno").val(originalFormData.contactno);
-        $("#txtemailadd").val(originalFormData.email);
-        $("#txtuname").val(originalFormData.uname);
-        $("#txtpass").val("");
-        $("#txtrpass").val("");
-        $("#dppwdexpdate").val(originalFormData.pwdexpdate);
-        $("#chk2fa").prop("checked", originalFormData.chk2fa).trigger("change");
-    }
-});
+  window.dataRoutes = {
+    userAccountSession : @json(route('getSession.variables')),
+    userAccountData : @json(route('get_user_profile_data')),
+    checkUserName: @json(route('user.check_username')),
+    userAccountUpdate: @json(route('user_account.update')),
+  }
 </script>
+
+<script src ="{{ asset('tmia-assets/js/laravel/account_laravel.js') }}"></script>
 @endpush
 
 

@@ -413,13 +413,20 @@ $.ajaxSetup({
   //======= Customer Type =====//
   $.ajax({
     type:"POST",
-    url: window.LaravelRoutes.customerTypeData,
-    headers: {
-        'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-    },
+    url:window.LaravelRoutes.customerTypeData,
     success: function(data) {
-      
-      $("#cbogroup").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cbogroup").html(options).trigger('change.select2');
+    },
+    error: function(xhr, status, error) {
+        console.error("Error fetching customer types:", xhr.responseText);
     }
   });
 
@@ -731,7 +738,7 @@ function LoadCustomerData() {
     return;
   }
 
- const customerTable = $('#table_trans').DataTable({
+ $('#table_trans').DataTable({
     language: {
         processing: "Loading Customer List..."
     },
@@ -757,7 +764,7 @@ function LoadCustomerData() {
         }
     },
     columns: [
-        { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false, defaultContent: '' },
+        { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
         { data: 'Customer_No', name: 'Customer_No', defaultContent: '' },
         { data: 'Group', name: 'Group', defaultContent: '' },
         { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
@@ -771,7 +778,7 @@ function LoadCustomerData() {
         },
         { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
         { data: 'Email_Address', name: 'Email_Address', defaultContent: '' },
-        { data: 'Full_Address', name: 'Full_Address', defaultContent: '' },
+        { data: 'Address', name: 'Address', defaultContent: '' },
         { data: 'Remarks', name: 'Remarks', defaultContent: '' },
         { 
             data: 'Active_Status', 
@@ -785,18 +792,20 @@ function LoadCustomerData() {
         { data: 'button', name: 'button', searchable: false, orderable: false, defaultContent: '' }
     ],
     columnDefs: [
-        {
-            // Truncate long strings for: Full_Name (2), Address (5)
-            targets: [2, 5],
-            render: function(data, type, row, meta) {
-                const maxLength = 30;
-                if (typeof data === 'string' && data.length > maxLength) {
-                    const truncated = data.substring(0, maxLength) + '...';
-                    return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+            {
+                // Truncate long strings for: Full_Name (3), Email_Address (6), Address (7)
+                targets: [3, 6, 7],
+                render: function (data, type, row, meta) {
+                    if (type === 'display' && typeof data === 'string') {
+                        const maxLength = 30;
+                        if (data.length > maxLength) {
+                            const truncated = data.substring(0, maxLength) + '...';
+                            return `<span class="popup-data" data-toggle="tooltip" title="${data}">${truncated}</span>`;
+                        }
+                    }
+                    return data || '';
                 }
-                return data || '';
             }
-        }
     ]
 });
 }
