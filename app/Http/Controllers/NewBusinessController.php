@@ -148,7 +148,6 @@ class NewBusinessController extends Controller
     */
     public function store(Request $request)
     {       
-        
         try {
             DB::beginTransaction();
 
@@ -160,7 +159,7 @@ class NewBusinessController extends Controller
                1) CUSTOMER INSERT OR UPDATE
                ============================================================ */
             $custno = $request->input('custno');
-            $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
+            // $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
 
             $customerData = [
                 'Group'          => $request->input('group', ''),

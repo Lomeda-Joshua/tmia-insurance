@@ -22,6 +22,11 @@
             /* Keeps spinner on top of all elements */
         }
 
+        .loader-image{
+            width:120px;
+            margin:auto;
+        }
+
         /* Card container */
         .loader-card {
             background: #ffffff;
@@ -139,7 +144,9 @@
     <!-- Full-Screen Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay" style="display: none;">
         <div class="loader-card">
-            <div class="spinner"></div>
+            <div class="spinner">
+            </div>
+            <img class="loader-image" src="{{ asset('tmia-assets/images/logo-mini.png') }}" />
             <p id="loading-text">Saving data, please wait...</p>
         </div>
     </div>

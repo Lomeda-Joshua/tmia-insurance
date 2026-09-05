@@ -10,7 +10,7 @@ class CustomerInformation extends Model
 {
     use HasFactory;
 
-    protected $table = 'customer_information_copy';
+    protected $table = 'customer_information';
 
     // Override the default 'id' primary key
     protected $primaryKey = 'Customer_No';
@@ -50,9 +50,9 @@ class CustomerInformation extends Model
         'Inactive_Date'
     ];
 
-    public function vehicle() : HasMany
+    public function vehicles() : HasMany
     {
-        return $this->HasMany(VehicleInformation::class, 'Customer_No', 'Customer_No');
+        return $this->hasMany(VehicleInformation::class, 'Customer_No', 'Customer_No');
     }
 
 

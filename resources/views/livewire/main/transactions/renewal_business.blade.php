@@ -762,9 +762,9 @@
                                       <div class="cc-header">
                                         <h3>Credit Card Details</h3>
                                         <div class="cc-icons">
-                                          <img src="../assets/images/credit/visa.svg" alt="visa">
-                                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
-                                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
+                                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -812,7 +812,7 @@
                                       <div class="pdc-header">
                                         <h3>Post-Dated Check (PDC) Details</h3>
                                         <div class="pdc-icons">
-                                          <img src="../assets/images/credit/check.png" alt="cheque">
+                                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
                                         </div>
                                       </div>
                                       <div class="row">
@@ -872,9 +872,9 @@
                                     </div>
                                     <div class="col-md-8 ew-icons-col">
                                       <div class="ew-icons">
-                                        <img id="pgcash-n" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
-                                        <img id="pmaya-n" src="../assets/images/e-wallet/maya.svg" alt="maya">
-                                        <img id="ptwallet-n" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
+                                        <img id="pgcash-n" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                                        <img id="pmaya-n" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                                        <img id="ptwallet-n" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                                       </div>
                                     </div>
                                   </div>
@@ -1315,9 +1315,9 @@
                       <div class="cc-header">
                         <h3>Credit Card Details</h3>
                         <div class="cc-icons">
-                          <img src="../assets/images/credit/visa.svg" alt="visa">
-                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
-                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
+                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                         </div>
                       </div>
                       <div class="row">
@@ -1365,7 +1365,7 @@
                       <div class="pdc-header">
                         <h3>Post-Dated Check (PDC) Details</h3>
                         <div class="pdc-icons">
-                          <img src="../assets/images/credit/check.png" alt="cheque">
+                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
                         </div>
                       </div>
                       <div class="row">
@@ -1425,9 +1425,9 @@
                     </div>
                     <div class="col-md-8 ew-icons-col">
                       <div class="ew-icons">
-                        <img id="pgcash" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
-                        <img id="pmaya" src="../assets/images/e-wallet/maya.svg" alt="maya">
-                        <img id="ptwallet" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
+                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                        <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                        <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                       </div>
                     </div>
                   </div>
@@ -1799,10 +1799,33 @@
 </div>
 <!-- /.content-wrapper -->
 
+{{-- renewalBusinessCounts: @json(route('renewal_business.counts')) --}}
 
 @push('scripts')
 <script>
-    window.dataRoutes = {
+    window.LaravelRoutes = {
+      csrfToken: "{{ csrf_token() }}",
+      insuranceStaffData: @json(route('insurance_staff.data')),
+      customerTypeData: @json(route('customers_type.data')),
+      customerTypeDataPost: @json(route('customers_type.data.2')),
+    }
+
+    window.DataRoutes = {
+      bodyTypeData: @json(route('bodytype.data')),
+      fuelTypeData: @json(route('fueltype.data')),
+      productClassData: @json(route('productclass.data')),
+      communicationTypeData: @json(route('communicationtype.data')),
+      paymentTypeData: @json(route('payments.data')),
+      ewalletTypeData: @json(route('ewalletype.data')),
+      insuranceTypeData: @json(route('insurancetype.data')),
+      insuranceCoData: @json(route('insuranceco.data')),
+      bankData: @json(route('banks.data')),
+      callStatusData: @json(route('callstatus.data')),
+      transactionStatusData: @json(route('transactionstatus.data')),
+      regionData: @json(route('region.data'))
+    }
+
+    window.tableRoutes = {
       renewal_business_data : @json(route("renewal_business.data"))
     }
 </script>

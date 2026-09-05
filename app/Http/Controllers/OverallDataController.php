@@ -27,6 +27,7 @@ use App\Models\TransactionStatus;
 use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Carbon;
 
 class OverallDataController extends Controller
 {
@@ -346,6 +347,38 @@ class OverallDataController extends Controller
         // 2. Return JSON response
         return response()->json($data);
     }
+
+
+    public function getVehicle(Request $request){
+        // 1. Filter vehicles by Customer_No relationship key
+        $custNo = $request->input('custno');
+
+        $query = CustomerInformation::findOrFail($custNo)->vehicles();
+
+        // 2. Return Yajra DataTables JSON payload[cite: 1]
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' for column 0
+            ->editColumn('VSI_Date', function ($row) {
+                return !empty($row->VSI_Date) 
+                    ? strtoupper(Carbon::parse($row->VSI_Date)->format('d-M-Y')) 
+                    : '';
+            })
+            ->editColumn('SRP', function ($row) {
+                return !is_null($row->SRP) 
+                    ? number_format((float)$row->SRP, 2, '.', ',') 
+                    : '0.00';
+            })
+            ->addColumn('button', function ($row) {
+                $vinEscaped = e($row->VIN);
+                
+                $buttons  = '<label vin="' . $vinEscaped . '" class="btn btn-sm btn-info btn-action btnviewveh" data-toggle="tooltip" title="View Details"><i class="fa fa-eye"></i></label> ';
+                $buttons .= '<label vin="' . $vinEscaped . '" class="btn btn-sm btn-primary btn-action btneditveh" data-toggle="tooltip" title="Edit Vehicle"><i class="fa fa-edit"></i></label>';
+
+                return $buttons;
+            })
+            ->rawColumns(['VSI_Date', 'SRP', 'button'])
+            ->make(true);
+    } 
 
 
 

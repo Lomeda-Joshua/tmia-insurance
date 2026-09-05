@@ -1006,7 +1006,7 @@ function LoadTransactionData() {
         pageLength: 10,
         order: [[2, 'desc']], // Orders by Trans_Date descending
         ajax: {
-            url: window.LaravelRoutes.newBusinessData,
+            url: window.tableRoutes.newBusinessData,
             type: "POST",
             data: function (d) {
                 // Pass custom request parameters to controller
@@ -5266,7 +5266,8 @@ $(document).on("click", "#btnsubmit", function () {
   [customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
     Object.entries(group).forEach(([key, val]) => formdata.append(key, val));
   });  
-
+  
+  showLoading("Saving user record..."); // Show spinner before sending request
   // ======================================================
   // AJAX SUBMISSION
   // ======================================================
@@ -5288,7 +5289,8 @@ $(document).on("click", "#btnsubmit", function () {
           type: "success",
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
-        }, function () {
+        }, function (isConfirm) {
+          hideLoading();
           $("#modal-add").iziModal("close");
           if ($.fn.dataTable.isDataTable("#table_trans")) {
             $('#table_trans').DataTable().ajax.reload(null, false);

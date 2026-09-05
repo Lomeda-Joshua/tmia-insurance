@@ -1767,12 +1767,16 @@
 
     window.LaravelRoutes = {
       csrfToken: "{{ csrf_token() }}",
-      newBusinessData: @json(route('newbusiness.data')),
+      
       insuranceStaffData: @json(route('insurance_staff.data')),
       customerData: @json(route('customers.data')),
       customerTypeData: @json(route('customers_type.data')),
       nbpendingcounts: @json(route('new_business.counts')),
       uploadCustomers: @json(route('uploaded.customer'))
+    }
+
+    window.tableRoutes = {
+          newBusinessData: @json(route('newbusiness.data')),
     }
 
     window.DataRoutes = {

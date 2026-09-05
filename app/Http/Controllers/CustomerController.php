@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Carbon;
 use Yajra\DataTables\Facades\DataTables;
-use App\Models\CustomerInformation;
+use App\Models\CustomerInformation; 
+use App\Models\VehicleInformation; 
 use App\Models\UploadedCustomer;
 
 
@@ -25,24 +26,22 @@ class CustomerController extends Controller
     public function getCustomers(Request $request)
     {
         // 1. Return an Eloquent Query Builder (do NOT call ->get())
-        $query = CustomerInformation::with('vehicle');
+        $query = CustomerInformation::with('vehicles');
 
+    
         // 2. Handle Alphabetical / Special Character Filter
         // Accepts 'btnselect' or 'letter' from JS payload
         $filter = $request->input('btnselect', $request->input('letter'));
 
         if (!empty($filter) && $filter !== 'ALL') {
-            if ($filter === '[0-9]') {
-                // Match names starting with numbers
-                $query->whereRaw("Full_Name REGEXP '^[0-9]'");
-            } elseif ($filter === '[SPECIAL CHAR]') {
-                // Match names starting with non-alphanumeric characters
-                $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
-            } else {
-                // Match standard A-Z first letter
-                $query->where('Full_Name', 'like', "{$filter}%");
+                if ($filter === '[0-9]') {
+                    $query->whereRaw("Full_Name REGEXP '^[0-9]'");
+                } elseif ($filter === '[SPECIAL CHAR]') {
+                    $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
+                } else {
+                    $query->where('Full_Name', 'like', "{$filter}%");
+                }
             }
-        }   
 
 
         // Determine and extract the search string safely
@@ -51,7 +50,6 @@ class CustomerController extends Controller
         if ($request->filled('searchval')) {
             $searchValue = $request->input('searchval');
         } elseif ($request->has('search') && is_array($request->input('search'))) {
-            // Extract the string value from DataTables' search array: ['value' => 'term', 'regex' => false]
             $searchValue = $request->input('search.value');
         } elseif ($request->filled('search') && is_string($request->input('search'))) {
             $searchValue = $request->input('search');
@@ -67,8 +65,8 @@ class CustomerController extends Controller
             });
         }
 
-        return DataTables::of($query)
-        ->addIndexColumn()
+       return DataTables::of($query)
+        ->addIndexColumn() // Auto-generates dynamic "DT_RowIndex"
         ->setRowId('Customer_No')
         ->editColumn('Birth_Date', function ($row) {
             return !empty($row->Birth_Date) 
@@ -82,9 +80,8 @@ class CustomerController extends Controller
         })
         ->addColumn('button', function ($row) {
             $custNoEscaped = e($row->Customer_No);
-            $buttons = '';
-            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
-            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" data-placement="top" title="View & Modify"><i class="fa fa-edit"></i></label>';
+            
+            $buttons  = '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
             $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
 
             return $buttons;
@@ -192,4 +189,6 @@ class CustomerController extends Controller
 
         return response()->json($data);
     }
+
+    
 }

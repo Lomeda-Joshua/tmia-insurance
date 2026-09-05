@@ -780,13 +780,17 @@
       csrfToken: "{{ csrf_token() }}",
       newBusinessData: @json(route('newbusiness.data')),
       insuranceStaffData: @json(route('insurance_staff.data')),
-      customerData: @json(route('customers.data')),
       customerTypeData: @json(route('customers_type.data.2')),
       nbpendingcounts: @json(route('new_business.counts')),
       uploadCustomers: @json(route('uploaded.customer'))
     }
 
-    window.DataRoutes = {
+    window.tableRoutes = {
+      customerData: @json(route('customers.data')),
+      associatedVehicleData : @json(route('vehicle.data'))
+    }
+
+    window.formRoutes = {
       bodyTypeData: @json(route('bodytype.data')),
       fuelTypeData: @json(route('fueltype.data')),
       productClassData: @json(route('productclass.data')),
@@ -814,7 +818,12 @@
     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data'))
     }
+
+    // Converted to a clean, valid JavaScript object automatically
+    const user = @json(Auth::user()); 
+
 </script>
+
 
 <script src="{{ asset('tmia-assets/js/laravel/customer_laravel.js') }}"></script>
 @endpush

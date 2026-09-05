@@ -16,11 +16,14 @@ var editinfo = false;
 var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-    }
-});  
+  
+  //============= CSRF TOKEN SETUP ============//
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+      }
+  });
+
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -411,37 +414,71 @@ $.ajaxSetup({
 
   //============== COMBO BOX INITIALIZED ===========//
   //======= Customer Type =====//
-  $.ajax({
-    type:"POST",
-    url:window.LaravelRoutes.customerTypeData,
-    success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
-    
-      // Loop through the JSON array and build <option> tags
-      $.each(data, function(index, item) {
-        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+  function LoadFormData(){
+      //======= Group =====//
+      $.ajax({
+        type:"POST",
+        url:window.formRoutes.customerTypeDataPost,
+        dataType: "json",
+        success: function(data) {
+
+            let options = '<option value="">PLEASE SELECT</option>';
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbogroup").html(options);
+
+            // Force Select2 to refresh its display
+            $("#cbogroup").trigger('change.select2');
+        }
       });
 
-      // Inject options into the element and tell Select2 to refresh its UI
-      $("#cbogroup").html(options).trigger('change.select2');
-    },
-    error: function(xhr, status, error) {
-        console.error("Error fetching customer types:", xhr.responseText);
-    }
-  });
+      $("#cbogroup").select2({
+        allowClear: true,
+        width: "100%",
+        placeholder: "PLEASE SELECT"
+      }).on('select2:close', function() {
+        $(this).trigger("change.select2");
+      });
 
-  $("#cbogroup").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
+      //======= Region =====//
+      $.ajax({
+        type:"POST",
+        url:window.formRoutes.regionData,
+        success: function(data) {
+          $("#cboregion").html(data);
+          let options = '<option value="">PLEASE SELECT</option>';
+        
+          // Loop through the JSON array and build <option> tags
+          $.each(data, function(index, item) {
+            options += `<option value="${item.RegCode}">${item.Region}</option>`;
+          });
 
-  //======= Region =====//
+          // Inject options into the element and tell Select2 to refresh its UI
+          $("#cboregion").html(options).trigger('change.select2');
+        }
+      });
+
+      $("#cboregion").select2({
+        allowClear: true,
+        width: "100%",
+        placeholder: "PLEASE SELECT"
+      }).on('select2:close', function() {
+        $(this).trigger("change.select2");
+      });
+
+  }
+  
+  
+ 
+
+  //======= Province =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.regionData,
+    url:window.formRoutes.regionData,
     success: function(data) {
       $("#cboregion").html(data);
       let options = '<option value="">PLEASE SELECT</option>';
@@ -456,15 +493,7 @@ $.ajaxSetup({
     }
   });
 
-  $("#cboregion").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
 
-  //======= Province =====//
   $("#cboprovince").select2({
     allowClear: true,
     width: "100%",
@@ -504,7 +533,7 @@ $.ajaxSetup({
   //======= Body Type =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.bodyTypeData,
+    url:window.formRoutes.bodyTypeData,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -532,7 +561,7 @@ $.ajaxSetup({
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.fuelTypeData,
+    url:window.formRoutes.fuelTypeData,
     dataType: "json",
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
@@ -547,7 +576,9 @@ $.ajaxSetup({
 
         // Force Select2 to refresh its display
         $("#cbofueltype").trigger('change.select2');
-    }
+    },
+
+
   });
 
   $("#cbofueltype").select2({
@@ -561,7 +592,7 @@ $.ajaxSetup({
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:window.DataRoutes.productClassData,   
+    url:window.formRoutes.productClassData,   
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -588,8 +619,8 @@ $.ajaxSetup({
 
    //======= Owner Type =====//
   $.ajax({
-    type:"POST",
-    url: window.LaravelRoutes.customerTypeData,
+    type:"GET",
+    url: window.formRoutes.customerTypeDataPost,
     dataType: "json",
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
@@ -716,104 +747,79 @@ $.ajaxSetup({
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
+
 //======= Function Load Master Data ============//
 //============== Customer List ============//
 function LoadCustomerData() {
   const searchval = $("#txtsearch").val().trim();
-
-  // Ensure btnselect is extracted as a string/primitive, not a DOM/jQuery object
-  let cleanBtnSelect = '';
-  if (typeof btnselect !== 'undefined' && btnselect !== null) {
-    cleanBtnSelect = typeof btnselect === 'object' ? ($(btnselect).val() || '') : btnselect;
-  }
+  if (typeof btnselect === 'undefined') { btnselect = '';}
 
   const value = {
     searchval:searchval,
     btnselect:btnselect
   };
 
-  if ($.fn.DataTable.isDataTable('#table_trans')) {
-    // Dynamically reload existing table instance without destroying DOM
-    $('#table_trans').DataTable().ajax.reload();
-    return;
+  if ($.fn.dataTable.isDataTable('#table_trans')) {
+    $('#table_trans').DataTable().clear().destroy();               
   }
 
- $('#table_trans').DataTable({
+  table = $('#table_trans').DataTable({
     language: {
-        processing: "Loading Customer List..."
+      processing: "Loading Customer List..."
     },
     processing: true,
     serverSide: true,
     responsive: true,
     autoWidth: false,
     pageLength: 10,
-    order: [[1, 'asc']], // Orders by Customer_No ascending
     ajax: {
-        url: window.LaravelRoutes.customerData,
-        type: "POST",
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        data: function (d) {
-            // Extracted values ensure no jQuery/DOM objects are passed
-            d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : (typeof searchval === 'string' ? searchval : '');
-            d.btnselect = typeof cleanBtnSelect === 'string' ? cleanBtnSelect : '';
-        },
-        error: function (xhr, error, code) {
-            console.error('DataTables AJAX Error:', xhr.responseText);
-        }
+      url: window.tableRoutes.customerData,
+      type: "POST",
+      data: function (d) {
+            // Merge custom payload variables into DataTables request payload
+            d.btnselect = $('#btnselect').val(); 
+            d.btnselect = btnselect;
+            d.searchval = $('#txtsearch').val();
+      },
+      headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Required for POST routes
+      },  
     },
     columns: [
-        { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false},
-        { data: 'Customer_No', name: 'Customer_No', defaultContent: '' },
-        { data: 'Group', name: 'Group', defaultContent: '' },
-        { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
-        { 
-            data: 'Birth_Date', 
-            name: 'Birth_Date', 
-            defaultContent: '',
-            render: function (data) {
-                return data ? getDateFormatted(data).toUpperCase() : '';
-            }
-        },
-        { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
-        { data: 'Email_Address', name: 'Email_Address', defaultContent: '' },
-        { data: 'Address', name: 'Address', defaultContent: '' },
-        { data: 'Remarks', name: 'Remarks', defaultContent: '' },
-        { 
-            data: 'Active_Status', 
-            name: 'Active_Status', 
-            defaultContent: '',
-            render: function (data) {
-                return data == "1" ? "ACTIVE" : "INACTIVE";
-            }
-        },
-        { data: 'Inactive_Date', name: 'Inactive_Date', defaultContent: '' },
-        { data: 'button', name: 'button', searchable: false, orderable: false, defaultContent: '' }
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "Customer_No", name: "Customer_No" },
+        { data: "Group", name: "Group", defaultContent: "" },
+        { data: "Full_Name", name: "Full_Name" },
+        { data: "Birth_Date", name: "Birth_Date", defaultContent: "" },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+        { data: "Email_Address", name: "Email_Address", defaultContent: "" },
+        { data: "Address", name: "Address", defaultContent: "" },
+        { data: "Remarks", name: "Remarks", defaultContent: "" },
+        { data: "Active_Status", name: "Active_Status" },
+        { data: "Inactive_Date", name: "Inactive_Date", defaultContent: "" },
+        { data: "button", name: "button", orderable: false, searchable: false }
     ],
     columnDefs: [
-            {
-                // Truncate long strings for: Full_Name (3), Email_Address (6), Address (7)
-                targets: [3, 6, 7],
-                render: function (data, type, row, meta) {
-                    if (type === 'display' && typeof data === 'string') {
-                        const maxLength = 30;
-                        if (data.length > maxLength) {
-                            const truncated = data.substring(0, maxLength) + '...';
-                            return `<span class="popup-data" data-toggle="tooltip" title="${data}">${truncated}</span>`;
-                        }
-                    }
-                    return data || '';
-                }
-            }
+      {
+        targets: [3, 7, 8],
+        render: function(data, type, row, meta) {
+          const maxLength = 30;
+          if (typeof data === 'string' && data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+          }
+          return data;
+        }
+      }
     ]
-});
+  });
 }
 //======================================//
 
 //============== Vehicle List ============//
 function LoadVehicleData(custno) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+
+  if (user?.User_Level_ID == 1 || user?.User_Level_ID == 7) {
     $("#btnaddveh").show();
   } else {
     $("#btnaddveh").hide();
@@ -833,33 +839,25 @@ function LoadVehicleData(custno) {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "customer_vehicle_data.php",
+      url: window.tableRoutes.associatedVehicleData,
       type: "POST",
-      data: {custno:custno}
+      data: function (d) {
+        d.custno = custno; // Sends customer_no filter to Laravel controller
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      {
-        data: "VSI_Date",
-        render: function (data) {
-          return getDateFormatted(data).toUpperCase();
-        }
-      },
-      {
-        data: "SRP",
-        render: function (data) {
-          return NumberFormat(data);
-        }
-      },
-      { data: "button" }
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "Model", name: "Model", defaultContent: "" },
+        { data: "Model_Year", name: "Model_Year", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+        { data: "Color", name: "Color", defaultContent: "" },
+        { data: "Engine_No", name: "Engine_No", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "VSI_Date", name: "VSI_Date", defaultContent: "" },
+        { data: "SRP", name: "SRP", defaultContent: "0.00" },
+        { data: "button", name: "button", orderable: false, searchable: false }
     ],
     columnDefs: [
       {
@@ -1520,6 +1518,7 @@ $(document).on( "click", "#btnadd", function () {
   editinfo = true;
   FormClear();
   FormDisable(false);
+  LoadFormData();
   $('#modal-modify').iziModal('open');
 });
 

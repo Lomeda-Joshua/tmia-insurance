@@ -78,7 +78,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
         Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
-        Route::get('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
+        Route::post('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
         Route::post('/payments/data', [OverallDataController::class, 'getPaymentType'])->name('payments.data');
         Route::get('/call-logs/data', [OverallDataController::class, 'getCallLogs'])->name('call_logs.data');
         Route::post('/uploadedcustomer/data', [OverallDataController::class, 'getUploadedCustomer'])->name('uploaded.customer');

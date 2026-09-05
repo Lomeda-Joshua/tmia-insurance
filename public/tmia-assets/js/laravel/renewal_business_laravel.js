@@ -28,28 +28,26 @@ var editcall = false;
 var editstatus = false;
 var activeCustTab;
 var activeVehTab;
+
+function populateSelect(selector, data, valueKey, textKey) {
+  let options = '<option value="">PLEASE SELECT</option>';
+
+  $.each(data, function(index, item) {
+    options += `<option value="${item[valueKey]}">${item[textKey]}</option>`;
+  });
+
+  $(selector).html(options).trigger('change.select2');
+}
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-  //================== GET USER LOG IN INFORMATION =================//
-  $.ajax({
-    url: "fetch_variable.php",
-    dataType: 'json',
-    cache: false,
-    success: function(data) {
-      userid = data.userid;
-      logname = data.logname;
-      ulevel = data.ulevel;
-      regdate = data.regdate;
-      dealercode = data.dealercode;
-      signin = data.signin;
-
-      if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
-        $(".btnactionud").show();
-      } else {
-        $(".btnactionud").hide();
-      }
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
     }
   });
+  //================== GET USER LOG IN INFORMATION =================//
+  // User data is provided by the authenticated Laravel session.
   //=============== END GET USER LOG IN INFORMATION  =================//
 
   //============= TOOLTIPS ============//
@@ -762,9 +760,10 @@ $(document).ready( function () {
   //======= Insurance  Staff =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_staff.php",
+    url: window.LaravelRoutes.insuranceStaffData,
+    dataType: "json",
     success: function(data) {
-      $("#cboise").html(data);
+      populateSelect("#cboise", data, "ISE_No", "ISE_Name");
     }
   });
 
@@ -779,10 +778,11 @@ $(document).ready( function () {
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
   $.ajax({
-    type:"POST",
-    url:"fetch_customer_type.php",
+    type:"GET",
+    url: window.LaravelRoutes.customerTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbogroup").html(data);
+      populateSelect("#cbogroup", data, "Customer_TID", "Customer_Type");
     }
   });
 
@@ -797,9 +797,10 @@ $(document).ready( function () {
   //======= Region =====//
   $.ajax({
     type:"POST",
-    url:"fetch_region.php",
+    url: window.DataRoutes.regionData,
+    dataType: "json",
     success: function(data) {
-      $("#cboregion").html(data);
+      populateSelect("#cboregion", data, "RegCode", "Region");
     }
   });
 
@@ -851,9 +852,10 @@ $(document).ready( function () {
   //======= Body Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_body_type.php",
+    url: window.DataRoutes.bodyTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbobodytype").html(data);
+      populateSelect("#cbobodytype", data, "Body_TID", "Body_Type");
     }
   });
 
@@ -868,9 +870,10 @@ $(document).ready( function () {
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_fuel_type.php",
+    url: window.DataRoutes.fuelTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbofueltype").html(data);
+      populateSelect("#cbofueltype", data, "Fuel_TID", "Fuel_Type");
     }
   });
 
@@ -885,9 +888,10 @@ $(document).ready( function () {
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:"fetch_product_class.php",
+    url: window.DataRoutes.productClassData,
+    dataType: "json",
     success: function(data) {
-      $("#cboprodclass").html(data);
+      populateSelect("#cboprodclass", data, "Prod_Class_ID", "Prod_Class");
     }
   });
 
@@ -901,10 +905,11 @@ $(document).ready( function () {
 
    //======= Owner Type =====//
   $.ajax({
-    type:"POST",
-    url:"fetch_customer_type.php",
+    type:"GET",
+    url: window.LaravelRoutes.customerTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboowntype").html(data);
+      populateSelect("#cboowntype", data, "Customer_TID", "Customer_Type");
     }
   });
 
@@ -920,9 +925,10 @@ $(document).ready( function () {
   //======= Payment Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_payment_type.php",
+    url: window.DataRoutes.paymentTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbopaytype, #cbopaytype-n").html(data);
+      populateSelect("#cbopaytype, #cbopaytype-n", data, "PayTID", "PayType");
     }
   });
 
@@ -937,9 +943,10 @@ $(document).ready( function () {
   //======= E-Wallet Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_ewallet_type.php",
+    url: window.DataRoutes.ewalletTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboewallet, #cboewallet-n").html(data);
+      populateSelect("#cboewallet, #cboewallet-n", data, "EWTID", "EWType");
     }
   });
 
@@ -955,9 +962,10 @@ $(document).ready( function () {
   //======= Insurance Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_type.php",
+    url: window.DataRoutes.insuranceTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cboinstype").html(data);
+      populateSelect("#cboinstype", data, "Insurance_TID", "Insurance_Type");
     }
   });
 
@@ -972,9 +980,10 @@ $(document).ready( function () {
   //======= Insurance =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_co.php",
+    url: window.DataRoutes.insuranceCoData,
+    dataType: "json",
     success: function(data) {
-      $("#cboinsco").html(data);
+      populateSelect("#cboinsco", data, "Insurance_ID", "Insurance_Desc");
     }
   });
 
@@ -989,9 +998,10 @@ $(document).ready( function () {
   //======= Bank =====//
   $.ajax({
     type:"POST",
-    url:"fetch_banks.php",
+    url: window.DataRoutes.bankData,
+    dataType: "json",
     success: function(data) {
-      $("#cbomortgage").html(data);
+      populateSelect("#cbomortgage", data, "BankID", "BankDesc");
     }
   });
 
@@ -1008,9 +1018,11 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     data:{ businesstype: "RENEWAL BUSINESS" },
-    url:"fetch_transaction_status.php",
+    url: window.DataRoutes.transactionStatusData,
+    dataType: "json",
     success: function(data) {
-      $("#cbotransstatus").html(data);
+      const statusData = data.filter(item => item.Business_Type === "RENEWAL BUSINESS");
+      populateSelect("#cbotransstatus", statusData, "Trans_Status", "Trans_Status");
     }
   });
 
@@ -1026,9 +1038,10 @@ $(document).ready( function () {
   //======= Communication Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_communication_type.php",
+    url: window.DataRoutes.communicationTypeData,
+    dataType: "json",
     success: function(data) {
-      $("#cbomodecomm").html(data);
+      populateSelect("#cbomodecomm", data, "Communication_ID", "Communication_Type");
     }
   });
 
@@ -1043,9 +1056,10 @@ $(document).ready( function () {
   //======= Call Status Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_call_status.php",
+    url: window.DataRoutes.callStatusData,
+    dataType: "json",
     success: function(data) {
-      $("#cbocallstatus").html(data);
+      populateSelect("#cbocallstatus", data, "Call_SID", "Call_Status");
     }
   });
 
@@ -1236,7 +1250,7 @@ $(document).ready( function () {
 function LoadStatusCounts() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_rb_counts.php",
+    url: window.LaravelRoutes.renewalBusinessCounts,
     dataType: "json",
     success: function(data) {
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
@@ -1264,57 +1278,102 @@ function LoadTransactionData() {
     chkall: chkall
   };
 
-  if ($.fn.dataTable.isDataTable('#table_trans')) {
-    $('#table_trans').DataTable().clear().destroy();               
-  }
 
-  table = $('#table_trans').DataTable({
-    language: {
-      processing: "Loading Transaction List..."
-    },
-    processing: true,
-    serverSide: false,
-    pageLength: 10,
-    responsive: true,
-    autoWidth: false,
-    ajax: {
-      url: "renewal_business_data.php",
-      type: "POST",
-      data: value
-    },
-    columns: [
-      { data: "urutan" },
-      { data: "Insurance_No" },
-      { data: "Trans_Date" },
-      { data: "Trans_Status" },
-      { data: "Customer_No" },
-      { data: "Full_Name" },
-      { data: "Contact_No" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Model" },
-      { data: "Variant" },
-      { data: "Insurance_Company" },
-      { data: "ISE_Name" },
-      { data: "MP_Name" },
-      { data: "Call_Attempts" },
-      { data: "button" }
-    ],
-    columnDefs: [
-      {
-        targets: [5, 11, 12, 13, 14],
-        render: function(data, type, row, meta) {
-          const maxLength = 30;
-          if (typeof data === 'string' && data.length > maxLength) {
-            const truncated = data.substring(0, maxLength) + '...';
-            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
-          }
-          return data;
-        }
-      }
-    ]
-  });
+  console.log(window.tableRoutes.renewal_business_data);
+
+  if ($.fn.DataTable.isDataTable('#table_trans')) {
+    // Dynamically reload existing table instance without destroying DOM
+    // Reload DataTables via AJAX without resetting pagination
+    $('#table_trans').DataTable().ajax.reload(null, false);
+    return;
+  }  
+
+    var table = $('#table_renewal_trans').DataTable({
+        language: {
+            processing: "Loading Renewal Transactions..."
+        },
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        autoWidth: false,
+        pageLength: 10,
+        order: [[2, 'desc']],
+        ajax: {
+            url: window.tableRoutes.renewal_business_data,
+            type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: function (d) {
+                d.datefrom = $('#dpdatefrom').val() || null;
+                d.dateto = $('#dpdateto').val() || null;
+                d.viewpending = window.viewpending === true;
+                d.viewexpiring = window.viewexpiring ?? true;
+                d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+                d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+            },
+            error: function (xhr, error, code) {
+                console.error('DataTables Ajax Error:', xhr.responseText);
+            }
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false },
+            { data: 'Insurance_No', name: 'Insurance_No' },
+            {
+                data: 'Trans_Date',
+                name: 'Trans_Date',
+                render: function (data) {
+                    if (!data) return '';
+                    return new Intl.DateTimeFormat('en-US', {
+                        month: 'long',
+                        day: '2-digit',
+                        year: 'numeric'
+                    }).format(new Date(data));
+                }
+            },
+            {
+                data: 'Trans_Status',
+                name: 'Trans_Status',
+                render: function (data) {
+                    const status = String(data || '').trim().toUpperCase();
+                    const className = {
+                        COMPLETED: 'success',
+                        CANCELLED: 'danger',
+                        PENDING: 'warning'
+                    }[status] || 'secondary';
+
+                    return `<span class="badge text-bg-${className}">${status}</span>`;
+                }
+            },
+            { data: 'Customer_No', name: 'Customer_No' },
+            { data: 'Full_Name', name: 'Full_Name', defaultContent: '' },
+            { data: 'Contact_No', name: 'Contact_No', defaultContent: '' },
+            { data: 'VIN', name: 'VIN', defaultContent: '' },
+            { data: 'CS_No', name: 'CS_No', defaultContent: '' },
+            { data: 'Plate_No', name: 'Plate_No', defaultContent: '' },
+            { data: 'Model', name: 'Model', defaultContent: '' },
+            { data: 'Variant', name: 'Variant', defaultContent: '' },
+            { data: 'Insurance_Company', name: 'Insurance_Company', defaultContent: '' },
+            { data: 'ISE_Name', name: 'ISE_Name', defaultContent: '' },
+            { data: 'MP_Name', name: 'MP_Name', defaultContent: '' },
+            { data: 'Call_Attempts', name: 'Call_Attempts', defaultContent: '0' },
+            { data: 'button', name: 'button', searchable: false, orderable: false }
+        ],
+        columnDefs: [
+            {
+                targets: [5, 11, 12, 13, 14],
+                render: function (data, type, row, meta) {
+                    const maxLength = 30;
+                    if (typeof data === 'string' && data.length > maxLength) {
+                        const truncated = data.substring(0, maxLength) + '...';
+                        const safeData = data.replace(/"/g, '&quot;');
+                        return `<span class="popup-data" title="${safeData}">${truncated}</span>`;
+                    }
+                    return data || '';
+                }
+            }
+        ]
+    });
   
   viewpending = false;
   viewexpiring = false;
