@@ -127,9 +127,17 @@ var xuname;
     //======= User Level =====//
     $.ajax({
       type:"POST",
-      url: window.tableRoute.userLevelData,
+      url: window.formRoute.userLevelData,
       success: function(data){
-        $("#cboulevel").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+    
+        // Loop through the JSON array and build <option> tags
+        $.each(data.data, function(index, item) {
+          options += `<option value="${item.User_Level_ID}">${item.User_Level_Description}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cboulevel").html(options).trigger('change.select2');
       }
     });
 
@@ -491,12 +499,11 @@ var xuname;
     function CheckUserName() {
       $.ajax(
         {
-          url : "user_check_uname_exist.php",
+          url : window.LaravelRoutes.checkUserAccount,
           type: "POST",
           data : { uname:uname,uid:uid },
           success: function(data)
           {
-            var data = jQuery.parseJSON(data);
             if(data.result == 1) {
               $("#txtuname").focus();
               $(".box-body").validator('reset');
@@ -528,14 +535,13 @@ var xuname;
     }
 
     function SaveData() {
+      showLoading("Saving user record..."); // Show spinner before sending request
       $.ajax({
-        url : "user_save.php",
+        url : window.SaveRoute.saveNewUserData,
         type: "POST",
         data : value,
         success: function(data)
         {
-          var data = jQuery.parseJSON(data);
-
           if(appmethod == 'N'){
             saveInfo = "New record has been added succesfully.";
           }else {
@@ -544,19 +550,26 @@ var xuname;
 
           if(data.result == 1){
             /*$.notify('Successfull save data');*/
+            hideLoading();
             swal({
-              title: "Saved!",
-              text: saveInfo,
-              type: "success",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK"
+                title: "Saved!",
+                text: "Updated successfully.",
+                type: "success",
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK"
+            }, function(isConfirm) {
+                if (isConfirm) {
+                      $('#modal-modify').iziModal('close');
+                      
+                      ClearForm();
+                }
             });
-            
+
             table.ajax.reload( null, false );
             table.search('').columns().search('').draw();
-            ClearForm();
-            $('#modal-modify').iziModal('close');
+            
+            
+           
           }else{
             swal({
               title: "Error!",
@@ -567,7 +580,7 @@ var xuname;
               confirmButtonText: "OK"
             });
           }
-        }
+        },
       });
     }
 

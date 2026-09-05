@@ -389,6 +389,8 @@ var xuname;
     }
 
     function SaveData() {
+      showLoading("Saving user record..."); // Show spinner before sending request
+
       $.ajax({
         url : window.dataRoutes.userAccountUpdate,
         type: "POST",
@@ -398,17 +400,45 @@ var xuname;
         },
         success: function(data)
         {
-        //   var data = jQuery.parseJSON(data);
+          // var data = jQuery.parseJSON(data);
           saveInfo = "Modified record has been updated succesfully.";
+
           if(data.result == 1){
+            
             /*$.notify('Successfull save data');*/
+            // swal({
+            //   title: "Saved!",
+            //   text: saveInfo,
+            //   type: "success",
+            //   showCancelButton: false,
+            //   confirmButtonColor: "#00a65a",
+            //   confirmButtonText: "OK"
+            // }).then(function(result){
+            //     if (result.value || result.isConfirmed) {
+            //         // --- THIS RUNS ONLY AFTER CLICKING "OK" ---
+                    
+            //         // 1. Close your modal
+            //         $('#modal-user').iziModal('close');
+                    
+            //         // 2. Refresh form/accounts
+            //         FormDisable(true);
+            //         LoadAccounts();
+            //     }
+            // });
+
             swal({
-              title: "Saved!",
-              text: saveInfo,
-              type: "success",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK"
+                title: "Saved!",
+                text: "Updated successfully.",
+                type: "success",
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK"
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    hideLoading();
+                    $('#modal-user').iziModal('close');
+                    FormDisable(true);
+                    LoadAccounts();
+                }
             });
 
             var subject = "Account Information Updated!";
@@ -457,7 +487,7 @@ var xuname;
               confirmButtonText: "OK"
             });
           }
-        }
+        },
       });
     }
 

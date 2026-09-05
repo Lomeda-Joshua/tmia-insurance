@@ -317,14 +317,26 @@
 <script>
   window.LaravelRoutes = {
     csrfToken: "{{ csrf_token() }}",
+    checkUserAccount: @json(route("user.check_username"))
   }
 
   window.tableRoute = {
     userData: @json(route("users.data")),
+  }
+
+  window.formRoute = {
     userLevelData: @json(route("users.levels.data")),
   }
 
-  console.log(window.tableRoute.userLevelData);
+  window.DataRoute = {
+    checkUserData : @json(route("users.get.data")),
+  }
+
+  window.SaveRoute = {
+    saveNewUserData : @json(route("user.save")),
+  }
+
+  
 </script>
 
 <script src=" {{ asset('tmia-assets/js/laravel/user_laravel.js') }}"></script>

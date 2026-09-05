@@ -13,8 +13,10 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
-use App\Http\Requests\UpdateAccountRequest;
+
+use App\Http\Requests\SaveUserRequest;
 use App\Http\Requests\UserDataRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -77,7 +79,7 @@ class UserController extends Controller
     {
         return response()->json([
             'data' => \App\Models\UserLevel::query()
-                ->orderBy('User_Level_Description')
+                ->orderBy('User_Level_ID')
                 ->get([
                     'User_Level_ID',
                     'User_Level_Description',
@@ -301,6 +303,88 @@ class UserController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Database operation failed.',
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Fetch user details by User_ID.
+     */
+    public function getUserData(Request $request): JsonResponse
+    {
+        $uid = $request->input('uid');
+
+        if (!$uid) {
+            return response()->json(['error' => 'Invalid or missing User ID'], 400);
+        }
+
+        $user = UserView::select([
+            'User_ID', 'Last_Name', 'First_Name', 'Middle_Name', 'Suffix_Name',
+            'Display_Name', 'Contact_No', 'Email_Address', 'User_Name',
+            'User_Level_ID', 'Active', 'Dealer_ID', 'Enable2FA',
+            'Google2FAKey', 'ExpireDate',
+        ])
+        ->where('User_ID', $uid)
+        ->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'No user found for the provided ID.'], 404);
+        }
+
+        // Return wrapped in an array to match your legacy JS expectations
+        return response()->json([$user]);
+    }
+
+    public function saveNewUserData(SaveUserRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $appMethod = $validated['appmethod'];
+        $userId    = $validated['uid'] ?? null;
+        $password  = $validated['pword'] ?? null;
+
+        // Base field mapping between POST variables and database columns
+        $userData = [
+            'Last_Name'     => trim($validated['lname']),
+            'First_Name'    => trim($validated['fname']),
+            'Middle_Name'   => !empty($validated['mname']) ? trim($validated['mname']) : null,
+            'Suffix_Name'   => !empty($validated['sname']) ? trim($validated['sname']) : null,
+            'Display_Name'  => trim($validated['dname']),
+            'User_Name'     => trim($validated['uname']),
+            'Contact_No'    => !empty($validated['contactno']) ? trim($validated['contactno']) : null,
+            'Email_Address' => trim($validated['email']),
+            'User_Level_ID' => $validated['ulevel'],
+            'Active'        => $validated['useractive'],
+            'Enable2FA'     => $validated['chk2fa'] ?? 0,
+            'ExpireDate'    => !empty($validated['pwdexpdate']) ? $validated['pwdexpdate'] : null,
+        ];
+
+        try {
+            if ($appMethod === 'N') {
+                // New User Creation
+                $userData['Encrypt_Password'] = Hash::make($password);
+                $userData['Register_Date']    = $validated['regdate'] ?? now();
+                $userData['Approved_Date']    = $validated['apprdate'] ?? now();
+
+                DB::table('user')->insert($userData);
+            } else {
+                // Update User
+                if (!empty($password)) {
+                    $userData['Encrypt_Password'] = Hash::make($password);
+                }
+
+                DB::table('user')
+                    ->where('User_ID', $userId)
+                    ->update($userData);
+            }
+
+            return response()->json(['result' => 1]);
+
+        } catch (Exception $e) {
             return response()->json([
                 'result' => 0,
                 'error'  => 'Database operation failed.',

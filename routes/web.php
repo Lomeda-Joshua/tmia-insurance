@@ -105,10 +105,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Account settings
         Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
-        Route::get('/useraccount/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
-        Route::post('/useraccount/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
-        Route::post('/user/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
-        Route::post('/useraccount/update', [UserController::class, 'updateUser'])->name('user_account.update');
+        Route::get('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
+        Route::post('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
+        Route::post('/user-account/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
+        Route::post('/user-account/update', [UserController::class, 'updateUser'])->name('user_account.update');
+        Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
+        Route::post('/user-account/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
+        Route::post('/user-account/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
     });
 
     // Laravel default Volt account settings routes
