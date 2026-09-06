@@ -111,75 +111,10 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function store(UserDataRequest $request): JsonResponse
-    {
-
-        dd($request);
-        $data = $request->validated();
-
-        $user = $request->filled('uid')
-            ? User::query()->findOrFail($data['uid'])
-            : new User();
-
-        $user->Last_Name = strtoupper($data['lname']);
-        $user->First_Name = strtoupper($data['fname']);
-        $user->Middle_Name = isset($data['mname'])
-            ? strtoupper($data['mname'])
-            : null;
-        $user->Suffix_Name = isset($data['sname'])
-            ? strtoupper($data['sname'])
-            : null;
-        $user->Display_Name = strtoupper($data['dname']);
-        $user->Contact_No = $data['contactno'] ?? null;
-        $user->Email_Address = $data['email'];
-        $user->User_Name = $data['uname'];
-        $user->User_Level_ID = $data['ulevel'];
-        $user->Active = $data['useractive'];
-        $user->Enable2FA = $data['chk2fa'];
-        $user->ExpireDate = ! empty($data['pwdexpdate'])
-            ? Carbon::createFromFormat('d/m/Y', $data['pwdexpdate'])
-                ->toDateString()
-            : null;
-
-        if (! empty($data['pword'])) {
-            $user->Encrypt_Password = Hash::make($data['pword']);
-        }
-
-        if (! $user->exists) {
-            $user->Register_Date = now()->toDateString();
-            $user->Approved_Date = now()->toDateString();
-        }
-
-        $user->save();
-
-        return response()->json([
-            'message' => 'User saved successfully.',
-            'user_id' => $user->User_ID,
-        ]);
-    }
-
-    public function destroy(int $userId): JsonResponse
-    {
-        $user = User::query()->findOrFail($userId);
-
-        abort_if(
-            $user->User_ID === auth()->id(),
-            422,
-            'You cannot delete your own account.'
-        );
-
-        $user->delete();
-
-        return response()->json([
-            'message' => 'User deleted successfully.',
-        ]);
-    }
-
-
     // User account settings
     public function account(): View
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         $userLevel = \App\Models\UserLevel::query()
             ->find($user->User_Level_ID);
@@ -389,6 +324,30 @@ class UserController extends Controller
                 'result' => 0,
                 'error'  => 'Database operation failed.',
             ], 500);
+        }
+    }
+
+
+    public function deleteUser(Request $request): JsonResponse
+    {
+        // 1. Sanitize & validate UID input
+        $validated = $request->validate([
+            'uid' => ['required', 'integer', 'exists:user,User_ID'],
+        ]);
+
+        try {
+            // 2. Perform deletion using Eloquent
+            $deleted = User::where('User_ID', $validated['uid'])->delete();
+
+            return response()->json([
+                'result' => $deleted ? 1 : 0,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Database error: ' . $e->getMessage(),
+            ]);
         }
     }
 

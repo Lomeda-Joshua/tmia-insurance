@@ -99,9 +99,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/users', [UserController::class, 'index'])->name('user');
         Route::post('/users/data', [UserController::class, 'userData'])->name('users.data');
         Route::post('/users/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
-        Route::get('/users/{userId}', [UserController::class, 'show'])->whereNumber('userId')->name('users.show');
         Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-        Route::delete('/users/{userId}', [UserController::class, 'destroy'])->whereNumber('userId')->name('users.destroy');
+        Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
+        Route::post('user/get-user-data', [UserController::class,  'getUserData'])->name('user.getdata');
 
         // Account settings
         Route::get('/user-account', [UserController::class, 'account'])->name('user_account');

@@ -17,7 +17,7 @@ var xuname;
 
     //============= DRAW TABLE ============//
     //===== USER =====//
-    $('#table_user').DataTable({
+    const table = $('#table_user').DataTable({
         language: {
             processing: "Loading User List..."
         },
@@ -272,12 +272,11 @@ var xuname;
     },
       function(){
         $.ajax({
-          url : "user_delete.php",
+          url : window.DeleteRoute.deleteUserData,
           type: "POST",
           data : { uid:uid },
           success: function(data)
           {
-            var data = jQuery.parseJSON(data);
             if(data.result ==1){
               /*$.notify('Successfull delete customer');*/
               swal({
@@ -289,8 +288,11 @@ var xuname;
                 confirmButtonText: "OK"
               });
 
-              table.ajax.reload( null, false );
-              table.search('').columns().search('').draw();
+                if ($.fn.DataTable.isDataTable('#table_user')) {
+                  const userTable = $('#table_user').DataTable();
+                  userTable.ajax.reload(null, false);
+                  userTable.search('').columns().search('').draw();
+                }
             }else{
               swal({
                 title: "Error!",
@@ -490,7 +492,7 @@ var xuname;
 
     if (appmethod == "N")  {
       CheckUserName();
-    } else if (appmethod == "E" && xuname != uname)  {
+    } else if (appmethod == "U" && xuname != uname)  {
       CheckUserName();
     } else {
       SaveData();
@@ -565,11 +567,12 @@ var xuname;
                 }
             });
 
-            table.ajax.reload( null, false );
-            table.search('').columns().search('').draw();
-            
-            
-           
+            if ($.fn.DataTable.isDataTable('#table_user')) {
+                  const userTable = $('#table_user').DataTable();
+                  userTable.ajax.reload(null, false);
+                  userTable.search('').columns().search('').draw();
+            }
+             
           }else{
             swal({
               title: "Error!",
@@ -650,7 +653,7 @@ var xuname;
     }
 
     $.ajax({
-        url: "user_get_data.php",
+        url: window.DataRoute.getUserData,
         type: "POST",
         dataType: "json", // Let jQuery parse the JSON
         data: { uid: uid },
@@ -669,7 +672,7 @@ var xuname;
           }
 
           // Fill form fields
-          $("#appmethod").val("E");
+          $("#appmethod").val("U");
           $("#txtid").val(user.User_ID);
           $("#txtlname").val(user.Last_Name);
           $("#txtfname").val(user.First_Name);
@@ -737,7 +740,7 @@ var xuname;
   ////////// TWO FACTOR AUTHENTICATOR ///////////////
   $(document).on("change","#chk2fa",function(){
     if ($(this).is(":checked")) {
-      if ($("#appmethod").val() == 'E') {
+      if ($("#appmethod").val() == 'U') {
         $(".view2fa").show();
       }
     } else {

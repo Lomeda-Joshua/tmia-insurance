@@ -330,10 +330,15 @@
 
   window.DataRoute = {
     checkUserData : @json(route("users.get.data")),
+    getUserData : @json(route('user.getdata'))
   }
 
   window.SaveRoute = {
     saveNewUserData : @json(route("user.save")),
+  }
+
+  window.DeleteRoute = {
+    deleteUserData : @json(route("user.delete"))
   }
 
   
