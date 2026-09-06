@@ -1767,10 +1767,8 @@
 
     window.LaravelRoutes = {
       csrfToken: "{{ csrf_token() }}",
-      
-      insuranceStaffData: @json(route('insurance_staff.data')),
       customerData: @json(route('customers.data')),
-      customerTypeData: @json(route('customers_type.data')),
+      
       nbpendingcounts: @json(route('new_business.counts')),
       uploadCustomers: @json(route('uploaded.customer'))
     }
@@ -1780,7 +1778,7 @@
     }
 
     window.DataRoutes = {
-      bodyTypeData: @json(route('bodytype.data')),
+      bodyTypeData: @json(route('bodytype.data')),      
       fuelTypeData: @json(route('fueltype.data')),
       productClassData: @json(route('productclass.data')),
       communicationTypeData: @json(route('communicationtype.data')),
@@ -1792,8 +1790,8 @@
       bankData: @json(route('banks.data')),
       callStatusData: @json(route('callstatus.data')),
       transactionStatusData: @json(route('transactionstatus.data')),
-      regionData: @json(route('region.data')),
-      provinceData: @json(route('province.data')),
+      
+      
       cityMunicipalData: @json(route('citymunicipal.data')),
       barangayData: @json(route('barangay.data')),
     }
@@ -1807,6 +1805,13 @@
     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data')),
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data'))
+    }
+
+    window.formRoutes = {
+      insuranceStaffData: @json(route('insurance_staff.data')),
+      customerTypeData: @json(route('customers_type.data')),
+      regionData: @json(route('region.data')),
+      provinceData: @json(route('province.data')),
     }
 
 

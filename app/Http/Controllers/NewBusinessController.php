@@ -29,94 +29,99 @@ class NewBusinessController extends Controller
     */
     public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();    
+        // 1. Build Base Query with Joins using Eloquent or Query Builder
         $query = NewBusinessTransactionView::query()
+            ->from('transactions_nb as t')
             ->select([
-                'Insurance_No',
-                'Trans_Date',
-                'Trans_Status',
-                'Customer_No',
-                'Full_Name',
-                'Contact_No',
-                'VIN',
-                'CS_No',
-                'Plate_No',
-                'Model',
-                'Variant',
-                'Insurance_Company',
-                'ISE_Name',
-                'MP_Name',
-                'Option_Type',
-                'Policy_Expiration',
-            ]);
+                't.Insurance_No',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                't.VIN',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                't.Insurance_Company',
+                'i.ISE_Name',
+                'v.MP_Name',
+                't.Option_Type',
+            ])
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No');
 
-            // 1. Pending Filter (Priority 1)
-            if (! empty($filters['viewpending'])) {
-                $query->where('Trans_Status', 'PENDING');
+            // 2. Extract Request Inputs
+            $viewPending  = $request->boolean('viewpending');
+            $viewExpiring = $request->boolean('viewexpiring');
+            $searchVal    = trim($request->input('searchval', ''));
+            $dateFrom     = $request->input('datefrom');
+            $dateTo       = $request->input('dateto');
+            $chkAll       = $request->integer('chkall', 0);
 
-            // 2. Expiring Filter (Priority 2)
-            } elseif (! empty($filters['viewexpiring'])) {
-                $query->whereBetween('Policy_Expiration', [
+            // 3. Dynamic Filtering Logic
+            if ($viewPending) {
+                $query->where('t.Trans_Status', 'PENDING');
+            } elseif ($viewExpiring) {
+                $query->whereBetween('t.Policy_Expiration', [
                     now()->startOfDay(),
                     now()->addDays(90)->endOfDay(),
-            ]);
-
-            // 3. Search Filter (Priority 3)
-            } elseif (! empty($filters['searchval'])) {
-                $search = '%' . $filters['searchval'] . '%';
-
+                ]);
+            } elseif (!empty($searchVal)) {
+                $search = '%' . $searchVal . '%';
                 $query->where(function ($q) use ($search) {
-                    $q->where('Insurance_No', 'like', $search)
-                    ->orWhere('VIN', 'like', $search)
-                    ->orWhere('CS_No', 'like', $search)
-                    ->orWhere('Plate_No', 'like', $search)
-                    ->orWhere('Customer_No', 'like', $search)
-                    ->orWhere('Full_Name', 'like', $search);
+                    $q->where('t.Insurance_No', 'LIKE', $search)
+                    ->orWhere('t.VIN', 'LIKE', $search)
+                    ->orWhere('v.Order_No', 'LIKE', $search)
+                    ->orWhere('v.CS_No', 'LIKE', $search)
+                    ->orWhere('v.Plate_No', 'LIKE', $search)
+                    ->orWhere('v.Customer_No', 'LIKE', $search)
+                    ->orWhere('c.Full_Name', 'LIKE', $search);
                 });
-
-            // 4. Date Range Filter (Priority 4 - Only when chkall is 0/false)
-            } elseif (
-                ! empty($filters['datefrom']) && 
-                ! empty($filters['dateto'])
-            ) {
-                $query->whereBetween('Trans_Date', [
-                    Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                    Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            } elseif ($chkAll === 0 && !empty($dateFrom) && !empty($dateTo)) {
+                $query->whereBetween('t.Trans_Date', [
+                    Carbon::parse($dateFrom)->startOfDay(),
+                    Carbon::parse($dateTo)->endOfDay(),
                 ]);
             }
 
-            
-            return DataTables::eloquent($query)
-            ->addIndexColumn() // Provides DT_RowIndex / urutan
-            ->addColumn('button', function (NewBusinessTransactionView $transaction): string {
-                $insuranceNo = e($transaction->Insurance_No);
-                $buttons = '';
-                if ($transaction->Option_Type === 'PAID') {
-                    $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnpay me-1" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="Payment">'
-                        . '<i class="fa-solid fa-peso-sign"></i></button>';
-                }
-                    $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnnetrem me-1" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="Gross Premium / Net Rem">'
-                        . '<i class="fa-solid fa-money-bill-transfer"></i></button>';
+            // 4. Return Yajra DataTables Server-Side Processing Payload
+            return DataTables::of($query)
+                ->addIndexColumn() // Generates 'DT_RowIndex' (urutan)
+                ->editColumn('Trans_Status', function ($row) {
+                    $insuranceNo = e($row->Insurance_No);
+                    $statusRaw   = $row->Trans_Status ?? '';
+                    $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
 
-                    $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnstatus me-1" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="Change Status">'
-                        . '<i class="fa-solid fa-chart-bar"></i></button>';
+                    $statusColors = [
+                        'PENDING'   => 'label label-default',
+                        'COMPLETED' => 'label label-success',
+                        'CANCELLED' => 'label label-danger',
+                    ];
 
-                    $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnedit me-1" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
-                        . '<i class="fa fa-edit"></i></button>';
+                    $labelClass = $statusColors[$status] ?? 'label label-default';
 
-                    $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
-                        . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
-                        . '<i class="fa-regular fa-trash-can"></i></button>';
+                    return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+                })
+                ->addColumn('button', function ($row) {
+                    $insuranceNo = e($row->Insurance_No);
+                    $buttons = '';
 
-                return $buttons;
-            })
-            ->rawColumns(['button'])
-            ->setRowId('Insurance_No')
-            ->make(true);
+                    if ($row->Option_Type === 'PAID') {
+                        $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnpay" data-toggle="tooltip" title="Payment"><i class="fa-solid fa-peso-sign"></i></label> ';
+                    }
+
+                    $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnnetrem" data-toggle="tooltip" title="Gross Premium / Net Rem"><i class="fa-solid fa-money-bill-transfer"></i></label> ';
+                    $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnstatus" data-toggle="tooltip" title="Change Status"><i class="fa-solid fa-chart-bar"></i></label> ';
+                    $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label> ';
+                    $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btndelete" data-toggle="tooltip" title="Delete"><i class="fa-regular fa-trash-can"></i></label>';
+
+                    return $buttons;
+                })
+                ->rawColumns(['Trans_Status', 'button'])
+                ->make(true);
     }
 
     /**

@@ -75,7 +75,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
-        Route::get('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
+        Route::post('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
         Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::post('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');
