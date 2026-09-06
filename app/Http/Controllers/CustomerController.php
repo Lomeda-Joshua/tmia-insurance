@@ -9,6 +9,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\CustomerInformation; 
 use App\Models\VehicleInformation; 
 use App\Models\UploadedCustomer;
+use Illuminate\Http\JsonResponse;
 
 
 class CustomerController extends Controller
@@ -189,6 +190,96 @@ class CustomerController extends Controller
 
         return response()->json($data);
     }
+
+
+    public function checkCustomerData(Request $request): JsonResponse
+    {
+        $custNo = trim($request->input('custno', ''));
+
+        if (empty($custNo)) {
+            return response()->json([]);
+        }
+
+        // 1. Check in vw_customer_information first
+        $customers = CustomerInformation::where('Upload_Cust_No', $custNo)->get();
+
+        if ($customers->isNotEmpty()) {
+            // Transform collection to set Cust_Exist = true
+            $data = $customers->map(function ($item) {
+                $array = $item->toArray();
+                $array['Cust_Exist'] = true;
+                return $array;
+            });
+        } else {
+            // 2. Fallback: Not found, fetch from upload_customer_data
+            $uploadedCustomers = UploadedCustomer::where('Customer_No', $custNo)->get();
+
+            // Transform collection to set Cust_Exist = false
+            $data = $uploadedCustomers->map(function ($item) {
+                $array = $item->toArray();
+                $array['Cust_Exist'] = false;
+                return $array;
+            });
+        }
+
+        return response()->json($data);
+    }
+
+
+    /**
+     * Fetch customer data by Customer_No.
+     */
+    public function getCustomerByNo(Request $request): JsonResponse
+    {
+        $custNo = $request->input('custno');
+
+        // Return empty array if no customer number was provided
+        if (empty($custNo)) {
+            return response()->json([]);
+        }
+
+        // Query view via Eloquent
+        $data = CustomerInformation::where('Customer_No', $custNo)->get();
+
+        return response()->json($data);
+    }
+
+
+    /**
+     * Search vehicle information by priority: VIN -> CS_No -> Plate_No
+     */
+    public function searchVehicle(Request $request): JsonResponse
+    {
+        // 1. Sanitize and extract inputs
+        $vin     = trim($request->input('vin', ''));
+        $csno    = trim($request->input('csno', ''));
+        $plateno = trim($request->input('plateno', ''));
+
+        $data = collect();
+
+        // Priority 1: Check by VIN
+        if (!empty($vin)) {
+            $data = VehicleInformation::where('VIN', $vin)->get();
+        }
+
+        // Priority 2: Check by CS_No if VIN has no results
+        if ($data->isEmpty() && !empty($csno)) {
+            $data = VehicleInformation::where('CS_No', $csno)->get();
+        }
+
+        // Priority 3: Check by Plate_No if VIN & CS_No have no results
+        if ($data->isEmpty() && !empty($plateno)) {
+            $data = VehicleInformation::where('Plate_No', $plateno)->get();
+        }
+
+        // 2. Return JSON response
+        return response()->json($data);
+    }
+
+
+
+
+
 
     
 }

@@ -49,42 +49,39 @@ class OverallDataController extends Controller
     }
 
     public function getUploadedCustomer(Request $request){
-        $uploadedCustomer = UploadedCustomer::query()
-            ->orderBy('Customer_No', 'asc')
-            ->get([
-                "Customer_No",
-                "Group",
-                "Full_Name",
-                "First_Name",
-                "Middle_Name",
-                "Last_Name",
-                "Suffix_Name",
-                "Birth_Date",
-                "TIN",
-                "Contact_No",
-                "Email_Address",
-                "Address",
-                "RegCode",
-                "ProvCode",
-                "CMCode",
-                "BrgyCode",
-                "Zip_Code",
-                "Country",
-                "VIN",
-                "Variant",
-                "Make",
-                "Model",
-                "Model_Year",
-                "Color",
-                "Engine_No",
-                "CS_No",
-                "Plate_No",
-                "Order_No",
-            ]);
+        // 1. Base Query Builder instance (do NOT call ->get() or ->all())
+        $query = UploadedCustomer::query()
+            ->whereNotNull('Full_Name');
 
-        return DataTables::of($uploadedCustomer)
-        ->addIndexColumn() // Adds DT_RowIndex
-        ->make(true);      // Wraps response in { draw, recordsTotal, recordsFiltered, data }
+        // 2. Extract inputs from AJAX request
+        $searchVal = trim($request->input('searchval', ''));
+        $btnSelect = trim($request->input('btnselect', ''));
+
+        // 3. Dynamic Filter Logic
+        if (!empty($searchVal)) {
+            $like = '%' . $searchVal . '%';
+            $query->where(function ($q) use ($like) {
+                $q->where('Customer_No', 'LIKE', $like)
+                  ->orWhere('Full_Name', 'LIKE', $like)
+                  ->orWhere('CS_No', 'LIKE', $like)
+                  ->orWhere('Plate_No', 'LIKE', $like);
+            });
+        } elseif (strlen($btnSelect) === 1 && ctype_alpha($btnSelect)) {
+            $query->whereRaw("TRIM(Full_Name) LIKE ?", [$btnSelect . '%']);
+        } elseif ($btnSelect === '[0-9]') {
+            $query->whereRaw("TRIM(Full_Name) REGEXP '^[0-9]'");
+        } elseif ($btnSelect === '[SPECIAL CHAR]') {
+            $query->whereRaw("TRIM(Full_Name) REGEXP '^[^a-zA-Z0-9]'");
+        }
+
+        // 4. Default Order
+        $query->orderBy('Full_Name', 'ASC');
+
+        // 5. Pass query engine directly into DataTables payload generator
+        return DataTables::eloquent($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' to replace legacy 'urutan'
+            ->setRowId('Customer_No')
+            ->make(true);
     }
 
 

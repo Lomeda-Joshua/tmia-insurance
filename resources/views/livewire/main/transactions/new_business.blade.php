@@ -1767,33 +1767,16 @@
 
     window.LaravelRoutes = {
       csrfToken: "{{ csrf_token() }}",
-      customerData: @json(route('customers.data')),
-      
       nbpendingcounts: @json(route('new_business.counts')),
-      uploadCustomers: @json(route('uploaded.customer'))
+      loadSelectedCustomer : @json(route('customer.get-by-no')),
+      loadVehicle: @json(route('vehicle.search'))
     }
 
     window.tableRoutes = {
-          newBusinessData: @json(route('newbusiness.data')),
-    }
-
-    window.DataRoutes = {
-      bodyTypeData: @json(route('bodytype.data')),      
-      fuelTypeData: @json(route('fueltype.data')),
-      productClassData: @json(route('productclass.data')),
-      communicationTypeData: @json(route('communicationtype.data')),
-      customerTypeDataPost: @json(route('customers_type.data.2')),
-      paymentTypeData: @json(route('payments.data')),
-      ewalletTypeData: @json(route('ewalletype.data')),
-      insuranceTypeData: @json(route('insurancetype.data')),
-      insuranceCoData: @json(route('insuranceco.data')),
-      bankData: @json(route('banks.data')),
-      callStatusData: @json(route('callstatus.data')),
-      transactionStatusData: @json(route('transactionstatus.data')),
-      
-      
-      cityMunicipalData: @json(route('citymunicipal.data')),
-      barangayData: @json(route('barangay.data')),
+        newBusinessData: @json(route('newbusiness.data')),
+        customerData: @json(route('customers.data')),
+        uploadCustomers: @json(route('uploaded.customer')),
+        uploadEDAFcustomers: @json(route('customer.getCheck-data')),
     }
 
 
@@ -1810,8 +1793,37 @@
     window.formRoutes = {
       insuranceStaffData: @json(route('insurance_staff.data')),
       customerTypeData: @json(route('customers_type.data')),
+
+      // Location
       regionData: @json(route('region.data')),
       provinceData: @json(route('province.data')),
+      cityMunicipalData: @json(route('citymunicipal.data')),
+      barangayData: @json(route('barangay.data')),
+
+      // vehicle info
+      bodyTypeData: @json(route('bodytype.data')),
+      fuelTypeData: @json(route('fueltype.data')),
+      productClassData: @json(route('productclass.data')),
+
+      // Payment type
+      paymentTypeData: @json(route('payments.data')),
+      ewalletTypeData: @json(route('ewalletype.data')),
+
+      // Insurances
+      insuranceTypeData: @json(route('insurancetype.data')),
+      insuranceCoData: @json(route('insuranceco.data')),
+
+      // Bank
+      bankData: @json(route('banks.data')),
+
+      // Transaction status
+      transactionStatusData: @json(route('transactionstatus.data')),
+
+      // Communication type
+      communicationTypeData: @json(route('communicationtype.data')),
+
+      // Call status
+      callStatusData: @json(route('callstatus.data')),
     }
 
 

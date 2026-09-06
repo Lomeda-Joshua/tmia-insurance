@@ -822,10 +822,20 @@ $(document).ready( function () {
   /*--------------------- VEHICLE INFO --------------------*/
   //======= Body Type =====//
   $.ajax({
-    type:"POST",
-    url:"fetch_body_type.php",
+    type:"post",
+    url:window.formRoutes.bodyTypeData,
     success: function(data) {
-      $("#cbobodytype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
     }
   });
 
@@ -840,9 +850,19 @@ $(document).ready( function () {
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_fuel_type.php",
+    url:window.formRoutes.fuelTypeData,
     success: function(data) {
-      $("#cbofueltype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbofueltype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbofueltype").trigger('change.select2');
     }
   });
 
@@ -857,9 +877,19 @@ $(document).ready( function () {
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:"fetch_product_class.php",
+    url:window.formRoutes.productClassData,
     success: function(data) {
-      $("#cboprodclass").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprodclass").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboprodclass").trigger('change.select2');
     }
   });
 
@@ -874,9 +904,19 @@ $(document).ready( function () {
    //======= Owner Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_customer_type.php",
+    url:window.formRoutes.customerTypeData,
     success: function(data) {
-      $("#cboowntype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboowntype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboowntype").trigger('change.select2');
     }
   });
 
@@ -892,9 +932,20 @@ $(document).ready( function () {
   //======= Payment Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_payment_type.php",
+    url:window.formRoutes.paymentTypeData,
     success: function(data) {
-      $("#cbopaytype, #cbopaytype-n").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.PayTID}">${item.PayType}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbopaytype, #cbopaytype-n").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbopaytype, #cbopaytype-n").trigger('change.select2');
     }
   });
 
@@ -909,9 +960,20 @@ $(document).ready( function () {
   //======= E-Wallet Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_ewallet_type.php",
+    url:window.formRoutes.ewalletTypeData,
     success: function(data) {
-      $("#cboewallet, #cboewallet-n").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.PayTID}">${item.PayType}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboewallet, #cboewallet-n").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboewallet, #cboewallet-n").trigger('change.select2');
     }
   });
 
@@ -927,9 +989,21 @@ $(document).ready( function () {
   //======= Insurance Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_type.php",
+    url:window.formRoutes.insuranceTypeData,
     success: function(data) {
       $("#cboinstype").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboinstype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboinstype").trigger('change.select2');
     }
   });
 
@@ -944,9 +1018,20 @@ $(document).ready( function () {
   //======= Insurance =====//
   $.ajax({
     type:"POST",
-    url:"fetch_insurance_co.php",
+    url:window.formRoutes.insuranceCoData,
     success: function(data) {
-      $("#cboinsco").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Insurance_ID}">${item.Insurance_Desc}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboinsco").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboinsco").trigger('change.select2');
     }
   });
 
@@ -961,9 +1046,20 @@ $(document).ready( function () {
   //======= Bank =====//
   $.ajax({
     type:"POST",
-    url:"fetch_banks.php",
+    url:window.formRoutes.bankData,
     success: function(data) {
-      $("#cbomortgage").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.BankID}">${item.BankDesc}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbomortgage").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbomortgage").trigger('change.select2');
     }
   });
 
@@ -980,9 +1076,20 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     data:{ businesstype: "NEW BUSINESS" },
-    url:"fetch_transaction_status.php",
+    url:window.formRoutes.transactionStatusData,
     success: function(data) {
-      $("#cbotransstatus").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Trans_Status}">${item.Business_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbotransstatus").html(data);
+
+        // Force Select2 to refresh its display
+        $("#cbotransstatus").trigger('change.select2');
     }
   });
 
@@ -998,9 +1105,19 @@ $(document).ready( function () {
   //======= Communication Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_communication_type.php",
+    url:window.formRoutes.communicationTypeData,
     success: function(data) {
-      $("#cbomodecomm").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Communication_ID}">${item.Communication_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbomodecomm").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbomodecomm").trigger('change.select2');
     }
   });
 
@@ -1015,9 +1132,20 @@ $(document).ready( function () {
   //======= Call Status Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_call_status.php",
+    url:window.formRoutes.callStatusData,
     success: function(data) {
-      $("#cbocallstatus").html(data);
+      
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Call_SID}">${item.Call_Status}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbocallstatus").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbocallstatus").trigger('change.select2');
     }
   });
 
@@ -1207,7 +1335,7 @@ $(document).ready( function () {
 function LoadStatusCounts() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb_counts.php",
+    url:window.LaravelRoutes.nbpendingcounts,
     dataType: "json",
     success: function(data) {
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
@@ -1320,36 +1448,34 @@ function LoadCustomerData() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "new_business_customers.php",
+      url: window.tableRoutes.customerData,
       type: "POST",
-      data: value
+      data: function (d) {
+        // Passes search parameters to Laravel request
+        d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+        d.btnselect = window.btnselect || '';
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "Customer_No" },
-      { data: "Group" },
-      { data: "Full_Name" },
-      { data: "Birth_Date" },
-      { data: "Contact_No" },
-      { data: "Email_Address" },
-      { data: "Address" },
-      { data: "Upload_Cust_No" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Variant" },
-      // {
-      //   data: "Active_Status",
-      //   render: function (data) {
-      //     return data == "1" ? "ACTIVE" : "INACTIVE";
-      //   }
-      // },
-      // { data: "Inactive_Date" }
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+          { data: "Customer_No", name: "c.Customer_No" },
+          { data: "Group", name: "c.Group", defaultContent: "" },
+          { data: "Full_Name", name: "c.Full_Name", defaultContent: "" },
+          { data: "Birth_Date", name: "c.Birth_Date", defaultContent: "" },
+          { data: "Contact_No", name: "c.Contact_No", defaultContent: "" },
+          { data: "Email_Address", name: "c.Email_Address", defaultContent: "" },
+          { data: "Address", name: "c.Address", defaultContent: "" },
+          { data: "Upload_Cust_No", name: "c.Upload_Cust_No", defaultContent: "" },
+          { data: "VIN", name: "v.VIN", defaultContent: "" },
+          { data: "CS_No", name: "v.CS_No", defaultContent: "" },
+          { data: "Plate_No", name: "v.Plate_No", defaultContent: "" },
+          { data: "Variant", name: "v.Variant", defaultContent: "" },
+          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -1414,23 +1540,34 @@ function LoadCustomerDataEDAFSAP() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "fetch_upload_customers.php",
+      url: window.tableRoutes.uploadCustomers,
       type: "POST",
-      data: value
+      data: function (d) {
+        d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+        d.btnselect = window.btnselect || '';
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "Customer_No" },
-      { data: "Group" },
-      { data: "Full_Name" },
-      { data: "Birth_Date" },
-      { data: "Contact_No" },
-      { data: "Email_Address" },
-      { data: "Address" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Variant" },
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "Customer_No", name: "Customer_No" },
+        { data: "Group", name: "Group", defaultContent: "" },
+        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+        { 
+          data: "Birth_Date", 
+          name: "Birth_Date", 
+          defaultContent: "",
+          render: function (data) {
+            return data ? new Date(data).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() : '';
+          }
+        },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+        { data: "Email_Address", name: "Email_Address", defaultContent: "" },
+        { data: "Address", name: "Address", defaultContent: "" },
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+        { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -1635,10 +1772,9 @@ function fetchView(){
 function LoadCustomerInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_customer_info.php",
+    url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:xcustno},
-    success: function(data){
-      var data = jQuery.parseJSON(data);
+    success: function(data){      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -1715,7 +1851,7 @@ function LoadCustomerInfo() {
 function LoadCustomerEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_upload_customer_info.php",
+    url:window.tableRoutes.uploadEDAFcustomers,
     data:{custno:xcustnoupload},
     success: function(data){
       var data = jQuery.parseJSON(data);
@@ -1800,10 +1936,9 @@ function LoadCustomerEDAFSAPInfo() {
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_info.php",
+    url:window.LaravelRoutes.loadVehicle,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2428,12 +2563,23 @@ function FetchProv(regcode,provcode) {
       data: {regcode:regcode},
       url:window.formRoutes.provinceData,
       success: function(data) {
-        $("#cboprovince").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprovince").html(options);
+
+        // Pre-select province code if available
         if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
+          $("#cboprovince").val(provcode);
         }
+
+        // Force Select2 to refresh its display
+        $("#cboprovince").trigger('change.select2');
       }
     });
   }
@@ -2444,14 +2590,25 @@ function FetchCM(provcode,cmcode) {
     $.ajax({
       type:"POST",
       data: {provcode:provcode},
-      url:"fetch_city_municipal.php",
+      url:window.formRoutes.cityMunicipalData,
       success: function(data) {
-        $("#cbocity").html(data);
-        if (cmcode !== null && cmcode !== '') {
-          if ($("#cbocity").find("option[value='" + cmcode + "']").length) {
-            $("#cbocity").val(cmcode).trigger('change.select2');
-          } 
-        }
+          let options = '<option value="">PLEASE SELECT</option>';
+
+          // Iterate over JSON objects and build <option> elements
+          $.each(data, function(index, item) {
+            options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
+          });
+
+          // Inject populated options into dropdown
+          $("#cbocity").html(options);
+
+          // Pre-select province code if available
+          if (provcode !== null && provcode !== '') {
+            $("#cbocity").val(provcode);
+          }
+
+          // Force Select2 to refresh its display
+          $("#cbocity").trigger('change.select2');
       }
     });
   }
@@ -2462,14 +2619,25 @@ function FetchBrgy(cmcode,brgycode) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      url:"fetch_barangay.php",
+      url:window.formRoutes.barangayData,
       success: function(data) {
-        $("#cbobrgy").html(data);
-        if (brgycode !== null && brgycode !== '') {
-          if ($("#cbobrgy").find("option[value='" + brgycode + "']").length) {
-            $("#cbobrgy").val(brgycode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbobrgy").html(options);
+
+            // Pre-select province code if available
+            if (brgycode !== null && brgycode !== '') {
+              $("#cbobrgy").val(brgycode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cbobrgy").trigger('change.select2');
       }
     });
   }
