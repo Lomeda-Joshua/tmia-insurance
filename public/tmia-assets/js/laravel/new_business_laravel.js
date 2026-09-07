@@ -1456,6 +1456,7 @@ function LoadCustomerData() {
       type: "POST",
       data: function (d) {
         // Passes search parameters to Laravel request
+        
         d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
         d.btnselect = window.btnselect || '';
       }
@@ -1470,10 +1471,10 @@ function LoadCustomerData() {
           { data: "Email_Address", name: "c.Email_Address", defaultContent: "" },
           { data: "Address", name: "c.Address", defaultContent: "" },
           { data: "Upload_Cust_No", name: "c.Upload_Cust_No", defaultContent: "" },
-          { data: "VIN", name: "v.VIN", defaultContent: "" },
-          { data: "CS_No", name: "v.CS_No", defaultContent: "" },
-          { data: "Plate_No", name: "v.Plate_No", defaultContent: "" },
-          { data: "Variant", name: "v.Variant", defaultContent: "" },
+          { data: "VIN", name: "VIN", defaultContent: "" },
+          { data: "CS_No", name: "CS_No", defaultContent: "" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+          { data: "Variant", name: "Variant", defaultContent: "" },
           { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
@@ -1611,39 +1612,45 @@ function LoadCustomerDataEDAFSAP() {
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {
     $('#table_vehiclelist').DataTable().clear().destroy();               
-  }
+  }  
 
   table = $('#table_vehiclelist').DataTable({
     language: {
       processing: "Loading Vehicle List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "new_business_vehicles.php",
+      url: window.tableRoutes.getVehiclesByCustomer,
       type: "POST",
-      data: {custno:xcustno}
+      data: function (d) {
+              d.custno = activeCustTab === '#uploadtab'
+              ? xcustnoupload
+              : xcustno;// Pass your dynamic customer number
+        }
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "VSI_Date" },
-      {
-        data: "SRP",
-        render: function (data) {
-          return NumberFormat(data);
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "Model", name: "Model", defaultContent: "" },
+        { data: "Model_Year", name: "Model_Year", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+        { data: "Color", name: "Color", defaultContent: "" },
+        { data: "Engine_No", name: "Engine_No", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "VSI_Date", name: "VSI_Date", defaultContent: "" },
+        {
+            data: "SRP",
+            name: "SRP",
+            defaultContent: "0.00",
+            render: function (data) {
+                return typeof NumberFormat === "function" ? NumberFormat(data) : data;
+            }
         }
-      }
     ],
     columnDefs: [
       {
@@ -1696,27 +1703,24 @@ function LoadVehicleEDAFSAPData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "fetch_vehicle_upload.php",
+      url: window.tableRoutes.getEdafVehicleByCustomer,
       type: "POST",
-      data: {custno:xcustnoupload}
+      data: function (d) {
+            d.custno = xcustnoupload; // Passes dynamic customer number
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "VSI_Date" },
-      {
-        data: "SRP",
-        render: function (data) {
-          return NumberFormat(data);
-        }
-      }
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+          { data: "VIN", name: "VIN", defaultContent: "" },
+          { data: "Model", name: "Model", defaultContent: "" },
+          { data: "Variant", name: "Variant", defaultContent: "" },
+          { data: "Color", name: "Color", defaultContent: "" },
+          { data: "Engine_No", name: "Engine_No", defaultContent: "" },
+          { data: "CS_No", name: "CS_No", defaultContent: "" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+          { data: "VSI_Date", name: "VSI_Date", defaultContent: "" },
+          { data: "SRP", name: "SRP", defaultContent: "" },
+          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -1853,9 +1857,8 @@ function LoadCustomerEDAFSAPInfo() {
     url:window.tableRoutes.uploadEDAFcustomers,
     data:{custno:xcustnoupload},
     success: function(data){
-      var data = jQuery.parseJSON(data);
-      $.each(data, function(i, value) {
 
+      $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -1935,11 +1938,10 @@ function LoadCustomerEDAFSAPInfo() {
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
-    url:window.LaravelRoutes.loadVehicle,
+    url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2007,12 +2009,12 @@ function LoadVehicleInfo() {
 function LoadVehicleEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_upload_info.php",
+    url:window.getData.edafVehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
-      $.each(data, function(i, value) {
 
+      $.each(data, function(i, value) {
+        
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2601,7 +2603,7 @@ function FetchCM(provcode,cmcode) {
 
           // Pre-select province code if available
           if (provcode !== null && provcode !== '') {
-            $("#cbocity").val(provcode);
+            $("#cbocity").val(cmcode);
           }
 
           // Force Select2 to refresh its display
@@ -2670,7 +2672,7 @@ $(document).on("change", "#cbopaytype", function () {
         });
     }
 
-    $(".box-body").validator('reset');
+    $(".box-body").validator('reset'); 
 });
 
 $(document).on("click", "#pgcash", function () {
@@ -5327,17 +5329,17 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "new_business_save.php",
+    url: window.saveData.saveNbCustomerData,
     method: "POST",
     data: formdata,
     processData: false,
     contentType: false,
-    success: function (response) {
+    success: function (result) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
       if (result.result == 1) {
+        showLoading("Saving user record..."); // Show spinner before sending request
+        
         swal({
           title: "Saved!",
           text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",
@@ -5345,6 +5347,7 @@ $(document).on("click", "#btnsubmit", function () {
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
         }, function () {
+          hideLoading();
           $("#modal-add").iziModal("close");
           if ($.fn.dataTable.isDataTable("#table_trans")) {
             $('#table_trans').DataTable().ajax.reload(null, false);

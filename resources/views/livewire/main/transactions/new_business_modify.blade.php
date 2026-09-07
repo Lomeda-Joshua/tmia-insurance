@@ -1472,7 +1472,8 @@
       getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
       customerData: @json(route('customers.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
-      getPaymentData: @json(route('payments.get-data'))
+      getPaymentData: @json(route('payments.get-data')),
+      getCustomerSpecificData : @json(route('getSpecificView.data'))
     }
 
     window.formRoutes = {
@@ -1509,6 +1510,8 @@
 
       // Call status
       callStatusData: @json(route('callstatus.data')),
+
+      searchVehicle: @json(route('vehicle.search')),
     }
 
     // Safely pass the Laravel session variable into JavaScript

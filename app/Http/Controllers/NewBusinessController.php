@@ -18,6 +18,7 @@ use App\Models\TransactionsNb;
 use App\Models\TransactionNbPayment;
 use App\Models\Notification;
 use App\Models\FileNbUpload;
+use App\Models\UploadedEdafCustomer;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -168,7 +169,7 @@ class NewBusinessController extends Controller
                1) CUSTOMER INSERT OR UPDATE
                ============================================================ */
             $custno = $request->input('custno');
-            // $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
+            $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
 
             $customerData = [
                 'Group'          => $request->input('group', ''),
@@ -476,6 +477,63 @@ class NewBusinessController extends Controller
             // Exceptions are caught and handled safely
             return response()->json(null, 500);
         }
+    }
+
+    /**0
+     * Fetch vehicle information by Customer_No and wrap in a DataTables-friendly array structure.
+     */
+    public function getVehiclesByCustomer(Request $request): JsonResponse
+    {
+        $custNo = trim($request->input('custno', ''));
+
+        // 1. Return empty engine payload if no customer number provided
+        if (empty($custNo)) {
+            return DataTables::of(collect([]))->make(true);
+        }
+
+        // 2. Pass base Query Builder directly (DO NOT execute ->get() first)
+        $query = VehicleInformation::where('Customer_No', $custNo);
+
+        // 3. Process Yajra DataTables payload response
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates dynamic 'DT_RowIndex'
+            ->editColumn('VSI_Date', function ($row) {
+                return !empty($row->VSI_Date) 
+                    ? \Carbon\Carbon::parse($row->VSI_Date)->format('d-M-Y') 
+                    : '';
+            })
+            ->editColumn('SRP', function ($row) {
+                return $row->SRP ?? 0;
+            })
+            ->make(true);
+    }
+
+    /**
+     * Fetch uploaded customer data for server-side DataTables.
+     */
+    public function getUploadedCustomersEdaf(Request $request): JsonResponse
+    {
+        $custNo = trim($request->input('custno', ''));
+
+        // 1. If no Customer_No provided, return an empty DataTables structure
+        if (empty($custNo)) {
+            return DataTables::of(collect([]))->make(true);
+        }
+
+        // 2. Base Query Builder (do NOT call ->get() or ->fetchAll())
+        $query = UploadedEdafCustomer::where('Customer_No', $custNo)
+            ->orderBy('Full_Name', 'ASC');
+
+        // 3. Process Yajra DataTables engine
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates dynamic 'DT_RowIndex' (replaces legacy 'urutan')
+            ->setRowId('Customer_No')
+            ->addColumn('button', function ($row) {
+                // Return placeholder or row action buttons if needed
+                return '';
+            })
+            ->rawColumns(['button'])
+            ->make(true);
     }
 
 

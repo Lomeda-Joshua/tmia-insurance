@@ -1778,13 +1778,21 @@
         customerData: @json(route('customers.data')),
         uploadCustomers: @json(route('uploaded.customer')),
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
-        getPaymentData: @json(route('payments.get-data'))
+        getPaymentData: @json(route('payments.get-data')),
+        getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
+        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
 
 
     window.getData = {
       customerInfo : @json(route('customerinfo.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
+      vehicleSpecific: @json(route('vehicle.search')),
+      edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+    }
+
+    window.saveData = {
+      saveNbCustomerData : @json(route('newbusiness.save'))
     }
 
     window.loadData = {

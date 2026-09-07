@@ -231,7 +231,7 @@ class OverallDataController extends Controller
     }
 
 
-        public function getInsuranceCo(Request $request): JsonResponse
+    public function getInsuranceCo(Request $request): JsonResponse
     {
         $insuranceCo = InsuranceCo::query()
             ->orderBy('Insurance_ID', 'asc')
@@ -286,7 +286,7 @@ class OverallDataController extends Controller
     }
 
 
-        public function getTrasactionStatus(Request $request): JsonResponse
+    public function getTrasactionStatus(Request $request): JsonResponse
     {
         $transactionStatus = TransactionStatus::query()
             ->orderBy('Trans_SID', 'asc')
@@ -351,6 +351,7 @@ class OverallDataController extends Controller
         $custNo = $request->input('custno');
 
         $query = CustomerInformation::findOrFail($custNo)->vehicles();
+
 
         // 2. Return Yajra DataTables JSON payload[cite: 1]
         return DataTables::of($query)

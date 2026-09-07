@@ -1144,9 +1144,10 @@ function LoadInsuranceInfoDisplay(insuranceno) {
 function LoadCustomerInfoDisplay(custno) {
   $.ajax({
     type:"POST",
-    url:window.fetchData.customerData,
+    url:window.fetchData.getCustomerSpecificData,
     data:{custno:custno},
     success: function(data){
+      console.log(data);
       $.each(data, function(i, value) {
         xcustno = value.Customer_No;
         $("#custfullname").text(value.Full_Name);
@@ -1283,12 +1284,11 @@ function LoadPaymentInfoDisplay(insuranceno) {
 function LoadCustomerInfo(custno) {
   $.ajax({
     type:"POST",
-    url:"fetch_customer_info.php",
+    url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:custno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);

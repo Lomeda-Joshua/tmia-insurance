@@ -61,6 +61,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
         Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
+        Route::post('/new-business/specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');
+        Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
+        Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');
 
         
         // Lists        
@@ -75,7 +78,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
+        Route::post('/vehicle/edaf-search', [CustomerController::class, 'getEdafCustomerVehicle'])->name('edaf.vehicle.search');
         Route::post('/customer/file-nb-upload', [CustomerController::class, 'fileNbUpload'])->name('file.nbupload');
+        
 
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
         Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');

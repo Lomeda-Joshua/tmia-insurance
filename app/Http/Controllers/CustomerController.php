@@ -72,6 +72,12 @@ class CustomerController extends Controller
        return DataTables::of($query)
         ->addIndexColumn() // Auto-generates dynamic "DT_RowIndex"
         ->setRowId('Customer_No')
+
+        ->addColumn('VIN', fn($row) => $row->vehicles->first()?->VIN ?? '')
+        ->addColumn('CS_No', fn($row) => $row->vehicles->first()?->CS_No ?? '')
+        ->addColumn('Plate_No', fn($row) => $row->vehicles->first()?->Plate_No ?? '')
+        ->addColumn('Variant', fn($row) => $row->vehicles->first()?->Variant ?? '')
+
         ->editColumn('Birth_Date', function ($row) {
             return !empty($row->Birth_Date) 
                 ? \Carbon\Carbon::parse($row->Birth_Date)->format('d-M-Y') 
@@ -84,7 +90,6 @@ class CustomerController extends Controller
         })
         ->addColumn('button', function ($row) {
             $custNoEscaped = e($row->Customer_No);
-            
             $buttons  = '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
             $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
 
@@ -172,7 +177,7 @@ class CustomerController extends Controller
         }
 
         // 1. Primary Lookup: Active Customer View
-        $data = CustomerInformation::where('Upload_Cust_No', $custNo)->get();
+        $data = CustomerInformation::where('Customer_No', $custNo)->first();
 
         if ($data->isNotEmpty()) {
             $data->transform(function ($item) {
@@ -258,8 +263,7 @@ class CustomerController extends Controller
         $csno    = trim($request->input('csno', ''));
         $plateno = trim($request->input('plateno', ''));
 
-        $data = collect();
-
+        
         // Priority 1: Check by VIN
         if (!empty($vin)) {
             $data = VehicleInformation::where('VIN', $vin)->get();
@@ -274,6 +278,7 @@ class CustomerController extends Controller
         if ($data->isEmpty() && !empty($plateno)) {
             $data = VehicleInformation::where('Plate_No', $plateno)->get();
         }
+
 
         // 2. Return JSON response
         return response()->json($data);
@@ -360,7 +365,49 @@ class CustomerController extends Controller
         }
     }
 
+    public function getCustomerSpecificData(Request $request)
+    {
+        $custNo = $request->input('custno');
 
+        if (empty($custNo)) {
+            return response()->json([]);
+        }
+
+        // Query the 'vw_customer_information' view using the Eloquent model
+        $data = CustomerInformation::where('Customer_No', $custNo)->get();
+
+        return response()->json($data);
+    }
+
+    public function getEdafCustomerVehicle(Request $request){
+        // 1. Sanitize and extract inputs
+        $vin     = trim($request->input('vin'));
+        $csno    = trim($request->input('csno'));
+        $plateno = trim($request->input('plateno'));
+
+        
+        // Priority 1: Check by VIN
+        if (!empty($vin)) {
+            $data = VehicleInformation::where('VIN', $vin)->get();
+        }
+
+        // Priority 2: Check by CS_No if VIN has no results
+        if (!empty($csno)) {
+            $data = VehicleInformation::where('CS_No', $csno)->get();
+        }
+
+        // Priority 3: Check by Plate_No if VIN & CS_No have no results
+        if (!empty($plateno)) {
+            $data = VehicleInformation::where('Plate_No', $plateno)->get();
+        }
+
+
+
+        // 2. Return JSON response
+        return response()->json($data);
+    }
+
+    
     
 
 }
