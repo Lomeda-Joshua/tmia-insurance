@@ -734,7 +734,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.customerTypeData,
     success: function(data) {      
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
@@ -761,7 +761,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.regionData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.RegCode}">${item.Region}</option>`;
@@ -852,7 +852,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.fuelTypeData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
@@ -879,7 +879,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.productClassData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
@@ -906,7 +906,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.customerTypeData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
@@ -991,7 +991,6 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceTypeData,
     success: function(data) {
-      $("#cboinstype").html(data);
         let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
@@ -1020,7 +1019,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceCoData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -1048,7 +1047,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.bankData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -2081,10 +2080,9 @@ function LoadVehicleEDAFSAPInfo() {
 function LoadPayData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         // xtpremium = value.Total_Premium;
         xtpremium = value.Gross_Premium;
@@ -2125,7 +2123,7 @@ function LoadPaymentInfo() {
         return nRow;
       },
       ajax: {
-          url: "new_business_payment.php",
+          url: window.tableRoutes.getPaymentData,
           type: "POST",
           data: { insuranceno: insuranceno }
       },
@@ -2271,10 +2269,9 @@ function updatePaymentTotals() {
 function LoadNetRemData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
         $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));
@@ -2292,10 +2289,10 @@ function LoadNetRemData() {
 function LoadStatusData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -4846,8 +4843,8 @@ $(document).on( "click", ".btncalllog", function () {
 
 $(document).on( "click", ".btnedit", function () {
   insuranceno = $(this).attr('insuranceno');
-  $.post("send_variable.php", { insuranceno:insuranceno }) .done(function(data) {
-    window.open('new_business_modify.php', '_self');
+  $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
+    window.open(window.LaravelRoutes.loadModifyPage, '_self');
   });
 });
 

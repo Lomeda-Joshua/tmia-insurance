@@ -17,6 +17,10 @@ use App\Models\VehicleInformation;
 use App\Models\TransactionsNb;
 use App\Models\TransactionNbPayment;
 use App\Models\Notification;
+use App\Models\FileNbUpload;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class NewBusinessController extends Controller
 {
@@ -383,21 +387,95 @@ class NewBusinessController extends Controller
             return response()->json(['data' => []]);
         }
 
+        // Fetch matching records via Eloquent
         $payments = TransactionNBpayment::where('Insurance_No', $insuranceNo)->get();
 
-        // Map collection to add 'urutan' and 'button' HTML
+        // Transform the collection to attach row index ('urutan') and action buttons
         $data = $payments->values()->map(function ($row, $index) {
             $payId = e($row->Payment_ID);
 
             return array_merge($row->toArray(), [
                 'urutan' => $index + 1,
-                'button' => '<button type="button" data-payid="' . $payId . '" class="btn btn-sm btn-success btn-action btnremovepaysave" data-bs-toggle="tooltip" title="Remove">'
+                'button' => '<label payid="' . $payId . '" class="btn btn-success btn-action btnremovepaysave" data-toggle="tooltip" data-placement="top" title="Remove">'
                           . '<i class="fa-regular fa-trash-can"></i>'
-                          . '</button>',
+                          . '</label>',
             ]);
         });
 
         return response()->json(['data' => $data]);
+    }
+
+
+    /**
+     * Store insurance, customer, and VIN parameters in the session.
+     */
+    public function setTransactionSession(Request $request): JsonResponse
+    {
+        // Store inputs into Laravel's session (defaults to empty string if missing)
+        session([
+            'insuranceno' => $request->input('insuranceno', ''),
+            'cusno'       => $request->input('cusno', ''),
+            'vin'         => $request->input('vin', ''),
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Session updated successfully',
+        ]);
+    }
+
+
+    public function getModifyView(){
+        return view('livewire.main.transactions.new_business_modify');
+    }
+
+    /**
+     * Fetch uploaded files by Insurance Number and encode contents to Base64.
+     */
+    public function getUploadedFiles(Request $request): JsonResponse
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json(null);
+        }
+
+        try {
+            // Query uploaded file records ordered by date
+            $files = FileNbUpload::where('Insurance_No', $insuranceNo)
+                ->orderBy('Date_Time', 'asc')
+                ->get();
+
+            if ($files->isEmpty()) {
+                return response()->json([]);
+            }
+
+            // Transform records to attach Base64 encoded file contents
+            $data = $files->map(function ($row) use ($insuranceNo) {
+                // Construct path using Laravel Storage disk or env variable
+                $relativePath = 'INV/' . $insuranceNo . '/' . $row->Name;
+
+                // Check local storage disk (or fallback to database BLOB column)
+                if (Storage::disk('uploads')->exists($relativePath)) {
+                    $fileContents = Storage::disk('uploads')->get($relativePath);
+                    $encodedFile = $fileContents !== false ? base64_encode($fileContents) : null;
+                } else {
+                    // Fallback to database binary BLOB content
+                    $encodedFile = !empty($row->File) ? base64_encode($row->File) : null;
+                }
+
+                $fileData = $row->toArray();
+                $fileData['File'] = $encodedFile;
+
+                return $fileData;
+            });
+
+            return response()->json($data);
+
+        } catch (\Exception $e) {
+            // Exceptions are caught and handled safely
+            return response()->json(null, 500);
+        }
     }
 
 

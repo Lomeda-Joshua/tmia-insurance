@@ -9,8 +9,11 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\CustomerInformation; 
 use App\Models\VehicleInformation; 
 use App\Models\UploadedCustomer;
+use App\Models\TransactionsNb;
+use App\Models\FileNbUpload;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
@@ -277,9 +280,87 @@ class CustomerController extends Controller
     }
 
 
+    public function getTransactionsByInsuranceNo(Request $request): JsonResponse
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json([]);
+        }
+
+        // Eloquent query matching "SELECT * FROM transactions_nb WHERE Insurance_No = :insuranceno"
+        $data = TransactionsNb::where('Insurance_No', $insuranceNo)->get();
+
+        return response()->json($data);
+    }
 
 
+    /**
+     * Fetch authenticated user state and attributes.
+     */
+    public function getAuthVariables(): JsonResponse
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'userid'     => $user?->User_ID ?? null,
+            'logname'    => $user?->Display_Name ?? $user?->User_Name ?? null,
+            'uname'      => $user?->User_Name ?? null,
+            'ulevel'     => $user?->User_Level_ID ?? null,
+            'regdate'    => $user?->Register_Date ?? null,
+            'dealercode' => $user?->Dealer_ID ?? null,
+            'signin'     => Auth::check(),
+            'signout'    => ! Auth::check(),
+        ]);
+    }
+
+
+    public function fileNbUpload(Request $request){
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json(null);
+        }
+
+        try {
+            // Query uploaded file records ordered by date
+            $files = FileNbUpload::where('Insurance_No', $insuranceNo)
+                ->orderBy('Date_Time', 'asc')
+                ->get();
+
+            if ($files->isEmpty()) {
+                return response()->json([]);
+            }
+
+            // Transform records to attach Base64 encoded file contents
+            $data = $files->map(function ($row) use ($insuranceNo) {
+                // Construct path using Laravel Storage disk or env variable
+                $relativePath = 'INV/' . $insuranceNo . '/' . $row->Name;
+
+                // Check local storage disk (or fallback to database BLOB column)
+                if (Storage::disk('uploads')->exists($relativePath)) {
+                    $fileContents = Storage::disk('uploads')->get($relativePath);
+                    $encodedFile = $fileContents !== false ? base64_encode($fileContents) : null;
+                } else {
+                    // Fallback to database binary BLOB content
+                    $encodedFile = !empty($row->File) ? base64_encode($row->File) : null;
+                }
+
+                $fileData = $row->toArray();
+                $fileData['File'] = $encodedFile;
+
+                return $fileData;
+            });
+
+            return response()->json($data);
+
+        } catch (\Exception $e) {
+            // Exceptions are caught and handled safely
+            return response()->json(null, 500);
+        }
+    }
 
 
     
+
 }

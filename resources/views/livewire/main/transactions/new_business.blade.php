@@ -1769,7 +1769,8 @@
       csrfToken: "{{ csrf_token() }}",
       nbpendingcounts: @json(route('new_business.counts')),
       loadSelectedCustomer : @json(route('customer.get-by-no')),
-      loadVehicle: @json(route('vehicle.search'))
+      loadVehicle: @json(route('vehicle.search')),
+      loadModifyPage: @json(route('getModifyView.data'))
     }
 
     window.tableRoutes = {
@@ -1777,6 +1778,7 @@
         customerData: @json(route('customers.data')),
         uploadCustomers: @json(route('uploaded.customer')),
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
+        getPaymentData: @json(route('payments.get-data'))
     }
 
 
@@ -1787,43 +1789,45 @@
 
     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data')),
-        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data'))
+        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
+        loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
+        sessionSetTransaction : @json(route('session.set-transaction-data')),
     }
 
     window.formRoutes = {
-      insuranceStaffData: @json(route('insurance_staff.data')),
-      customerTypeData: @json(route('customers_type.data')),
+        insuranceStaffData: @json(route('insurance_staff.data')),
+        customerTypeData: @json(route('customers_type.data')),
 
-      // Location
-      regionData: @json(route('region.data')),
-      provinceData: @json(route('province.data')),
-      cityMunicipalData: @json(route('citymunicipal.data')),
-      barangayData: @json(route('barangay.data')),
+        // Location
+        regionData: @json(route('region.data')),
+        provinceData: @json(route('province.data')),
+        cityMunicipalData: @json(route('citymunicipal.data')),
+        barangayData: @json(route('barangay.data')),
 
-      // vehicle info
-      bodyTypeData: @json(route('bodytype.data')),
-      fuelTypeData: @json(route('fueltype.data')),
-      productClassData: @json(route('productclass.data')),
+        // vehicle info
+        bodyTypeData: @json(route('bodytype.data')),
+        fuelTypeData: @json(route('fueltype.data')),
+        productClassData: @json(route('productclass.data')),
 
-      // Payment type
-      paymentTypeData: @json(route('payments.data')),
-      ewalletTypeData: @json(route('ewalletype.data')),
+        // Payment type
+        paymentTypeData: @json(route('payments.data')),
+        ewalletTypeData: @json(route('ewalletype.data')),
 
-      // Insurances
-      insuranceTypeData: @json(route('insurancetype.data')),
-      insuranceCoData: @json(route('insuranceco.data')),
+        // Insurances
+        insuranceTypeData: @json(route('insurancetype.data')),
+        insuranceCoData: @json(route('insuranceco.data')),
 
-      // Bank
-      bankData: @json(route('banks.data')),
+        // Bank
+        bankData: @json(route('banks.data')),
 
-      // Transaction status
-      transactionStatusData: @json(route('transactionstatus.data')),
+        // Transaction status
+        transactionStatusData: @json(route('transactionstatus.data')),
 
-      // Communication type
-      communicationTypeData: @json(route('communicationtype.data')),
+        // Communication type
+        communicationTypeData: @json(route('communicationtype.data')),
 
-      // Call status
-      callStatusData: @json(route('callstatus.data')),
+        // Call status
+        callStatusData: @json(route('callstatus.data')),
     }
 
 

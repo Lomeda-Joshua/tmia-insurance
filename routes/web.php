@@ -59,6 +59,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
+        Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
+        Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
+
         
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
@@ -72,9 +75,12 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
+        Route::post('/customer/file-nb-upload', [CustomerController::class, 'fileNbUpload'])->name('file.nbupload');
 
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
         Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
+        Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
+        Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
 
         // Data API Endpoints for DataTables - AJAX
         Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
