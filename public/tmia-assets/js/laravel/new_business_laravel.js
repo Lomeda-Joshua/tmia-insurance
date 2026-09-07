@@ -1930,7 +1930,7 @@ function LoadCustomerEDAFSAPInfo() {
     }
   });
 
-  LoadVehicleEDAFSAPInfo();
+  LoadVehicleEDAFSAPInfo(xcustnoupload);
 
   $(".box-body").validator('reset');
 }
@@ -2006,13 +2006,14 @@ function LoadVehicleInfo() {
   $(".box-body").validator('reset');
 }
 
-function LoadVehicleEDAFSAPInfo() {
+function LoadVehicleEDAFSAPInfo(custNo) {
   $.ajax({
     type:"POST",
     url:window.getData.edafVehicleSpecific,
-    data:{vin:xvin, csno:xcsno, plateno:xplateno},
+    data:{vin:xvin, csno:custNo, plateno:xplateno},
     success: function(data){
 
+      console.log(data);
       $.each(data, function(i, value) {
         
         // Helper: set select option safely

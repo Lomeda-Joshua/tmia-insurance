@@ -11,6 +11,7 @@ use App\Models\VehicleInformation;
 use App\Models\UploadedCustomer;
 use App\Models\TransactionsNb;
 use App\Models\FileNbUpload;
+use App\Models\UploadedEdafCustomer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -385,23 +386,22 @@ class CustomerController extends Controller
         $csno    = trim($request->input('csno'));
         $plateno = trim($request->input('plateno'));
 
-        
+        $data = UploadedEdafCustomer::where('VIN', $vin)->get();
+
         // Priority 1: Check by VIN
         if (!empty($vin)) {
-            $data = VehicleInformation::where('VIN', $vin)->get();
+            $data = UploadedEdafCustomer::where('VIN', $vin)->get();
         }
 
         // Priority 2: Check by CS_No if VIN has no results
         if (!empty($csno)) {
-            $data = VehicleInformation::where('CS_No', $csno)->get();
+            $data = UploadedEdafCustomer::where('CS_No', $csno)->get();
         }
 
         // Priority 3: Check by Plate_No if VIN & CS_No have no results
         if (!empty($plateno)) {
-            $data = VehicleInformation::where('Plate_No', $plateno)->get();
+            $data = UploadedEdafCustomer::where('Plate_No', $plateno)->get();
         }
-
-
 
         // 2. Return JSON response
         return response()->json($data);
