@@ -158,13 +158,12 @@ class NewBusinessController extends Controller
     */
     public function store(Request $request)
     {       
+        $user = Auth::user();
+        $userid = $user->User_ID;
+        $ulevel = $user->User_Level_Description ?? '';
+
         try {
             DB::beginTransaction();
-
-            $user = Auth::user();
-            $userid = $user->id;
-            $ulevel = $user->User_Level_Description ?? '';
-
             /* ============================================================
                1) CUSTOMER INSERT OR UPDATE
                ============================================================ */
@@ -172,6 +171,7 @@ class NewBusinessController extends Controller
             $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
 
             $customerData = [
+                'User_ID'        => $userid,
                 'Group'          => $request->input('group', ''),
                 'Full_Name'      => $request->input('custname', ''),
                 'First_Name'     => $request->input('custfname', ''),

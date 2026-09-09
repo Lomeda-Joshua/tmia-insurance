@@ -2691,7 +2691,8 @@ $(document).on("click", "#ptwallet", function () {
 $(document).on("click", "#btnaddpay", function () {
   var tablepay = $("#table_payment").DataTable();
 
-  var paytype        = $("#cbopaytype").val();
+  // var paytype        = $("#cbopaytype").val();
+  var paytype        = $("#cbopaytype option:selected").text().trim();
   var ewallet        = $("#cboewallet").val();
   var ccno           = $("#txtccno").val().trim();
   var ccholder       = $("#txtccholder").val().trim();
@@ -2963,11 +2964,9 @@ $(document).ready(function () {
 
     processing: true,
     serverSide: false,
-
     responsive: false,      // remove "+" icon
     scrollX: false,         // no horizontal scroll
     scrollCollapse: false,
-
     autoWidth: true,        // allow automatic column resizing
     ordering: false,
     searching: false,
@@ -3100,7 +3099,8 @@ $(document).ready(function () {
 $(document).on("click", "#btnaddpay-n", function () {
   var tablepay = $("#table_payment-n").DataTable();
 
-  var paytype        = $("#cbopaytype-n").val();
+  // var paytype     = $("#cbopaytype-n").val();
+  var paytype        = $("#cbopaytype-n option:selected").text().trim();
   var ewallet        = $("#cboewallet-n").val();
   var ccno           = $("#txtccno-n").val().trim();
   var ccholder       = $("#txtccholder-n").val().trim();
