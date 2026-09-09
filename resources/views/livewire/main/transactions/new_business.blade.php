@@ -1800,6 +1800,7 @@
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
         loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),
+        getTransactionStatus : @json(route('gettransaction-status.data'))
     }
 
     window.formRoutes = {

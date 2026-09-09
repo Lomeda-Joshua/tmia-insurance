@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TransactionNBpayment extends Model
 {
+    use HasFactory;
     protected $table = 'transactions_nb_payment';
     public $timestamps = false;
 
@@ -14,4 +16,5 @@ class TransactionNBpayment extends Model
         'PDC_No', 'PDC_Account_Name', 'PDC_Bank_Name', 'PDC_Date', 
         'Payment_Terms', 'Payment_Amount', 'Payment_Date'
     ];
+
 }

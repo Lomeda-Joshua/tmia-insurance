@@ -22,15 +22,14 @@ class RenewalBusinessController extends Controller
 
         $filters = $request->validated();
 
-        dd(RenewalBusinessTransaction::get());
-
-        $query = RenewalBusinessTransaction::query()
+        $query = RenewalBusinessTransaction::with(['customer_details' => function ($q) {
+                $q->select('Customer_No', 'Full_Name', 'Contact_No' ); // Select columns from Customer table
+            }])
             ->select([
                 'Insurance_No',
                 'Trans_Date',
                 'Trans_Status',
-                'Customer_No',
-                'Full_Name',
+                'Customer_No', // Foreign key required for mapping
                 'Contact_No',
                 'VIN',
                 'CS_No',

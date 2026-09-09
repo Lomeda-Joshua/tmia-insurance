@@ -15,6 +15,8 @@ use App\Models\UploadedEdafCustomer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\TransactionStatus;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -396,6 +398,73 @@ class CustomerController extends Controller
         // 2. Return JSON response
         return response()->json($data);
     }
+
+
+    public function getCurrentStatus(Request $request)
+    {            
+        $transactionStatus = TransactionStatus::query()
+            ->where('Business_Type', $request->input('businesstype'))
+            ->orderBy('Trans_SID', 'asc')
+            ->get([
+                'Trans_Status',
+                'Business_Type',
+            ]);
+
+        return response()->json($transactionStatus);
+    }
+
+
+
+    /**
+     * Store or update customer information inside a database transaction.
+     */
+    public function saveCustomerFromList(Request $request): JsonResponse
+    {
+        // Execute everything safely within a database transaction
+        return DB::transaction(function () use ($request) {
+            $isNewData = filter_var($request->input('newdata', false), FILTER_VALIDATE_BOOLEAN);
+            $xCustNo   = $request->input('xcustno', '');
+            $custNo    = $request->input('custno', '');
+
+            // Array mapping inputs to exact database column keys
+            $customerData = [
+                'Customer_No'   => $custNo,
+                'Group'         => $request->input('group', ''),
+                'Full_Name'     => $request->input('custname', ''),
+                'First_Name'    => $request->input('custfname', ''),
+                'Middle_Name'   => $request->input('custmname', ''),
+                'Last_Name'     => $request->input('custlname', ''),
+                'Suffix_Name'   => $request->input('custsname', ''),
+                'Birth_Date'    => $request->filled('birthdate') ? $request->input('birthdate') : null,
+                'TIN'           => $request->input('tin', ''),
+                'Contact_No'    => $request->input('contactno', ''),
+                'Email_Address' => $request->input('emailadd', ''),
+                'Address'       => $request->input('address', ''),
+                'RegCode'       => $request->input('region', ''),
+                'ProvCode'      => $request->input('province', ''),
+                'CMCode'        => $request->input('city', ''),
+                'BrgyCode'      => $request->input('brgy', ''),
+                'Zip_Code'      => $request->input('zipcode', ''),
+                'Country'       => $request->input('country', ''),
+                'Remarks'       => $request->input('remarks', ''),
+            ];
+
+            if ($isNewData) {
+                // INSERT new record
+                $customerData['Active_Status'] = '1';
+                CustomerInformation::create($customerData);
+            } else {
+                // UPDATE existing record by old Customer_No ($xCustNo)
+                CustomerInformation::where('Customer_No', $xCustNo)->update($customerData);
+            }
+
+            return response()->json([
+                'result'      => 1,
+                'Customer_No' => $custNo,
+            ]);
+        });
+    }
+
 
     
     

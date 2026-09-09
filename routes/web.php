@@ -46,6 +46,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // vehicleinfo group
     Route::post('/productclass/data', [OverallDataController::class, 'getProductClass'])->name('productclass.data');
     Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
+    Route::post('/transaction-get-status/data', [CustomerController::class, 'getCurrentStatus'])->name('gettransaction-status.data');
 
 
     Route::post('/customerinfo/data', [OverallDataController::class, 'getCustomerInfoData'])->name('customerinfo.data');
@@ -77,6 +78,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
+        Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
+
         Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
@@ -90,7 +93,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
 
         // Data API Endpoints for DataTables - AJAX
-        Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
+        // Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
         Route::post('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
         Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
@@ -103,8 +106,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
-        Route::get('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
-        Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
+        Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
+        Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
 
         // Vehicle
@@ -119,7 +122,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         // User settings    
         Route::get('/users', [UserController::class, 'index'])->name('user');
         Route::post('/users/data', [UserController::class, 'userData'])->name('users.data');
-        Route::post('/users/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
+        
         Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
         Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
         Route::post('user/get-user-data', [UserController::class,  'getUserData'])->name('user.getdata');

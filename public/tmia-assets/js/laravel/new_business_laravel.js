@@ -1075,12 +1075,14 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     data:{ businesstype: "NEW BUSINESS" },
-    url:window.formRoutes.transactionStatusData,
+    url:window.loadData.getTransactionStatus,
     success: function(data) {
+
         let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
+          console.log(item.Trans_Status);
           options += `<option value="${item.Trans_Status}">${item.Business_Type}</option>`;
         });
 
@@ -2295,7 +2297,7 @@ function LoadStatusData() {
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      
+      console.log(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely

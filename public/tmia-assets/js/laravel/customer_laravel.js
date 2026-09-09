@@ -16,6 +16,278 @@ var editinfo = false;
 var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
+
+  //======= Province =====//
+  $.ajax({
+    type:"POST",
+    url:window.formRoutes.provinceData,
+    success: function(data) {
+      $("#cboprovince").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+    
+      // Loop through the JSON array and build <option> tags
+      $.each(data, function(index, item) {
+        options += `<option value="${item.RegCode}">${item.Region}</option>`;
+      });
+
+      // Inject options into the element and tell Select2 to refresh its UI
+      $("#cboprovince").html(options).trigger('change.select2');
+    }
+  });
+
+
+  $("#cboprovince").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  //======= City / Municipal =====//
+  $("#cbocity").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  //======= Barangay =====//
+  $("#cbobrgy").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  //======= Country =====//
+  $("#cbocountry").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  /*--------------------- VEHICLE INFO --------------------*/
+  //======= Body Type =====//
+  $.ajax({
+    type:"POST",
+    url:window.formRoutes.bodyTypeData,
+    success: function(data) {
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
+    },
+  });
+
+  $("#cbobodytype").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  //======= Fuel Type =====//
+  $.ajax({
+    type:"POST",
+    url:window.formRoutes.fuelTypeData,
+    dataType: "json",
+    success: function(data) {
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbofueltype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbofueltype").trigger('change.select2');
+    },
+
+
+  });
+
+  $("#cbofueltype").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+  //======= Product Classification =====//
+  $.ajax({
+    type:"POST",
+    url:window.formRoutes.productClassData,   
+    success: function(data) {
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprodclass").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboprodclass").trigger('change.select2');
+    },
+  });
+
+  $("#cboprodclass").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
+   //======= Owner Type =====//
+  $.ajax({
+    type:"GET",
+    url: window.formRoutes.customerTypeDataPost,
+    dataType: "json",
+    success: function(data) {
+        let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboowntype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboowntype").trigger('change.select2');
+    }
+  });
+
+  $("#cboowntype").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+  //============== END COMBO BOX INITIALIZED ===========//
+
+  //================== DATE & TIME PICKER ===================//
+   /*--------------------- CUSTOMER INFO --------------------*/
+  $("#dpbirthdate").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  });
+
+  /*--------------------- VEHICLE INFO --------------------*/
+  $("#dpvsidate").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  });
+
+  $("#dpreldate").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  });
+
+  $("#dptechdate").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  });
+
+  //================== Date From & Date To Picker ===================//
+  var today = new Date();
+  var d = new Date(new Date().setDate(today.getDate() - 30));
+  //d.setMonth(d.getMonth() - 3);
+  var dd = d.getDate();
+  var yy = d.getFullYear();
+  var mm = d.getMonth();
+
+  $("#dpdatefrom").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  }).datepicker("setDate", new Date(yy,mm,dd));
+
+  $("#dpdateto").datepicker({
+    autoclose: true,
+    format:'dd-MM-yyyy',
+    todayHighlight : true
+  }).datepicker("setDate", new Date());
+  //==================================================//
+  //================== END DATE & TIME PICKER ===================//
+
+  //======= Clearable text inputs =======//
+  function tog(v){return v ? "addClass" : "removeClass";} 
+  $(document).on("input", ".clearable", function(){
+      $(this)[tog(this.value)]("x");
+  }).on("mousemove", ".x", function( e ){
+      $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]("onX");
+  }).on("touchstart click", ".onX", function( ev ){
+      ev.preventDefault();
+      $(this).removeClass("x onX").val("").change();
+      
+      LoadCustomerData();
+  });
+
+  const container = document.getElementById('alphabet-container');
+
+    // Function to create a button
+    function createButton(label, isActive = false) {
+      const button = document.createElement('button');
+      button.textContent = label;
+      if (isActive) {
+        button.classList.add('active');
+      }
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        // You can add your custom action here (e.g., filter items)
+        btnselect = `${label}`;
+        LoadCustomerData();
+      });
+      return button;
+    }
+
+    // Add "All" button first
+    container.appendChild(createButton("ALL"));
+
+    // Add A-Z buttons
+    for (let i = 65; i <= 90; i++) {
+      const letter = String.fromCharCode(i);
+      const isActive = letter === 'A'; // Set "A" as default
+      container.appendChild(createButton(letter, isActive));
+    }
+
+    // Add Other button first
+    container.appendChild(createButton("[0-9]"));
+    container.appendChild(createButton("[SPECIAL CHAR]"));
+
+    btnselect = 'A';
+    LoadCustomerData();
+});
+///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
   
   //============= CSRF TOKEN SETUP ============//
   $.ajaxSetup({
@@ -412,340 +684,7 @@ $(document).ready( function () {
   });
   /////////////////////// END IZIMODAL ///////////////////////
 
-  //============== COMBO BOX INITIALIZED ===========//
-  //======= Customer Type =====//
-  function LoadFormData(){
-      //======= Group =====//
-      $.ajax({
-        type:"POST",
-        url:window.formRoutes.customerTypeDataPost,
-        dataType: "json",
-        success: function(data) {
-
-            let options = '<option value="">PLEASE SELECT</option>';
-            // Iterate over JSON objects and build <option> elements
-            $.each(data, function(index, item) {
-              options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
-            });
-
-            // Inject populated options into dropdown
-            $("#cbogroup").html(options);
-
-            // Force Select2 to refresh its display
-            $("#cbogroup").trigger('change.select2');
-        }
-      });
-
-      $("#cbogroup").select2({
-        allowClear: true,
-        width: "100%",
-        placeholder: "PLEASE SELECT"
-      }).on('select2:close', function() {
-        $(this).trigger("change.select2");
-      });
-
-      //======= Region =====//
-      $.ajax({
-        type:"POST",
-        url:window.formRoutes.regionData,
-        success: function(data) {
-          $("#cboregion").html(data);
-          let options = '<option value="">PLEASE SELECT</option>';
-        
-          // Loop through the JSON array and build <option> tags
-          $.each(data, function(index, item) {
-            options += `<option value="${item.RegCode}">${item.Region}</option>`;
-          });
-
-          // Inject options into the element and tell Select2 to refresh its UI
-          $("#cboregion").html(options).trigger('change.select2');
-        }
-      });
-
-      $("#cboregion").select2({
-        allowClear: true,
-        width: "100%",
-        placeholder: "PLEASE SELECT"
-      }).on('select2:close', function() {
-        $(this).trigger("change.select2");
-      });
-
-  }
   
-  
- 
-
-  //======= Province =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.regionData,
-    success: function(data) {
-      $("#cboregion").html(data);
-      let options = '<option value="">PLEASE SELECT</option>';
-    
-      // Loop through the JSON array and build <option> tags
-      $.each(data, function(index, item) {
-        options += `<option value="${item.RegCode}">${item.Region}</option>`;
-      });
-
-      // Inject options into the element and tell Select2 to refresh its UI
-      $("#cboregion").html(options).trigger('change.select2');
-    }
-  });
-
-
-  $("#cboprovince").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  //======= City / Municipal =====//
-  $("#cbocity").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  //======= Barangay =====//
-  $("#cbobrgy").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  //======= Country =====//
-  $("#cbocountry").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  /*--------------------- VEHICLE INFO --------------------*/
-  //======= Body Type =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.bodyTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
-        });
-
-        // Inject populated options into dropdown
-        $("#cbobodytype").html(options);
-
-        // Force Select2 to refresh its display
-        $("#cbobodytype").trigger('change.select2');
-    },
-  });
-
-  $("#cbobodytype").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  //======= Fuel Type =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.fuelTypeData,
-    dataType: "json",
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
-        });
-
-        // Inject populated options into dropdown
-        $("#cbofueltype").html(options);
-
-        // Force Select2 to refresh its display
-        $("#cbofueltype").trigger('change.select2');
-    },
-
-
-  });
-
-  $("#cbofueltype").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-  //======= Product Classification =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.productClassData,   
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
-        });
-
-        // Inject populated options into dropdown
-        $("#cboprodclass").html(options);
-
-        // Force Select2 to refresh its display
-        $("#cboprodclass").trigger('change.select2');
-    },
-  });
-
-  $("#cboprodclass").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-
-   //======= Owner Type =====//
-  $.ajax({
-    type:"GET",
-    url: window.formRoutes.customerTypeDataPost,
-    dataType: "json",
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
-        });
-
-        // Inject populated options into dropdown
-        $("#cboowntype").html(options);
-
-        // Force Select2 to refresh its display
-        $("#cboowntype").trigger('change.select2');
-    }
-  });
-
-  $("#cboowntype").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
-  //============== END COMBO BOX INITIALIZED ===========//
-
-  //================== DATE & TIME PICKER ===================//
-   /*--------------------- CUSTOMER INFO --------------------*/
-  $("#dpbirthdate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
-
-  /*--------------------- VEHICLE INFO --------------------*/
-  $("#dpvsidate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
-
-  $("#dpreldate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
-
-  $("#dptechdate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
-
-  //================== Date From & Date To Picker ===================//
-  var today = new Date();
-  var d = new Date(new Date().setDate(today.getDate() - 30));
-  //d.setMonth(d.getMonth() - 3);
-  var dd = d.getDate();
-  var yy = d.getFullYear();
-  var mm = d.getMonth();
-
-  $("#dpdatefrom").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  }).datepicker("setDate", new Date(yy,mm,dd));
-
-  $("#dpdateto").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  }).datepicker("setDate", new Date());
-  //==================================================//
-  //================== END DATE & TIME PICKER ===================//
-
-  //======= Clearable text inputs =======//
-  function tog(v){return v ? "addClass" : "removeClass";} 
-  $(document).on("input", ".clearable", function(){
-      $(this)[tog(this.value)]("x");
-  }).on("mousemove", ".x", function( e ){
-      $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]("onX");
-  }).on("touchstart click", ".onX", function( ev ){
-      ev.preventDefault();
-      $(this).removeClass("x onX").val("").change();
-      
-      LoadCustomerData();
-  });
-
-  const container = document.getElementById('alphabet-container');
-
-    // Function to create a button
-    function createButton(label, isActive = false) {
-      const button = document.createElement('button');
-      button.textContent = label;
-      if (isActive) {
-        button.classList.add('active');
-      }
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.alphabet-buttons button').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-        // You can add your custom action here (e.g., filter items)
-        btnselect = `${label}`;
-        LoadCustomerData();
-      });
-      return button;
-    }
-
-    // Add "All" button first
-    container.appendChild(createButton("ALL"));
-
-    // Add A-Z buttons
-    for (let i = 65; i <= 90; i++) {
-      const letter = String.fromCharCode(i);
-      const isActive = letter === 'A'; // Set "A" as default
-      container.appendChild(createButton(letter, isActive));
-    }
-
-    // Add Other button first
-    container.appendChild(createButton("[0-9]"));
-    container.appendChild(createButton("[SPECIAL CHAR]"));
-
-    btnselect = 'A';
-    LoadCustomerData();
-});
-///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
 
 //======= Function Load Master Data ============//
@@ -1113,6 +1052,8 @@ function LoadVehicleInfo(vin) {
     $('#modal-modifyveh').iziModal('open');
   }
 }
+
+
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
 /////////////////////////////// DATATABLE CLICK EVENT ////////////////////////////////////
@@ -1185,14 +1126,25 @@ function FetchProv(regcode,provcode) {
     $.ajax({
       type:"POST",
       data: {regcode:regcode},
-      url:"fetch_province.php",
+      url:window.formRoutes.provinceData,
       success: function(data) {
-        $("#cboprovince").html(data);
-        if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
-        }
+          let options = '<option value="">PLEASE SELECT</option>';
+
+          // Iterate over JSON objects and build <option> elements
+          $.each(data, function(index, item) {
+            options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+          });
+
+          // Inject populated options into dropdown
+          $("#cboprovince").html(options);
+
+          // Pre-select province code if available
+          if (provcode !== null && provcode !== '') {
+            $("#cboprovince").val(provcode);
+          }
+
+          // Force Select2 to refresh its display
+          $("#cboprovince").trigger('change.select2');
       }
     });
   }
@@ -1203,14 +1155,25 @@ function FetchCM(provcode,cmcode) {
     $.ajax({
       type:"POST",
       data: {provcode:provcode},
-      url:"fetch_city_municipal.php",
+      url:window.formRoutes.cityMunicipalData,
       success: function(data) {
-        $("#cbocity").html(data);
-        if (cmcode !== null && cmcode !== '') {
-          if ($("#cbocity").find("option[value='" + cmcode + "']").length) {
-            $("#cbocity").val(cmcode).trigger('change.select2');
-          } 
-        }
+          let options = '<option value="">PLEASE SELECT</option>';
+
+          // Iterate over JSON objects and build <option> elements
+          $.each(data, function(index, item) {
+            options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
+          });
+
+          // Inject populated options into dropdown
+          $("#cbocity").html(options);
+
+          // Pre-select province code if available
+          if (provcode !== null && provcode !== '') {
+            $("#cbocity").val(cmcode);
+          }
+
+          // Force Select2 to refresh its display
+          $("#cbocity").trigger('change.select2');
       }
     });
   }
@@ -1221,18 +1184,30 @@ function FetchBrgy(cmcode,brgycode) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      url:"fetch_barangay.php",
+      url:window.formRoutes.barangayData,
       success: function(data) {
-        $("#cbobrgy").html(data);
-        if (brgycode !== null && brgycode !== '') {
-          if ($("#cbobrgy").find("option[value='" + brgycode + "']").length) {
-            $("#cbobrgy").val(brgycode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbobrgy").html(options);
+
+            // Pre-select province code if available
+            if (brgycode !== null && brgycode !== '') {
+              $("#cbobrgy").val(brgycode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cbobrgy").trigger('change.select2');
       }
     });
   }
 }
+
 /////////////// END COMBO BOX EVENT ///////////////////
 
 /////////////// TEXTBOX EVENT ///////////////////
@@ -1361,6 +1336,66 @@ $(document).on( "keypress", "#txtsrp", function () {
 $(document).on( "keypress", "#txtseats", function () {
   return isNumberKey(this, event);
 });
+
+//============== COMBO BOX INITIALIZED ===========//
+//======= Customer Type =====//
+  function LoadFormData(){
+      //======= Group =====//
+      $.ajax({
+        type:"POST",
+        url:window.formRoutes.customerTypeDataPost,
+        dataType: "json",
+        success: function(data) {
+
+            let options = '<option value="">PLEASE SELECT</option>';
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbogroup").html(options);
+
+            // Force Select2 to refresh its display
+            $("#cbogroup").trigger('change.select2');
+        }
+      });
+
+      $("#cbogroup").select2({
+        allowClear: true,
+        width: "100%",
+        placeholder: "PLEASE SELECT"
+      }).on('select2:close', function() {
+        $(this).trigger("change.select2");
+      });
+
+      //======= Region =====//
+      $.ajax({
+        type:"POST",
+        url:window.formRoutes.regionData,
+        success: function(data) {
+          $("#cboregion").html(data);
+          let options = '<option value="">PLEASE SELECT</option>';
+        
+          // Loop through the JSON array and build <option> tags
+          $.each(data, function(index, item) {
+            options += `<option value="${item.RegCode}">${item.Region}</option>`;
+          });
+
+          // Inject options into the element and tell Select2 to refresh its UI
+          $("#cboregion").html(options).trigger('change.select2');
+        }
+      });
+
+      $("#cboregion").select2({
+        allowClear: true,
+        width: "100%",
+        placeholder: "PLEASE SELECT"
+      }).on('select2:close', function() {
+        $(this).trigger("change.select2");
+      });
+
+  }
 
 // $(document).on( "keypress", "#txtunloadweight", function () {
 //   return isNumberKey(this, event);
@@ -1509,14 +1544,16 @@ $(document).on( "blur", "#txtmpname", function () {
 /////////////// END TEXTBOX EVENT ///////////////////
 
 ////////////////////////////// BUTTONS CLICKED /////////////////////////////////
+
+
 //============= BUTTONS OUTSIDE TABLE ============//
 $(document).on( "click", "#btnadd", function () {
   newdata = true;
   transid = '';
   editinfo = true;
+  LoadFormData();
   FormClear();
   FormDisable(false);
-  LoadFormData();
   $('#modal-modify').iziModal('open');
 });
 
@@ -2231,16 +2268,15 @@ $(document).on("click", "#btnsave", function () {
   const txttitle = newdata === true ? "Saved!" : "Updated!";
 
   $.ajax({
-    url: "customer_list_save.php",
+    url: window.formRoutes.saveData,
     method: "POST",
     data: formdata,
     processData: false,
     contentType: false,
     success: function (response) {
 
-      let result = jQuery.parseJSON(response);
 
-      if (result.result == 1) {
+      if (response.result == 1) {
 
         swal({
           title: txttitle,

@@ -372,10 +372,11 @@ class NewBusinessController extends Controller
         $insuranceNo = $request->input('insuranceno');  
         if (!empty($insuranceNo)) {
             // Using Eloquent ORM
-            $data = TransactionNBpayment::where('Insurance_No', $insuranceNo)->get();
+            $data = TransactionsNb::where('Insurance_No', $insuranceNo)->get();
             // Alternatively, using Query Builder:
             // $data = \DB::table('transactions_nb')->where('Insurance_No', $insuranceNo)->get();
         }
+        
 
         return response()->json($data);
     }
@@ -537,6 +538,8 @@ class NewBusinessController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
+
+    
 
 
 }

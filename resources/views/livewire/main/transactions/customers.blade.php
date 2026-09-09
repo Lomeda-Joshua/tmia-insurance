@@ -81,16 +81,20 @@
       <div class="box box-solid">
         <div class="box-body" style="max-width:100%;">
           <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div id="viewaction" class="row" hidden>
-              <div class="col-md-12 cellborder">
-                <label><u>Modify Button</u></label>
-                <div class="col-md-12">
-                  <button type="button" id="btnedit" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-success btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                  <button type="button" id="btndelete" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-remove"></i> Delete</button>
-                  <button type="button" id="btnprint" data-toggle="tooltip" data-placement="top" title="Print" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-print"></i> Print</button>
+            
+            @if(Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 6)
+              <div id="viewaction" class="row">
+                <div class="col-md-12 cellborder">
+                  <label><u>Modify Button</u></label>
+                  <div class="col-md-12">
+                    <button type="button" id="btnedit" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-success btn-sm"><i class="fa fa-edit"></i> Edit</button>
+                    <button type="button" id="btndelete" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-remove"></i> Delete</button>
+                    <button type="button" id="btnprint" data-toggle="tooltip" data-placement="top" title="Print" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-print"></i> Print</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            @endif
+
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -269,19 +273,25 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-12" id="viewaction1" hidden>
-                <div class="col-md-6">
-                  <!-- Nothing here -->
-                </div>
-                <div class="col-md-6 cellborder" style="margin-top: 10px;">
-                  <label><u>Save & Cancel Buttons</u></label>
-                  <div class="col-md-12">
-                    <button type="button" id="btnsave" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" id="btncancel" data-toggle="tooltip" data-placement="top" title="Cancel" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-                    <button type="button" id="btnclose" data-toggle="tooltip" data-placement="top" title="Close" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-close"></i> Close</button>
+
+              @if(Auth::user()->User_Level_ID == 1)
+                  <div class="col-md-12" id="viewaction1">
+                    <div class="col-md-6">
+                      <!-- Nothing here -->
+                    </div>
+                    <div class="col-md-6 cellborder" style="margin-top: 10px;">
+                      <label><u>Save & Cancel Buttons</u></label>
+                      <div class="col-md-12">
+                        <button type="button" id="btnsave" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" id="btncancel" data-toggle="tooltip" data-placement="top" title="Cancel" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
+                        <button type="button" id="btnclose" data-toggle="tooltip" data-placement="top" title="Close" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-close"></i> Close</button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+              @endif
+             
+
+
             </div>
           </div>
         </div>
@@ -323,6 +333,7 @@
       <div class="box box-solid">
         <div class="box-body" style="max-width:100%;">
           <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
             <div id="viewactionveh" class="row" hidden>
               <div class="col-md-12 cellborder">
                 <label><u>Modify Button</u></label>
@@ -808,6 +819,8 @@
       provinceData: @json(route('province.data')),
       cityMunicipalData: @json(route('citymunicipal.data')),
       barangayData: @json(route('barangay.data')),
+
+      saveData : @json(route('customer.save'))
     }
 
 
@@ -820,6 +833,7 @@
     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data'))
     }
+
 
     // Converted to a clean, valid JavaScript object automatically
     const user = @json(Auth::user()); 
