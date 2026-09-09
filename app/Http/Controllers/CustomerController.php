@@ -131,16 +131,6 @@ class CustomerController extends Controller
         return response()->json(['success' => true, 'data' => $customer]);
     }
 
-    
-    /**
-     * Show single customer for edit modal.
-     */
-    // public function show(CustomerInformation $customer)
-    // {
-    //     return response()->json($customer);
-    // }
-
-
     /**
      * Update customer.
      */
@@ -380,13 +370,13 @@ class CustomerController extends Controller
         return response()->json($data);
     }
 
-    public function getEdafCustomerVehicle(Request $request){
+    public function getEdafCustomerVehicle(Request $request) 
+    {
         // 1. Sanitize and extract inputs
         $vin     = trim($request->input('vin'));
         $csno    = trim($request->input('csno'));
         $plateno = trim($request->input('plateno'));
-
-        $data = UploadedEdafCustomer::where('VIN', $vin)->get();
+        $customerNo = trim($request->input('custno'));
 
         // Priority 1: Check by VIN
         if (!empty($vin)) {

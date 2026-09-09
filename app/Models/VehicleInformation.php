@@ -21,7 +21,8 @@ class VehicleInformation extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'VIN', 'Make', 'Model', 'Model_Year', 'Color', 'Engine_No', 
+        'VIN', 
+        'Make', 'Model', 'Model_Year', 'Color', 'Engine_No', 
         'CS_No', 'Plate_No', 'SRP', 'VSI_Date', 'Released_Date', 
         'Technical_Date', 'Variant', 'Body_Type', 'Transmission', 
         'Fuel_Type', 'Seats', 'Prod_Classify', 'Owner_Type', 

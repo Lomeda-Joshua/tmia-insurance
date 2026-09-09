@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\HomeDashboardController;
 use App\Http\Controllers\NewBusinessController;
 use App\Http\Controllers\RenewalBusinessController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OverallDataController;
@@ -36,14 +37,16 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/callstatus/data', [OverallDataController::class, 'getCallStatus'])->name('callstatus.data');
     Route::post('/insuranceco/data', [OverallDataController::class, 'getInsuranceCo'])->name('insuranceco.data');
 
+    // Location group
     Route::post('/region/data', [OverallDataController::class, 'getRegion'])->name('region.data');
     Route::post('/province/data', [OverallDataController::class, 'getProvince'])->name('province.data');
     Route::post('/citymunicipal/data', [OverallDataController::class, 'getCityMunicipal'])->name('citymunicipal.data');
     Route::post('/barangay/data', [OverallDataController::class, 'getBarangay'])->name('barangay.data');
 
-
+    // vehicleinfo group
     Route::post('/productclass/data', [OverallDataController::class, 'getProductClass'])->name('productclass.data');
     Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
+
 
     Route::post('/customerinfo/data', [OverallDataController::class, 'getCustomerInfoData'])->name('customerinfo.data');
     Route::post('/customervehicleinfo/data', [OverallDataController::class, 'getVehicleInfoData'])->name('customercvehicleinfo.data');
@@ -59,13 +62,12 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
-        Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
         Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
         Route::post('/new-business/specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');
+        Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
         Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
         Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');
 
-        
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
@@ -103,6 +105,11 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
         Route::get('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
         Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
+
+
+        // Vehicle
+        Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');
+        Route::post('/vehicle/data', [VehicleController::class, 'getVehicles'])->name('vehicletable.data');
     });
 
 

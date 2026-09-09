@@ -782,7 +782,8 @@
       insuranceStaffData: @json(route('insurance_staff.data')),
       customerTypeData: @json(route('customers_type.data.2')),
       nbpendingcounts: @json(route('new_business.counts')),
-      uploadCustomers: @json(route('uploaded.customer'))
+      uploadCustomers: @json(route('uploaded.customer')),
+      loadSelectedCustomer : @json(route('customer.get-by-no')),
     }
 
     window.tableRoutes = {
@@ -813,6 +814,7 @@
     window.getData = {
       customerInfo : @json(route('customerinfo.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
+      vehicleSpecific: @json(route('vehicle.search')),
     }
 
     window.loadData = {

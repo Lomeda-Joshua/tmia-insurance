@@ -730,7 +730,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
+          options += `<option value="${item.Insurance_Type}">${item.Insurance_Type}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -758,7 +758,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_ID}">${item.Insurance_Desc}</option>`;
+          options += `<option value="${item.Insurance_Desc}">${item.Insurance_Desc}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -786,7 +786,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.BankID}">${item.BankDesc}</option>`;
+          options += `<option value="${item.BankDesc}">${item.BankDesc}</option>`;
         });
 
         // Inject populated options into dropdown

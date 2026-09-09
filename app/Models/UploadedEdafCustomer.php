@@ -12,4 +12,8 @@ class UploadedEdafCustomer extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
+
+    public function customer(){
+        return $this->belongsTo(CustomerInformation::class, 'Customer_No', 'Customer_No');
+    }
 }

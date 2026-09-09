@@ -516,13 +516,15 @@ class NewBusinessController extends Controller
         $custNo = trim($request->input('custno', ''));
 
         // 1. If no Customer_No provided, return an empty DataTables structure
-        if (empty($custNo)) {
-            return DataTables::of(collect([]))->make(true);
-        }
+        // if (empty($custNo)) {
+        //     return DataTables::of(collect([]))->make(true);
+        // }
 
         // 2. Base Query Builder (do NOT call ->get() or ->fetchAll())
-        $query = UploadedEdafCustomer::where('Customer_No', $custNo)
-            ->orderBy('Full_Name', 'ASC');
+        $query = UploadedEdafCustomer::where('Customer_No', $custNo)->with('customer');
+            // ->orderBy('Model_Year', 'ASC');
+
+        // dd($query);
 
         // 3. Process Yajra DataTables engine
         return DataTables::of($query)

@@ -21,12 +21,16 @@
     <div class="box box-warning">
       <div class="box-body">
         <div class="box-body" style="max-width:100%;">
-          <div class="row btnactionud" hidden>
-            <div class="col-md-12">
-              <button type="submit" class="btn btn-success" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
-              <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: none;"><i class="fa fa-upload"></i> Import Excel File</button>
+
+          @if(Auth::user()->User_Level_ID = 1 || Auth::user()->User_Level_ID = 6)
+            <div class="row btnactionud">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-success" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
+                <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: none;"><i class="fa fa-upload"></i> Import Excel File</button>
+              </div>
             </div>
-          </div>
+          @endif
+          
           <div class="box center">
             <div class="box-body">
               <div class="row">
@@ -563,7 +567,18 @@
 <!-- /.content-wrapper -->
 
 @push('scripts')
-    <script>
+  <script>
+    window.LaravelRoutes = {
+        csrfToken: "{{ csrf_token() }}",
+    }
+
+    window.tableRoute = {
+        vehicleData : @json(route('vehicletable.data'))
+    }
+  </script>
+  <script src="{{ asset('tmia-assets/js/laravel/vehicle_laravel.js') }}"></script>
+
+    {{-- <script>
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
@@ -684,7 +699,7 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 @endpush
 
 </x-layouts.main>

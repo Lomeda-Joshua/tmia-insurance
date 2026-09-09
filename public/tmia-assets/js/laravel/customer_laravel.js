@@ -959,10 +959,9 @@ function fetchView(){
 function LoadCustomerInfo(custno) {
   $.ajax({
     type:"POST",
-    url:"fetch_customer_info.php",
+    url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:custno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -1041,10 +1040,9 @@ function LoadCustomerInfo(custno) {
 function LoadVehicleInfo(vin) {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_info.php",
+    url:window.getData.vehicleSpecific,
     data:{vin:vin},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely

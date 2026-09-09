@@ -995,7 +995,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
+          options += `<option value="${item.Insurance_Type}">${item.Insurance_Type}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1023,7 +1023,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_ID}">${item.Insurance_Desc}</option>`;
+          options += `<option value="${item.Insurance_Desc}">${item.Insurance_Desc}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1051,7 +1051,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.BankID}">${item.BankDesc}</option>`;
+          options += `<option value="${item.BankDesc}">${item.BankDesc}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1502,7 +1502,7 @@ function LoadCustomerData() {
 
     // Optional: get Customer_No
     xcustno = table.cell(this, 1).data();
-    console.log('Selected Customer No:', xcustno);
+    // console.log('Selected Customer No:', xcustno);
 
     xcustnoupload = table.cell(this, 8).data();
     xvin = table.cell(this, 9).data();
@@ -1608,6 +1608,8 @@ function LoadCustomerDataEDAFSAP() {
   });
 }
 
+
+console.log(window.tableRoutes.getVehiclesByCustomer);
 //============== Vehicle List ============//
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {
@@ -1688,17 +1690,20 @@ function LoadVehicleData() {
   });
 }
 
-function LoadVehicleEDAFSAPData() {
+function LoadVehicleEDAFSAPData(customerNo) {
+
   if ($.fn.dataTable.isDataTable('#table_uploadvehlist')) {
     $('#table_uploadvehlist').DataTable().clear().destroy();               
   }
+
+  console.log(customerNo);
 
   table = $('#table_uploadvehlist').DataTable({
     language: {
       processing: "Loading Vehicle List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -1706,7 +1711,7 @@ function LoadVehicleEDAFSAPData() {
       url: window.tableRoutes.getEdafVehicleByCustomer,
       type: "POST",
       data: function (d) {
-            d.custno = xcustnoupload; // Passes dynamic customer number
+            d.custno = xcustnoupload ?? customerNo; // Passes dynamic customer number
       }
     },
     columns: [
@@ -1747,7 +1752,7 @@ function LoadVehicleEDAFSAPData() {
 
     // Optional: get Customer_No
     xvin = table.cell(this, 1).data();
-    console.log('Selected VIN:', xvin);
+    // console.log('Selected VIN:', xvin);
     xcsno = table.cell(this, 7).data();
     xplateno = table.cell(this, 8).data();
   });
@@ -1857,7 +1862,6 @@ function LoadCustomerEDAFSAPInfo() {
     url:window.tableRoutes.uploadEDAFcustomers,
     data:{custno:xcustnoupload},
     success: function(data){
-
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2010,12 +2014,10 @@ function LoadVehicleEDAFSAPInfo(custNo) {
   $.ajax({
     type:"POST",
     url:window.getData.edafVehicleSpecific,
-    data:{vin:xvin, csno:custNo, plateno:xplateno},
+    data:{vin:xvin, csno:xcsno, plateno:xplateno, custno:custNo},
     success: function(data){
-
-      console.log(data);
-      $.each(data, function(i, value) {
-        
+      
+      $.each(data, function(i, value) {  
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2035,8 +2037,6 @@ function LoadVehicleEDAFSAPInfo(custNo) {
         $("#txtengineno").val(value.Engine_No);
         $("#txtcsno").val(value.CS_No);
         $("#txtplateno").val(value.Plate_No);
-        // $("#txtorderno").val(value.Order_No);
-        // $("#txtorderstatus").val(value.Order_Status);
         $("#txtsrp").val(NumberFormat(value.SRP));
         
         // Safe date handling
@@ -2048,7 +2048,7 @@ function LoadVehicleEDAFSAPInfo(custNo) {
         }
 
         if (value.Released_Date) {
-          const safeRelDate = new Date(value.Released_Date);
+          const safeRelDate = new Date(value);
           if (!isNaN(safeRelDate)) {
             $("#dpreldate").datepicker("setDate", safeRelDate);
           }
@@ -2465,7 +2465,7 @@ $(document).ready( function () {
 
     if (activeVehTab === '#uploadvehtab') {
       console.log('Upload Vehicle tab selected');
-      LoadVehicleEDAFSAPData();
+      LoadVehicleEDAFSAPData(xcustnoupload);
     }
   });
   
@@ -4257,11 +4257,12 @@ $(document).ready( function () {
   $('input[name="rdoptiontype"]').on('change', function() {
     const val = $(this).val();
     if (val === 'FREE') {
-      $(".installment-section").fadeOut();
-      $(".payment-new").fadeOut();
+      $(".installment-section, .payment-new").fadeOut();
     } else {
-      $(".installment-section").fadeIn();
-      $(".payment-new").fadeIn();
+      $(".installment-section, .payment-new")
+                .prop("hidden", false)
+                .removeAttr("hidden")
+                .fadeIn();
     }
     $("#chkpayment").prop("checked", false).trigger('change');
     // $("#chknonvat").prop("checked", false).trigger('change');

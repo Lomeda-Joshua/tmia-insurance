@@ -17,15 +17,18 @@ class VehicleController extends Controller
         return view("livewire.main.transactions.vehicles");
     }
 
-    public function datatable(VehicleDatatableRequest $request): JsonResponse
+    public function getVehicles(VehicleDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();
-
+        $filters = $request->validated();        
         $query = VehicleInformation::query()
+            ->with(['customer' => function ($q) {
+                // Select specific columns from CustomerInformation
+                $q->select('Customer_No', 'Full_Name', 'Contact_No');
+            }])
             ->select([
                 'VIN',
                 'Model',
-                'Year_Model',
+                'Model_Year',
                 'Variant',
                 'Color',
                 'Engine_No',
@@ -33,9 +36,11 @@ class VehicleController extends Controller
                 'Plate_No',
                 'VSI_Date',
                 'SRP',
-                'Customer_No',
-                'Customer_Name',
+                'Customer_No', // 👈 Required foreign key to map relation
+                'Owner_Name',
             ]);
+
+            
 
         // Search Filter
         if (! empty($filters['searchval'])) {
