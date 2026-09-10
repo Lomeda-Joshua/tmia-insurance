@@ -1783,6 +1783,9 @@
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
 
+    window.deleteData = {
+      deleteEntryByInsurance : @json(route('remove-by-insurance-no.data')),
+    }
 
     window.getData = {
       customerInfo : @json(route('customerinfo.data')),

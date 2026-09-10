@@ -20,6 +20,7 @@ use App\Models\Notification;
 use App\Models\FileNbUpload;
 use App\Models\UploadedEdafCustomer;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -537,6 +538,45 @@ class NewBusinessController extends Controller
             })
             ->rawColumns(['button'])
             ->make(true);
+    }
+
+
+    /**
+     * Delete a transaction by Insurance Number.
+     */
+    public function removeByInsuranceNo(Request $request): JsonResponse
+    {
+        $insuranceNo = trim($request->input('insuranceno', ''));
+
+        if (empty($insuranceNo)) {
+            return response()->json([
+                'result' => 0, 
+                'error'  => 'Insurance number is required'
+            ]);
+        }
+
+        try {
+            // Delete using Eloquent ORM (returns count of deleted rows)
+            $deletedCount = TransactionsNb::where('Insurance_No', $insuranceNo)->delete();
+
+            if ($deletedCount > 0) {
+                return response()->json(['result' => 1]);
+            }
+
+            return response()->json([
+                'result' => 0, 
+                'error'  => 'No matching record found'
+            ]);
+
+        } catch (\Exception $e) {
+            // Log error internally using Laravel Logger
+            Log::error('Database error during transaction deletion: ' . $e->getMessage());
+
+            return response()->json([
+                'result' => 0, 
+                'error'  => 'Database error occurred'
+            ]);
+        }
     }
 
     

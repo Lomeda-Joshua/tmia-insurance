@@ -581,19 +581,25 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-12" id="viewactionveh1" hidden>
-                <div class="col-md-6">
-                  <!-- Nothing here -->
-                </div>
-                <div class="col-md-6 cellborder" style="margin-top: 10px;">
-                  <label><u>Save & Cancel Buttons</u></label>
-                  <div class="col-md-12">
-                    <button type="button" id="btnsaveveh" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
-                    <button type="button" id="btncancelveh" data-toggle="tooltip" data-placement="top" title="Cancel" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-                    <button type="button" id="btncloseveh" data-toggle="tooltip" data-placement="top" title="Close" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-close"></i> Close</button>
+
+
+              @if(Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 6)
+                <div class="col-md-12" id="viewactionveh1">
+                  <div class="col-md-6">
+                    <!-- Nothing here -->
+                  </div>
+                  <div class="col-md-6 cellborder" style="margin-top: 10px;">
+                    <label><u>Save & Cancel Buttons</u></label>
+                    <div class="col-md-12">
+                      <button type="button" id="btnsaveveh" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Save</button>
+                      <button type="button" id="btncancelveh" data-toggle="tooltip" data-placement="top" title="Cancel" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
+                      <button type="button" id="btncloseveh" data-toggle="tooltip" data-placement="top" title="Close" class="btn btn-success btn-sm" style="display:none;"><i class="fa fa-close"></i> Close</button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              @endif
+
+
             </div>
           </div>
         </div>
@@ -785,6 +791,11 @@
 <!-- /.content-wrapper -->
 
 @push('scripts')
+
+<script>
+    window.userLevel = @json(Auth::user()?->User_Level_Description);
+    window.currentUserId = {{ Auth::user()?->User_ID ?? 'null' }};
+</script>
 
 <script>
     window.LaravelRoutes = {

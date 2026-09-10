@@ -68,6 +68,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
         Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
         Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');
+        Route::post('/new-business/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
 
         // Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');

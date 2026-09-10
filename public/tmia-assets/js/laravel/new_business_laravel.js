@@ -27,6 +27,7 @@ var editcall = false;
 var editstatus = false;
 var activeCustTab;
 var activeVehTab;
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
@@ -35,6 +36,7 @@ $(document).ready( function () {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       }
   });
+  
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -4241,15 +4243,21 @@ $(document).ready( function () {
   // ------------------------------
   $('#txtterms').on('input', calculateMonthlyPayment);
 
+  
   $(document).on( "change", "#chkpayment", function () {
     if ($(this).is(':checked')) {
-      $("#installpay-terms").fadeIn();
-      $("#installpay-mpay").fadeIn();
+        $("#installpay-terms, #installpay-mpay")
+              .prop("hidden", false)
+              .removeAttr("hidden")
+              .fadeIn();
 
       calculateMonthlyPayment();
+
     } else {
-      $("#installpay-terms").fadeOut();
-      $("#installpay-mpay").fadeOut();
+      // Fade out and re-hide
+      $("#installpay-terms, #installpay-mpay").fadeOut(function() {
+        $(this).prop("hidden", true);
+      });
 
       $("#txtterms").val("1");
       $("#txtmonthpay").val("0.00");
@@ -4870,7 +4878,7 @@ $(document).on( "click", ".btndelete", function () {
     if (isConfirm) {
       $.ajax({
         type:"POST",
-        url:"new_business_delete.php",
+        url:window.deleteData.deleteEntryByInsurance,
         data:{ insuranceno:insuranceno },
         dataType: "json",   // keep this
         success: function(data){
