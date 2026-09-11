@@ -66,6 +66,10 @@ class VehicleController extends Controller
             $query->whereRaw('1 = 0');
         }
 
+        // Determine current user level (from Auth model or Session)
+        $user = auth()->user();
+        $ulevel = $user->User_Level_ID ?? session('User_Level_ID');
+
         return DataTables::eloquent($query)
             ->addIndexColumn()
             ->editColumn('VSI_Date', function ($row): string {
@@ -74,10 +78,24 @@ class VehicleController extends Controller
             ->editColumn('SRP', function ($row): string {
                 return number_format((float) $row->SRP, 2);
             })
-            ->addColumn('action', function ($row): string {
-                $vin = e($row->VIN);
-                return '<button type="button" class="btn btn-xs btn-success btnview" data-vin="' . $vin . '" title="View / Edit">'
-                    . '<i class="fa fa-edit"></i> View/Modify</button>';
+            ->addColumn('action', function ($row) use ($ulevel) : string {
+                $VINEscaped = e($row->VIN);
+                $buttons = '';
+
+                // Assign Vehicle Button (Admin/Insurance Staff only)
+                if (in_array((int)$ulevel, [1, 6], true)) {
+                    $buttons .= '<label vin="' . $VINEscaped . '" class="btn btn-success btn-action btntag" data-toggle="tooltip" data-placement="top" title="Assign Vehicle"><i class="fa-solid fa-user-tag"></i></label> ';
+                }
+
+                // View & Modify Button (All Users)
+                $buttons .= '<label vin="' . $VINEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" data-placement="top" title="View & Modify"><i class="fa fa-edit"></i></label> ';
+
+                // Delete Vehicle Button (Admin/Insurance Staff only)
+                if (in_array((int)$ulevel, [1, 6], true)) {
+                    $buttons .= '<label vin="' . $VINEscaped . '" class="btn btn-danger btn-action btndelete" data-toggle="tooltip" data-placement="top" title="Delete Vehicle"><i class="fa fa-remove"></i></label>';
+                }
+
+                return $buttons;
             })
             ->rawColumns(['action'])
             ->setRowId('VIN')

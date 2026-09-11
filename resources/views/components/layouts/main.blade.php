@@ -67,6 +67,7 @@
     <div class="wrapper">
         @include('components.layouts.headernav')
         @include('components.layouts.sidebar')
+        {{-- <livewire:layouts.header-nav /> --}}
 
         {{ $slot }}
 
@@ -230,6 +231,12 @@
 
     @endpush
     @stack('scripts')
+    <script>
+        window.nofiticationdata = {
+            notifications_data : @json(route('notifications.data')),
+        }
+    </script>
+    <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
 </body>
 
 </html>

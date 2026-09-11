@@ -5657,7 +5657,7 @@ function FormDisableNetRem(val) {
 }
 
 function FormDisableStatus(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (window.userAccount.ulevel == 1 || window.userAccount.ulevel == 6) {
     if (val == true) {
       $("#btneditstatus").show();
       $("#btnclosestatus").show();

@@ -10,6 +10,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OverallDataController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\EnsureLockscreenIsUnlocked;
 use App\Http\Controllers\LockscreenController;
 
@@ -25,6 +26,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
     // Data Group
     Route::post('/bodytype/data', [OverallDataController::class, 'getBodyType'])->name('bodytype.data');

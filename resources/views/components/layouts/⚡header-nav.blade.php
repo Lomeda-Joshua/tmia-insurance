@@ -1,0 +1,130 @@
+<?php
+
+use Livewire\Component;
+use App\Models\Notification;
+
+new class extends Component
+{
+
+    public $notification_data;
+    public $unreadCount = 0;
+    public $hasDangerUnread = false;
+
+    public function mount()
+    {
+        // Retrieve data with necessary fields for icons and attributes
+        $this->notification_data = Notification::select([
+            'ID', 
+            'Insurance_No', 
+            'URL', 
+            'type', 
+            'Status', 
+            'Title', 
+            'Message'
+        ])->get();
+
+        // Calculate counts and state flags
+        $this->unreadCount = $this->notification_data->where('Status', 'unread')->count();
+        $this->hasDangerUnread = $this->notification_data
+            ->where('Status', 'unread')
+            ->where('type', 'danger')
+            ->isNotEmpty();
+    }
+
+    
+
+};
+?>
+
+
+<header class="main-header">
+    <!-- Logo -->
+    <a class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><img src="{{ asset('tmia-assets/images/logo-mini.png') }}" style="width:50px;height:20px;"></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img src="{{ asset('tmia-assets/images/logo.png') }}" alt="Logo" style="width: 100px; height: 100px;" width="100px" height="100px" fetchpriority="high" loading="eager"></span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </a>
+
+
+        <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+            <!-- Notification Dropdown -->
+            <!-- ================== NOTIFICATION DROPDOWN ================== -->
+            <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notification-toggle">
+                <i class="fa-regular fa-bell fa-lg" id="notification-bell"></i>
+                <span class="label label-danger" id="notification-count">0</span>
+            </a>
+            
+            <ul class="dropdown-menu">
+                <li class="header" id="notification-header">You have 0 notifications</li>
+                    <li>
+                        <ul class="menu" id="notification-menu">
+                        @foreach($notification_data as $notifiation_info)
+                            <li>{{ $notifiation_info->Title}}</li>
+                        @endforeach
+                        </ul>
+                    </li>
+                <li class="footer"><a href="#">View all</a></li>
+            </ul>
+
+            <!-- Notification sound -->
+            <audio id="notification-sound" preload="auto">
+                <source src="{{ asset('tmia-assets/sounds/bell-notification.wav') }}" type="audio/mpeg">
+            </audio>
+            </li>
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="{{ asset('tmia-assets/images/user.png') }}" class="user-image" alt="User Image">
+                <span class="hidden-xs"><b><font size="2px" face="arial black">{{ Auth::user()->Display_Name }}</font></b></span>
+            </a>
+            <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                    <img src="{{ asset('tmia-assets/images/user.png') }}" class="img-circle" alt="User Image">
+                    <p>
+                      @if( Auth::user()->User_ID != null )
+                        <b>ID No.:</b>
+                            &nbsp;
+                            <span id="userid" aria-label="User ID"><b>{{ Auth::user()->User_ID }}</b></span>
+                      @endif
+                    </p>
+                    <p>
+                      <b>{{ Auth::user()->Display_Name }}</b>
+                      <br>
+                      {{ Auth::user()->userLevel->User_Level_Description }}
+                      <small>Member since {{ Auth::user()->Register_Date?->format('F j, Y') }}</small>
+                    </p>
+                  </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                <div class="pull-right">
+                     <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <button class="btn btn-default btn-flat btnsignout" type="s"><i class="fa fa-sign-out"></i>Sign out</button>
+                    </form>
+                </div>
+                </li>
+            </ul>
+            </li>
+            <!-- Control Sidebar Toggle Button -->
+            <!--
+            <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            </li>
+            -->
+        </ul>
+        </div>
+    </nav>
+</header>

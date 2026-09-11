@@ -1764,13 +1764,16 @@
 
 @push('scripts')
 <script>
+    window.userAccount = {
+        ulevel: @json(Auth::user()?->User_Level_ID)
+    };
 
     window.LaravelRoutes = {
-      csrfToken: "{{ csrf_token() }}",
-      nbpendingcounts: @json(route('new_business.counts')),
-      loadSelectedCustomer : @json(route('customer.get-by-no')),
-      loadVehicle: @json(route('vehicle.search')),
-      loadModifyPage: @json(route('getModifyView.data'))
+        csrfToken: "{{ csrf_token() }}",
+        nbpendingcounts: @json(route('new_business.counts')),
+        loadSelectedCustomer : @json(route('customer.get-by-no')),
+        loadVehicle: @json(route('vehicle.search')),
+        loadModifyPage: @json(route('getModifyView.data'))
     }
 
     window.tableRoutes = {
@@ -1784,18 +1787,18 @@
     }
 
     window.deleteData = {
-      deleteEntryByInsurance : @json(route('remove-by-insurance-no.data')),
+        deleteEntryByInsurance : @json(route('remove-by-insurance-no.data')),
     }
 
     window.getData = {
-      customerInfo : @json(route('customerinfo.data')),
-      vehicleInfo: @json(route('customercvehicleinfo.data')),
-      vehicleSpecific: @json(route('vehicle.search')),
-      edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+        customerInfo : @json(route('customerinfo.data')),
+        vehicleInfo: @json(route('customercvehicleinfo.data')),
+        vehicleSpecific: @json(route('vehicle.search')),
+        edafVehicleSpecific: @json(route('edaf.vehicle.search')),
     }
 
     window.saveData = {
-      saveNbCustomerData : @json(route('newbusiness.save'))
+        saveNbCustomerData : @json(route('newbusiness.save'))
     }
 
     window.loadData = {

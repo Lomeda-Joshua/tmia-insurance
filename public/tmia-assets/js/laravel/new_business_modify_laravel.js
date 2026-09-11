@@ -2819,17 +2819,13 @@ $(document).ready( function () {
   $('#txtterms').on('input', calculateMonthlyPayment);
 
   $(document).on( "change", "#chkpayment", function () {
-    if ($(this).is(':checked')) {
-      $("#installpay-terms").fadeIn();
-      $("#installpay-mpay").fadeIn();
-
-      calculateMonthlyPayment();
-    } else {
-      $("#installpay-terms").fadeOut();
-      $("#installpay-mpay").fadeOut();
-
-      $("#txtterms").val("0");
-      $("#txtmonthpay").val("0.00");
+      if ($(this).is(':checked')) {
+        $("#installpay-terms, #installpay-mpay").fadeIn();
+        calculateMonthlyPayment();
+      } else {
+        $("#installpay-terms, #installpay-mpay").fadeOut();
+        $("#txtterms").val("0");
+        $("#txtmonthpay").val("0.00");
     }
   });
 

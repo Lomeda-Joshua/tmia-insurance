@@ -1042,14 +1042,14 @@
                         <span class="checkbox-label">Installment Payment</span>
                       </label>
                     </td>
-                    <td data-label="" id="installpay-terms" hidden>
+                    <td data-label="" id="installpay-terms" style="display: none;">
                       <div class="form-group">
                         <label for="txtterms">Terms (months)</label>
                         <input type="text" id="txtterms">
                         <div class="help-block with-errors"></div>
                       </div>
                     </td>
-                    <td data-label="" id="installpay-mpay" hidden>
+                    <td data-label="" id="installpay-mpay" style="display: none;">
                       <div class="form-group">
                         <label for="txtmonthpay">Monthly Payment(₱/month)</label>
                         <input type="text" id="txtmonthpay" style="font-weight: bold; background: #F3F3F3;" disabled>
