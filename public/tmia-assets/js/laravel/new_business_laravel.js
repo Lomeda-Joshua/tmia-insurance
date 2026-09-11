@@ -5657,29 +5657,31 @@ function FormDisableNetRem(val) {
 }
 
 function FormDisableStatus(val) {
-  if (window.userAccount.ulevel == 1 || window.userAccount.ulevel == 6) {
-    if (val == true) {
-      $("#btneditstatus").show();
-      $("#btnclosestatus").show();
-      $("#btncancelstatus").hide();
-      $("#btnupdatestatus").hide();
+  // Convert ulevel to integer for safe comparison
+  const ulevel = parseInt(window.userAccount?.ulevel, 10);
+
+  // 1. Role-restricted action button toggles (e.g., 1 = Administrator, 6 = Insurance Staff)
+  if (ulevel === 1 || ulevel === 6) {
+    if (val === true) {
+      $("#btneditstatus, #btnclosestatus").show().removeAttr("hidden");
+      $("#btncancelstatus, #btnupdatestatus").hide();
     } else {
-      $("#btneditstatus").hide();
-      $("#btnclosestatus").hide();
-      $("#btncancelstatus").show();
-      $("#btnupdatestatus").show();
+      $("#btneditstatus, #btnclosestatus").hide();
+      $("#btncancelstatus, #btnupdatestatus").show().removeAttr("hidden");
     }
   } else {
-    $("#btneditstatus").hide();
-    $("#btnclosestatus").show();
-    $("#btncancelstatus").hide();
-    $("#btnupdatestatus").hide();
+    // Non-admin / default user state
+    $("#btneditstatus, #btncancelstatus, #btnupdatestatus").hide();
+    $("#btnclosestatus").show().removeAttr("hidden");
   }
-  
-  $("#cbotransstatus").attr("disabled",val);
-  $("#txttranssremarks").attr("disabled",val);
 
-  $(".box-body").validator('reset');
+  // 2. Disable or Enable form inputs using boolean property assignment
+  $("#cbotransstatus, #txttranssremarks").prop("disabled", val);
+
+  // 3. Reset form validation UI if Validator plugin is initialized
+  if ($.fn.validator) {
+    $(".box-body").validator('reset');
+  }
 }
 
 function FormDisableCall(val) {

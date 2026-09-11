@@ -117,6 +117,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         // Vehicle
         Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');
         Route::post('/vehicle/data', [VehicleController::class, 'getVehicles'])->name('vehicletable.data');
+        Route::post('/vehicle/assign-customer', [VehicleController::class, 'assignCustomer'])->name('vehicle.assign-customer');
     });
 
 

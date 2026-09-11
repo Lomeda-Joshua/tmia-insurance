@@ -568,14 +568,65 @@
 
 @push('scripts')
   <script>
+    window.userAccount = {
+        ulevel: @json("{{ Auth::user()?->User_Level_ID }}")
+    };
+
     window.LaravelRoutes = {
         csrfToken: "{{ csrf_token() }}",
+        saveAssignedVehicle: @json(route('vehicle.assign-customer'))
+    }
+
+    window.tableRoutes = {
+        customerData: @json(route('customers.data')),
+    }
+
+    window.getData = {
+        vehicleSpecific: @json(route('vehicle.search')),
     }
 
     window.tableRoute = {
         vehicleData : @json(route('vehicletable.data'))
     }
+
+    window.formRoutes = {
+        insuranceStaffData: @json(route('insurance_staff.data')),
+        customerTypeData: @json(route('customers_type.data')),
+
+        // Location
+        regionData: @json(route('region.data')),
+        provinceData: @json(route('province.data')),
+        cityMunicipalData: @json(route('citymunicipal.data')),
+        barangayData: @json(route('barangay.data')),
+
+        // vehicle info
+        bodyTypeData: @json(route('bodytype.data')),
+        fuelTypeData: @json(route('fueltype.data')),
+        productClassData: @json(route('productclass.data')),
+
+        // Payment type
+        paymentTypeData: @json(route('payments.data')),
+        ewalletTypeData: @json(route('ewalletype.data')),
+
+        // Insurances
+        insuranceTypeData: @json(route('insurancetype.data')),
+        insuranceCoData: @json(route('insuranceco.data')),
+
+        // Bank
+        bankData: @json(route('banks.data')),
+
+        // Transaction status
+        transactionStatusData: @json(route('transactionstatus.data')),
+
+        // Communication type
+        communicationTypeData: @json(route('communicationtype.data')),
+
+        // Call status
+        callStatusData: @json(route('callstatus.data')),
+    }
+  
   </script>
+
   <script src="{{ asset('tmia-assets/js/laravel/vehicle_laravel.js') }}"></script>
 
     {{-- <script>

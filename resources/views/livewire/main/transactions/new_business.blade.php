@@ -1540,13 +1540,13 @@
           </div>
         </div>
         <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditstatus" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosestatus" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <button type="button" id="btncancelstatus" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnupdatestatus" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
+            <div class="pull-right">
+              <button type="button" id="btneditstatus" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+              <button type="button" id="btnclosestatus" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+              <button type="button" id="btncancelstatus" class="btn btn-danger" style="display: none;"><i class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatestatus" class="btn btn-primary" style="display: none;"><i class="fa fa-save"></i> Update</button>
+            </div>
           </div>
-        </div>  
       </div>
     </div>
     <!-- END MODAL MODIFY CHANGE STATUS -->
@@ -1765,7 +1765,7 @@
 @push('scripts')
 <script>
     window.userAccount = {
-        ulevel: @json(Auth::user()?->User_Level_ID)
+        ulevel: @json("{{ Auth::user()?->User_Level_ID }}")
     };
 
     window.LaravelRoutes = {

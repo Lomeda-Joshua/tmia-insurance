@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Carbon;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class VehicleController extends Controller
 {
@@ -142,4 +144,49 @@ class VehicleController extends Controller
             'data'    => $vehicle,
         ]);
     }
+
+    /**
+     * Assign or update the customer assigned to a vehicle.
+     */
+    public function assignCustomer(Request $request): JsonResponse
+    {
+        // 1. Validate inputs (replaces manual $_POST empty checks)
+        $validated = $request->validate([
+            'xvin'    => ['required', 'string'],
+            'xcustno' => ['required', 'string'],
+        ]);
+
+        try {
+            // 2. Perform database transaction
+            DB::transaction(function () use ($validated) {
+                
+                // Using Eloquent ORM
+                VehicleInformation::where('VIN', $validated['xvin'])
+                    ->update(['Customer_No' => $validated['xcustno']]);
+
+                /* 
+                 // Alternatively using Query Builder:
+                 DB::table('vehicle_information')
+                     ->where('VIN', $validated['xvin'])
+                     ->update(['Customer_No' => $validated['xcustno']]);
+                */
+            });
+
+            // 3. Return successful JSON payload
+            return response()->json([
+                'result'      => 1,
+                'Customer_No' => $validated['xcustno'],
+            ]);
+
+        } catch (Exception $e) {
+            // Transaction auto-rolls back if an exception occurs inside DB::transaction()
+            return response()->json([
+                'result' => 0,
+                'error'  => $e->getMessage(),
+            ]);
+        }
+    }
+
+
 }
+ 

@@ -254,9 +254,19 @@ $(document).ready( function () {
   //======= Body Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_body_type.php",
+    url:window.formRoutes.bodyTypeData,
     success: function(data) {
-      $("#cbobodytype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
     }
   });
 
@@ -271,9 +281,19 @@ $(document).ready( function () {
   //======= Fuel Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_fuel_type.php",
+    url:window.formRoutes.fuelTypeData,
     success: function(data) {
-      $("#cbofueltype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbobodytype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbobodytype").trigger('change.select2');
     }
   });
 
@@ -288,9 +308,19 @@ $(document).ready( function () {
   //======= Product Classification =====//
   $.ajax({
     type:"POST",
-    url:"fetch_product_class.php",
+    url:window.formRoutes.productClassData,
     success: function(data) {
-      $("#cboprodclass").html(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboprodclass").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboprodclass").trigger('change.select2');
     }
   });
 
@@ -305,9 +335,19 @@ $(document).ready( function () {
    //======= Owner Type =====//
   $.ajax({
     type:"POST",
-    url:"fetch_customer_type.php",
-    success: function(data) {
-      $("#cboowntype").html(data);
+    url:window.formRoutes.customerTypeData,
+    success: function(data) {      
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cbogroup").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cbogroup").trigger('change.select2');
     }
   });
 
@@ -544,35 +584,34 @@ function LoadCustomerData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "new_business_customers.php",
+      url: window.tableRoutes.customerData,
       type: "POST",
-      data: value
+      data: function (d) {
+        // Passes search parameters to Laravel request
+        
+        d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+        d.btnselect = window.btnselect || '';
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "Customer_No" },
-      { data: "Group" },
-      { data: "Full_Name" },
-      {
-        data: "Birth_Date",
-        render: function (data) {
-          return getDateFormatted(data).toUpperCase();
-        }
-      },
-      { data: "Contact_No" },
-      { data: "Email_Address" },
-      { data: "Address" },
-      {
-        data: "Active_Status",
-        render: function (data) {
-          return data == "1" ? "ACTIVE" : "INACTIVE";
-        }
-      },
-      { data: "Inactive_Date" }
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+          { data: "Customer_No", name: "c.Customer_No" },
+          { data: "Group", name: "c.Group", defaultContent: "" },
+          { data: "Full_Name", name: "c.Full_Name", defaultContent: "" },
+          { data: "Birth_Date", name: "c.Birth_Date", defaultContent: "" },
+          { data: "Contact_No", name: "c.Contact_No", defaultContent: "" },
+          { data: "Email_Address", name: "c.Email_Address", defaultContent: "" },
+          { data: "Address", name: "c.Address", defaultContent: "" },
+          { data: "Upload_Cust_No", name: "c.Upload_Cust_No", defaultContent: "" },
+          { data: "VIN", name: "VIN", defaultContent: "" },
+          { data: "CS_No", name: "CS_No", defaultContent: "" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+          { data: "Variant", name: "Variant", defaultContent: "" },
+          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
-        targets: [3, 7],
+        targets: [3, 7, 12],
         render: function(data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
@@ -623,10 +662,10 @@ function fetchView(){
 function LoadVehicleInfo(vin) {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_info.php",
+    url:window.getData.vehicleSpecific,
     data:{vin:vin},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      // var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -843,7 +882,7 @@ $(document).on("click", "#btncustselect", function () {
   }, function(isConfirm) {
     if (isConfirm) {
       $.ajax({
-        url: "vehicle_list_update_customer.php",
+        url: window.LaravelRoutes.saveAssignedVehicle,
         type: "POST",
         dataType: "json",   // 👈 tell jQuery to auto-parse JSON
         data: {
@@ -852,6 +891,7 @@ $(document).on("click", "#btncustselect", function () {
         },
         success: function (result) {
           if (result.result === 1) {
+            showLoading("Saving user record..."); // Show spinner before sending request
             swal({
               title: "Success!",
               text: "Vehicle with VIN " + xvin + " has been assigned successfully.",
@@ -859,6 +899,7 @@ $(document).on("click", "#btncustselect", function () {
               confirmButtonColor: "#00a65a",
               confirmButtonText: "OK"
             }, function () {
+              hideLoading();
               $("#modal-customerlist").iziModal("close");
               LoadMasterData();
             });
