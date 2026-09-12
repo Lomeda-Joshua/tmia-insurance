@@ -26,8 +26,12 @@ use App\Models\CallStatus;
 use App\Models\TransactionStatus;
 use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
+
+use Illuminate\Support\Facades\Auth;
+
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class OverallDataController extends Controller
 {
@@ -38,14 +42,23 @@ class OverallDataController extends Controller
      */
     public function getInsuranceStaff(): JsonResponse
     {
-        $staff = InsuranceStaff::query()
-            ->orderBy('ISE_Name')
-            ->get([
-                'ISE_No',
-                'ISE_Name',
-            ]);
+        // Retrieve the authenticated user's ID
+        $userId = Auth::id();
 
-        return response()->json($staff);
+        // Create a unique cache key for this user
+        $cacheKey = "customer_type_user_{$userId}";
+
+        // Retrieve from cache if exists; otherwise run query and cache for 10,000 seconds
+        $iseStaff = Cache::remember($cacheKey, 10000, function () {
+            return InsuranceStaff::query()
+                    ->orderBy('ISE_Name')
+                    ->get([
+                        'ISE_No',
+                        'ISE_Name',
+                    ]);
+        });
+
+        return response()->json($iseStaff);
     }
 
     public function getUploadedCustomer(Request $request){
@@ -133,12 +146,21 @@ class OverallDataController extends Controller
 
     public function getCustomerType(): JsonResponse
     {
-        $customerTypes = CustomerType::query()
-            ->orderBy('Customer_Type', 'asc')
-            ->get([
-                'Customer_TID',
-                'Customer_Type',
-            ]);
+        // Retrieve the authenticated user's ID
+        $userId = Auth::id();
+
+        // Create a unique cache key for this user
+        $cacheKey = "customer_type_user_{$userId}";
+
+        // Retrieve from cache if exists; otherwise run query and cache for 10,000 seconds
+        $customerTypes = Cache::remember($cacheKey, 10000, function () {
+            return CustomerType::query()
+                ->orderBy('Customer_Type', 'asc')
+                ->get([
+                    'Customer_TID',
+                    'Customer_Type',
+                ]);
+        });
 
         return response()->json($customerTypes);
     }

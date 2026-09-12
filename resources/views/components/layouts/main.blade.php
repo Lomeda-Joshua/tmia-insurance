@@ -237,10 +237,10 @@
         }
     
         window.dataRoutes = {
-            sessionVariable : @json(route('getSession.dataVariable'));
+            sessionVariable : @json(route('getSession.dataVariable')),
         }
     </script>
-    <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
+    {{-- <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script> --}}
 
 </body>
 

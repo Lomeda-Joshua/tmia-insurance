@@ -34,7 +34,6 @@ class CustomerController extends Controller
     {
         // 1. Return an Eloquent Query Builder (do NOT call ->get())
         $query = CustomerInformation::with('vehicles');
-
     
         // 2. Handle Alphabetical / Special Character Filter
         // Accepts 'btnselect' or 'letter' from JS payload

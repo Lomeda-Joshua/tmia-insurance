@@ -708,6 +708,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceStaffData,
     success: function(data) {
+      
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -1084,7 +1085,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          console.log(item.Trans_Status);
+
           options += `<option value="${item.Trans_Status}">${item.Business_Type}</option>`;
         });
 
@@ -1612,8 +1613,6 @@ function LoadCustomerDataEDAFSAP() {
   });
 }
 
-
-console.log(window.tableRoutes.getVehiclesByCustomer);
 //============== Vehicle List ============//
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {
@@ -4440,6 +4439,8 @@ $(document).on( "click", "#btnupload", function () {
 });
 //============= END BUTTONS OUTSIDE TABLE ============//
 
+
+
 //============= BUTTONS ON MODAL UPLOAD FILE EXCEL ============//
 $(document).on("click", "#btnimport", function () {
   // Reset UI and table
@@ -4683,6 +4684,8 @@ function buildTable(data) {
 }
 //============= BUTTONS ON MODAL UPLOAD FILE EXCEL ============//
 
+
+
 //============= BUTTONS INSIDE TABLE ============//
 var currentPopover = null;
 
@@ -4917,6 +4920,8 @@ $(document).on( "click", ".btndelete", function () {
   });
 });
 //============= END BUTTONS INSIDE TABLE ============//
+
+
 
 //============= BUTTONS ON MODAL MODIFY ============//
 $(document).on( "click", "#btneditcall", function () {
@@ -5659,7 +5664,6 @@ function FormDisableNetRem(val) {
 function FormDisableStatus(val) {
   // Convert ulevel to integer for safe comparison
   const ulevel = parseInt(window.userAccount?.ulevel, 10);
-  console.log("hello");
 
   // 1. Role-restricted action button toggles (e.g., 1 = Administrator, 6 = Insurance Staff)
   if (ulevel == 1 || ulevel == 6) {
@@ -5739,7 +5743,7 @@ function FormDisableCall(val) {
 
 /////////////////// ENABLED OR DISABLED /////////////////////
 function FormClear() {
-  // $("#cboise").val("").trigger('change.select2');
+  $("#cboise").val("").trigger('change.select2');
 
   /*============== CUSTOMER INFO ===========*/
   $("#txtcustno").val("");
