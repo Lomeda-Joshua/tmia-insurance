@@ -953,11 +953,11 @@ $(document).ready( function () {
   });
 
   $("#cbopaytype, #cbopaytype-n").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
+      allowClear: true,
+      width: "100%",
+      placeholder: "PLEASE SELECT"
   }).on('select2:close', function() {
-    $(this).trigger("change.select2");
+      $(this).trigger("change.select2");
   });
 
   //======= E-Wallet Type =====//
@@ -1415,7 +1415,7 @@ function LoadTransactionData() {
     ],
     columnDefs: [
       {
-        targets: [5, 11, 12, 13, 14],
+        targets: [2],
         render: function(data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
@@ -1484,7 +1484,7 @@ function LoadCustomerData() {
     ],
     columnDefs: [
       {
-        targets: [3, 7, 12],
+        targets: [1, 7, 12],
         render: function(data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
@@ -2114,7 +2114,7 @@ function LoadPaymentInfo() {
           processing: "Loading Payment List..."
       },
       processing: true,
-      serverSide: false,
+      serverSide: true,
       responsive: true,
       autoWidth: false,
       ordering: false,
@@ -2201,6 +2201,7 @@ function LoadPaymentInfo() {
 
     // Get row data
     var rowData = tablepay.row(this).data();
+    console.log(rowData);
     editingRow = tablepay.row(this); // store reference for later update
 
     // Populate form fields
@@ -2298,7 +2299,6 @@ function LoadStatusData() {
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      console.log(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2649,27 +2649,31 @@ function FetchBrgy(cmcode,brgycode) {
 $(document).on("change", "#cbopaytype", function () {
     var paytype = $(this).val();
 
+    console.log(paytype);
+    
     // Hide all sections first
-    // $(".cc-section, .pdc-section, .ew-section").fadeOut();
+    $(".cc-section, .pdc-section, .ew-section").fadeOut();
     $(".pdc-section, .ew-section").fadeOut();
 
     // Map payment types to sections
     var sectionMap = {
-        // "CREDIT CARD": ".cc-section",
-        "POST-DATED CHECK (PDC)": ".pdc-section",
-        "E-WALLET": ".ew-section"
+        2 : ".cc-section",
+        4 : ".pdc-section",
+        5 : ".ew-section"
     };
 
     // Map payment types to focus fields
     var focusMap = {
-        // "CREDIT CARD": "#txtccno",
+        "CREDIT CARD": "#txtccno",
         "POST-DATED CHECK (PDC)": "#txtpdcno",
         "E-WALLET": "#cboewallet"
     };
 
     if (sectionMap[paytype]) {
-        $(sectionMap[paytype]).fadeIn(function() {
-            // Set focus on the appropriate field after the fadeIn completes
+        $(sectionMap[paytype])
+        .stop(true, true) // Clear any queued animations
+        .removeAttr("hidden") // Remove HTML hidden attribute if present
+        .fadeIn(function() {
             if (focusMap[paytype]) {
                 // $(focusMap[paytype]).focus();
             }
@@ -2907,10 +2911,12 @@ $(document).on("click", "#btnupdatepay", function() {
 });
 
 $(document).on("change", "#cbopaytype-n", function () {
+    console.log("this is paytype");  
     var paytype = $(this).val();
+    
 
     // Hide all sections first
-    // $(".cc-section-n, .pdc-section-n, .ew-section-n").fadeOut();
+    $(".cc-section-n, .pdc-section-n, .ew-section-n").fadeOut();
     $(".pdc-section-n, .ew-section-n").fadeOut();
 
     // Map payment types to sections
@@ -2927,14 +2933,20 @@ $(document).on("change", "#cbopaytype-n", function () {
         "E-WALLET": "#cboewallet-n"
     };
 
+    console.log("focusmap", focusMap);
+    console.log("section map", sectionMap[paytype]);
+
+
     if (sectionMap[paytype]) {
-        $(sectionMap[paytype]).fadeIn(function() {
-            // Set focus on the appropriate field after the fadeIn completes
-            if (focusMap[paytype]) {
-                // $(focusMap[paytype]).focus();
-            }
-        });
-    }
+        $(sectionMap[paytype])
+            .prop("hidden", false)
+            .removeAttr("hidden")
+            .fadeIn(function () {
+                if (focusMap[paytype]) {
+                    // $(focusMap[paytype]).focus();
+                }
+            });
+    } 
 
     // Clear form
   xpayid = "";
@@ -5393,6 +5405,7 @@ $(document).on("click", "#btnsubmit", function () {
   });
 });
 
+
 $(document).on( "click", "#btndelete", function () {
   swal({
     title: "Are you sure?",
@@ -5488,6 +5501,7 @@ $(document).on("click", "#prevBtn", function () {
 
 ////////////////////////////// END BUTTONS CLICKED /////////////////////////////////
 
+
 /////////////////// ENABLED OR DISABLED /////////////////////
 function FormDisable(val) { 
   $("#cboise").attr("disabled",val);
@@ -5576,7 +5590,7 @@ function FormDisable(val) {
 }
 
 function FormDisablePay(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (window.userAccount.ulevel == 1 || window.userAccount.ulevel == 6) {
     if (val == true) {
       $("#btneditpay").show();
       $("#btnclosepay").show();
@@ -5589,10 +5603,10 @@ function FormDisablePay(val) {
       $("#btnupdatepay").show();
     }
   } else {
-    $("#btneditpay").hide();
-    $("#btnclosepay").show();
-    $("#btncancelpay").hide();
-    $("#btnupdatepay").hide();
+      $("#btneditpay").hide();
+      $("#btnclosepay").show();
+      $("#btncancelpay").hide();
+      $("#btnupdatepay").hide();
   }
 
   

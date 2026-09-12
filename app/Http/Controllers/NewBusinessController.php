@@ -58,6 +58,7 @@ class NewBusinessController extends Controller
             ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
             ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
             ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No');
+            // ->groupBy('t.Customer_No');
 
             // 2. Extract Request Inputs
             $viewPending  = $request->boolean('viewpending');

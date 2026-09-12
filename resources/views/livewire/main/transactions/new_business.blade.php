@@ -1301,7 +1301,7 @@
                 </div>
 
                 <!-- Credit Card Section -->
-                <div class="row cc-section" hidden>
+                <div class="row cc-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="credit-card">
                       <div class="cc-header">
@@ -1351,7 +1351,7 @@
                 </div>
 
                 <!-- PDC Section -->
-                <div class="row pdc-section" hidden>
+                <div class="row pdc-section">
                   <div class="col-md-12">
                     <div class="post-dated-check">
                       <div class="pdc-header">
@@ -1404,7 +1404,7 @@
                 </div>
 
                 <!-- E-Wallet Section -->
-                <div class="row ew-section" hidden>
+                <div class="row ew-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="col-md-4">
                       <div class="form-group">
@@ -1764,8 +1764,9 @@
 
 @push('scripts')
 <script>
+    
     window.userAccount = {
-        ulevel: @json("{{ Auth::user()?->User_Level_ID }}")
+        ulevel: @json(Auth::user()?->User_Level_ID)
     };
 
     window.LaravelRoutes = {
