@@ -1543,8 +1543,8 @@
             <div class="pull-right">
               <button type="button" id="btneditstatus" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
               <button type="button" id="btnclosestatus" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-              <button type="button" id="btncancelstatus" class="btn btn-danger" style="display: none;"><i class="fa fa-ban"></i> Cancel</button>
-              <button type="button" id="btnupdatestatus" class="btn btn-primary" style="display: none;"><i class="fa fa-save"></i> Update</button>
+              <button type="button" id="btncancelstatus" class="btn btn-danger" ><i class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatestatus" class="btn btn-primary" ><i class="fa fa-save"></i> Update</button>
             </div>
           </div>
       </div>

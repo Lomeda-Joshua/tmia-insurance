@@ -71,7 +71,6 @@
 
         {{ $slot }}
 
-
         <footer class="main-footer">
             <div class="pull-right hidden-xs">
                 <b>Version</b> 1.8.14
@@ -82,6 +81,7 @@
             rights reserved.
             <!-- <strong>Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="http://toyotabicutan.com.ph/" target="_blank">Toyota Bicutan Parañaque</a>.</strong> All rights reserved. -->
         </footer>
+
         <!-- MODAL PASSWORD EXPIRED -->
         <div id="modalpwdexpired" class="modal">
             <div class="modal-content pwd-content animate">
@@ -235,8 +235,13 @@
         window.nofiticationdata = {
             notifications_data : @json(route('notifications.data')),
         }
+    
+        window.dataRoutes = {
+            sessionVariable : @json(route('getSession.dataVariable'));
+        }
     </script>
     <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
+
 </body>
 
 </html>

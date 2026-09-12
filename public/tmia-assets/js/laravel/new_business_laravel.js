@@ -5659,10 +5659,13 @@ function FormDisableNetRem(val) {
 function FormDisableStatus(val) {
   // Convert ulevel to integer for safe comparison
   const ulevel = parseInt(window.userAccount?.ulevel, 10);
+  console.log("hello");
 
   // 1. Role-restricted action button toggles (e.g., 1 = Administrator, 6 = Insurance Staff)
-  if (ulevel === 1 || ulevel === 6) {
+  if (ulevel == 1 || ulevel == 6) {
+    console.log("on check");
     if (val === true) {
+      
       $("#btneditstatus, #btnclosestatus").show().removeAttr("hidden");
       $("#btncancelstatus, #btnupdatestatus").hide();
     } else {
@@ -5670,6 +5673,7 @@ function FormDisableStatus(val) {
       $("#btncancelstatus, #btnupdatestatus").show().removeAttr("hidden");
     }
   } else {
+    console.log("without check");
     // Non-admin / default user state
     $("#btneditstatus, #btncancelstatus, #btnupdatestatus").hide();
     $("#btnclosestatus").show().removeAttr("hidden");

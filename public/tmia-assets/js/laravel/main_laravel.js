@@ -1,6 +1,6 @@
 //================== GET USER LOG IN INFORMATION =================//
 $.ajax({
-    url: "fetch_variable",
+    url: window.dataRoutes.sessionVariable,
     dataType: 'json',
     cache: false,
     success: function(data) {

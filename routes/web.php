@@ -30,6 +30,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Notification
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
+    Route::post('/user-session-variable', [OverallDataController::class,'getSessionVariables'])->name('getSession.dataVariable');
+
+
     // Data Group
     Route::post('/bodytype/data', [OverallDataController::class, 'getBodyType'])->name('bodytype.data');
     Route::post('/communicationtype/data', [OverallDataController::class, 'getCommunicationType'])->name('communicationtype.data');

@@ -378,6 +378,23 @@ class OverallDataController extends Controller
             ->make(true);
     } 
 
+/**
+     * Retrieve user-related session variables as JSON.
+     */
+    public function getSessionVariables(): JsonResponse
+    {
+        return response()->json([
+            'userid'     => session('userid'),
+            'logname'    => session('logname'),
+            'uname'      => session('uname'),
+            'ulevel'     => session('ulevel'),
+            'regdate'    => session('regdate'),
+            'dealercode' => session('dealercode'),
+            'signin'     => session('signin', false),
+            'signout'    => session('signout', false),
+        ]);
+    }
+
 
 
 }
