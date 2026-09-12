@@ -13,7 +13,7 @@ use App\Http\Controllers\OverallDataController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\EnsureLockscreenIsUnlocked;
 use App\Http\Controllers\LockscreenController;
-
+use App\Http\Controllers\GeneralReportingController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -27,6 +27,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
 
+    // Notification
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
     // Data Group
@@ -51,7 +52,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/transactionstatus/data', [OverallDataController::class, 'getTrasactionStatus'])->name('transactionstatus.data');
     Route::post('/transaction-get-status/data', [CustomerController::class, 'getCurrentStatus'])->name('gettransaction-status.data');
 
-
+    // Customer info
     Route::post('/customerinfo/data', [OverallDataController::class, 'getCustomerInfoData'])->name('customerinfo.data');
     Route::post('/customervehicleinfo/data', [OverallDataController::class, 'getVehicleInfoData'])->name('customercvehicleinfo.data');
 
@@ -121,13 +122,11 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     });
 
 
-
     // Settings Group
     Route::prefix('settings')->group(function () {
         // User settings    
         Route::get('/users', [UserController::class, 'index'])->name('user');
         Route::post('/users/data', [UserController::class, 'userData'])->name('users.data');
-        
         Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
         Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
         Route::post('user/get-user-data', [UserController::class,  'getUserData'])->name('user.getdata');
@@ -141,6 +140,10 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
         Route::post('/user-account/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
         Route::post('/user-account/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
     });
 
     // Laravel default Volt account settings routes

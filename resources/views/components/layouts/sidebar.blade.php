@@ -59,7 +59,7 @@
                     </li>
                 </ul>
             </li>
-            {{-- <li class="treeview {{ request()->routeIs('nbrb_report') ? 'active menu-open' : '' }}">
+            <li class="treeview {{ request()->routeIs('nbrb_report') ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>
                     <span>Reports</span>
@@ -68,14 +68,14 @@
                     </span>
                 </a>
                 <ul class="treeview-menu" id="mymenuchild2">
-                    <li class="{{ request()->routeIs('nbrb_report') ? 'active' : '' }}">
-                        <a href="{{ route('nbrb_report') }}">
+                    <li class="{{ request()->routeIs('general_report.index') ? 'active' : '' }}">
+                        <a href="{{ route('general_report.index') }}">
                             <i class="fa fa-file-text"></i> 
                             <span>New Business / Renewal Business Report</span>
                         </a>
                     </li>
                 </ul>
-            </li> --}}
+            </li>
         </ul>
 
 
