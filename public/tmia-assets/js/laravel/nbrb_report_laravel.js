@@ -7,12 +7,22 @@ var signin;
 var table;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
   $(document).ready( function () {
+
+  
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+        }
+    });
+    
+    
     //================== GET USER LOG IN INFORMATION =================//
     $.ajax({
-      url: "fetch_variable.php",
+      url: window.LaravelRoutes.ulevel,
       dataType: 'json',
       cache: false,
       success: function(data) {
+        console.log(data);_
         userid = data.userid;
         logname = data.logname;
         ulevel = data.ulevel;
@@ -42,7 +52,7 @@ var table;
     //======= Transaction Status =====//
     $.ajax({
       type:"POST",
-      url:"fetch_transaction_status.php",
+      url:window.loadData.getTransactionStatus,
       success: function(data) {
         const options = '<option value="ALL" selected>ALL</option>' + $.trim(data);
         $("#cbotranstatus").html(options);

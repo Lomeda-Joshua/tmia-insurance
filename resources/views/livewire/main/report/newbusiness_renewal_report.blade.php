@@ -216,10 +216,24 @@
 </div>
 <!-- /.content-wrapper -->
 
-</x-layouts.main>
+
 
 
 
 @push('scripts')
-<script type="text/javascript" src="{{ asset('tmia-assets/js/nbrb_report_laravel.js') }}"></script>
+<script>
+  window.LaravelRoutes = {
+      csrfToken: "{{ csrf_token() }}",
+      ulevel: @json(route('getSession.dataVariable')),
+  }
+ 
+  window.loadData = {
+      getTransactionStatus : @json(route('gettransaction-status.data'))
+  }
+
+</script>
+
+<script type="text/javascript" src="{{ asset('tmia-assets/js/laravel/nbrb_report_laravel.js') }}"></script>
 @endpush
+
+</x-layouts.main>

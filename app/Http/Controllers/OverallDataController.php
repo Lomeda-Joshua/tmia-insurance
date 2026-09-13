@@ -405,13 +405,15 @@ class OverallDataController extends Controller
      */
     public function getSessionVariables(): JsonResponse
     {
+        $user = Auth::user();
+        
         return response()->json([
-            'userid'     => session('userid'),
-            'logname'    => session('logname'),
-            'uname'      => session('uname'),
-            'ulevel'     => session('ulevel'),
-            'regdate'    => session('regdate'),
-            'dealercode' => session('dealercode'),
+            'userid'     => $user->User_ID,
+            'logname'    => $user->Display_Name,
+            'uname'      => $user->User_Name,
+            'ulevel'     => $user->User_Level_ID,
+            'regdate'    => $user->Register_Date,
+            'dealercode' => $user->Dealer_ID,
             'signin'     => session('signin', false),
             'signout'    => session('signout', false),
         ]);
