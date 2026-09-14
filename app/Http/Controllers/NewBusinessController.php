@@ -19,6 +19,7 @@ use App\Models\TransactionNbPayment;
 use App\Models\Notification;
 use App\Models\FileNbUpload;
 use App\Models\UploadedEdafCustomer;
+use App\Models\ApprovalNbStatus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -580,7 +581,211 @@ class NewBusinessController extends Controller
         }
     }
 
-    
 
+     /**
+     * Update transaction status using Eloquent ORM.
+     */
+    public function updateStatus(Request $request): JsonResponse
+    {
+        // 1. Validate incoming request parameters
+        $validated = $request->validate([
+            'insuranceno'   => ['required', 'string'],
+            'transstatus'   => ['required', 'string'],
+            'transsremarks' => ['nullable', 'string'],
+        ]);
+
+        $userId = Auth::id() ?? session('userid');
+
+        try {
+            // 2. Perform database transaction using Eloquent ORM operations
+            DB::transaction(function () use ($validated, $userId) {
+
+                // A. Update existing transaction via Eloquent ORM
+                TransactionsNb::where('Insurance_No', $validated['insuranceno'])
+                    ->update([
+                        'Trans_Status'         => $validated['transstatus'],
+                        'Trans_Status_Remarks' => $validated['transsremarks'] ?? '',
+                        'Trans_Status_Date'    => now(),
+                        'User_ID'              => $userId,
+                    ]);
+
+                // B. Insert into log table using Eloquent create()
+                ApprovalNbStatus::create([
+                    'Insurance_No'         => $validated['insuranceno'],
+                    'User_ID'              => $userId,
+                    'Trans_Status'         => $validated['transstatus'],
+                    'Trans_Status_Remarks' => $validated['transsremarks'] ?? '',
+                    'Trans_Status_Date'    => now(),
+                ]);
+
+                // C. Create notification record via Eloquent create()
+                Notification::create([
+                    'Insurance_No'     => $validated['insuranceno'],
+                    'Business_Type'    => 'NEW BUSINESS',
+                    'Insurance_Status' => $validated['transstatus'],
+                    'Title'            => '[' . $validated['transstatus'] . ' - ' . $validated['insuranceno'] . ']',
+                    'Message'          => 'The status of the request has been updated.',
+                    'Info_Type'        => 'info',
+                    'URL'              => 'new_business_modify',
+                    'Status'           => 'unread',
+                    'Created_Date'     => now(),
+                    'User_ID'          => $userId,
+                ]);
+            });
+
+            // 3. Success JSON response
+            return response()->json([
+                'result'       => 1,
+                'Insurance_No' => $validated['insuranceno'],
+            ]);
+
+        } catch (Exception $e) {
+            // DB::transaction automatically handles rollbacks on error
+            return response()->json([
+                'result' => 0,
+                'error'  => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+
+    
+    public function syncPayments(Request $request): JsonResponse
+    {
+        // 1. Inline Request Validation
+        $validated = $request->validate([
+            'insuranceno' => ['required', 'string'],
+            'payments'    => ['required'],
+        ]);
+
+        $insuranceNo = $validated['insuranceno'];
+        $userId = auth()->id();
+
+        // Support both JSON string and pre-parsed array inputs
+        $paymentsPayload = is_array($request->input('payments'))
+            ? $request->input('payments')
+            : json_decode($request->input('payments'), true);
+
+        if (!is_array($paymentsPayload)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Invalid JSON data'
+            ], 422);
+        }
+
+        // 2. Transaction Execution
+        try {
+            DB::transaction(function () use ($insuranceNo, $userId, $paymentsPayload) {
+                $existingIds = TransactionNbPayment::where('Insurance_No', $insuranceNo)
+                    ->pluck('Payment_ID')
+                    ->toArray();
+
+                $receivedIds = [];
+
+                foreach ($paymentsPayload as $payment) {
+                    $pdcDate = !empty($payment['PDC_Date'])
+                        ? Carbon::parse($payment['PDC_Date'])->format('Y-m-d')
+                        : null;
+
+                    $attributes = [
+                        'Insurance_No'     => $insuranceNo,
+                        'User_ID'          => $userId,
+                        'Payment_Type'     => $payment['Payment_Type'] ?? null,
+                        'EWallet_Type'     => $payment['EWallet_Type'] ?? null,
+                        'PDC_No'           => $payment['PDC_No'] ?? null,
+                        'PDC_Account_Name' => $payment['PDC_Account_Name'] ?? null,
+                        'PDC_Bank_Name'    => $payment['PDC_Bank_Name'] ?? null,
+                        'PDC_Date'         => $pdcDate,
+                        'Payment_Terms'    => $payment['Payment_Terms'] ?? null,
+                        'Payment_Amount'   => isset($payment['Payment_Amount']) ? (float)$payment['Payment_Amount'] : null,
+                    ];
+
+                    if (!empty($payment['Payment_ID'])) {
+                        $paymentId = $payment['Payment_ID'];
+                        $existingRecord = TransactionNbPayment::where('Payment_ID', $paymentId)
+                            ->where('Insurance_No', $insuranceNo)
+                            ->first();
+
+                        if ($existingRecord) {
+                            $receivedIds[] = $paymentId;
+
+                            if ($this->hasChanges($existingRecord->toArray(), $attributes)) {
+                                $attributes['Payment_Date'] = now();
+                            }
+
+                            $existingRecord->update($attributes);
+                        }
+                    } else {
+                        $attributes['Payment_Date'] = now();
+                        $newRecord = TransactionNbPayment::create($attributes);
+                        $receivedIds[] = $newRecord->Payment_ID;
+                    }
+                }
+
+                // 3. Delete records removed from the client payload
+                $idsToDelete = array_diff($existingIds, $receivedIds);
+                if (!empty($idsToDelete)) {
+                    TransactionNbPayment::whereIn('Payment_ID', $idsToDelete)
+                        ->where('Insurance_No', $insuranceNo)
+                        ->delete();
+                }
+            });
+
+            return response()->json([
+                'result'       => 1,
+                'Insurance_No' => $insuranceNo
+            ], 200);
+
+        } catch (Throwable $e) {
+            Log::channel('single')->error('Payment Sync Error: ' . $e->getMessage(), [
+                'exception'    => $e,
+                'insurance_no' => $insuranceNo
+            ]);
+
+            return response()->json([
+                'result' => 0,
+                'error'  => 'An internal error occurred.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Determines whether payload values diverge from database values.
+     */
+    private function hasChanges(array $old, array $new): bool
+    {
+        $fields = [
+            'Payment_Type',
+            'EWallet_Type',
+            'PDC_No',
+            'PDC_Account_Name',
+            'PDC_Bank_Name',
+            'PDC_Date',
+            'Payment_Terms',
+            'Payment_Amount'
+        ];
+
+        foreach ($fields as $field) {
+            $oldVal = $old[$field] ?? null;
+            $newVal = $new[$field] ?? null;
+
+            if ($field === 'PDC_Date') {
+                $oldVal = !empty($oldVal) ? Carbon::parse($oldVal)->format('Y-m-d') : null;
+                $newVal = !empty($newVal) ? Carbon::parse($newVal)->format('Y-m-d') : null;
+            }
+
+            if ($field === 'Payment_Amount') {
+                $oldVal = $oldVal !== null ? (float)$oldVal : null;
+                $newVal = $newVal !== null ? (float)$newVal : null;
+            }
+
+            if ($oldVal !== $newVal) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }

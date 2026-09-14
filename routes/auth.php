@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureLockscreenIsUnlocked;
 use Livewire\Volt\Volt;
 
-Route::middleware(['guest', EnsureLockscreenIsUnlocked::class])->group(function () {
+Route::middleware(['guest'])->group(function () { 
     Volt::route('/', 'auth.login')
         ->name('login');
 

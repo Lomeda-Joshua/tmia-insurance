@@ -1292,7 +1292,7 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="cbopaytype">Payment Type *</label>
-                      <select id="cbopaytype" class="form-control input-sm" required data-error="Payment Type is required." disabled>
+                      <select id="cbopaytype" class="form-control input-sm" required data-error="Payment Type is required.">
                         <option value="">PLEASE SELECT</option>
                       </select>
                       <div class="help-block with-errors"></div>
@@ -1799,7 +1799,8 @@
     }
 
     window.saveData = {
-        saveNbCustomerData : @json(route('newbusiness.save'))
+        saveNbCustomerData : @json(route('newbusiness.save')),
+        saveModifyPayment : @json(route('payments.sync'))
     }
 
     window.loadData = {
@@ -1809,6 +1810,7 @@
         sessionSetTransaction : @json(route('session.set-transaction-data')),
         getTransactionStatus : @json(route('gettransaction-status.data'))
     }
+
 
     window.formRoutes = {
         insuranceStaffData: @json(route('insurance_staff.data')),
@@ -1844,6 +1846,9 @@
 
         // Call status
         callStatusData: @json(route('callstatus.data')),
+
+        // Change status
+        transactionSubmitStatus: @json(route('transactions.update-status')),
     }
 
 

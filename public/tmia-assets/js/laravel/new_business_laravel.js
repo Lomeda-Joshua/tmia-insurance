@@ -937,6 +937,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.paymentTypeData,
     success: function(data) {
+      
       let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
@@ -945,14 +946,14 @@ $(document).ready( function () {
         });
 
         // Inject populated options into dropdown
-        $("#cbopaytype, #cbopaytype-n").html(options);
+        $("#cbopaytype").html(options);
 
         // Force Select2 to refresh its display
-        $("#cbopaytype, #cbopaytype-n").trigger('change.select2');
+        $("#cbopaytype").trigger('change.select2');
     }
   });
 
-  $("#cbopaytype, #cbopaytype-n").select2({
+  $("#cbopaytype").select2({
       allowClear: true,
       width: "100%",
       placeholder: "PLEASE SELECT"
@@ -965,11 +966,11 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.ewalletTypeData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
 
+      let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.PayTID}">${item.PayType}</option>`;
+          options += `<option value="${item.EWTID}">${item.EWType}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1081,16 +1082,14 @@ $(document).ready( function () {
     url:window.loadData.getTransactionStatus,
     success: function(data) {
 
-        let options = '<option value="">PLEASE SELECT</option>';
-
+        let options = '<option disabled value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-
-          options += `<option value="${item.Trans_Status}">${item.Business_Type}</option>`;
+          options += `<option value="${item.Trans_Status}">${item.Trans_Status}</option>`;
         });
 
         // Inject populated options into dropdown
-        $("#cbotransstatus").html(data);
+        $("#cbotransstatus").html(options);
 
         // Force Select2 to refresh its display
         $("#cbotransstatus").trigger('change.select2');
@@ -2201,7 +2200,6 @@ function LoadPaymentInfo() {
 
     // Get row data
     var rowData = tablepay.row(this).data();
-    console.log(rowData);
     editingRow = tablepay.row(this); // store reference for later update
 
     // Populate form fields
@@ -2648,8 +2646,6 @@ function FetchBrgy(cmcode,brgycode) {
 
 $(document).on("change", "#cbopaytype", function () {
     var paytype = $(this).val();
-
-    console.log(paytype);
     
     // Hide all sections first
     $(".cc-section, .pdc-section, .ew-section").fadeOut();
@@ -2695,8 +2691,12 @@ $(document).on("click", "#ptwallet", function () {
   $("#cboewallet").val("TOYOTA WALLET").trigger('change.select2');
 });
 
-$(document).on("click", "#btnaddpay", function () {
+$(document).on("click", "#btnaddpay", function (e) {
+  e.preventDefault();
+
   var tablepay = $("#table_payment").DataTable();
+
+  console.log(tablepay);
 
   // var paytype        = $("#cbopaytype").val();
   var paytype        = $("#cbopaytype option:selected").text().trim();
@@ -2710,7 +2710,7 @@ $(document).on("click", "#btnaddpay", function () {
   var pdcbankname    = $("#txtpdcbankname").val().trim();
   var pdccheckdate   = $("#dppdccheckdate").val();
   var payterms       = $("#txtpayterms").val().trim();
-  var payamount      = $("#txtpayamount").val().trim();
+  var payamount      = $("#txtpayamount").val().trim();  
 
   function warn(field, msg) {
       $(field).focus();
@@ -2877,7 +2877,7 @@ $(document).on("click", "#btnupdatepay", function() {
   // }
 
   $.ajax({
-    url: "new_business_payment_save.php", // Your PHP endpoint
+    url: window.saveData.saveModifyPayment, // Your PHP endpoint
     type: "POST",
     data: {insuranceno:insuranceno, payments:JSON.stringify(allData) },
     success: function(response) {
@@ -2911,9 +2911,8 @@ $(document).on("click", "#btnupdatepay", function() {
 });
 
 $(document).on("change", "#cbopaytype-n", function () {
-    console.log("this is paytype");  
+
     var paytype = $(this).val();
-    
 
     // Hide all sections first
     $(".cc-section-n, .pdc-section-n, .ew-section-n").fadeOut();
@@ -2921,21 +2920,17 @@ $(document).on("change", "#cbopaytype-n", function () {
 
     // Map payment types to sections
     var sectionMap = {
-        // "CREDIT CARD": ".cc-section-n",
-        "POST-DATED CHECK (PDC)": ".pdc-section-n",
-        "E-WALLET": ".ew-section-n"
+        "2": ".cc-section-n",
+        "4": ".pdc-section-n",
+        "5": ".ew-section-n"
     };
 
     // Map payment types to focus fields
     var focusMap = {
-        // "CREDIT CARD": "#txtccno-n",
-        "POST-DATED CHECK (PDC)": "#txtpdcno-n",
-        "E-WALLET": "#cboewallet-n"
-    };
-
-    console.log("focusmap", focusMap);
-    console.log("section map", sectionMap[paytype]);
-
+        "2": "#txtccno-n",
+        "4": "#txtpdcno-n",
+        "5": "#cboewallet-n"
+    };    
 
     if (sectionMap[paytype]) {
         $(sectionMap[paytype])
@@ -2949,12 +2944,14 @@ $(document).on("change", "#cbopaytype-n", function () {
     } 
 
     // Clear form
-  xpayid = "";
+  xpayid = "";m,  n
   $("#cboewallet-n").val("").trigger("change");
   $("#txtccno-n, #txtccholder-n, #txtccexpirydate-n, #txtccvv-n").val("");
   $("#txtpdcno-n, #txtpdcholdername-n, #txtpdcbankname-n, #dppdccheckdate-n").val("");
   $(".box-body").validator('reset');
 });
+
+
 
 $(document).on("click", "#pgcash-n", function () {
   $("#cboewallet-n").val("G-CASH").trigger('change.select2');
@@ -3288,15 +3285,13 @@ $(document).on("click", "#btnupdatestatus", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "new_business_update_status.php",
+    url: window.formRoutes.transactionSubmitStatus,
     method: "POST",
     data: formdata,
     processData: false,
     contentType: false,
     success: function (response) {
       $("#modalsaving").iziModal('close');
-
-      let result = jQuery.parseJSON(response);
 
       if (result.result == 1) {
         swal({

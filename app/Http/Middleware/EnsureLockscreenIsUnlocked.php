@@ -13,35 +13,34 @@ class EnsureLockscreenIsUnlocked
 
     public function handle(Request $request, Closure $next): Response
     {        
-        /*
-         * Not authenticated.
-         */
-        if (! Auth::check() || $request->routeIs('lockscreen*')) {
+            // 1. Allow unauthenticated users or specific exempt routes immediately
+        $exemptRoutes = [
+            'lockscreen*',
+            'login*',
+            'logout',
+        ];
+
+        if (! Auth::check() || $request->routeIs($exemptRoutes)) {
             return $next($request);
         }
 
-        
-        // Initialize session state if missing
+        // 2. Initialize lockscreen state if not set
         if (! $request->session()->has('lockscreen')) {
             $request->session()->put('lockscreen', false);
         }
 
-        
-        // Allow access to lockscreen routes to avoid infinite redirect loops
-        if ($request->routeIs('lockscreen') || $request->routeIs('lockscreen.unlock') || $request->routeIs('lockscreen.lock')) {
-            return $next($request);
-        }
-
-        // If locked, restrict access to all protected application routes
+        // 3. Enforce lockscreen restriction on all protected routes
         if ($request->session()->get('lockscreen') === true) {
-            return redirect()->route('lockscreen');
+
+            return redirect()->route('lockscreen');            
         }
 
-
-        return $next($request)->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
-                        ->header('Pragma', 'no-cache')
-                        ->header('Expires', 'Sun, 02 Jan 1990 00:00:00 GMT');
+        // 4. Pass request through with no-cache headers for authenticated, unlocked state
+        return $next($request)
+            ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Sun, 02 Jan 1990 00:00:00 GMT');
+    }
 
         
-    }
 }

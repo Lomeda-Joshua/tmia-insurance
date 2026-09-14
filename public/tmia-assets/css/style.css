@@ -154,7 +154,7 @@ section.home {
   display: flex;               /* enables flexbox */
   justify-content: center;     /* horizontal center */
   align-items: center;         /* vertical center */
-  width: 100% !important;                 /* full width of parent */
+  width: 90% !important;                 /* full width of parent */
   max-height: 100% !important;                /* full height of parent */
 }
 

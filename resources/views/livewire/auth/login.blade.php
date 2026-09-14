@@ -26,6 +26,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
      */
     public function login(): void
     {
+        dd("hello");
+        
         $this->validate();
 
         $this->ensureIsNotRateLimited();
