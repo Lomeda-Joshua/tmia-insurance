@@ -25,9 +25,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
      * Handle an incoming authentication request.
      */
     public function login(): void
-    {
-        dd("hello");
-        
+    {        
         $this->validate();
 
         $this->ensureIsNotRateLimited();

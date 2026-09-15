@@ -161,7 +161,7 @@ $(document).ready( function () {
 
    //======= Owner Type =====//
   $.ajax({
-    type:"GET",
+    type:"POST",
     url: window.formRoutes.customerTypeDataPost,
     dataType: "json",
     success: function(data) {

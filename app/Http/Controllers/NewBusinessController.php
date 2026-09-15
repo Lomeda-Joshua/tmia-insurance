@@ -528,7 +528,6 @@ class NewBusinessController extends Controller
         $query = UploadedEdafCustomer::where('Customer_No', $custNo)->with('customer');
             // ->orderBy('Model_Year', 'ASC');
 
-        // dd($query);
 
         // 3. Process Yajra DataTables engine
         return DataTables::of($query)

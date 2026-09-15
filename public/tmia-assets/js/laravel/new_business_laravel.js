@@ -938,7 +938,7 @@ $(document).ready( function () {
     url:window.formRoutes.paymentTypeData,
     success: function(data) {
       
-      let options = '<option value="">PLEASE SELECT</option>';
+      let options = '<option value=" " disabled>PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -1698,8 +1698,6 @@ function LoadVehicleEDAFSAPData(customerNo) {
     $('#table_uploadvehlist').DataTable().clear().destroy();               
   }
 
-  console.log(customerNo);
-
   table = $('#table_uploadvehlist').DataTable({
     language: {
       processing: "Loading Vehicle List..."
@@ -2113,7 +2111,7 @@ function LoadPaymentInfo() {
           processing: "Loading Payment List..."
       },
       processing: true,
-      serverSide: true,
+      serverSide: false,
       responsive: true,
       autoWidth: false,
       ordering: false,
@@ -2204,6 +2202,9 @@ function LoadPaymentInfo() {
 
     // Populate form fields
     xpayid = rowData.Payment_ID;
+
+    console.log(xpayid);
+
     if (balance <= 0) {
       $("#cbopaytype").val(rowData.Payment_Type).trigger("change.select2");
     } else {
@@ -2696,8 +2697,6 @@ $(document).on("click", "#btnaddpay", function (e) {
 
   var tablepay = $("#table_payment").DataTable();
 
-  console.log(tablepay);
-
   // var paytype        = $("#cbopaytype").val();
   var paytype        = $("#cbopaytype option:selected").text().trim();
   var ewallet        = $("#cboewallet").val();
@@ -2761,14 +2760,16 @@ $(document).on("click", "#btnaddpay", function (e) {
     button: "<button type='button' data-toggle='tooltip' data-placement='top' title='Remove Payment' class='btn btn-success btn-action btnremovepay'><i class='fa fa-remove'></i></button>"
   };
 
-  if (editingRow) {
-    // ✅ Replace the existing row
-    editingRow.data(rowData).draw(false);
-    editingRow = null; // reset editing
-  } else {
-    // ✅ Add a new row
-    var newRow = tablepay.row.add(rowData).draw(false).node();
-  }
+
+  tablepay.row.add(rowData).draw(false).node();
+  // if (editingRow) {
+  //   // ✅ Replace the existing row
+  //   editingRow.data(rowData).draw(false);
+  //   editingRow = null; // reset editing
+  // } else {
+  //   // ✅ Add a new row
+  //   var newRow = tablepay.row.add(rowData).draw(false).node();
+  // }
 
   // Deselect any previously selected row
   tablepay.$('tr.selected').removeClass('selected');

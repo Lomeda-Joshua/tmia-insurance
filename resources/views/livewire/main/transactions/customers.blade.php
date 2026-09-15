@@ -802,7 +802,6 @@
       csrfToken: "{{ csrf_token() }}",
       newBusinessData: @json(route('newbusiness.data')),
       insuranceStaffData: @json(route('insurance_staff.data')),
-      customerTypeData: @json(route('customers_type.data.2')),
       nbpendingcounts: @json(route('new_business.counts')),
       uploadCustomers: @json(route('uploaded.customer')),
       loadSelectedCustomer : @json(route('customer.get-by-no')),
