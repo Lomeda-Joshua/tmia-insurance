@@ -74,6 +74,12 @@ class VehicleController extends Controller
 
         return DataTables::eloquent($query)
             ->addIndexColumn()
+            ->addColumn('customer_name', function ($row) {
+                return $row->customer->Full_Name ?? 'N/A';
+            })
+            ->addColumn('contact_no', function ($row) {
+                return $row->customer->Contact_No ?? 'N/A';
+            })
             ->editColumn('VSI_Date', function ($row): string {
                 return $row->VSI_Date ? Carbon::parse($row->VSI_Date)->format('d-M-Y') : '';
             })

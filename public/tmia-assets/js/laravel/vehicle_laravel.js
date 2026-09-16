@@ -15,6 +15,22 @@ var rowindex;
 var editinfo = false;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
+
+//================== GET USER LOG IN INFORMATION =================//
+  $.ajax({
+    url: window.fetchData.variableData,
+    dataType: 'json',
+    cache: false,
+    success: function(data) {
+      userid = data.userid;
+      logname = data.logname;
+      ulevel = data.ulevel;
+      regdate = data.regdate;
+      dealercode = data.dealercode;
+      signin = data.signin;
+    }
+  });
+
   $.ajaxSetup({
     headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -499,7 +515,7 @@ function LoadMasterData() {
         processing: "Loading Vehicle List..."
       },
       processing: true,
-      serverSide: false,
+      serverSide: true,
       pageLength: 10,
       responsive: true,
       autoWidth: false,
@@ -517,31 +533,91 @@ function LoadMasterData() {
         console.error("DataTables AJAX Error: ", xhr.responseText);
       },
       columns: [
-        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "VIN", name: "VIN", defaultContent: "" },
-        { data: "Model", name: "Model", defaultContent: "" },
-        { data: "Model_Year", name: "Model_Year", defaultContent: "" },
-        { data: "Variant", name: "Variant", defaultContent: "" },
-        { data: "Color", name: "Color", defaultContent: "" },
-        { data: "Engine_No", name: "Engine_No", defaultContent: "" },
-        { data: "CS_No", name: "CS_No", defaultContent: "" },
-        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
-        {
-          data: "VSI_Date",
-          render: function (data) {
-            return getDateFormatted(data).toUpperCase();
-          }
-        },
-        {
-          data: "SRP",
-          render: function (data) {
-            return NumberFormat(data);
-          }
-        },
-        { data: "Customer_No", name: "Customer_No", defaultContent: "" },
-        { data: "Owner_Name", name: "Owner_Name", defaultContent: "" },
-        { data: "action", name: "action", orderable: false, searchable: false, defaultContent: "" },
+          {
+              data: "DT_RowIndex",
+              name: "DT_RowIndex",
+              orderable: false,
+              searchable: false
+          },
 
+          {
+              data: "VIN",
+              name: "VIN",
+              defaultContent: ""
+          },
+
+          {
+              data: "Model",
+              name: "Model",
+              defaultContent: ""
+          },
+
+          {
+              data: "Model_Year",
+              name: "Model_Year",
+              defaultContent: ""
+          },
+
+          {
+              data: "Variant",
+              name: "Variant",
+              defaultContent: ""
+          },
+
+          {
+              data: "Color",
+              name: "Color",
+              defaultContent: ""
+          },
+
+          {
+              data: "Engine_No",
+              name: "Engine_No",
+              defaultContent: ""
+          },
+
+          {
+              data: "CS_No",
+              name: "CS_No",
+              defaultContent: ""
+          },
+
+          {
+              data: "Plate_No",
+              name: "Plate_No",
+              defaultContent: ""
+          },
+
+          {
+              data: "VSI_Date",
+              defaultContent: ""
+          },
+
+          {
+              data: "SRP",
+              defaultContent: ""
+          },
+
+          {
+              data: "Customer_No",
+              name: "Customer_No",
+              defaultContent: ""
+          },
+
+          {
+              data: "customer_name",
+              orderable: false,
+              searchable: false,
+              defaultContent: "N/A"
+          },
+
+          {
+              data: "action",
+              name: "action",
+              orderable: false,
+              searchable: false,
+              defaultContent: ""
+          }
       ],
       columnDefs: [
         {
@@ -697,9 +773,9 @@ function LoadVehicleInfo(vin) {
           const safeVSIDate = new Date(value.VSI_Date);
           if (!isNaN(safeVSIDate)) {
             $("#dpvsidate").datepicker("setDate", safeVSIDate);
-          }
+          } 
         }
-
+ 
         if (value.Released_Date) {
           const safeRelDate = new Date(value.Released_Date);
           if (!isNaN(safeRelDate)) {
@@ -1446,6 +1522,10 @@ $(document).on("click", "#btnsave", function () {
   // ======================================================
   // VEHICLE FIELDS
   // ======================================================
+
+  console.log(getDate("#dpvsidate"));
+
+  // If data comes in YYYY-MM-DD or DD-MM-YYYY string format
   const vehicleFields = {
     newdata,        // Ensure this exists in scope
     xvin,           // Ensure this exists in scope
@@ -1476,7 +1556,9 @@ $(document).on("click", "#btnsave", function () {
     voname: getVal("#txtvoname"),
     mpname: getVal("#txtmpname"),
     remarks: getVal("#txtremarksveh")
-  };
+  }; 
+
+  console.log(vehicleFields);
 
   // ======================================================
   // Custom Validation: CS No / Plate No (either one required)
@@ -1515,7 +1597,7 @@ $(document).on("click", "#btnsave", function () {
     { key: "owntype", selector: "#cboowntype", message: "Please fill out Owner Type." },
     { key: "voname", selector: "#txtvoname", message: "Please fill out Vehicle Owner Name." },
     { key: "mpname", selector: "#txtmpname", message: "Please fill out Marketing Professional." }
-  ];
+  ];  
 
   // ======================================================
   // Master Validation Function
@@ -1675,23 +1757,27 @@ $(document).on( "click", "#btnclose", function () {
 ////////////////////////////// END BUTTONS CLICKED /////////////////////////////////
 
 /////////////////// ENABLED OR DISABLED /////////////////////
+
 function FormDisable(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
-    if (val == true){
-      $("#viewaction").show();
-      $("#viewaction1").hide();
-    } else {
-      $("#viewaction").hide();
-      $("#viewaction1").show();
-    }
+  // 1. Role-based view toggles
+  if (ulevel == 1 || ulevel == 6) {
+      if (val === true) {
+          console.log("true");
+          $("#viewaction").show().removeAttr("hidden");
+          $("#viewaction1").hide().attr("hidden", true);
+      } else {
+          $("#viewaction").hide().attr("hidden", true);
+          $("#viewaction1").show().removeAttr("hidden");
+      }
   }
 
-  if (newdata == true){
-    $("#btncancel").hide();
-    $("#btnclose").show();
+  // 2. New data button toggles
+  if (typeof newdata !== "undefined" && newdata === true) {
+      $("#btncancel").hide().attr("hidden", true);
+      $("#btnclose").show().removeAttr("hidden");
   } else {
-    $("#btncancel").show();
-    $("#btnclose").hide();
+      $("#btncancel").show().removeAttr("hidden");
+      $("#btnclose").hide().attr("hidden", true);
   }
   
   $("#txtvin").attr("disabled",val);

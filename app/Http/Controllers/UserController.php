@@ -127,15 +127,17 @@ class UserController extends Controller
 
     public function getSessionVariables(): JsonResponse
     {
+        $user = Auth::user();
+
         return response()->json([
-            'userid'     => Session::get('userid'),
-            'logname'    => Session::get('logname'),
-            'uname'      => Session::get('uname'),
-            'ulevel'     => Session::get('ulevel'),
-            'regdate'    => Session::get('regdate'),
-            'dealercode' => Session::get('dealercode'),
-            'signin'     => Session::get('signin', false),
-            'signout'    => Session::get('signout', false),
+            'userid'     => $user?->User_ID ?? null,
+            'logname'    => $user?->Display_Name ?? $user?->User_Name ?? null,
+            'uname'      => $user?->User_Name ?? null,
+            'ulevel'     => $user?->User_Level_ID ?? null,
+            'regdate'    => $user?->Register_Date ?? null,
+            'dealercode' => $user?->Dealer_ID ?? null,
+            'signin'     => Auth::check(),
+            'signout'    => ! Auth::check(),
         ]);
     }
 

@@ -3294,7 +3294,7 @@ $(document).on("click", "#btnupdatestatus", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Status!",
           text: "Transaction status has been updated successfully.",
@@ -3420,9 +3420,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Gross Premium / Net Rem!",
           text: "Gross Premium / Net Rem has been updated successfully.",

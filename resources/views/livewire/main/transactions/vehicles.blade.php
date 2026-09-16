@@ -581,6 +581,15 @@
         customerData: @json(route('customers.data')),
     }
 
+    window.fetchData = {
+      variableData : @json(route('getSession.variables')),
+      getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
+      customerData: @json(route('customers.data')),
+      vehicleInfo: @json(route('customercvehicleinfo.data')),
+      getPaymentData: @json(route('payments.get-data')),
+      getCustomerSpecificData : @json(route('getSpecificView.data'))
+    }
+
     window.getData = {
         vehicleSpecific: @json(route('vehicle.search')),
     }
@@ -629,128 +638,6 @@
 
   <script src="{{ asset('tmia-assets/js/laravel/vehicle_laravel.js') }}"></script>
 
-    {{-- <script>
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-            });
-
-            // DataTables Initialization
-            let table = $('#table_trans').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: "{{ route('vehicle.datatable') }}",
-                    type: "POST",
-                    data: function(d) {
-                        d.searchval = $('#txtsearch').val();
-                        d.datefrom  = $('#dpdatefrom').val();
-                        d.dateto    = $('#dpdateto').val();
-                        d.chkall    = $('#chkall').is(':checked') ? 1 : 0;
-                    }
-                },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'VIN', name: 'VIN' },
-                    { data: 'Model', name: 'Model' },
-                    { data: 'Year_Model', name: 'Year_Model' },
-                    { data: 'Variant', name: 'Variant' },
-                    { data: 'Color', name: 'Color' },
-                    { data: 'Engine_No', name: 'Engine_No' },
-                    { data: 'CS_No', name: 'CS_No' },
-                    { data: 'Plate_No', name: 'Plate_No' },
-                    { data: 'VSI_Date', name: 'VSI_Date' },
-                    { data: 'SRP', name: 'SRP' },
-                    { data: 'Customer_No', name: 'Customer_No' },
-                    { data: 'Customer_Name', name: 'Customer_Name' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false }
-                ]
-            });
-
-            // Trigger grid search
-            $('#btnfind').on('click', function() {
-                table.draw();
-            });
-
-            $('#txtsearch').on('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    table.draw();
-                }
-            });
-
-            // Fetch and Populate Vehicle Details into Modal
-            $(document).on('click', '.btnview', function() {
-                let vin = $(this).data('vin');
-                let url = "{{ route('vehicle.show', ':vin') }}".replace(':vin', vin);
-
-                $.get(url, function(data) {
-                    $('#txtvin').val(data.VIN);
-                    $('#txtmake').val(data.Make);
-                    $('#txtmodel').val(data.Model);
-                    $('#txtmodelyear').val(data.Year_Model);
-                    $('#txtcolor').val(data.Color);
-                    $('#txtengineno').val(data.Engine_No);
-                    $('#txtcsno').val(data.CS_No);
-                    $('#txtplateno').val(data.Plate_No);
-                    $('#txtsrp').val(data.SRP);
-                    $('#dpvsidate').val(data.VSI_Date);
-                    $('#txtvariant').val(data.Variant);
-                    $('#cbobodytype').val(data.Body_Type);
-                    $('#txttransmission').val(data.Power_Transmission);
-                    $('#cbofueltype').val(data.Fuel_Type);
-                    $('#txtseats').val(data.Seats);
-                    $('#cboprodclass').val(data.Product_Classification);
-                    $('#cboowntype').val(data.Owner_Type);
-                    $('#txtvoname').val(data.Vehicle_Owner_Name);
-                    $('#txtmpname').val(data.Marketing_Professional);
-
-                    $('#modal-modify').iziModal('open');
-                });
-            });
-
-            // Save/Update Action
-            $('#btnsave').on('click', function() {
-                $('#modalsaving').modal('show');
-
-                let payload = {
-                    vin: $('#txtvin').val(),
-                    make: $('#txtmake').val(),
-                    model: $('#txtmodel').val(),
-                    model_year: $('#txtmodelyear').val(),
-                    color: $('#txtcolor').val(),
-                    engine_no: $('#txtengineno').val(),
-                    cs_no: $('#txtcsno').val(),
-                    plate_no: $('#txtplateno').val(),
-                    srp: $('#txtsrp').val(),
-                    vsi_date: $('#dpvsidate').val(),
-                    variant: $('#txtvariant').val(),
-                    body_type: $('#cbobodytype').val(),
-                    transmission: $('#txttransmission').val(),
-                    fuel_type: $('#cbofueltype').val(),
-                    seats: $('#txtseats').val(),
-                    prod_class: $('#cboprodclass').val(),
-                    owner_type: $('#cboowntype').val(),
-                    vehicle_owner: $('#txtvoname').val(),
-                    marketing_prof: $('#txtmpname').val()
-                };
-
-                $.ajax({
-                    url: "{{ route('vehicle.save') }}",
-                    type: "POST",
-                    data: payload,
-                    success: function(response) {
-                        $('#modalsaving').modal('hide');
-                        $('#modal-modify').iziModal('close');
-                        table.draw();
-                    },
-                    error: function(xhr) {
-                        $('#modalsaving').modal('hide');
-                        alert('An error occurred while saving the record.');
-                    }
-                });
-            });
-        });
-    </script> --}}
 @endpush
 
 </x-layouts.main>
