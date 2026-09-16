@@ -46,4 +46,8 @@ class RenewalBusinessTransaction extends Model
     public function customer_details (){
         return $this->belongsTo(CustomerInformation::class, "Customer_No" , "Customer_No");
     }
+
+    public function vehicle_details(){
+        return $this->belongsTo(CustomerInformation::class, "Customer_No" , "Customer_No");
+    }
 }

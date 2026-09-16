@@ -1371,6 +1371,8 @@ function LoadTransactionData() {
     return;
   }  
 
+  console.log(window.tableRoutes.renewalBusinessData);
+
   table = $('#table_trans').DataTable({
     language: {
       processing: "Loading Transaction List..."
@@ -1381,7 +1383,7 @@ function LoadTransactionData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.newBusinessData,
+      url: window.tableRoutes.renewalBusinessData,
       type: "POST",
       data: function (d) {
             d.viewpending  = window.viewpending === true;
@@ -1611,8 +1613,6 @@ function LoadCustomerDataEDAFSAP() {
   });
 }
 
-
-console.log(window.tableRoutes.getVehiclesByCustomer);
 //============== Vehicle List ============//
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {

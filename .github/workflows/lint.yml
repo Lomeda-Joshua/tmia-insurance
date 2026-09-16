@@ -3,10 +3,12 @@ name: linter
 on:
   push:
     branches:
+      - version_1.18
       - develop
       - main
   pull_request:
     branches:
+      - version_1.18
       - develop
       - main
 

@@ -30,7 +30,6 @@ class RenewalBusinessController extends Controller
                 'Trans_Date',
                 'Trans_Status',
                 'Customer_No', // Foreign key required for mapping
-                'Contact_No',
                 'VIN',
                 'CS_No',
                 'Plate_No',

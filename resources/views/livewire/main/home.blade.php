@@ -312,5 +312,6 @@
   </section>
 
 </div>
+<script src="{{ asset('tmia-assets/js/laravel/dashboard_laravel.js') }}"></script>
 <!-- /.content-wrapper -->
 </x-layouts.main>

@@ -16,13 +16,19 @@ use App\Http\Controllers\LockscreenController;
 use App\Http\Controllers\GeneralReportingController;
 
 
+// Lockscreen middleware and group
 Route::middleware(['auth'])->group(function () {
     Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
     Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
     Route::post('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
 });
 
+
 Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
+
+    Route::get('/csrf-token', function () {
+        return response()->json(['token' => csrf_token()]);
+    });
 
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
@@ -30,10 +36,10 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Notification
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
+    // User session variable for Javascript auth use
     Route::get('/user-session-variable', [OverallDataController::class,'getSessionVariables'])->name('getSession.dataVariable');
 
-
-    // Data Group
+    // Data fetch for Form Groups
     Route::post('/bodytype/data', [OverallDataController::class, 'getBodyType'])->name('bodytype.data');
     Route::post('/communicationtype/data', [OverallDataController::class, 'getCommunicationType'])->name('communicationtype.data');
     Route::post('/ewalletype/data', [OverallDataController::class, 'getEwalletType'])->name('ewalletype.data');
@@ -117,7 +123,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
-        Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
+        Route::get('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
 
@@ -146,11 +152,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
         Route::post('/user-account/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
         Route::post('/user-account/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
-    });
 
-    Route::prefix('settings')->group(function () {
+        // Report generation
         Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
     });
+
+
+
 
     // Laravel default Volt account settings routes
     Route::redirect('settings', 'settings/profile');

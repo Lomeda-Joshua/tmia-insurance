@@ -1630,9 +1630,7 @@ function LoadVehicleData() {
       url: window.tableRoutes.getVehiclesByCustomer,
       type: "POST",
       data: function (d) {
-              d.custno = activeCustTab === '#uploadtab'
-              ? xcustnoupload
-              : xcustno;// Pass your dynamic customer number
+              d.custno = activeCustTab === '#uploadtab' ? xcustnoupload : xcustno;// Pass your dynamic customer number
         }
     },
     columns: [
@@ -1938,12 +1936,15 @@ function LoadCustomerEDAFSAPInfo() {
   $(".box-body").validator('reset');
 }
 
+
+
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
+      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {

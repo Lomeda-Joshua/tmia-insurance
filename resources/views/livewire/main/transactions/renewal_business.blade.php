@@ -1813,7 +1813,7 @@
     }
 
     window.tableRoutes = {
-        newBusinessData: @json(route('renewal_business.data')),
+        renewalBusinessData: @json(route('renewal_business.data')),
         customerData: @json(route('customers.data')),
         uploadCustomers: @json(route('uploaded.customer')),
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
