@@ -2949,9 +2949,7 @@ $(document).on("click", "#btnupdatecust", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Information!",
           text: "Customer information detatils has been updated successfully.",

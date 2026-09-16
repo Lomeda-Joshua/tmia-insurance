@@ -937,7 +937,6 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.paymentTypeData,
     success: function(data) {
-      
       let options = '<option value=" " disabled>PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
@@ -946,10 +945,10 @@ $(document).ready( function () {
         });
 
         // Inject populated options into dropdown
-        $("#cbopaytype").html(options);
+        $("#cbopaytype, #cbopaytype-n").html(options);
 
         // Force Select2 to refresh its display
-        $("#cbopaytype").trigger('change.select2');
+        $("#cbopaytype, #cbopaytype-n").trigger('change.select2');
     }
   });
 
@@ -2699,7 +2698,8 @@ $(document).on("click", "#btnaddpay", function (e) {
 
   // var paytype        = $("#cbopaytype").val();
   var paytype        = $("#cbopaytype option:selected").text().trim();
-  var ewallet        = $("#cboewallet").val();
+  // var ewallet        = $("#cboewallet").val();
+  var ewallet        = $("#cboewallet option:selected").text().trim();
   var ccno           = $("#txtccno").val().trim();
   var ccholder       = $("#txtccholder").val().trim();
   var ccexpirydate   = $("#txtccexpirydate").val().trim();
@@ -2710,6 +2710,8 @@ $(document).on("click", "#btnaddpay", function (e) {
   var pdccheckdate   = $("#dppdccheckdate").val();
   var payterms       = $("#txtpayterms").val().trim();
   var payamount      = $("#txtpayamount").val().trim();  
+
+  console.log(ewallet);
 
   function warn(field, msg) {
       $(field).focus();
@@ -2945,7 +2947,7 @@ $(document).on("change", "#cbopaytype-n", function () {
     } 
 
     // Clear form
-  xpayid = "";m,  n
+  xpayid = "";
   $("#cboewallet-n").val("").trigger("change");
   $("#txtccno-n, #txtccholder-n, #txtccexpirydate-n, #txtccvv-n").val("");
   $("#txtpdcno-n, #txtpdcholdername-n, #txtpdcbankname-n, #dppdccheckdate-n").val("");
@@ -3114,7 +3116,8 @@ $(document).on("click", "#btnaddpay-n", function () {
 
   // var paytype     = $("#cbopaytype-n").val();
   var paytype        = $("#cbopaytype-n option:selected").text().trim();
-  var ewallet        = $("#cboewallet-n").val();
+  // var ewallet        = $("#cboewallet-n").val();
+  var ewallet        = $("#cboewallet-n option:selected").text().trim();
   var ccno           = $("#txtccno-n").val().trim();
   var ccholder       = $("#txtccholder-n").val().trim();
   var ccexpirydate   = $("#txtccexpirydate-n").val().trim();
@@ -3125,6 +3128,8 @@ $(document).on("click", "#btnaddpay-n", function () {
   var pdccheckdate   = $("#dppdccheckdate-n").val();
   var payterms       = $("#txtpayterms-n").val().trim();
   var payamount      = $("#txtpayamount-n").val().trim();
+
+  console.log(ewallet);
 
   function warn(field, msg) {
       $(field).focus();
@@ -5284,6 +5289,8 @@ $(document).on("click", "#btnsubmit", function () {
     }
     allData.push(row);
   });
+
+  console.log(allData);
 
   const insuranceFields = {
     grosspremium: getNum("#txtgrosspremium"),

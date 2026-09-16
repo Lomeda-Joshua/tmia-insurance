@@ -881,7 +881,7 @@
                                       <div class="form-group">
                                         <label for="cboewallet-n">E-Wallet Type *</label>
                                         <select id="cboewallet-n" class="form-control input-sm" required data-error="E-Wallet Type is required." disabled>
-                                          <option value="">PLEASE SELECT</option>
+                                          <option value=" ">PLEASE SELECT</option>
                                         </select>
                                         <div class="help-block with-errors"></div>
                                       </div>
