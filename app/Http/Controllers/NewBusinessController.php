@@ -104,14 +104,13 @@ class NewBusinessController extends Controller
                     $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
 
                     $statusColors = [
-                        'PENDING'   => 'label label-default',
-                        'COMPLETED' => 'label label-success',
-                        'CANCELLED' => 'label label-danger',
+                        'PENDING'   => '#5bc0de',
+                        'COMPLETED' => '#22bb33',
+                        'CANCELLED' => '#bb2124',
                     ];
 
                     $labelClass = $statusColors[$status] ?? 'label label-default';
-
-                    return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+                    return '<span insuranceno="' . $insuranceNo . '" class="badge" style=background-color:'. $labelClass .'>' . e($statusRaw) . '</span>';
                 })
                 ->addColumn('button', function ($row) {
                     $insuranceNo = e($row->Insurance_No);
@@ -683,9 +682,7 @@ class NewBusinessController extends Controller
                 $receivedIds = [];
 
                 foreach ($paymentsPayload as $payment) {
-                    $pdcDate = !empty($payment['PDC_Date'])
-                        ? Carbon::parse($payment['PDC_Date'])->format('Y-m-d')
-                        : null;
+                    $pdcDate = !empty($payment['PDC_Date']) ? Carbon::parse($payment['PDC_Date'])->format('Y-m-d') : null;
 
                     $attributes = [
                         'Insurance_No'     => $insuranceNo,

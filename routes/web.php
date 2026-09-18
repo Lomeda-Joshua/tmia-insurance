@@ -16,7 +16,11 @@ use App\Http\Controllers\LockscreenController;
 use App\Http\Controllers\GeneralReportingController;
 
 
-// Lockscreen middleware and group
+/**
+ * 
+ * Lockscreen middleware and group
+ * 
+ * */ 
 Route::middleware(['auth'])->group(function () {
     Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
     Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
@@ -26,14 +30,16 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
 
+    // CSRF Token for Javascript AJAX transactions
     Route::get('/csrf-token', function () {
         return response()->json(['token' => csrf_token()]);
     });
 
+
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
 
-    // Notification
+    // Notification backend data
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
     // User session variable for Javascript auth use
@@ -123,7 +129,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
-        Route::get('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
+        Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
 

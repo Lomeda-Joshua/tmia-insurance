@@ -19,6 +19,8 @@
             <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
             </li>
+            
+            
             <li class="treeview {{ request()->routeIs(['customer_list', 'vehicle_list', 'new_business*', 'renewal_business*']) ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-tasks"></i>
@@ -42,6 +44,7 @@
                     </li> 
                 </ul>
             </li>
+            
             <li class="treeview {{ request()->routeIs('settings.*') ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-gears"></i>
@@ -51,14 +54,17 @@
                     </span>
                 </a>
                 <ul class="treeview-menu" id="mymenuchild1">
+                    @if(Auth::user()->User_Level_ID == 1)
                     <li class="{{ request()->routeIs('user') ? 'active' : '' }}">
                         <a href="{{ route('user') }}"><i class="fa fa-user"></i> <span>Users</span></a>
                     </li>
+                    @endif
                     <li class="{{ request()->routeIs('user_account') ? 'active' : '' }}">
                         <a href="{{ route('user_account') }}"><i class="fa fa-user"></i> <span>Account</span></a>
                     </li>
                 </ul>
             </li>
+            
             <li class="treeview {{ request()->routeIs('nbrb_report') ? 'active menu-open' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i>

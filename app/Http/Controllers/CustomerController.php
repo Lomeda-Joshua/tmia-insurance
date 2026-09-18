@@ -255,8 +255,6 @@ class CustomerController extends Controller
         $csno    = trim($request->input('csno', ''));
         $plateno = trim($request->input('plateno', ''));
 
-        dd($request->all());
-        
         // Priority 1: Check by VIN
         if (!empty($vin)) {
             $data = VehicleInformation::where('VIN', $vin)->get();

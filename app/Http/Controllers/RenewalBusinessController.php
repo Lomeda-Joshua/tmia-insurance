@@ -19,11 +19,9 @@ class RenewalBusinessController extends Controller
 
     public function getRenewalData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
-
-        $filters = $request->validated();
-
+        $filters = $request->validated();     
         $query = RenewalBusinessTransaction::with(['customer_details' => function ($q) {
-                $q->select('Customer_No', 'Full_Name', 'Contact_No' ); // Select columns from Customer table
+                // $q->select('Customer_No', 'Full_Name', 'Contact_No' ); // Select columns from Customer table
             }])
             ->select([
                 'Insurance_No',
@@ -31,18 +29,18 @@ class RenewalBusinessController extends Controller
                 'Trans_Status',
                 'Customer_No', // Foreign key required for mapping
                 'VIN',
-                'CS_No',
-                'Plate_No',
-                'Model',
-                'Variant',
-                'Insurance_Company',
-                'ISE_Name',
-                'MP_Name',
-                'Call_Attempts',
-                'Option_Type',
-                'Policy_Expiration',
+                // 'CS_No',
+                // 'Plate_No',
+                // 'Model',
+                // 'Variant',
+                // 'Insurance_Company',
+                // 'ISE_Name',
+                // 'MP_Name',
+                // 'Call_Attempts',
+                // 'Option_Type',
+                // 'Policy_Expiration',
             ]);
-
+        
         // 1. Pending Filter (Priority 1)
         if (! empty($filters['viewpending'])) {
             $query->where('Trans_Status', 'PENDING');

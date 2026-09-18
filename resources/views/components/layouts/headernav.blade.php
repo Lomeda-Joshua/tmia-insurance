@@ -54,13 +54,13 @@
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="{{ asset('tmia-assets/images/user.png') }}" class="user-image" alt="User Image">
+                <img src="{{ asset('tmia-assets/images/user.png') }}" class="user-image"  alt="User Image">
                 <span class="hidden-xs"><b><font size="2px" face="arial black">{{ Auth::user()->Display_Name }}</font></b></span>
             </a>
             <ul class="dropdown-menu">
                 <!-- User image -->
                 <li class="user-header">
-                    <img src="{{ asset('tmia-assets/images/user.png') }}" class="img-circle" alt="User Image">
+                    <img src="{{ asset('tmia-assets/images/user.png') }}" style="margin-left:auto; margin-right:auto;" class="img-circle" alt="User Image">
                     <p>
                       @if( Auth::user()->User_ID != null )
                         <b>ID No.:</b>

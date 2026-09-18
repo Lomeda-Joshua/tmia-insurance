@@ -708,7 +708,6 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceStaffData,
     success: function(data) {
-      
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -828,7 +827,7 @@ $(document).ready( function () {
     type:"post",
     url:window.formRoutes.bodyTypeData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
@@ -937,7 +936,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.paymentTypeData,
     success: function(data) {
-      let options = '<option value=" " disabled>PLEASE SELECT</option>';
+        let options = '<option value=" " disabled>PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -965,8 +964,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.ewalletTypeData,
     success: function(data) {
-
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
           options += `<option value="${item.EWTID}">${item.EWType}</option>`;
@@ -1080,7 +1078,6 @@ $(document).ready( function () {
     data:{ businesstype: "NEW BUSINESS" },
     url:window.loadData.getTransactionStatus,
     success: function(data) {
-
         let options = '<option disabled value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -1136,7 +1133,6 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.callStatusData,
     success: function(data) {
-      
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -1396,14 +1392,49 @@ function LoadTransactionData() {
     columns: [
           { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
           { data: 'Insurance_No', name: 't.Insurance_No' },
-          { data: 'Trans_Date', name: 't.Trans_Date' },
+          { 
+            data: 'Trans_Date', 
+            name: 't.Trans_Date',
+            render: function (data, type, row) {
+                // Return empty string if missing
+                if (!data) return ''; 
+
+                // Apply custom formatting for display and search/filter views
+                if (type === 'display' || type === 'filter') {
+                    // Replace space with 'T' so cross-browser JS parses the SQL datetime string safely
+                    const dateObj = new Date(typeof data === 'string' ? data.replace(' ', 'T') : data);
+                    
+                    // Fallback if the date is invalid
+                    if (isNaN(dateObj.getTime())) return data; 
+
+                    // Format date part (e.g., "September 16, 2026")
+                    const formattedDate = dateObj.toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+
+                    // Format time part (e.g., "10:06 AM")
+                    const formattedTime = dateObj.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+
+                    return `${formattedDate} ${formattedTime}`;
+                }
+
+                // Keep raw ISO/SQL timestamp format for background sorting
+                return data; 
+            }
+          },
           { data: 'Trans_Status', name: 't.Trans_Status' },
           { data: 'Customer_No', name: 't.Customer_No' },
           { data: 'Full_Name', name: 'c.Full_Name' },
           { data: 'Contact_No', name: 'c.Contact_No' },
           { data: 'VIN', name: 't.VIN' },
-          { data: 'CS_No', name: 'v.CS_No' },
           { data: 'Plate_No', name: 'v.Plate_No' },
+          { data: 'CS_No', name: 'v.CS_No' },
           { data: 'Model', name: 'v.Model' },
           { data: 'Variant', name: 'v.Variant' },
           { data: 'Insurance_Company', name: 't.Insurance_Company' },
@@ -1538,7 +1569,7 @@ function LoadCustomerDataEDAFSAP() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,

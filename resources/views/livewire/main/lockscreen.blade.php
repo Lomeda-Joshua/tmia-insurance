@@ -19,7 +19,7 @@
     <meta name="msapplication-TileColor" content="#da532c"/>
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff"/>
-
+    
     <!--============<******* CASCADING STYLE SHEETS (CSS) *******>============-->
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/plugins/bootstrap/css/bootstrap.min.css") }}"/>
@@ -29,6 +29,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/css/AdminLTE.min.css") }}"/>
     <!-- SweetAlert style -->
     <link rel="stylesheet" type="text/css" href="{{ asset("tmia-assets/plugins/sweetalert/sweetalert.css") }}"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style type="text/css">
       body {
         color: #000000;
@@ -152,19 +154,13 @@
                     </div>
 
                 </div>
-
-                @error('password')
-                    <div
-                        class="text-danger mt-1 text-left"
-                        style="font-size:12px;color:#ff4d4d;"
-                    >
-                        {{ $message }}
-                    </div>
-                @enderror
-
             </form>
 
-
+    @error('password')
+    {{-- <div class="text-danger mt-1 text-left" style="font-size:12px;color:#ff4d4d;">
+        {{ $message }}
+    </div> --}}
+    @enderror
 
         </div>
 
@@ -199,6 +195,27 @@
     </div>
 
 </div>
+
+
+{{-- Push the script to your layout's footer scripts section --}}
+@error('password')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Swal.fire({
+            imageUrl: '{{ asset("tmia-assets/images/logo-mini.png") }}', // Path or URL to your custom image
+            imageWidth: 130,                                        // Custom width in pixels
+            imageHeight: 100,                                       // Custom height in pixels
+            imageAlt: 'Custom Error Icon',                          // Accessibility alt text
+            title: 'Password Error',
+            text: 'Incorrect password',
+            confirmButtonColor: '#ff4d4d',
+            target: 'body',                                         // Forces overlay to append directly to body
+            heightAuto: false                                       // Prevents body height jumping
+        });
+    });
+</script>
+@enderror
+
 
 <script>
     (function () {

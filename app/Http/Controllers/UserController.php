@@ -50,13 +50,13 @@ class UserController extends Controller
             })
             ->editColumn('Active', function ($user): string {
                 $status = strtoupper(trim((string) $user->Active));
-                $badgeClass = ($status === 'YES' || $status === '1') ? 'success' : 'danger';
-                return '<span class="badge text-bg-' . $badgeClass . '">' . e($user->Active) . '</span>';
+                $colorClass = ($status === 'YES' || $status === '1') ? '#22bb33' : '#bb2124';
+                return '<span class="badge text-bg" style="background-color: '. $colorClass . ' !important ">' . e($user->Active) . '</span>';
             })
             ->editColumn('Enable2FA', function ($user): string {
                 $enabled = strtoupper(trim((string) $user->Enable2FA));
-                $badgeClass = ($enabled === 'YES' || $enabled === '1') ? 'info' : 'secondary';
-                return '<span class="badge text-bg-' . $badgeClass . '">' . e($user->Enable2FA) . '</span>';
+                $colorClass = ($enabled === 'YES' || $enabled === '1') ? '#22bb33' : '#bb2124';
+                return '<span class="badge text-bg" style="background-color: '. $colorClass . ' !important ">' . e($user->Enable2FA) . '</span>';
             })
             ->addColumn('button', function ($user): string {
                 $uid = e($user->User_ID);

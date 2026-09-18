@@ -97,7 +97,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="btnactionud pull-right" hidden>
+          <div class="btnactionud pull-right" style="display: none;">
             <button type="button" id="btnnblist" class="btn btn-box-tool" style="font-size: 15px !important;" data-toggle="tooltip" title="New Business Expired & Expiring Soon (90Days)"><i class="fa fa-list"></i> NB Expired & 90D</button>
             <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i class="fa fa-plus"></i> Add New</button>
           </div>
@@ -1805,11 +1805,11 @@
 <script>
 
     window.LaravelRoutes = {
-      csrfToken: "{{ csrf_token() }}",
-      nbpendingcounts: @json(route('new_business.counts')),
-      loadSelectedCustomer : @json(route('customer.get-by-no')),
-      loadVehicle: @json(route('vehicle.search')),
-      loadModifyPage: @json(route('getModifyView.data'))
+        csrfToken: "{{ csrf_token() }}",
+        nbpendingcounts: @json(route('new_business.counts')),
+        loadSelectedCustomer : @json(route('customer.get-by-no')),
+        loadVehicle: @json(route('vehicle.search')),
+        loadModifyPage: @json(route('getModifyView.data'))
     }
 
     window.tableRoutes = {
@@ -1821,7 +1821,10 @@
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
-
+    
+    window.fetchData = {
+      variableData : @json(route('getSession.variables')),
+    }
 
     window.getData = {
       customerInfo : @json(route('customerinfo.data')),
