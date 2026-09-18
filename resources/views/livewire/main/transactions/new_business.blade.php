@@ -725,7 +725,7 @@
                             </div>
                           </div>  
                         </div>
-                        <table class="installment-section" hidden>
+                        <table class="installment-section" style="display: none;">
                           <tbody>
                             <tr>
                               <td data-label="" style="text-align: left;">
@@ -754,7 +754,7 @@
                         </table>
                       </form>
                       <hr>
-                      <div class="box box-solid payment-new" hidden>
+                      <div class="box box-solid payment-new" style="display: none;">
                         <div class="box-body" style="max-width:100%;">
                           <div class="payment-info-n" >
                             <div class="row">
@@ -772,7 +772,7 @@
                                 </div>
 
                                 <!-- Credit Card Section -->
-                                <div class="row cc-section-n" hidden>
+                                <div class="row cc-section-n" style="display: none;">
                                   <div class="col-md-12">
                                     <div class="credit-card">
                                       <div class="cc-header">
@@ -822,7 +822,7 @@
                                 </div>
 
                                 <!-- PDC Section -->
-                                <div class="row pdc-section-n" hidden>
+                                <div class="row pdc-section-n" style="display: none;">
                                   <div class="col-md-12">
                                     <div class="post-dated-check">
                                       <div class="pdc-header">
@@ -875,7 +875,7 @@
                                 </div>
 
                                 <!-- E-Wallet Section -->
-                                <div class="row ew-section-n" hidden>
+                                <div class="row ew-section-n" style="display: none;">
                                   <div class="col-md-12">
                                     <div class="col-md-4">
                                       <div class="form-group">
@@ -1351,7 +1351,7 @@
                 </div>
 
                 <!-- PDC Section -->
-                <div class="row pdc-section">
+                <div class="row pdc-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="post-dated-check">
                       <div class="pdc-header">

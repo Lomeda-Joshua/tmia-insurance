@@ -16,6 +16,7 @@ use App\Http\Controllers\LockscreenController;
 use App\Http\Controllers\GeneralReportingController;
 use App\Http\Controllers\VehicleLookupController;
 use App\Http\Controllers\PolicyExpirationController;
+use App\Http\Controllers\TransactionController;
 
 
 /**
@@ -75,6 +76,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
     // Transactions Group
     Route::prefix('transactions')->group(function () {
+
+        Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
+        Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
 
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
@@ -154,8 +158,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Account settings
         Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
+        
         Route::get('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
-        Route::post('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
+        Route::get('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
         Route::post('/user-account/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
         Route::post('/user-account/update', [UserController::class, 'updateUser'])->name('user_account.update');
         Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');

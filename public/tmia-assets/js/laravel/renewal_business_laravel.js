@@ -31,13 +31,27 @@ var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
+  $.ajax({
+    url: window.fetchData.variableData,
+    dataType: 'json',
+    cache: false,
+    success: function(data) {
+      userid = data.userid;
+      logname = data.logname;
+      ulevel = data.ulevel;
+      regdate = data.regdate;
+      dealercode = data.dealercode;
+      signin = data.signin;
+    }
+  });
+
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       }
   });
 
-  //================== GET USER LOG IN INFORMATION =================//
+//================== GET USER LOG IN INFORMATION =================//
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
@@ -802,8 +816,6 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.customerTypeData,
     success: function(data) {
-        console.log("hello",data);
-        
         let options = '<option value="">PLEASE SELECT</option>';
           // Iterate over JSON objects and build <option> elements
           $.each(data, function(index, item) {
@@ -1060,7 +1072,18 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceTypeData,
     success: function(data) {
-      $("#cboinstype").html(data);
+      let options = '<option value="">PLEASE SELECT</option>';
+
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Insurance_Type}">${item.Insurance_Type}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboinstype").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboinstype").trigger('change.select2');
     }
   });
 
@@ -1383,6 +1406,42 @@ $(document).ready( function () {
 
   LoadStatusCounts();
 });
+
+
+//======= Insurance  Staff =====//
+$.ajax({
+  type:"POST",
+  url:window.loadData.getInsurance,
+  headers: {
+      'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+  },
+  success: function(data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function(index, item) {
+        options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+      });
+
+      // Inject populated options into dropdown
+      $("#cboprevinsco").html(options);
+
+      // Force Select2 to refresh its display
+      $("#cboprevinsco").trigger('change.select2');
+  }
+});
+
+
+
+$(document).on("change", 'input[name="rdpolicyaction"]', function () {
+    const isTransfer = $(this).val() === "TRANSFER";
+    const $select = $("#cboprevinsco");
+
+    $select.prop("disabled", !isTransfer);
+
+    if (!isTransfer) {
+        $select.val("");
+    }
+});
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
 //======= Function Load Master Data ============//
@@ -1390,7 +1449,7 @@ $(document).ready( function () {
 function LoadStatusCounts() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_rb_counts.php",
+    url:window.loadData.getRBCount,
     dataType: "json",
     success: function(data) {
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
@@ -1894,7 +1953,7 @@ function LoadNBData() {
 function LoadInsuranceInfo(insuranceno) {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.getInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
       var data = jQuery.parseJSON(data);
@@ -4454,18 +4513,23 @@ $(document).ready( function () {
   $('#txtterms').on('input', calculateMonthlyPayment);
 
   $(document).on( "change", "#chkpayment", function () {
-    if ($(this).is(':checked')) {
-      $("#installpay-terms").fadeIn();
-      $("#installpay-mpay").fadeIn();
+        var $terms = $("#installpay-terms");
+        var $monthlyPay = $("#installpay-mpay");
 
-      calculateMonthlyPayment();
-    } else {
-      $("#installpay-terms").fadeOut();
-      $("#installpay-mpay").fadeOut();
+        if ($(this).is(":checked")) {
+            $terms.stop(true, true).css("display", "block").hide().fadeIn(300);
+            $monthlyPay.stop(true, true).css("display", "block").hide().fadeIn(300);
 
-      $("#txtterms").val("0");
-      $("#txtmonthpay").val("0.00");
-    }
+            if (typeof calculateMonthlyPayment === "function") {
+                calculateMonthlyPayment();
+            }
+        } else {
+            $terms.stop(true, true).fadeOut(200);
+            $monthlyPay.stop(true, true).fadeOut(200);
+
+            $("#txtterms").val("0");
+            $("#txtmonthpay").val("0.00");
+        }
   });
 
   $('input[name="rdoptiontype"]').on('change', function() {

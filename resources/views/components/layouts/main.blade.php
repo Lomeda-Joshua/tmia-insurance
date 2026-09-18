@@ -228,19 +228,23 @@
         })();
 
     </script>
-
-    @endpush
-    @stack('scripts')
+   
+   
     <script>
-        window.nofiticationdata = {
-            notifications_data : @json(route('notifications.data')),
-        }
+        // window.nofiticationdata = {
+        //     notifications_data : @json(route('notifications.data')),
+        // }
     
-        window.dataRoutes = {
-            sessionVariable : @json(route('getSession.dataVariable')),
-        }
+        // window.dataRoutes = {
+        //     sessionVariable : @json(route('getSession.dataVariable')),
+        // }
     </script>
     {{-- <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script> --}}
+
+    @endpush
+
+    @stack('scripts')
+
 
 </body>
 

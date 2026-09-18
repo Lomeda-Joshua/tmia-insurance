@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Exception;
-
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Requests\SaveUserRequest;
 use App\Http\Requests\UserDataRequest;
@@ -117,7 +118,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         $userLevel = \App\Models\UserLevel::query()
-            ->find($user->User_Level_ID);
+            ->find($user->User_Level_ID);                
 
         return view('livewire.main.settings.account', [
             'user' => $user,
@@ -143,14 +144,17 @@ class UserController extends Controller
 
     public function getUserProfile(): JsonResponse
     {
-        // Auth middleware ensures the user is signed in; retrieve the current user's ID
-        $uid = Auth::id();
+        try {
+            $uid = Auth::id();
 
-        if (!$uid) {
-            return response()->json(['error' => 'Invalid or missing User ID'], 400);
-        }
+            if (!$uid) {
+                return response()->json([
+                    'status' => 'error',
+                    'error'  => 'Invalid or missing User ID',
+                ], 400);
+            }
 
-        $user = UserView::select([
+            $user = UserView::select([
                 'User_ID', 'Last_Name', 'First_Name', 'Middle_Name', 
                 'Suffix_Name', 'Display_Name', 'Contact_No', 'Email_Address', 
                 'User_Name', 'User_Level_Description', 'Active', 
@@ -159,11 +163,29 @@ class UserController extends Controller
             ->where('User_ID', $uid)
             ->first();
 
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'error'  => 'User record not found',
+                ], 404);
+            }
 
-        return response()->json($user);
+            return response()->json($user, 200);
+
+        } catch (Throwable $e) {
+            // Log the actual trace for backend debugging
+            Log::error('getUserProfile error: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
+
+            // Always return JSON to keep the AJAX parser intact
+            return response()->json([
+                'status' => 'error',
+                'error'  => 'Database execution failed: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

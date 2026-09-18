@@ -22,9 +22,6 @@
   <!-- Main content -->
   <section class="content home">
 
-    
-
-
     <!-- BIRTH DAY AND ANNIVERSARRY -->
     <div class="box">
       <div class="box-body dashboard-container">
@@ -48,7 +45,7 @@
 
            
 
-            {{-- <!--begin::Row-->
+            <!--begin::Row-->
             <div class="box" style="padding: 5px 10px;">
               <div class="box-body" style="border: 1.5px solid #ddd; border-radius: 15px;">
                 <div class="row">
@@ -217,7 +214,7 @@
                 </div>
               </div>
             </div>     
-            <!--end::Row--> --}}
+            <!--end::Row-->
 
             <div class="row">
 

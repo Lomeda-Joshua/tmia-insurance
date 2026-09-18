@@ -709,7 +709,7 @@
                             </div>
                           </div>  
                         </div>
-                        <table class="installment-section" hidden>
+                        <table class="installment-section">
                           <tbody>
                             <tr>
                               <td data-label="" style="text-align: left;">
@@ -719,14 +719,14 @@
                                   <span class="checkbox-label">Installment Payment</span>
                                 </label>
                               </td>
-                              <td data-label="" id="installpay-terms" hidden>
+                              <td data-label="" id="installpay-terms" style="display: none;">
                                 <div class="form-group">
                                   <label for="txtterms">Terms (months)</label>
                                   <input type="text" id="txtterms">
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </td>
-                              <td data-label="" id="installpay-mpay" hidden>
+                              <td data-label="" id="installpay-mpay" style="display: none;">
                                 <div class="form-group">
                                   <label for="txtmonthpay">Monthly Payment(₱/month)</label>
                                   <input type="text" id="txtmonthpay" style="font-weight: bold; background: #F3F3F3;" disabled>
@@ -738,7 +738,7 @@
                         </table>
                       </form>
                       <hr>
-                      <div class="box box-solid payment-new" hidden>
+                      <div class="box box-solid payment-new">
                         <div class="box-body" style="max-width:100%;">
                           <div class="payment-info-n" >
                             <div class="row">
@@ -1843,7 +1843,9 @@
         loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),
         getTransactionStatus : @json(route('gettransaction-status.data')),
-        getPolicyExpiration : @json(route('loadpolicy.expiration'))
+        getPolicyExpiration : @json(route('loadpolicy.expiration')),
+        getInsurance: @json(route('transaction.by_insurance_no')),
+        getRBCount : @json(route('getTransactions.count'))
     }
 
     window.formRoutes = {

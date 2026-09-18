@@ -153,5 +153,20 @@ class RenewalBusinessController extends Controller
             'Expiring_Counts' => (int) $counts->Expiring_Counts,
         ]);
     }
+
+    /**
+     * Retrieve transaction metric counts for pending status and expiring policies.
+     */
+    public function getTransactionMetrics(): JsonResponse
+    {
+        $metrics = DB::table('transactions_rb')
+            ->selectRaw("
+                COUNT(CASE WHEN Trans_Status = 'PENDING' THEN 1 END) AS Pending_Counts,
+                COUNT(CASE WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY) THEN 1 END) AS Expiring_Counts
+            ")
+            ->first();
+
+        return response()->json($metrics);
+    }
         
 }

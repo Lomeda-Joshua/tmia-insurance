@@ -11,7 +11,7 @@ var xuname;
     $.ajax({
       url: window.dataRoutes.userAccountSession,
       dataType: 'json',
-      type: "GET",
+      type: "POST",
       cache: false,
       headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -57,6 +57,7 @@ var xuname;
 
 //========= LOAD ACCOUNTS =========
   function LoadAccounts() {
+    
     $.ajax({
       url: window.dataRoutes.userAccountData,
       type: "POST",
@@ -65,10 +66,8 @@ var xuname;
         // Optional: show loader or disable form
         $("#loader").show();
       },
-        headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
       success: function (user) {
+        console.log(user)
         if (user.error) {
           swal("Error!", user.error, "error");
           return;
