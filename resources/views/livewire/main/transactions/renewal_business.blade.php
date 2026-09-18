@@ -1842,12 +1842,13 @@
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
         loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),
-        getTransactionStatus : @json(route('gettransaction-status.data'))
+        getTransactionStatus : @json(route('gettransaction-status.data')),
+        getPolicyExpiration : @json(route('loadpolicy.expiration'))
     }
 
     window.formRoutes = {
-        insuranceStaffData: @json(route('insurance_staff.data')),
         customerTypeData: @json(route('customers_type.data')),
+        insuranceStaffData: @json(route('insurance_staff.data')),
 
         // Location
         regionData: @json(route('region.data')),

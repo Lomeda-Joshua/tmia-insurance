@@ -802,6 +802,8 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.customerTypeData,
     success: function(data) {
+        console.log("hello",data);
+        
         let options = '<option value="">PLEASE SELECT</option>';
           // Iterate over JSON objects and build <option> elements
           $.each(data, function(index, item) {
@@ -1832,7 +1834,7 @@ function LoadNBData() {
     fixedHeader: true,
     fixedColumns: { left: 2 },
     ajax: {
-      url: "renewal_business_nb_expired.php",
+      url: window.loadData.getPolicyExpiration,
       type: "POST"
     },
     columns: [

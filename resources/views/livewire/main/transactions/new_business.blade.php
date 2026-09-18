@@ -1275,7 +1275,7 @@
         </div>
         <div class="box-footer with-border">
           <div class="pull-right">
-            <button type="button" id="btnvehselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            <button type="button" id="  " data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
           </div>
         </div>  
       </div>
@@ -1796,6 +1796,7 @@
         vehicleInfo: @json(route('customercvehicleinfo.data')),
         vehicleSpecific: @json(route('vehicle.search')),
         edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+        vehicleLookUp : @json(route('vehicle.lookup'))
     }
 
     window.saveData = {

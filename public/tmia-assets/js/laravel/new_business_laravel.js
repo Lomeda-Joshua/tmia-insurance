@@ -1967,8 +1967,6 @@ function LoadCustomerEDAFSAPInfo() {
   $(".box-body").validator('reset');
 }
 
-
-
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
@@ -3690,7 +3688,7 @@ $(document).on("blur", "#txtvin", function () {
   if (vin === "") return; // do nothing if empty
 
   $.ajax({
-    url: "customer_vehicle_vin_exist.php",
+    url: window.getData.vehicleLookUp,
     type: "POST",
     data: { vin: vin },
     dataType: "json",
@@ -4401,6 +4399,10 @@ $(document).on( "click", "#btncustselect", function () {
   }
 
   if (activeCustTab === '#uploadtab') {
+      console.log(xvin);
+  console.log(xcsno);
+  console.log(xplateno);
+  console.log(xcustnoupload);
     LoadCustomerEDAFSAPInfo();
   }
   $('#modal-customerlist').iziModal('close');
@@ -4423,6 +4425,7 @@ $(document).on( "click", "#btnvehselect", function () {
   }
 
   if (activeVehTab === '#uploadvehtab') {
+
     LoadVehicleEDAFSAPInfo();
   }
   $('#modal-vehiclelist').iziModal('close');

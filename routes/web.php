@@ -14,6 +14,8 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\EnsureLockscreenIsUnlocked;
 use App\Http\Controllers\LockscreenController;
 use App\Http\Controllers\GeneralReportingController;
+use App\Http\Controllers\VehicleLookupController;
+use App\Http\Controllers\PolicyExpirationController;
 
 
 /**
@@ -79,7 +81,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
-        
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
@@ -89,8 +90,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');
         Route::post('/new-business/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
         Route::post('/new-business/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
+        Route::post('/new-business/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
 
-        // Lists        
+        Route::post('/new-business/vin-lookup', [VehicleLookupController::class, 'lookupByVin'])->name('vehicle.lookup');
+
+        Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
+
+        // Customers Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
@@ -98,22 +104,19 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-
         Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
-
         Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
         Route::post('/vehicle/edaf-search', [CustomerController::class, 'getEdafCustomerVehicle'])->name('edaf.vehicle.search');
         Route::post('/customer/file-nb-upload', [CustomerController::class, 'fileNbUpload'])->name('file.nbupload');
         
-        Route::post('/new-business/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
-
-
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
         Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
         Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
         Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
+
+        
 
         // Data API Endpoints for DataTables - AJAX
         // Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
@@ -161,6 +164,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Report generation
         Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
+
     });
 
 
