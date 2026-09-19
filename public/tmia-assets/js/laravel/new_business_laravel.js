@@ -707,7 +707,7 @@ $(document).ready( function () {
   //======= Customer Type =====//
   $.ajax({
     type:"POST",
-    url:window.formRoutes.customerTypeData,
+    // url:window.formRoutes.customerTypeData,
     success: function(data) {      
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -1459,7 +1459,7 @@ function LoadCustomerData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.customerData,
+      // url: window.tableRoutes.customerData,
       type: "POST",
       data: function (d) {
         // Passes search parameters to Laravel request
@@ -1547,7 +1547,7 @@ function LoadCustomerDataEDAFSAP() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.uploadCustomers,
+      // url: window.tableRoutes.uploadCustomers,
       type: "POST",
       data: function (d) {
         d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
@@ -1631,7 +1631,7 @@ function LoadVehicleData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.getVehiclesByCustomer,
+      // url: window.tableRoutes.getVehiclesByCustomer,
       type: "POST",
       data: function (d) {
               d.custno = activeCustTab === '#uploadtab' ? xcustnoupload : xcustno;// Pass your dynamic customer number
@@ -1709,7 +1709,7 @@ function LoadVehicleEDAFSAPData(customerNo) {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.getEdafVehicleByCustomer,
+      // url: window.tableRoutes.getEdafVehicleByCustomer,
       type: "POST",
       data: function (d) {
             d.custno = xcustnoupload ?? customerNo; // Passes dynamic customer number
@@ -1781,7 +1781,7 @@ function fetchView(){
 function LoadCustomerInfo() {
   $.ajax({
     type:"POST",
-    url:window.LaravelRoutes.loadSelectedCustomer,
+    // url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:xcustno},
     success: function(data){      
       $.each(data, function(i, value) {
@@ -1860,7 +1860,7 @@ function LoadCustomerInfo() {
 function LoadCustomerEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:window.tableRoutes.uploadEDAFcustomers,
+    // url:window.tableRoutes.uploadEDAFcustomers,
     data:{custno:xcustnoupload},
     success: function(data){
       $.each(data, function(i, value) {
@@ -1943,7 +1943,7 @@ function LoadCustomerEDAFSAPInfo() {
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
-    url:window.getData.vehicleSpecific,
+    // url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
       
@@ -2015,7 +2015,7 @@ function LoadVehicleInfo() {
 function LoadVehicleEDAFSAPInfo(custNo) {
   $.ajax({
     type:"POST",
-    url:window.getData.edafVehicleSpecific,
+    // url:window.getData.edafVehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno, custno:custNo},
     success: function(data){
       
@@ -2085,7 +2085,7 @@ function LoadVehicleEDAFSAPInfo(custNo) {
 function LoadPayData() {
   $.ajax({
     type:"POST",
-    url:window.loadData.loadTransactionByInsurance,
+    // url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
       $.each(data, function(i, value) {
@@ -2128,7 +2128,7 @@ function LoadPaymentInfo() {
         return nRow;
       },
       ajax: {
-          url: window.tableRoutes.getPaymentData,
+          // url: window.tableRoutes.getPaymentData,
           type: "POST",
           data: { insuranceno: insuranceno }
       },
@@ -2277,7 +2277,7 @@ function updatePaymentTotals() {
 function LoadNetRemData() {
   $.ajax({
     type:"POST",
-    url:window.loadData.loadTransactionByInsurance,
+    // url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
       $.each(data, function(i, value) {
@@ -2297,7 +2297,7 @@ function LoadNetRemData() {
 function LoadStatusData() {
   $.ajax({
     type:"POST",
-    url:window.loadData.loadPaymentData,
+    // url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
       $.each(data, function(i, value) {
@@ -2565,7 +2565,7 @@ function FetchProv(regcode,provcode) {
     $.ajax({
       type:"POST",
       data: {regcode:regcode},
-      url:window.formRoutes.provinceData,
+      // url:window.formRoutes.provinceData,
       success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -2594,7 +2594,7 @@ function FetchCM(provcode,cmcode) {
     $.ajax({
       type:"POST",
       data: {provcode:provcode},
-      url:window.formRoutes.cityMunicipalData,
+      // url:window.formRoutes.cityMunicipalData,
       success: function(data) {
           let options = '<option value="">PLEASE SELECT</option>';
 
@@ -2623,7 +2623,7 @@ function FetchBrgy(cmcode,brgycode) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      url:window.formRoutes.barangayData,
+      // url:window.formRoutes.barangayData,
       success: function(data) {
             let options = '<option value="">PLEASE SELECT</option>';
 
@@ -2883,7 +2883,7 @@ $(document).on("click", "#btnupdatepay", function() {
   // }
 
   $.ajax({
-    url: window.saveData.saveModifyPayment, // Your PHP endpoint
+    // url: window.saveData.saveModifyPayment, // Your PHP endpoint
     type: "POST",
     data: {insuranceno:insuranceno, payments:JSON.stringify(allData) },
     success: function(response) {
@@ -3298,7 +3298,7 @@ $(document).on("click", "#btnupdatestatus", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: window.formRoutes.transactionSubmitStatus,
+    // url: window.formRoutes.transactionSubmitStatus,
     method: "POST",
     data: formdata,
     processData: false,
@@ -3665,7 +3665,7 @@ $(document).on("blur", "#txtvin", function () {
   if (vin === "") return; // do nothing if empty
 
   $.ajax({
-    url: window.getData.vehicleLookUp,
+    // url: window.getData.vehicleLookUp,
     type: "POST",
     data: { vin: vin },
     dataType: "json",
@@ -4534,7 +4534,7 @@ $(document).on("click", "#btnimport", function () {
 
   // Step 1: Validate file structure before importing
   $.ajax({
-    url: "customer_list_import_xls_check.php",
+    // url: "customer_list_import_xls_check.php",
     type: "POST",
     data: formData,
     processData: false,
@@ -4572,7 +4572,7 @@ function startImport(formData) {
 
   // Step 2: Perform the actual import
   $.ajax({
-    url: "customer_list_import_xls.php",
+    // url: "customer_list_import_xls.php",
     method: "POST",
     data: formData,
     processData: false,
@@ -4624,7 +4624,7 @@ function startProgressPolling() {
     }
 
     $.ajax({
-      url: 'import_progress.php',
+      // url: 'import_progress.php',
       dataType: 'json',
       success: function (res) {
         if (res.processing_percent !== null) {
@@ -4819,7 +4819,7 @@ $(document).on("click", ".badge", function (e) {
 
         // AJAX JSON fetch
         $.ajax({
-            url: "new_business_status.php",
+            // url: "new_business_status.php",
             type: "POST",
             data: { insuranceno: insuranceno },
             dataType: "json",
@@ -4941,7 +4941,7 @@ $(document).on( "click", ".btndelete", function () {
     if (isConfirm) {
       $.ajax({
         type:"POST",
-        url:window.deleteData.deleteEntryByInsurance,
+        // url:window.deleteData.deleteEntryByInsurance,
         data:{ insuranceno:insuranceno },
         dataType: "json",   // keep this
         success: function(data){
@@ -5086,7 +5086,7 @@ $(document).on("click", "#btnupdatecall", function () {
 
   // AJAX request
   $.ajax({
-    url: "new_business_call_status_save.php",
+    // url: "new_business_call_status_save.php",
     method: "POST",
     data: formdata,
     processData: false,
@@ -5408,7 +5408,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: window.saveData.saveNbCustomerData,
+    // url: window.saveData.saveNbCustomerData,
     method: "POST",
     data: formdata,
     processData: false,
@@ -5471,7 +5471,7 @@ $(document).on( "click", "#btndelete", function () {
     if (isConfirm) {
       $.ajax({
         type:"POST",
-        url:"customer_list_delete.php",
+        // url:"customer_list_delete.php",
         data:{ transid:transid },
         success: function(data){
           var data = jQuery.parseJSON(data);
