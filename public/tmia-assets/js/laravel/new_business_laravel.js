@@ -30,14 +30,12 @@ var activeVehTab;
 
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       }
   });
   
-
   //============= TOOLTIPS ============//
   // Enable tooltips globally
   $("body").tooltip({
@@ -703,32 +701,7 @@ $(document).ready( function () {
   /////////////////////// END IZIMODAL ///////////////////////
 
   //============== COMBO BOX INITIALIZED ===========//
-  //======= Insurance  Staff =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.insuranceStaffData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
-        });
-
-        // Inject populated options into dropdown
-        $("#cboise").html(options);
-
-        // Force Select2 to refresh its display
-        $("#cboise").trigger('change.select2');
-    }
-  });
-
-  $("#cboise").select2({
-    allowClear: true,
-    width: "100%",
-    placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
-    $(this).trigger("change.select2");
-  });
+  
 
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
@@ -4441,6 +4414,7 @@ $(document).on( "click", "#btnadd", function () {
   editinfo = true;
   FormClear();
   FormDisable(false);
+
   if ( ulevel == 'INSURANCE STAFF') { 
     $("#cboise").val(userid).trigger("change.select2");
     
@@ -4448,6 +4422,42 @@ $(document).on( "click", "#btnadd", function () {
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
+
+  //======= Insurance  Staff =====//
+  let container_data = $(".btnactionud");
+  let ise_staff = container_data.data("ise-staff");
+
+  $.ajax({
+    type:"POST",
+    url:ise_staff,
+    headers: {
+      'Cache-Control': 'no-cache'  // Forces Laravel to invalidate the cache key}
+    },
+    success: function(data) {
+        console.log(data);
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+        });
+
+        // Inject populated options into dropdown
+        $("#cboise").html(options);
+
+        // Force Select2 to refresh its display
+        $("#cboise").trigger('change.select2');
+    }
+  });
+
+  $("#cboise").select2({
+    allowClear: true,
+    width: "100%",
+    placeholder: "PLEASE SELECT"
+  }).on('select2:close', function() {
+    $(this).trigger("change.select2");
+  });
+
 });
 
 $(document).on( "click", "#btnselectise", function () {

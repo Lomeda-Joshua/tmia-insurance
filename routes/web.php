@@ -139,6 +139,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
+        Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewal-business.save');
 
         // Vehicle
         Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');
@@ -159,8 +160,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         // Account settings
         Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
         
-        Route::get('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
-        Route::get('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
+        Route::post('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
+        Route::post('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
         Route::post('/user-account/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
         Route::post('/user-account/update', [UserController::class, 'updateUser'])->name('user_account.update');
         Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');

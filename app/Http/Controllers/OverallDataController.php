@@ -40,7 +40,7 @@ class OverallDataController extends Controller
     /**
      * Fetch insurance staff data for DataTables AJAX.
      */
-    public function getInsuranceStaff(): JsonResponse
+    public function getInsuranceStaff(Request $request): JsonResponse
     {
         // Retrieve the authenticated user's ID
         $userId = Auth::id();
@@ -48,22 +48,30 @@ class OverallDataController extends Controller
         // Create a unique cache key for this user
         $cacheKey = "customer_type_user_{$userId}";
 
-        // Retrieve from cache if exists; otherwise run query and cache for 10,000 seconds
-        // $iseStaff = Cache::remember($cacheKey, 10000, function () {
-        //     return InsuranceStaff::query()
-        //             ->orderBy('ISE_Name')
-        //             ->get([
-        //                 'ISE_No',
-        //                 'ISE_Name',
-        //             ]);
-        // });
+        // 1. Detect if the browser sent a Hard Reload request (Ctrl + F5 / Shift + Reload)
+        $isHardReload = $request->header('Cache-Control') === 'no-cache' || $request->header('Pragma') === 'no-cache';
 
-        $iseStaff =  InsuranceStaff::query()
+        if ($isHardReload) {
+            Cache::forget($cacheKey);
+        }
+
+        // Retrieve from cache if exists; otherwise run query and cache for 10,000 seconds
+        $iseStaff = Cache::remember($cacheKey, 10000, function () {
+            return InsuranceStaff::query()
                     ->orderBy('ISE_Name')
                     ->get([
                         'ISE_No',
                         'ISE_Name',
                     ]);
+        });
+
+    
+        // $iseStaff =  InsuranceStaff::query()
+        //             ->orderBy('ISE_Name')
+        //             ->get([
+        //                 'ISE_No',
+        //                 'ISE_Name',
+        //             ]);
 
         return response()->json($iseStaff);
     }

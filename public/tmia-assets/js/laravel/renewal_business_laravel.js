@@ -30,21 +30,6 @@ var activeCustTab;
 var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
-  $.ajax({
-    url: window.fetchData.variableData,
-    dataType: 'json',
-    cache: false,
-    success: function(data) {
-      userid = data.userid;
-      logname = data.logname;
-      ulevel = data.ulevel;
-      regdate = data.regdate;
-      dealercode = data.dealercode;
-      signin = data.signin;
-    }
-  });
-
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -55,6 +40,7 @@ $(document).ready( function () {
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
+    type:'POST',
     cache: false,
     success: function(data) {
       userid = data.userid;
@@ -1793,7 +1779,6 @@ function LoadVehicleData() {
 
     // Optional: get Customer_No
     xvin = table.cell(this, 1).data();
-    console.log('Selected VIN:', xvin);
     xcsno = table.cell(this, 7).data();
     xplateno = table.cell(this, 8).data();
   });
@@ -1861,7 +1846,6 @@ function LoadVehicleEDAFSAPData() {
 
     // Optional: get Customer_No
     xvin = table.cell(this, 1).data();
-    console.log('Selected VIN:', xvin);
     xcsno = table.cell(this, 7).data();
     xplateno = table.cell(this, 8).data();
   });
@@ -1941,7 +1925,6 @@ function LoadNBData() {
     xnbno = table.cell(this, 1).data();
     xcustno = table.cell(this, 4).data();;
     xvin = table.cell(this, 7).data();
-    console.log('Selected VIN:', xvin);
   });
 
   // ✅ Bind row click for selection AFTER table initialization
@@ -3917,7 +3900,7 @@ $(document).on("blur", "#txtvin", function () {
   if (vin === "") return; // do nothing if empty
 
   $.ajax({
-    url: "customer_vehicle_vin_exist.php",
+    url: window.getData.vehicleLookUp,
     type: "POST",
     data: { vin: vin },
     dataType: "json",
@@ -5633,7 +5616,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_save.php",
+    url: window.saveData.saveRbCustomerData,
     method: "POST",
     data: formdata,
     processData: false,
@@ -5641,9 +5624,7 @@ $(document).on("click", "#btnsubmit", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Saved!",
           text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",

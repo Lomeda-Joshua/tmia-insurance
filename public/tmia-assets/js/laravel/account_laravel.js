@@ -6,6 +6,13 @@ var regdate;
 var signin;
 var xuname;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
+
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+      }
+  });
+
   $(document).ready( function () {
     //================== GET USER LOG IN INFORMATION =================//
     $.ajax({
@@ -24,6 +31,8 @@ var xuname;
         signin = data.signin;
       }
     });
+
+
     //=============== END GET USER LOG IN INFORMATION  =================//
 
     //============== DATE PICKER INITIALIZED ===========//

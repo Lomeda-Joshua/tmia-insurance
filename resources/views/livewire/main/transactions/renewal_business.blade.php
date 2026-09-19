@@ -1804,6 +1804,14 @@
 @push('scripts')
 <script>
 
+    window.getData = {
+        customerInfo : @json(route('customerinfo.data')),
+        vehicleInfo: @json(route('customercvehicleinfo.data')),
+        vehicleSpecific: @json(route('vehicle.search')),
+        edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+        vehicleLookUp : @json(route('vehicle.lookup'))
+    }
+
     window.LaravelRoutes = {
         csrfToken: "{{ csrf_token() }}",
         nbpendingcounts: @json(route('new_business.counts')),
@@ -1834,7 +1842,7 @@
     }
 
     window.saveData = {
-      saveNbCustomerData : @json(route('newbusiness.save'))
+      saveRbCustomerData : @json(route('renewal-business.save'))
     }
 
     window.loadData = {

@@ -103,14 +103,13 @@
 
         @if(Auth::user()->User_Level_ID == 1)
           <div class="row">
-            <div class="btnactionud pull-right">
+            <div class="btnactionud pull-right" data-ise-staff="{{ route('insurance_staff.data') }}">
               <button
                     type="button"
                     id="btnadd"
                     class="btn btn-box-tool"
                     data-user-id="{{ Auth::user()->User_ID }}"
-                    data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}"
-                  >
+                    data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}">
                   <i class="fa fa-plus"></i> Add New
               </button>
             </div>
@@ -1767,53 +1766,53 @@
     
     window.userAccount = {
         ulevel: @json(Auth::user()?->User_Level_ID)
-    };
+    }
 
     window.LaravelRoutes = {
         csrfToken: "{{ csrf_token() }}",
-        nbpendingcounts: @json(route('new_business.counts')),
-        loadSelectedCustomer : @json(route('customer.get-by-no')),
-        loadVehicle: @json(route('vehicle.search')),
-        loadModifyPage: @json(route('getModifyView.data'))
+        // nbpendingcounts: @json(route('new_business.counts')),
+        // loadSelectedCustomer : @json(route('customer.get-by-no')),
+        // loadVehicle: @json(route('vehicle.search')),
+        // loadModifyPage: @json(route('getModifyView.data'))
     }
 
     window.tableRoutes = {
         newBusinessData: @json(route('newbusiness.data')),
-        customerData: @json(route('customers.data')),
-        uploadCustomers: @json(route('uploaded.customer')),
-        uploadEDAFcustomers: @json(route('customer.getCheck-data')),
-        getPaymentData: @json(route('payments.get-data')),
-        getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
-        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
+        // customerData: @json(route('customers.data')),
+        // uploadCustomers: @json(route('uploaded.customer')),
+        // uploadEDAFcustomers: @json(route('customer.getCheck-data')),
+        // getPaymentData: @json(route('payments.get-data')),
+        // getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
+        // getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
 
-    window.deleteData = {
+/*     window.deleteData = {
         deleteEntryByInsurance : @json(route('remove-by-insurance-no.data')),
-    }
+    } */
 
-    window.getData = {
+/*     window.getData = {
         customerInfo : @json(route('customerinfo.data')),
         vehicleInfo: @json(route('customercvehicleinfo.data')),
         vehicleSpecific: @json(route('vehicle.search')),
         edafVehicleSpecific: @json(route('edaf.vehicle.search')),
         vehicleLookUp : @json(route('vehicle.lookup'))
-    }
+    } */
 
-    window.saveData = {
+/*     window.saveData = {
         saveNbCustomerData : @json(route('newbusiness.save')),
         saveModifyPayment : @json(route('payments.sync'))
-    }
+    } */
 
-    window.loadData = {
+/*     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data')),
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
         loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),
         getTransactionStatus : @json(route('gettransaction-status.data'))
-    }
+    } */
 
 
-    window.formRoutes = {
+/*     window.formRoutes = {
         insuranceStaffData: @json(route('insurance_staff.data')),
         customerTypeData: @json(route('customers_type.data')),
 
@@ -1850,7 +1849,7 @@
 
         // Change status
         transactionSubmitStatus: @json(route('transactions.update-status')),
-    }
+    } */
 
 
     
