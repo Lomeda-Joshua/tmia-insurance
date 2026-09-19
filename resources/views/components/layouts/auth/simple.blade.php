@@ -34,6 +34,9 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/plugins/sweetalert/sweetalert.css') }}"/>
         <!-- Customized Style -->
         <link rel="stylesheet" type="text/css" href="{{ asset('tmia-assets/css/login.css') }}"/>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
 <body>
     {{ $slot }}    

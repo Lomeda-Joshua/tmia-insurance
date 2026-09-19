@@ -30,29 +30,48 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
         $this->ensureIsNotRateLimited();
 
-        // Map input properties to custom database columns
+        // Debug 1: Confirm inputs are received
+        // dd($this->username, $this->password);
+
         $credentials = [
             'User_Name' => $this->username,
-            'Active' => 'YES',
-            'password' => $this->password,
-        ];
+            'Active'    => 'YES',
+            'password'  => $this->password,
+        ];        
 
-        if (! Auth::attempt($credentials, $this->remember)) {
-            RateLimiter::hit($this->throttleKey());
+        try {
+            if (! Auth::attempt($credentials, $this->remember)) {
 
-            throw ValidationException::withMessages([
-                'username' => __('auth.failed'),
-            ]);
+                RateLimiter::hit($this->throttleKey());
+
+                $logurl = asset('tmia-assets/images/logo-mini.png');
+
+                // Execute Swal directly without needing Livewire.on listeners
+                $this->js("
+                    Swal.fire({
+                        imageUrl: '$logurl', 
+                        imageWidth: 150,                                       
+                        imageHeight: 100,                                      
+                        imageAlt: 'Custom Error Icon',                         
+                        title: 'Login Failed!',
+                        text: 'Invalid username or password.',
+                        confirmButtonColor: '#d33'
+                    });
+                ");
+
+                return;
+
+            }
+        } catch (\Exception $e) {
+            // Debug 3: If an exception is caused by DB connection or missing column
+            dd('Login Exception Caught: ' . $e->getMessage());
         }
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
-
         Session::flash('signin', true);
         
-        $this->redirect(
-            route('dashboard', absolute: false),
-        );
+        $this->redirect(route('dashboard', absolute: false));
     }
 
     /**
@@ -89,7 +108,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
     
 }; ?>
 
-<x-layouts.auth.simple>
     <div class="main"> 
         <div class="container center-box">
 
@@ -145,7 +163,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
                     <form wire:submit="login">
                         <fieldset>
-
                             <!-- Email / Username -->
                             <p>
                                 <span class="fa fa-user"></span>
@@ -269,7 +286,23 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     </div>
 
-    @push('scripts')
+@push('scripts')
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('swal:error', (event) => {
+                const data = Array.isArray(event) ? event[0] : event;
+                Swal.fire({
+                    icon: 'error',
+                    title: data.title || 'Error!',
+                    text: data.text || 'Something went wrong.',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Try Again'
+                });
+            });
+        });
+    </script>
+
     <script>
         (function () {
             // 1. Force a full page reload if loaded from the browser's back-forward cache (bfcache)
@@ -287,8 +320,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             });
         })();
     </script>
-    @endpush
-</x-layouts.auth.simple>
+@endpush
+
+
 
 
 
