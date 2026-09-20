@@ -30,7 +30,7 @@ class CustomerController extends Controller
     /**
      * Fetch customer data for DataTables AJAX.
     */
-    public function getCustomers(Request $request)
+    public function getCustomerData(Request $request)
     {
         // 1. Return an Eloquent Query Builder (do NOT call ->get())
         $query = CustomerInformation::with('vehicles');
@@ -196,33 +196,20 @@ class CustomerController extends Controller
     {
         $custNo = trim($request->input('custno', ''));
 
-        if (empty($custNo)) {
-            return response()->json([]);
+        // Check in vw_customer_information first
+        $query = CustomerInformation::where('Upload_Cust_No', $custNo);
+
+        if (!$query->exists()) {
+            // Fallback: fetch from upload_customer_data
+            $query = UploadedCustomer::where('Customer_No', $custNo);
         }
 
-        // 1. Check in vw_customer_information first
-        $customers = CustomerInformation::where('Upload_Cust_No', $custNo)->get();
-
-        if ($customers->isNotEmpty()) {
-            // Transform collection to set Cust_Exist = true
-            $data = $customers->map(function ($item) {
-                $array = $item->toArray();
-                $array['Cust_Exist'] = true;
-                return $array;
-            });
-        } else {
-            // 2. Fallback: Not found, fetch from upload_customer_data
-            $uploadedCustomers = UploadedCustomer::where('Customer_No', $custNo)->get();
-
-            // Transform collection to set Cust_Exist = false
-            $data = $uploadedCustomers->map(function ($item) {
-                $array = $item->toArray();
-                $array['Cust_Exist'] = false;
-                return $array;
-            });
-        }
-
-        return response()->json($data);
+        return DataTables::eloquent($query)
+            ->addIndexColumn() // Generates DT_RowIndex for column 0
+            ->addColumn('Cust_Exist', function ($row) {
+                return true; // or set conditions as needed
+            })
+            ->make(true); // Automatically wraps data into { draw, recordsTotal, recordsFiltered, data }
     }
 
 

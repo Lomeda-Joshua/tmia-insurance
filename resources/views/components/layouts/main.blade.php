@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.head')
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])

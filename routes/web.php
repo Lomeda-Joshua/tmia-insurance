@@ -82,7 +82,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
+        Route::get('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
@@ -102,14 +102,14 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Customers Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
-        Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
+        Route::post('/customers/data', [CustomerController::class, 'getCustomerData'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
         Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
         Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
-        Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
+        Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('uploaded-edaf-customer.data'); 
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
         Route::post('/vehicle/edaf-search', [CustomerController::class, 'getEdafCustomerVehicle'])->name('edaf.vehicle.search');

@@ -35,6 +35,7 @@ $(document).ready( function () {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       }
   });
+
   
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -701,8 +702,6 @@ $(document).ready( function () {
   /////////////////////// END IZIMODAL ///////////////////////
 
   //============== COMBO BOX INITIALIZED ===========//
-  
-
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
   $.ajax({
@@ -1316,6 +1315,9 @@ function LoadStatusCounts() {
 }
 
 //============== Transaction List ============//
+let table_trans = $(".table_trans");
+let table_data = table_trans.data("trans-table");
+
 function LoadTransactionData() {
   const searchval = $("#txtsearch").val().trim();
   const datefromRaw = $("#dpdatefrom").val();
@@ -1351,8 +1353,11 @@ function LoadTransactionData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: window.tableRoutes.newBusinessData,
-      type: "POST",
+      url: table_data,
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // 👈 Required for POST
+      },
+      type: "GET",
       data: function (d) {
             d.viewpending  = window.viewpending === true;
             d.viewexpiring = window.viewexpiring === true;
@@ -1437,6 +1442,9 @@ function LoadTransactionData() {
 
 //============== Customer List ============//
 function LoadCustomerData() {
+  let modal_customerlist = $('#modal-customerlist');
+  let customer_list = modal_customerlist.data('customer-list');
+
   const searchval = $("#txtcustomersearch").val().trim();
   if (typeof btnselect === 'undefined') { btnselect = '';}
 
@@ -1459,7 +1467,7 @@ function LoadCustomerData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      // url: window.tableRoutes.customerData,
+      url: customer_list,
       type: "POST",
       data: function (d) {
         // Passes search parameters to Laravel request
@@ -1524,14 +1532,12 @@ function LoadCustomerData() {
 }
 
 //============== Customer List FROM DAF/SAP ============//
+let table_uploaded_edaf = $("#modal-customerlist");
+let table_upload_edaf_data = table_uploaded_edaf.data("edaf-customer-list");
+
 function LoadCustomerDataEDAFSAP() {
   const searchval = $("#txtcustomersearch").val().trim();
   if (typeof btnselect === 'undefined') { btnselect = '';}
-
-  const value = {
-    searchval:searchval,
-    btnselect:btnselect
-  };
 
   if ($.fn.dataTable.isDataTable('#table_customerlistupload')) {
     $('#table_customerlistupload').DataTable().clear().destroy();               
@@ -1542,12 +1548,12 @@ function LoadCustomerDataEDAFSAP() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: true,
+    serverSide: false,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      // url: window.tableRoutes.uploadCustomers,
+      url: table_upload_edaf_data,
       type: "POST",
       data: function (d) {
         d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
@@ -2714,7 +2720,6 @@ $(document).on("click", "#btnaddpay", function (e) {
   var payterms       = $("#txtpayterms").val().trim();
   var payamount      = $("#txtpayamount").val().trim();  
 
-  console.log(ewallet);
 
   function warn(field, msg) {
       $(field).focus();
