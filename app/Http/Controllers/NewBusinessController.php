@@ -36,6 +36,7 @@ class NewBusinessController extends Controller
     */
     public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
     {
+        dd("hello");
         // 1. Build Base Query with Joins using Eloquent or Query Builder
         $query = NewBusinessTransactionView::query()
             ->from('transactions_nb as t')

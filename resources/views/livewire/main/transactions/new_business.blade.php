@@ -803,6 +803,7 @@
                                             data-paymemt-data="{{ route('payments.data') }}"
                                             data-ewallet-data="{{ route('ewalletype.data') }}"
                                             data-insuranceinformation-data="{{ route('insurancetype.data') }}"
+                                            data-insuranceCompany-data="{{ route('insuranceco.data') }}"
                                         >
 
                                     <div class="box-header with-border">
@@ -2171,8 +2172,10 @@
     @push('scripts')
         <script>
             window.LaravelRoutes = {
-                csrfToken: "{{ csrf_token() }}"
-            }
+                csrfToken : "{{ csrf_token() }}",
+                transaction_table : @json(route('newbusiness.data')),
+            }            
+
         </script>
 
         <script src="{{ asset('tmia-assets/js/laravel/new_business_laravel.js') }}"></script>

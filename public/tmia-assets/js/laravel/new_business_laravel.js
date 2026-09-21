@@ -1007,9 +1007,10 @@ $(document).ready( function () {
   });
 
   //======= Insurance =====//
+  let insuranceCompany = insuranceinformation_container.data("insuranceCompany-data");
   $.ajax({
     type:"POST",
-    url:window.formRoutes.insuranceCoData,
+    url:insuranceCompany,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -1035,9 +1036,10 @@ $(document).ready( function () {
   });
 
   //======= Bank =====//
+  let bankData_selectbox = insuranceinformation_container.data("insuranceCompany-data");
   $.ajax({
     type:"POST",
-    url:window.formRoutes.bankData,
+    url:bankData_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -1359,8 +1361,8 @@ function LoadTransactionData() {
     return;
   }  
 
-  let table_trans = $(".table_trans");
-  let table_data = table_trans.data("trans-table");
+  // let table_trans = $(".table_trans");
+  // let table_data = table_trans.data("trans-table");
 
   table = $('#table_trans').DataTable({
     language: {
@@ -1372,11 +1374,11 @@ function LoadTransactionData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: table_data,
+      url: window.LaravelRoutes.transaction_table,
+      type: "POST",
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // 👈 Required for POST
       },
-      type: "POST",
       data: function (d) {
             d.viewpending  = window.viewpending === true;
             d.viewexpiring = window.viewexpiring === true;
@@ -2231,8 +2233,6 @@ function LoadPaymentInfo() {
 
     // Populate form fields
     xpayid = rowData.Payment_ID;
-
-    console.log(xpayid);
 
     if (balance <= 0) {
       $("#cbopaytype").val(rowData.Payment_Type).trigger("change.select2");
@@ -3162,9 +3162,6 @@ $(document).on("click", "#btnaddpay-n", function () {
   var payterms       = $("#txtpayterms-n").val().trim();
   var payamount      = $("#txtpayamount-n").val().trim();
 
-
-  console.log($("#cboewallet-n").val());
-
   function warn(field, msg) {
       $(field).focus();
       swal({
@@ -3213,8 +3210,6 @@ $(document).on("click", "#btnaddpay-n", function () {
     Payment_Date: null, 
     button: "<button type='button' data-toggle='tooltip' data-placement='top' title='Remove Payment' class='btn btn-success btn-action btnremovepay-n'><i class='fa fa-remove'></i></button>"
   };
-
-  console.log(rowData);
 
   if (editingRow) {
     // ✅ Replace the existing row
@@ -4464,7 +4459,6 @@ $(document).on( "click", "#btnadd", function () {
       'Cache-Control': 'no-cache'  // Forces Laravel to invalidate the cache key}
     },
     success: function(data) {
-        console.log(data);
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -5367,8 +5361,6 @@ $(document).on("click", "#btnsubmit", function () {
     }
     allData.push(row);
   });
-
-  console.log(allData);
 
   const insuranceFields = {
     grosspremium: getNum("#txtgrosspremium"),

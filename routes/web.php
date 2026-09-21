@@ -79,7 +79,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
+        Route::post('/new-business/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
