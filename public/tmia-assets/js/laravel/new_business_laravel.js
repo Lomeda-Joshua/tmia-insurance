@@ -28,6 +28,11 @@ var editstatus = false;
 var activeCustTab;
 var activeVehTab;
 
+// Modal identification where the form data will reside
+let customerinfo_container = $('#modal-call');
+let vehicleinformation_container = $('#vehicle_information_container');
+let insuranceinformation_container = $('#insurance_calculation');
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
   $.ajaxSetup({
@@ -702,12 +707,15 @@ $(document).ready( function () {
   /////////////////////// END IZIMODAL ///////////////////////
 
   //============== COMBO BOX INITIALIZED ===========//
+
+
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
+  let customertype_selectbox = customerinfo_container.data('customer-type');
   $.ajax({
     type:"POST",
-    // url:window.formRoutes.customerTypeData,
-    success: function(data) {      
+    url:customertype_selectbox,
+    success: function(data) {   
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -730,10 +738,13 @@ $(document).ready( function () {
     $(this).trigger("change.select2");
   });
 
+
+
   //======= Region =====//
+  let region_selectbox = customerinfo_container.data('region-data');
   $.ajax({
     type:"POST",
-    url:window.formRoutes.regionData,
+    url:region_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -795,9 +806,10 @@ $(document).ready( function () {
 
   /*--------------------- VEHICLE INFO --------------------*/
   //======= Body Type =====//
+  let bodytype_selectbox = vehicleinformation_container.data('body-type');
   $.ajax({
-    type:"post",
-    url:window.formRoutes.bodyTypeData,
+    type:"POST",
+    url:bodytype_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -822,9 +834,10 @@ $(document).ready( function () {
   });
 
   //======= Fuel Type =====//
+  let fueltype_selectbox = vehicleinformation_container.data('fuel-type');
   $.ajax({
     type:"POST",
-    url:window.formRoutes.fuelTypeData,
+    url:fueltype_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -849,9 +862,10 @@ $(document).ready( function () {
   });
 
   //======= Product Classification =====//
+  let product_selectbox = vehicleinformation_container.data('product-class');
   $.ajax({
     type:"POST",
-    url:window.formRoutes.productClassData,
+    url:product_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -875,10 +889,11 @@ $(document).ready( function () {
     $(this).trigger("change.select2");
   });
 
-   //======= Owner Type =====//
+  //======= Owner Type =====//
+  let ownertype_selectbox = vehicleinformation_container.data('owner-class');
   $.ajax({
     type:"POST",
-    url:window.formRoutes.customerTypeData,
+    url:ownertype_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -904,10 +919,12 @@ $(document).ready( function () {
 
   /*--------------------- PAYMENT INFO --------------------*/ 
   //======= Payment Type =====//
+  let paymenttype_Selectbox = insuranceinformation_container.data("paymemt-data");
   $.ajax({
     type:"POST",
-    url:window.formRoutes.paymentTypeData,
+    url:paymenttype_Selectbox,
     success: function(data) {
+      console.log(data);
         let options = '<option value=" " disabled>PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
@@ -932,9 +949,10 @@ $(document).ready( function () {
   });
 
   //======= E-Wallet Type =====//
+  let ewallet_selectbox = insuranceinformation_container.data("ewallet-data");
   $.ajax({
     type:"POST",
-    url:window.formRoutes.ewalletTypeData,
+    url:ewallet_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -960,9 +978,10 @@ $(document).ready( function () {
 
  /*--------------------- INSURER INFO --------------------*/ 
   //======= Insurance Type =====//
+  let insurance_selectbox = insuranceinformation_container.data("insuranceinformation-data");
   $.ajax({
     type:"POST",
-    url:window.formRoutes.insuranceTypeData,
+    url:insurance_selectbox,
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -1315,9 +1334,6 @@ function LoadStatusCounts() {
 }
 
 //============== Transaction List ============//
-let table_trans = $(".table_trans");
-let table_data = table_trans.data("trans-table");
-
 function LoadTransactionData() {
   const searchval = $("#txtsearch").val().trim();
   const datefromRaw = $("#dpdatefrom").val();
@@ -1343,6 +1359,9 @@ function LoadTransactionData() {
     return;
   }  
 
+  let table_trans = $(".table_trans");
+  let table_data = table_trans.data("trans-table");
+
   table = $('#table_trans').DataTable({
     language: {
       processing: "Loading Transaction List..."
@@ -1357,7 +1376,7 @@ function LoadTransactionData() {
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // 👈 Required for POST
       },
-      type: "GET",
+      type: "POST",
       data: function (d) {
             d.viewpending  = window.viewpending === true;
             d.viewexpiring = window.viewexpiring === true;
@@ -1539,9 +1558,11 @@ function LoadCustomerDataEDAFSAP() {
   const searchval = $("#txtcustomersearch").val().trim();
   if (typeof btnselect === 'undefined') { btnselect = '';}
 
-  if ($.fn.dataTable.isDataTable('#table_customerlistupload')) {
-    $('#table_customerlistupload').DataTable().clear().destroy();               
+  if ($.fn.DataTable.isDataTable('#table_customerlistupload')) {
+      $('#table_customerlistupload').DataTable().destroy();
+      $('#table_customerlistupload').empty(); // Ensures old header/body markup is cleared cleanly
   }
+  console.log($('#txtcustomersearch').val());
 
   table = $('#table_customerlistupload').DataTable({
     language: {
@@ -2566,12 +2587,13 @@ $(document).on("change", "#cbocity", function () {
     FetchBrgy(cmcode,'');
 });
 
+let province_selectbox = customerinfo_container.data('province-data');
 function FetchProv(regcode,provcode) {
   if (regcode !== null) {
     $.ajax({
       type:"POST",
       data: {regcode:regcode},
-      // url:window.formRoutes.provinceData,
+      url:province_selectbox,
       success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -2595,12 +2617,13 @@ function FetchProv(regcode,provcode) {
   }
 }
 
+let citymunicipal_selectbox = customerinfo_container.data('citymunicipal-data');
 function FetchCM(provcode,cmcode) {
   if (provcode !== null) {
     $.ajax({
       type:"POST",
       data: {provcode:provcode},
-      // url:window.formRoutes.cityMunicipalData,
+      url:citymunicipal_selectbox,
       success: function(data) {
           let options = '<option value="">PLEASE SELECT</option>';
 
@@ -2624,12 +2647,13 @@ function FetchCM(provcode,cmcode) {
   }
 }
 
+let baranggay_selectbox = customerinfo_container.data('baranggay-data');
 function FetchBrgy(cmcode,brgycode) {
   if (cmcode !== null) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      // url:window.formRoutes.barangayData,
+      url:baranggay_selectbox,
       success: function(data) {
             let options = '<option value="">PLEASE SELECT</option>';
 

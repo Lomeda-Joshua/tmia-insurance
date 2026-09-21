@@ -8,8 +8,8 @@
                 New Business Insurance
             </h1>
             <ol class="breadcrumb">
-                <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
+                <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="{{ route('new_business.index') }}"><i class="fa fa-tasks"></i> Transactions</a></li>
                 <li class="active"><i class="fa-solid fa-car"></i> New Business Insurance</li>
             </ol>
         </section>
@@ -475,7 +475,12 @@
 
                             <!-- Step 2 -->
                             <div class="page" id="page2">
-                                <div class="box box-solid">
+                                <div class="box box-solid" id="vehicle_information_container"
+                                        data-body-type="{{ route('bodytype.data') }}" 
+                                        data-fuel-type="{{ route('fueltype.data') }}"
+                                        data-product-class="{{ route('productclass.data') }}"
+                                        data-owner-class="{{ route('get.customers_type.data') }}"
+                                >
                                     <div class="box-header with-border">
                                         <h2 class="box-title"><i class="fa-solid fa-car"></i> Vehicle Information</h2>
                                     </div>
@@ -794,9 +799,14 @@
 
                             <!-- Step 3 -->
                             <div class="page" id="page3">
-                                <div class="box box-solid">
+                                <div class="box box-solid" id="insurance_calculation" 
+                                            data-paymemt-data="{{ route('payments.data') }}"
+                                            data-ewallet-data="{{ route('ewalletype.data') }}"
+                                            data-insuranceinformation-data="{{ route('insurancetype.data') }}"
+                                        >
+
                                     <div class="box-header with-border">
-                                        <h2 class="box-title"><i class="fa fa-calculator"></i> Insurance Calculation
+                                        <h2 class="box-title"><i class="fa fa-calculator"></i>Insurance Calculation
                                         </h2>
                                     </div>
                                     <div class="box-body" style="max-width:100%;">
@@ -1403,7 +1413,9 @@
 
             <!-- MODAL CUSTOMER LIST -->
             <div id="modal-customerlist" aria-hidden="false" role="dialog"
-                class="iziModal isAttached hasScroll" data-customer-list="{{ route('customers.data') }}" data-edaf-customer-list="{{ route('uploaded-edaf-customer.data') }}">
+                class="iziModal isAttached hasScroll" 
+                data-customer-list="{{ route('customers.data') }}" 
+                data-edaf-customer-list="{{ route('uploaded-edaf-customer.data') }}">
                 <div class="box">
                     <div class="box-header with-border">
                         <!-- <h2 class="box-title">Customer List</h2> -->
@@ -1976,7 +1988,13 @@
             </div>
             <!-- END MODAL MODIFY NET REM -->
             <!-- MODAL CALL STATUS -->
-            <div id="modal-call" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+            <div id="modal-call" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll" 
+                        data-customer-type="{{ route('get.customers_type.data') }}" 
+                        data-region-data={{ route('region.data') }} 
+                        data-province-data="{{ route('province.data') }}"
+                        data-citymunicipal-data="{{ route('citymunicipal.data') }}"
+                        data-baranggay-data="{{ route('barangay.data') }}"
+                    >
                 <div class="box box-solid">
                     <div class="box-body" style="max-width:100%;">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

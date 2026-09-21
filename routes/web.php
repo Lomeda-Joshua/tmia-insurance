@@ -77,12 +77,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Transactions Group
     Route::prefix('transactions')->group(function () {
 
-        Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
-        Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
-
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::get('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
+        Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
@@ -99,6 +96,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/vin-lookup', [VehicleLookupController::class, 'lookupByVin'])->name('vehicle.lookup');
 
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
+        Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
+        Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
 
         // Customers Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
@@ -124,7 +123,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Data API Endpoints for DataTables - AJAX
         // Route::get('/customers/{custno}', [CustomerController::class, 'show'])->name('customers.show');
-        Route::post('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('customers_type.data');
+        Route::post('/customertype/data', [OverallDataController::class, 'getCustomerType'])->name('get.customers_type.data');
         Route::post('/customertype/data-2', [OverallDataController::class, 'getCustomerTypePost'])->name('customers_type.data.2');
         Route::post('/insurance-staff/data', [OverallDataController::class, 'getInsuranceStaff'])->name('insurance_staff.data');                
         Route::post('/vehicles/data', [OverallDataController::class, 'getVehicle'])->name('vehicle.data');

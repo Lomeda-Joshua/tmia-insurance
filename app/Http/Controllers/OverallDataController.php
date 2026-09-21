@@ -56,22 +56,22 @@ class OverallDataController extends Controller
         }
 
         // Retrieve from cache if exists; otherwise run query and cache for 10,000 seconds
-        $iseStaff = Cache::remember($cacheKey, 10000, function () {
-            return InsuranceStaff::query()
-                    ->orderBy('ISE_Name')
-                    ->get([
-                        'ISE_No',
-                        'ISE_Name',
-                    ]);
-        });
-
-    
-        // $iseStaff =  InsuranceStaff::query()
+        // $iseStaff = Cache::remember($cacheKey, 10000, function () {
+        //     return InsuranceStaff::query()
         //             ->orderBy('ISE_Name')
         //             ->get([
         //                 'ISE_No',
         //                 'ISE_Name',
         //             ]);
+        // });
+
+    
+        $iseStaff =  InsuranceStaff::query()
+                    ->orderBy('ISE_Name')
+                    ->get([
+                        'ISE_No',
+                        'ISE_Name',
+                    ]);
 
         return response()->json($iseStaff);
     }
