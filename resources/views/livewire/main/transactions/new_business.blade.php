@@ -800,10 +800,10 @@
                             <!-- Step 3 -->
                             <div class="page" id="page3">
                                 <div class="box box-solid" id="insurance_calculation" 
-                                            data-paymemt-data="{{ route('payments.data') }}"
-                                            data-ewallet-data="{{ route('ewalletype.data') }}"
-                                            data-insuranceinformation-data="{{ route('insurancetype.data') }}"
-                                            data-insuranceCompany-data="{{ route('insuranceco.data') }}"
+                                            {{-- data-paymemt-data="{{ route('payments.data') }}" --}}
+                                            {{-- data-ewallet-data="{{ route('ewalletype.data') }}" --}}
+                                            {{-- data-insuranceinformation-data="{{ route('insurancetype.data') }}" --}}
+                                            {{-- data-insuranceCompany-data="{{ route('insuranceco.data') }}" --}}
                                         >
 
                                     <div class="box-header with-border">
@@ -2174,7 +2174,9 @@
             window.LaravelRoutes = {
                 csrfToken : "{{ csrf_token() }}",
                 transaction_table : @json(route('newbusiness.data')),
-            }            
+            }       
+            
+            console.log(window.LaravelRoutes.transaction_table);
 
         </script>
 

@@ -600,7 +600,7 @@
 
     window.formRoutes = {
         insuranceStaffData: @json(route('insurance_staff.data')),
-        customerTypeData: @json(route('customers_type.data')),
+        customerTypeData: @json(route('get.customers_type.data')),
 
         // Location
         regionData: @json(route('region.data')),
