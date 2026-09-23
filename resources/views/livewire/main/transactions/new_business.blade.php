@@ -59,13 +59,23 @@
           <div class="col-md-12">
             <div class="col-md-4">
               <div class="form-group">
-                <label for="txtsearch">Search </label>
-                <div class="input-group input-group-sm">
+                <label for="txtsearch">Search :</label>
+                <div class="input-group input-group-sm mb-5">
                   <input type="text" id="txtsearch" class="form-control input-sm clearable" placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
                   <span class="input-group-btn">
                     <button type="button" id="btnfind" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
                   </span>
                 </div>
+                <small class="text-muted d-block">
+                    <i class="fas fa-info-circle"></i> Searchable by: 
+                    <strong>Customer No</strong>, 
+                    <strong>Full Name</strong>, 
+                    <strong>Contact No</strong>, 
+                    <strong>VIN</strong>, 
+                    <strong>CS No</strong>, 
+                    <strong>ISE Name</strong>, and 
+                    <strong>MP Name</strong>.
+                </small>
                 <div class="help-block with-errors"></div>
               </div>
             </div>
@@ -1758,7 +1768,7 @@
 <script>
 
     window.dataRoutes = {
-      userAccountSession : @json(route('getSession.variables')),
+      userAccountSession : @json(route('getSession.variables'))
     }
     
     window.userAccount = {

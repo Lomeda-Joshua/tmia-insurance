@@ -907,6 +907,9 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     url:window.formRoutes.productClassData,
+     headers: {
+          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+      },
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
@@ -1074,6 +1077,9 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     url:window.formRoutes.bankData,
+     headers: {
+          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+      },
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -1460,8 +1466,8 @@ function LoadTransactionData() {
           { data: 'Full_Name', name: 'c.Full_Name' },
           { data: 'Contact_No', name: 'c.Contact_No' },
           { data: 'VIN', name: 't.VIN' },
-          { data: 'Plate_No', name: 'v.Plate_No' },
           { data: 'CS_No', name: 'v.CS_No' },
+          { data: 'Plate_No', name: 'v.Plate_No' },
           { data: 'Model', name: 'v.Model' },
           { data: 'Variant', name: 'v.Variant' },
           { data: 'Insurance_Company', name: 't.Insurance_Company' },
