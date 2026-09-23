@@ -101,21 +101,13 @@
           </div>
         </div>
 
-        @if(Auth::user()->User_Level_ID == 1)
-          <div class="row">
-            <div class="btnactionud pull-right">
-              <button
-                    type="button"
-                    id="btnadd"
-                    class="btn btn-box-tool"
-                    data-user-id="{{ Auth::user()->User_ID }}"
-                    data-user-level="{{ Auth::user()->userLevel?->User_Level_Description }}"
-                  >
+        <div class="row">
+          <div class="btnactionud pull-right" style="display: none;">
+              <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px;">
                   <i class="fa fa-plus"></i> Add New
               </button>
-            </div>
           </div>
-        @endif
+        </div>
 
       </div>
       <div class="box-body" style="max-width:100%;">
@@ -1593,13 +1585,13 @@
           </div>
         </div>
         <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditnetrem" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <button type="button" id="btncancelnetrem" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
-          </div>
-        </div>  
+            <div class="pull-right">
+                <button type="button" id="btneditnetrem" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+                <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
+                <button type="button" id="btncancelnetrem" class="btn btn-success" style="display: none;"><i class="fa fa-ban"></i> Cancel</button>
+                <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display: none;"><i class="fa fa-save"></i> Update</button>
+            </div>
+        </div>
       </div>
     </div>
     <!-- END MODAL MODIFY NET REM -->
@@ -1764,6 +1756,10 @@
 
 @push('scripts')
 <script>
+
+    window.dataRoutes = {
+      userAccountSession : @json(route('getSession.variables')),
+    }
     
     window.userAccount = {
         ulevel: @json(Auth::user()?->User_Level_ID)

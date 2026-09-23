@@ -159,8 +159,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         // Account settings
         Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
         
-        Route::get('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
-        Route::get('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
+        Route::post('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
+        Route::post('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
         Route::post('/user-account/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
         Route::post('/user-account/update', [UserController::class, 'updateUser'])->name('user_account.update');
         Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');

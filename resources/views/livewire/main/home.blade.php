@@ -25,10 +25,6 @@
     <!-- BIRTH DAY AND ANNIVERSARRY -->
     <div class="box">
       <div class="box-body dashboard-container">
-
-         <div id='bg-logo'>
-              <IMG SRC="{{ asset('tmia-assets/images/logo.png') }}">
-          </div>
         
         <header class="dashboard-header">
           <h1>Client Milestones Overview</h1>

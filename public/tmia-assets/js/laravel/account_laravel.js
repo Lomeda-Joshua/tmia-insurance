@@ -24,6 +24,13 @@ var xuname;
         signin = data.signin;
       }
     });
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+          }
+      });
+      
     //=============== END GET USER LOG IN INFORMATION  =================//
 
     //============== DATE PICKER INITIALIZED ===========//

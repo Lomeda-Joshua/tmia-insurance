@@ -31,6 +31,33 @@ var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
+    //================== GET USER LOG IN INFORMATION =================//
+    $.ajax({
+      url: window.dataRoutes.userAccountSession,
+      dataType: 'json',
+      type: "POST",
+      cache: false,
+      headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      success: function(data) {
+        userid = data.userid;
+        logname = data.logname;
+        ulevel = data.ulevel;
+        regdate = data.regdate;
+        signin = data.signin;
+
+        if (ulevel == 1 || ulevel == 6) {
+            $(".btnactionud").removeAttr("hidden").show();
+        } else {
+            $(".btnactionud").hide();
+        }
+
+      }
+    });
+    //=============== END GET USER LOG IN INFORMATION  =================//
+
+
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -5690,7 +5717,9 @@ function FormDisablePay(val) {
 }
 
 function FormDisableNetRem(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  var isReadonly   = Boolean(val);
+  if (ulevel == 1 || ulevel == 6) 
+  {
     if (val == true) {
       $("#btneditnetrem").show();
       $("#btnclosenetrem").show();
@@ -5709,8 +5738,8 @@ function FormDisableNetRem(val) {
     $("#btnupdatenetrem").hide();
   }
   
-  $("#txtinsgpremium").attr("disabled",val);
-  $("#txtnetrem").attr("disabled",val);
+  // Modern jQuery property toggle for form fields
+  $("#txtinsgpremium, #txtnetrem").prop("disabled", isReadonly);
 
   $(".box-body").validator('reset');
 }
