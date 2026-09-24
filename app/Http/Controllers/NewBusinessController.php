@@ -81,12 +81,12 @@ class NewBusinessController extends Controller
                 $search = '%' . $searchVal . '%';
                 $query->where(function ($q) use ($search) {
                     $q->where('t.Insurance_No', 'LIKE', $search)
-                    ->orWhere('t.VIN', 'LIKE', $search)
-                    ->orWhere('t.VIN', 'LIKE', $search)
-                    ->orWhere('v.Order_No', 'LIKE', $search)
+                    // ->orWhere('t.VIN', 'LIKE', $search)
+                    // ->orWhere('v.Order_No', 'LIKE', $search)
                     ->orWhere('v.CS_No', 'LIKE', $search)
-                    ->orWhere('v.Plate_No', 'LIKE', $search)
+                    // ->orWhere('v.Plate_No', 'LIKE', $search)
                     ->orWhere('v.Customer_No', 'LIKE', $search)
+                    ->orWhere('t.Insurance_Company', 'LIKE', $search)
                     ->orWhere('c.Full_Name', 'LIKE', $search);
                 });
             } elseif ($chkAll === 0 && !empty($dateFrom) && !empty($dateTo)) {

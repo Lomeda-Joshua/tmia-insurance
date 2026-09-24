@@ -1077,9 +1077,9 @@ $(document).ready( function () {
   $.ajax({
     type:"POST",
     url:window.formRoutes.bankData,
-     headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-      },
+    headers: {
+        'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+    },
     success: function(data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
@@ -1358,6 +1358,7 @@ $(document).ready( function () {
   btnselect = 'A';
 
   LoadStatusCounts();
+
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
@@ -5159,6 +5160,103 @@ $(document).on("click", "#btnupdatecall", function () {
   });
 });
 
+
+// ======================================================
+// Start begin Review Utility
+// ======================================================
+function showReviewModal(onConfirmCallback) {
+
+
+  // 1. Gather current form values
+  const insurerFields = {
+    "Insurance Type": getVal("#cboinstype"),
+    "Insurance Co.": getVal("#cboinsco"),
+    "Start Date": getDate("#dpstartdate"),
+    "Policy No.": getUpper("#txtpolicyno"),
+    "Issue Date": getDate("#dpissuedate"),
+    "Policy Expiry": getDate("#dppexpiredate"),
+    "Mortgagee": getVal("#cbomortgage")
+  };
+
+  const insuranceFields = {
+    "Gross Premium": getNum("#txtgrosspremium"),
+    "Net Remittance": getNum("#txtnetremittance"),
+    "Commission": getNum("#txtcommission"),
+    "Option Type": $('input[name="rdoptiontype"]:checked').val() || "N/A",
+    "Payment Checked": $("#chkpayment").is(":checked") ? "Yes" : "No",
+    "Terms": getVal("#txtterms"),
+    "Monthly Payment": getNum("#txtmonthpay")
+  };
+
+  const vehicleFields = {
+    "VIN": getVal("#txtvin"),
+    "Make": getVal("#txtmake"),
+    "Model": getVal("#txtmodel"),
+    "Model Year": getVal("#txtmodelyear"),
+    "Color": getVal("#txtcolor"),
+    "Engine No.": getVal("#txtengineno"),
+    "CS No.": getVal("#txtcsno"),
+    "Plate No.": getVal("#txtplateno"),
+    "Paid Price / SRP": getNum("#txtsrp"),
+    "VSI Date": getDate("#dpvsidate"),
+    "Release Date": getDate("#dpreldate"),
+    "Tech Date": getDate("#dptechdate"),
+    "Variant": getVal("#txtvariant"),
+    "Body Type": getVal("#cbobodytype"),
+    "Transmission": getVal("#txttransmission"),
+    "Fuel Type": getVal("#cbofueltype"),
+    "Seats": getVal("#txtseats"),
+    "Product Class": getVal("#cboprodclass"),
+    "Ownership Type": getVal("#cboowntype"),
+    "Vehicle Owner": getVal("#txtvoname"),
+    "Mortgagee Name": getVal("#txtmpname")
+  };
+
+  // 2. Helper to build HTML sections
+  function buildSectionHtml(title, dataObj) {
+    let html = `<h4 class="review-section-title">${title}</h4>`;
+    html += `<table class="review-table"><tbody>`;
+    for (const [label, val] of Object.entries(dataObj)) {
+      const displayVal = val !== null && val !== undefined && val !== "" ? val : "-";
+      html += `<tr><th>${label}</th><td>${displayVal}</td></tr>`;
+    }
+    html += `</tbody></table>`;
+    return html;
+  }
+
+  // 3. Render HTML inside target div
+  const reviewContent = 
+    buildSectionHtml("Insurer Information", insurerFields) +
+    buildSectionHtml("Insurance & Payment Details", insuranceFields) +
+    buildSectionHtml("Vehicle Details", vehicleFields);
+
+  $(".form-data").html(reviewContent);
+
+  // 4. Open modal
+  $("#reviewModal").fadeIn(200);
+
+  // 5. Handle Confirmation
+  $("#btnConfirmSubmit").off("click").on("click", function() {
+    $("#reviewModal").fadeOut(200);
+    if (typeof onConfirmCallback === "function") {
+      onConfirmCallback();
+    }
+  });
+}
+
+// Close Modal Handler
+$(document).on("click", "#btnCloseModal, .modal-overlay", function(e) {
+  if (e.target === this) {
+    $("#reviewModal").fadeOut(200);
+  }
+});
+
+  // ======================================================
+  // End Review modal Utility
+  // ======================================================
+
+
+
 $(document).on("click", "#btnsubmit", function () {
   // ======================================================
   // Helper Utilities
@@ -5362,7 +5460,6 @@ $(document).on("click", "#btnsubmit", function () {
     allData.push(row);
   });
 
-  console.log(allData);
 
   const insuranceFields = {
     grosspremium: getNum("#txtgrosspremium"),
@@ -5426,6 +5523,8 @@ $(document).on("click", "#btnsubmit", function () {
   [customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
     Object.entries(group).forEach(([key, val]) => formdata.append(key, val));
   });
+
+  console.log(formdata);
 
   // ======================================================
   // AJAX SUBMISSION
