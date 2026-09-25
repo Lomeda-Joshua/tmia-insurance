@@ -80,9 +80,10 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
         Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
 
+
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::post('/newbusiness/data', [NewBusinessController::class, 'getNewBusiness'])->name('newbusiness.data');
+        Route::post('/new-business/data', [NewBusinessController::class, 'getNewBusinessTableData'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
         Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
@@ -95,7 +96,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
         Route::post('/new-business/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
         Route::post('/new-business/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
+        Route::post('/new-business/update-net-rem', [TransactionController::class, 'updateNetRemittance'])->name('update.netrem');
 
+        
         Route::post('/new-business/vin-lookup', [VehicleLookupController::class, 'lookupByVin'])->name('vehicle.lookup');
 
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
@@ -136,7 +139,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Renewal Business Insurance
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
-        Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalData'])->name('renewal_business.data');
+        Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalTableData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
 
 

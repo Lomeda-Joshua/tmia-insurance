@@ -77,7 +77,7 @@ class OverallDataController extends Controller
         $searchVal = trim($request->input('searchval', ''));
         $btnSelect = trim($request->input('btnselect', ''));
 
-        // 3. Dynamic Filter Logic
+        //   3. Dynamic Filter Logic
         if (!empty($searchVal)) {
             $like = '%' . $searchVal . '%';
             $query->where(function ($q) use ($like) {
@@ -93,9 +93,6 @@ class OverallDataController extends Controller
         } elseif ($btnSelect === '[SPECIAL CHAR]') {
             $query->whereRaw("TRIM(Full_Name) REGEXP '^[^a-zA-Z0-9]'");
         }
-
-        // 4. Default Order
-        $query->orderBy('Full_Name', 'ASC');
 
         // 5. Pass query engine directly into DataTables payload generator
         return DataTables::eloquent($query)

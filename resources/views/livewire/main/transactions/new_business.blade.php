@@ -72,8 +72,7 @@
                     <strong>Full Name</strong>, 
                     <strong>Contact No</strong>, 
                     <strong>VIN</strong>, 
-                    <strong>CS No</strong>, 
-                    <strong>ISE Name</strong>, and 
+                    <strong>CS No</strong>, and 
                     <strong>MP Name</strong>.
                 </small>
                 <div class="help-block with-errors"></div>
@@ -1421,7 +1420,7 @@
         </div>
         <div class="box-footer with-border">
           <div class="pull-right">
-            <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go asdasd</button>
           </div>
         </div>  
       </div>
@@ -1490,7 +1489,7 @@
         </div>
         <div class="box-footer with-border">
           <div class="pull-right">
-            <button type="button" id="  " data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            <button type="button" id="btnvehselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
           </div>
         </div>  
       </div>
@@ -2020,7 +2019,8 @@
 
     window.saveData = {
         saveNbCustomerData : @json(route('newbusiness.save')),
-        saveModifyPayment : @json(route('payments.sync'))
+        saveModifyPayment : @json(route('payments.sync')),
+        saveUpdatedNetRem : @json(route('update.netrem'))
     }
 
     window.loadData = {

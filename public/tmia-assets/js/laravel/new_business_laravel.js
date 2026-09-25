@@ -1407,6 +1407,7 @@ function LoadTransactionData() {
       processing: "Loading Transaction List..."
     },
     processing: true,
+    searching: false,
     serverSide: true,
     pageLength: 10,
     responsive: true,
@@ -1465,7 +1466,7 @@ function LoadTransactionData() {
           { data: 'Trans_Status', name: 't.Trans_Status' },
           { data: 'Customer_No', name: 't.Customer_No' },
           { data: 'Full_Name', name: 'c.Full_Name' },
-          { data: 'Contact_No', name: 'c.Contact_No' },
+          { data: 'Contact_No', name: 'c.Contact_No', searchable: true },
           { data: 'VIN', name: 't.VIN' },
           { data: 'CS_No', name: 'v.CS_No' },
           { data: 'Plate_No', name: 'v.Plate_No' },
@@ -1515,6 +1516,7 @@ function LoadCustomerData() {
       processing: "Loading Customer List..."
     },
     processing: true,
+    searching: false,
     serverSide: true,
     pageLength: 10,
     responsive: true,
@@ -1531,14 +1533,14 @@ function LoadCustomerData() {
     },
     columns: [
           { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-          { data: "Customer_No", name: "c.Customer_No" },
-          { data: "Group", name: "c.Group", defaultContent: "" },
-          { data: "Full_Name", name: "c.Full_Name", defaultContent: "" },
-          { data: "Birth_Date", name: "c.Birth_Date", defaultContent: "" },
-          { data: "Contact_No", name: "c.Contact_No", defaultContent: "" },
-          { data: "Email_Address", name: "c.Email_Address", defaultContent: "" },
-          { data: "Address", name: "c.Address", defaultContent: "" },
-          { data: "Upload_Cust_No", name: "c.Upload_Cust_No", defaultContent: "" },
+          { data: "Customer_No", name: "Customer_No", orderable: true },
+          { data: "Group", name: "Group", defaultContent: "" },
+          { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+          { data: "Birth_Date", name: "Birth_Date", defaultContent: "" },
+          { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+          { data: "Email_Address", name: "Email_Address", defaultContent: "" },
+          { data: "Address", name: "Address", defaultContent: "" },
+          { data: "Upload_Cust_No", name: "Upload_Cust_No", defaultContent: "" },
           { data: "VIN", name: "VIN", defaultContent: "" },
           { data: "CS_No", name: "CS_No", defaultContent: "" },
           { data: "Plate_No", name: "Plate_No", defaultContent: "" },
@@ -1604,7 +1606,9 @@ function LoadCustomerDataEDAFSAP() {
     },
     processing: true,
     serverSide: true,
+    orderable: true,
     pageLength: 10,
+    seaching:false,
     responsive: true,
     autoWidth: false,
     ajax: {
@@ -1617,9 +1621,9 @@ function LoadCustomerDataEDAFSAP() {
     },
     columns: [
         { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "Customer_No", name: "Customer_No" },
+        { data: "Customer_No", name: "Customer_No", orderable: true },
         { data: "Group", name: "Group", defaultContent: "" },
-        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+        { data: "Full_Name", name: "Full_Name", orderable: true, defaultContent: "" },
         { 
           data: "Birth_Date", 
           name: "Birth_Date", 
@@ -3485,7 +3489,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "new_business_update_netrem.php",
+    url: window.saveData.saveUpdatedNetRem,
     method: "POST",
     data: formdata,
     processData: false,
@@ -4437,10 +4441,7 @@ $(document).on( "click", "#btncustselect", function () {
   }
 
   if (activeCustTab === '#uploadtab') {
-      console.log(xvin);
-  console.log(xcsno);
-  console.log(xplateno);
-  console.log(xcustnoupload);
+
     LoadCustomerEDAFSAPInfo();
   }
   $('#modal-customerlist').iziModal('close');
@@ -4463,10 +4464,11 @@ $(document).on( "click", "#btnvehselect", function () {
   }
 
   if (activeVehTab === '#uploadvehtab') {
-
-    LoadVehicleEDAFSAPInfo();
+    LoadVehicleEDAFSAPInfo(xcustnoupload);
   }
+
   $('#modal-vehiclelist').iziModal('close');
+
 });
 
 $(document).on( "click", "#btnadd", function () {

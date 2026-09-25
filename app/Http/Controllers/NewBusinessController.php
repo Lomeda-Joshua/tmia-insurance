@@ -34,7 +34,7 @@ class NewBusinessController extends Controller
     /**
      * Fetch New business data for DataTables AJAX.
     */
-    public function getNewBusiness(NewBusinessDatatableRequest $request): JsonResponse
+    public function getNewBusinessTableData(NewBusinessDatatableRequest $request): JsonResponse
     {
         // 1. Build Base Query with Joins using Eloquent or Query Builder
         $query = NewBusinessTransactionView::query()
@@ -84,8 +84,8 @@ class NewBusinessController extends Controller
                     // ->orWhere('t.VIN', 'LIKE', $search)
                     // ->orWhere('v.Order_No', 'LIKE', $search)
                     ->orWhere('v.CS_No', 'LIKE', $search)
-                    // ->orWhere('v.Plate_No', 'LIKE', $search)
-                    ->orWhere('v.Customer_No', 'LIKE', $search)
+                    ->orWhere('c.Contact_No', 'LIKE', $search)
+                    ->orWhere('t.Customer_No', 'LIKE', $search)
                     ->orWhere('t.Insurance_Company', 'LIKE', $search)
                     ->orWhere('c.Full_Name', 'LIKE', $search);
                 });

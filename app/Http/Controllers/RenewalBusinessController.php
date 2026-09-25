@@ -17,29 +17,21 @@ class RenewalBusinessController extends Controller
         return view('livewire.main.transactions.renewal_business');
     }
 
-    public function getRenewalData(RenewalBusinessDatatableRequest $request): JsonResponse
+    public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
         $filters = $request->validated();     
-        $query = RenewalBusinessTransaction::with(['customer_details' => function ($q) {
-                // $q->select('Customer_No', 'Full_Name', 'Contact_No' ); // Select columns from Customer table
-            }])
-            ->select([
+        $query = RenewalBusinessTransaction::with([
+                    'customer_details' => function ($q) {$q->select('Customer_No', 'Full_Name', 'Contact_No' ); }, // Select columns from Customer table
+                    'vehicle_details' => function ($q) {$q->select('VIN', 'Make', 'Model', 'Model_Year', 'Color', 'Engine_No', 'CS_No'); } // Select columns from Customer table
+            ])->select([
                 'Insurance_No',
                 'Trans_Date',
                 'Trans_Status',
-                'Customer_No', // Foreign key required for mapping
                 'VIN',
-                // 'CS_No',
-                // 'Plate_No',
-                // 'Model',
-                // 'Variant',
-                // 'Insurance_Company',
-                // 'ISE_Name',
-                // 'MP_Name',
-                // 'Call_Attempts',
-                // 'Option_Type',
-                // 'Policy_Expiration',
+                'Customer_No', // Foreign key required for mapping
+                'Insurance_Company',
             ]);
+
         
         // 1. Pending Filter (Priority 1)
         if (! empty($filters['viewpending'])) {

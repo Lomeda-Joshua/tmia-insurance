@@ -30,21 +30,6 @@ var activeCustTab;
 var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
-  $.ajax({
-    url: window.fetchData.variableData,
-    dataType: 'json',
-    cache: false,
-    success: function(data) {
-      userid = data.userid;
-      logname = data.logname;
-      ulevel = data.ulevel;
-      regdate = data.regdate;
-      dealercode = data.dealercode;
-      signin = data.signin;
-    }
-  });
-
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -55,6 +40,7 @@ $(document).ready( function () {
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
+    type:"post",
     cache: false,
     success: function(data) {
       userid = data.userid;
@@ -1503,23 +1489,29 @@ function LoadTransactionData() {
       }
     },
     columns: [
-      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-      { data: "Insurance_No" },
-      { data: "Trans_Date" },
-      { data: "Trans_Status" },
-      { data: "Customer_No" },
-      { data: "Full_Name" },
-      { data: "Contact_No" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Model" },
-      { data: "Variant" },
-      { data: "Insurance_Company" },
-      { data: "ISE_Name" },
-      { data: "MP_Name" },
-      { data: "Call_Attempts" },
-      { data: "button" }
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+          { data: "Insurance_No", name: "Insurance_No", defaultContent: "" },
+          { data: "Trans_Date", name: "Trans_Date", defaultContent: "" },
+          { data: "Trans_Status", name: "Trans_Status", defaultContent: "" },
+          { data: "Customer_No", name: "Customer_No", defaultContent: "" },
+          
+          // Relation 1: Customer Details
+          { data: "customer_details.Full_Name", name: "customer_details.Full_Name", defaultContent: "" },
+          { data: "customer_details.Contact_No", name: "customer_details.Contact_No", defaultContent: "" },
+          
+          // Relation 2: Vehicle Details
+          { data: "vehicle_details.VIN", name: "vehicle_details.VIN", defaultContent: "" },
+          { data: "vehicle_details.CS_No", name: "vehicle_details.CS_No", defaultContent: "" },
+          { data: "vehicle_details.Plate_No", name: "vehicle_details.Plate_No", defaultContent: "" },
+          { data: "vehicle_details.Model", name: "vehicle_details.Model", defaultContent: "" },
+          { data: "vehicle_details.Variant", name: "vehicle_details.Variant", defaultContent: "" },
+          
+          // Main Table Columns
+          { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "" },
+          { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
+          { data: "MP_Name", name: "MP_Name", defaultContent: "" },
+          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "" },
+          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
