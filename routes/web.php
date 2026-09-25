@@ -79,6 +79,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
         Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
+        Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
 
 
         // New Business Insurance
@@ -86,7 +87,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/data', [NewBusinessController::class, 'getNewBusinessTableData'])->name('newbusiness.data');
         Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
         Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
-        Route::post('/new-business/save', [NewBusinessController::class, 'store'])->name('newbusiness.save');
+        Route::post('/new-business/save', [NewBusinessController::class, 'saveNewBusinessData'])->name('newbusiness.save');
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
         Route::post('/new-business/specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');

@@ -159,7 +159,7 @@ class NewBusinessController extends Controller
     /**
      * For saving data of New business.
     */
-    public function store(Request $request)
+    public function saveNewBusinessData(Request $request)
     {       
         $user = Auth::user();
         $userid = $user->User_ID;
@@ -172,7 +172,7 @@ class NewBusinessController extends Controller
                ============================================================ */
             $custno = $request->input('custno');
             $existingCust = CustomerInformation::where('Customer_No', $custno)->first();
-
+            
             $customerData = [
                 'User_ID'        => $userid,
                 'Group'          => $request->input('group', ''),
@@ -196,9 +196,11 @@ class NewBusinessController extends Controller
             ];
 
             if ($existingCust) {
+                dd("true");
                 $existingCust->update($customerData);
                 $finalCustNo = $custno;
             } else {
+                dd("false");
                 $yearc = date("Y");
                 $prefixc = "TMIA-{$yearc}-";
 

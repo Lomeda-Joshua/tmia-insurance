@@ -1006,7 +1006,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.PayTID}">${item.PayType}</option>`;
+          options += `<option value="${item.PayType}">${item.PayType}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1033,7 +1033,7 @@ $(document).ready( function () {
         let options = '<option value="">PLEASE SELECT</option>';
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.EWTID}">${item.EWType}</option>`;
+          options += `<option value="${item.EWType}">${item.EWType}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1473,6 +1473,7 @@ function LoadTransactionData() {
     },
     processing: true,
     serverSide: true,
+    searching: false,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -2201,6 +2202,8 @@ function LoadVehicleInfo() {
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
+
+      console.log(data);
       
       $.each(data, function(i, value) {
         // Helper: set select option safely
@@ -2914,8 +2917,8 @@ $(document).on("change", "#cbopaytype", function () {
 
     // Map payment types to sections
     var sectionMap = {
-        // "CREDIT CARD": ".cc-section",
-        "POST-DATED CHECK (PDC)": ".pdc-section",
+        "CREDIT CARD": ".cc-section",
+        "POST-DATED CHECK (PDC)" : ".pdc-section",
         "E-WALLET": ".ew-section"
     };
 
@@ -2953,8 +2956,10 @@ $(document).on("click", "#ptwallet", function () {
 $(document).on("click", "#btnaddpay", function () {
   var tablepay = $("#table_payment").DataTable();
 
-  var paytype        = $("#cbopaytype").val();
-  var ewallet        = $("#cboewallet").val();
+  // var paytype        = $("#cbopaytype").val();
+  var paytype        = $("#cbopaytype option:selected").text().trim();
+  // var ewallet        = $("#cboewallet").val();
+  var ewallet        = $("#cboewallet option:selected").text().trim();
   var ccno           = $("#txtccno").val().trim();
   var ccholder       = $("#txtccholder").val().trim();
   var ccexpirydate   = $("#txtccexpirydate").val().trim();
@@ -5625,7 +5630,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_save.php",
+    url: window.saveData.saveRenewalBusinessData,
     method: "POST",
     data: formdata,
     processData: false,
@@ -5633,9 +5638,7 @@ $(document).on("click", "#btnsubmit", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Saved!",
           text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",

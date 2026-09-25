@@ -1420,7 +1420,7 @@
         </div>
         <div class="box-footer with-border">
           <div class="pull-right">
-            <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go asdasd</button>
+            <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
           </div>
         </div>  
       </div>

@@ -18,7 +18,7 @@ class TransactionController extends Controller
     {
         // 1. Request validation handles empty/missing parameter checks
         $validated = $request->validate([
-            'insuranceno' => ['required', 'string'],
+            'insuranceno' => ['nullable', 'string'],
         ]);
 
         // 2. Query builder replaces manual PDO connection instantiation

@@ -2717,7 +2717,7 @@ $(document).on("change", "#cbopaytype", function () {
     
     // Hide all sections first
     // $(".cc-section, .pdc-section, .ew-section").fadeOut();
-    // $(".pdc-section, .ew-section").fadeOut();
+    $(".pdc-section, .ew-section").fadeOut();
 
     // Map payment types to sections
     var sectionMap = {
@@ -2761,7 +2761,6 @@ $(document).on("click", "#ptwallet", function () {
 
 $(document).on("click", "#btnaddpay", function (e) {
   e.preventDefault();
-
   var tablepay = $("#table_payment").DataTable();
 
   // var paytype        = $("#cbopaytype").val();
@@ -3249,9 +3248,7 @@ $(document).on("click", "#btnaddpay-n", function () {
     Payment_Date: null, 
     button: "<button type='button' data-toggle='tooltip' data-placement='top' title='Remove Payment' class='btn btn-success btn-action btnremovepay-n'><i class='fa fa-remove'></i></button>"
   };
-
-  console.log(rowData);
-
+  
   if (editingRow) {
     // ✅ Replace the existing row
     editingRow.data(rowData).draw(false);
