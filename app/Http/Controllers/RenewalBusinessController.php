@@ -13,6 +13,7 @@ use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
 use App\Models\TransactionRBPayment;
 use App\Models\Notification;
+use App\Models\UploadedCustomer;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -27,7 +28,7 @@ class RenewalBusinessController extends Controller
         $filters = $request->validated();     
         $query = RenewalBusinessTransaction::with([
                     'customer_details' => function ($q) {$q->select('Customer_No', 'Full_Name', 'Contact_No' ); }, // Select columns from Customer table
-                    'vehicle_details' => function ($q) {$q->select('VIN', 'Make', 'Model', 'Plate_No', 'Model_Year', 'Color', 'Engine_No', 'CS_No'); } // Select columns from Customer table
+                    'vehicle_details' => function ($q) {$q->select('VIN', 'Make', 'Model', 'Plate_No', 'Model_Year', 'Color', 'Engine_No', 'CS_No', 'Customer_No'); } // Select columns from Customer table
             ])->select([
                 'Insurance_No',
                 'Trans_Date',
@@ -256,10 +257,10 @@ class RenewalBusinessController extends Controller
                 // ----------------------------
                 // A) CUSTOMER INSERT OR UPDATE
                 // ----------------------------
-                $custNo = $request->input('custno');
+                $custNo = $request->input('custno');                
                 $customer = CustomerInformation::find($custNo);
-
-                $customerData = [
+                
+                $customerData = [ 
                     'Group'          => $request->input('group', ''),
                     'Full_Name'      => $request->input('custname', ''),
                     'First_Name'     => $request->input('custfname', ''),

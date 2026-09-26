@@ -16,14 +16,15 @@ class TransactionController extends Controller
      */
     public function getByInsuranceNo(Request $request): JsonResponse
     {
+
         // 1. Request validation handles empty/missing parameter checks
         $validated = $request->validate([
-            'insuranceno' => ['nullable', 'string'],
+            'insuranceNo' => ['nullable', 'string'],
         ]);
 
         // 2. Query builder replaces manual PDO connection instantiation
-        $transactions = DB::table('transactions_nb')
-            ->where('Insurance_No', $validated['insuranceno'])
+        $transactions = DB::table('transactions_rb')
+            ->where('Insurance_No', $validated['insuranceNo'])
             ->get();
 
         // 3. Return structured JSON response

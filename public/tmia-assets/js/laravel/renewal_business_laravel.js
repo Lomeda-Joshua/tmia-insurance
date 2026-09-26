@@ -1391,30 +1391,38 @@ $(document).ready( function () {
   btnselect = 'A';
 
   LoadStatusCounts();
+
+  $(document).on( "click", ".btnnetrem", function () {
+      let insuranceNo = $(this).data('insurance-no');
+      FormClearNetRem();
+      LoadNetRemData(insuranceNo);
+      FormDisableNetRem(true);
+  });
+
 });
 
 
-//======= Insurance  Staff =====//
-$.ajax({
-  type:"POST",
-  url:window.loadData.getInsurance,
-  headers: {
-      'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-  },
-  success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
-      // Iterate over JSON objects and build <option> elements
-      $.each(data, function(index, item) {
-        options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
-      });
+// //======= Insurance  Staff =====//
+// $.ajax({
+//   type:"POST",
+//   url:window.loadData.getInsurance,
+//   headers: {
+//       'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+//   },
+//   success: function(data) {
+//       let options = '<option value="">PLEASE SELECT</option>';
+//       // Iterate over JSON objects and build <option> elements
+//       $.each(data, function(index, item) {
+//         options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+//       });
 
-      // Inject populated options into dropdown
-      $("#cboprevinsco").html(options);
+//       // Inject populated options into dropdown
+//       $("#cboprevinsco").html(options);
 
-      // Force Select2 to refresh its display
-      $("#cboprevinsco").trigger('change.select2');
-  }
-});
+//       // Force Select2 to refresh its display
+//       $("#cboprevinsco").trigger('change.select2');
+//   }
+// });
 
 
 
@@ -1481,6 +1489,7 @@ function LoadTransactionData() {
       url: window.tableRoutes.renewalBusinessData,
       type: "POST",
       data: function (d) {
+            console.log(d);
             d.viewpending  = window.viewpending === true;
             d.viewexpiring = window.viewexpiring === true;
             d.searchval    = $('#txtsearch').val().trim();
@@ -1940,10 +1949,12 @@ function LoadNBData() {
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_nblist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
      $('#btnnbselect').trigger("click");
-  });
+  });  
 }
 
 function LoadInsuranceInfo(insuranceno) {
+  console.log("Load Insurance Info");
+  
   $.ajax({
     type:"POST",
     url:window.loadData.getInsurance,
@@ -2532,13 +2543,12 @@ function updatePaymentTotals() {
   }
 }
 
-function LoadNetRemData() {
+function LoadNetRemData(insuranceno) {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_rb.php",
-    data:{insuranceno:insuranceno},
+    url:window.loadData.getInsurance,
+    data:{insuranceNo:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
         $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));
@@ -4665,6 +4675,7 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadVehicleInfo();
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
+
   if ( ulevel == 'INSURANCE STAFF') { 
     $("#cboise").val(userid).trigger("change.select2");
 
@@ -4672,6 +4683,7 @@ $(document).on( "click", "#btnnbselect", function () {
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
 });
 
 $(document).on( "click", "#btnadd", function () {
@@ -5097,18 +5109,15 @@ $(document).on("click", function (e) {
 });
 
 $(document).on( "click", ".btnpay", function () {
-  insuranceno = $(this).attr('insuranceno');
-  FormClearPay();
-  LoadPayData();
-  FormDisablePay(true);
+  console.log("hello");
+  // insuranceno = $(this).attr('insuranceno');
+  // console.log("hello", insuranceno);
+  // console.log(insuranceno);
+  // FormClearPay();
+  // LoadPayData();
+  // FormDisablePay(true);
 });
 
-$(document).on( "click", ".btnnetrem", function () {
-  insuranceno = $(this).attr('insuranceno');
-  FormClearNetRem();
-  LoadNetRemData();
-  FormDisableNetRem(true);
-});
 
 $(document).on("click",".btnsoa",function(){
   insuranceno = $(this).attr('insuranceno');
@@ -5641,7 +5650,7 @@ $(document).on("click", "#btnsubmit", function () {
       if (response.result == 1) {
         swal({
           title: "Saved!",
-          text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",
+          text: "New record with Insurance No "+ response.Insurance_No +" has been created successfully.",
           type: "success",
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
@@ -5692,7 +5701,6 @@ $(document).on( "click", "#btndelete", function () {
         url:"customer_list_delete.php",
         data:{ transid:transid },
         success: function(data){
-          var data = jQuery.parseJSON(data);
           if(data.result == 1){
             swal({
               title: "Deleted!",
