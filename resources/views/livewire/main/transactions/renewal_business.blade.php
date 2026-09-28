@@ -129,7 +129,11 @@
               <th>Model</th>
               <th>Variant</th>
               <th>Insurance Partner</th>
-              <th>I.S.E</th>
+
+              @if(Auth::user()->User_Level_ID == 1)
+                <th>I.S.E</th>
+              @endif
+              
               <th>MP Name</th>
               <th>Call Attempts</th>
               <th>Action</th>

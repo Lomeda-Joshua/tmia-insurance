@@ -59,6 +59,8 @@ $(document).ready( function () {
 
       // Set visibility based on predicate evaluation
       $(".btnactionud").toggle(isAuthorized);
+      LoadTransactionData(ulevel);
+
     }
   });
   //=============== END GET USER LOG IN INFORMATION  =================//
@@ -1457,11 +1459,11 @@ function LoadStatusCounts() {
 }
 
 //============== Transaction List ============//
-function LoadTransactionData() {
+function LoadTransactionData(ulevel_declartion) {
   const searchval = $("#txtsearch").val().trim();
   const datefromRaw = $("#dpdatefrom").val();
   const datetoRaw = $("#dpdateto").val();
-  const chkall = $("#chkall").is(":checked") ? 1 : 0;
+  const chkall = $("#chkall").is(":checked") ? 1 : 0;  
 
   const datefrom = formatDate(datefromRaw);
   const dateto = formatDate(datetoRaw);
@@ -1478,6 +1480,40 @@ function LoadTransactionData() {
   if ($.fn.dataTable.isDataTable('#table_trans')) {
     $('#table_trans').DataTable().clear().destroy();               
   }
+
+  let tableColumns = [
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "Insurance_No", name: "Insurance_No", defaultContent: "" },
+        { data: "Trans_Date", name: "Trans_Date", defaultContent: "" },
+        { data: "Trans_Status", name: "Trans_Status", defaultContent: "" },
+        { data: "Customer_No", name: "Customer_No", defaultContent: "" },
+        
+        // Flattened Columns (Matches leftJoin backend)
+        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+        
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "Model", name: "Model", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+          
+          // Main Table Columns
+        { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "" },                  
+  ];
+
+  if( ulevel_declartion == 1 ){
+      tableColumns.push(
+        { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
+      );
+  }
+
+  tableColumns.push(
+        { data: "MP_Name", name: "MP_Name", defaultContent: "" },
+        { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "" },
+        { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
+  )
+
 
   table = $('#table_trans').DataTable({
     language: {
@@ -1501,30 +1537,7 @@ function LoadTransactionData() {
             d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
       }
     },
-    columns: [
-        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "Insurance_No", name: "Insurance_No", defaultContent: "" },
-        { data: "Trans_Date", name: "Trans_Date", defaultContent: "" },
-        { data: "Trans_Status", name: "Trans_Status", defaultContent: "" },
-        { data: "Customer_No", name: "Customer_No", defaultContent: "" },
-        
-        // Flattened Columns (Matches leftJoin backend)
-        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
-        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
-        
-        { data: "VIN", name: "VIN", defaultContent: "" },
-        { data: "CS_No", name: "CS_No", defaultContent: "" },
-        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
-        { data: "Model", name: "Model", defaultContent: "" },
-        { data: "Variant", name: "Variant", defaultContent: "" },
-        
-        // Main Table Columns
-        { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "" },
-        { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
-        { data: "MP_Name", name: "MP_Name", defaultContent: "" },
-        { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "" },
-        { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
-    ],
+    columns: tableColumns,
     columnDefs: [
       {
         targets: [5, 11, 12, 13, 14],
@@ -4671,7 +4684,7 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
 
-  if ( ulevel == 'INSURANCE STAFF') { 
+  if ( ulevel == 6 ) { 
     $("#cboise").val(userid).trigger("change.select2");
 
     $('#modal-add').iziModal('open');
@@ -5858,7 +5871,7 @@ function FormDisable(val) {
 }
 
 function FormDisablePay(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditpay").show();
       $("#btnclosepay").show();

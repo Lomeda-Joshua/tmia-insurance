@@ -30,7 +30,8 @@ class RenewalBusinessController extends Controller
         // 1. Build Base Query with Joins
         $query = RenewalBusinessTransaction::query()
             ->leftJoin('customer_information', 'transactions_rb.Customer_No', '=', 'customer_information.Customer_No')
-            ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No
+            ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No\
+            ->leftJoin('user', 'transactions_rb.User_ID', '=', 'user.User_ID') 
             ->select([
                 // Primary table columns (prefixed to avoid ambiguous column collisions)
                 'transactions_rb.Insurance_No',
@@ -41,16 +42,18 @@ class RenewalBusinessController extends Controller
                 'transactions_rb.Insurance_Company',
                 'transactions_rb.Option_Type',
                 'transactions_rb.Policy_Expiration',
+                'transactions_rb.ISE_Name',
 
                 // Columns from Related Tables (Flattened directly for DataTables)
                 'customer_information.Full_Name',
                 'customer_information.Contact_No',
+
                 'vehicle_information.CS_No',
                 'vehicle_information.Plate_No',
                 'vehicle_information.Make',
                 'vehicle_information.Model',
                 'vehicle_information.Model_Year',
-                'vehicle_information.Variant'
+                'vehicle_information.Variant',
         ]);
 
         
@@ -103,7 +106,6 @@ class RenewalBusinessController extends Controller
                     $statusRaw   = $transaction->Trans_Status ?? '';
                     $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
 
-
                     $statusColors = [
                         'PENDING'   => '#5bc0de',
                         'COMPLETED' => '#22bb33',
@@ -149,7 +151,7 @@ class RenewalBusinessController extends Controller
 
                 return $buttons;
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'Trans_Status'])
             ->make(true);
     }
 

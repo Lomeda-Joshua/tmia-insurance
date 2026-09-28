@@ -168,10 +168,10 @@
             Enter your password to retrieve your session
         </div>
 
-        <div class="text-center">
-            <a href="{{ route('login') }}" style="cursor:pointer;">Or sign in as a different user</a>
+        <div class="text-center mt-2">
+            <x-switch-user-link />
         </div>
-
+        
         <div
             class="lockscreen-footer text-center"
             style="margin-top:15px;"
