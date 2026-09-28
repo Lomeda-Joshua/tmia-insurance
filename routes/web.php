@@ -79,6 +79,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
         Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
+        Route::post('/transaction/update-net-remittance', [RenewalBusinessController::class, 'updateNetRemittance'])->name('update.net-remittance');
         Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
 
 
@@ -142,6 +143,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/renewal-business', [RenewalBusinessController::class, 'index'])->name('renewal_business');
         Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalTableData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
+        Route::post('/renewal-business/get-transaction-by-insuranceno', [RenewalBusinessController::class, 'getTransactionByInsuranceNo'])->name('renewal_business_insurance_no');
 
 
         // Vehicle

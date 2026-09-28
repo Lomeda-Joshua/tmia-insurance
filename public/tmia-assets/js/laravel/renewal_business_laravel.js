@@ -30,6 +30,7 @@ var activeCustTab;
 var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
+
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
@@ -1397,6 +1398,9 @@ $(document).ready( function () {
       FormClearNetRem();
       LoadNetRemData(insuranceNo);
       FormDisableNetRem(true);
+
+      // Store the insurance number directly on the save button (or modal container)
+      $("#btnupdatenetrem").data('insurance-no', insuranceNo);
   });
 
 });
@@ -1489,7 +1493,6 @@ function LoadTransactionData() {
       url: window.tableRoutes.renewalBusinessData,
       type: "POST",
       data: function (d) {
-            console.log(d);
             d.viewpending  = window.viewpending === true;
             d.viewexpiring = window.viewexpiring === true;
             d.searchval    = $('#txtsearch').val().trim();
@@ -1499,29 +1502,28 @@ function LoadTransactionData() {
       }
     },
     columns: [
-          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "" },
-          { data: "Trans_Date", name: "Trans_Date", defaultContent: "" },
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "" },
-          { data: "Customer_No", name: "Customer_No", defaultContent: "" },
-          
-          // Relation 1: Customer Details
-          { data: "customer_details.Full_Name", name: "customer_details.Full_Name", defaultContent: "" },
-          { data: "customer_details.Contact_No", name: "customer_details.Contact_No", defaultContent: "" },
-          
-          // Relation 2: Vehicle Details
-          { data: "vehicle_details.VIN", name: "vehicle_details.VIN", defaultContent: "" },
-          { data: "vehicle_details.CS_No", name: "vehicle_details.CS_No", defaultContent: "" },
-          { data: "vehicle_details.Plate_No", name: "vehicle_details.Plate_No", defaultContent: "" },
-          { data: "vehicle_details.Model", name: "vehicle_details.Model", defaultContent: "" },
-          { data: "vehicle_details.Variant", name: "vehicle_details.Variant", defaultContent: "" },
-          
-          // Main Table Columns
-          { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "" },
-          { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
-          { data: "MP_Name", name: "MP_Name", defaultContent: "" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "" },
-          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "Insurance_No", name: "Insurance_No", defaultContent: "" },
+        { data: "Trans_Date", name: "Trans_Date", defaultContent: "" },
+        { data: "Trans_Status", name: "Trans_Status", defaultContent: "" },
+        { data: "Customer_No", name: "Customer_No", defaultContent: "" },
+        
+        // Flattened Columns (Matches leftJoin backend)
+        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+        
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "Model", name: "Model", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+        
+        // Main Table Columns
+        { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "" },
+        { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
+        { data: "MP_Name", name: "MP_Name", defaultContent: "" },
+        { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "" },
+        { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -1952,9 +1954,7 @@ function LoadNBData() {
   });  
 }
 
-function LoadInsuranceInfo(insuranceno) {
-  console.log("Load Insurance Info");
-  
+function LoadInsuranceInfo(insuranceno) {  
   $.ajax({
     type:"POST",
     url:window.loadData.getInsurance,
@@ -2212,10 +2212,7 @@ function LoadVehicleInfo() {
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){
-
-      console.log(data);
-      
+    success: function(data){      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2359,7 +2356,6 @@ function LoadPayData() {
     url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         // xtpremium = value.Total_Premium;
         xtpremium = value.Gross_Premium;
@@ -2385,7 +2381,7 @@ function LoadPaymentInfo() {
           processing: "Loading Payment List..."
       },
       processing: true,
-      serverSide: false,
+      serverSide: true,
       responsive: true,
       autoWidth: false,
       ordering: false,
@@ -2566,10 +2562,10 @@ function LoadNetRemData(insuranceno) {
 function LoadStatusData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_rb.php",
+    url:window.getData.getRenewalInsuranceno,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      console.log(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -3615,7 +3611,8 @@ $(document).on("click", "#btncancelnetrem", function() {
   $(".iziModal-wrap").scrollTop(0); 
 });
 
-$(document).on("click", "#btnupdatenetrem", function () {
+$(document).on("click", "#btnupdatenetrem", function (e) {
+  e.preventDefault();
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -3624,6 +3621,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   const getNum = (sel) => RemoveNumFormat(getVal(sel)) || "0";
   const getDate = (sel) => getSaveDateFormatted($(sel).val());
   const isEmpty = (v) => v === "" || v === null || v === undefined;
+  const insuranceNo = $(this).data('insurance-no');
 
   const showWarning = (selector, message) => {
     $(selector).focus();
@@ -3653,7 +3651,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // CHANGE TRANSACTION STATUS
   // ======================================================
   const NetRem = {
-    insuranceno,
+    insuranceno: insuranceNo,
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
     inscommission: getNum("#txtinscommission")
@@ -3678,17 +3676,14 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_update_netrem.php",
+    url: window.formRoutes.updateNetRem,
     method: "POST",
     data: formdata,
     processData: false,
     contentType: false,
     success: function (response) {
       $("#modalsaving").iziModal('close');
-
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Gross Premium / Net Rem!",
           text: "Gross Premium / Net Rem has been updated successfully.",
@@ -5109,13 +5104,13 @@ $(document).on("click", function (e) {
 });
 
 $(document).on( "click", ".btnpay", function () {
-  console.log("hello");
-  // insuranceno = $(this).attr('insuranceno');
-  // console.log("hello", insuranceno);
-  // console.log(insuranceno);
-  // FormClearPay();
-  // LoadPayData();
-  // FormDisablePay(true);
+  insuranceno = $(this).data('insurance-no');
+  FormClearPay();
+  LoadPayData();
+  FormDisablePay(true);
+
+  // Store the insurance number directly on the save button (or modal container)
+  $("#btnupdatenetrem").data('insurance-no', insuranceno);
 });
 
 
@@ -5923,7 +5918,7 @@ function FormDisablePay(val) {
 }
 
 function FormDisableNetRem(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditnetrem").show();
       $("#btnclosenetrem").show();

@@ -62,6 +62,15 @@
                     <button type="button" id="btnfind" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
                   </span>
                 </div>
+                <small class="text-muted d-block">
+                    <i class="fas fa-info-circle"></i> Searchable by: 
+                    <strong>Customer No</strong>, 
+                    <strong>Full Name</strong>, 
+                    <strong>Contact No</strong>, 
+                    <strong>VIN</strong>, 
+                    <strong>CS No</strong>, and 
+                    <strong>MP Name</strong>.
+                </small>
                 <div class="help-block with-errors"></div>
               </div>
             </div>
@@ -1831,11 +1840,12 @@
       vehicleInfo: @json(route('customercvehicleinfo.data')),
       vehicleSpecific: @json(route('vehicle.search')),
       edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+      getRenewalInsuranceno: @json(route('renewal_business_insurance_no'))
     }
 
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
-      saveRenewalBusinessData : @json(route('renewalbusiness.save'))
+      saveRenewalBusinessData : @json(route('renewalbusiness.save')),
     }
 
     window.loadData = {
@@ -1883,6 +1893,8 @@
 
         // Call status
         callStatusData: @json(route('callstatus.data')),
+
+        updateNetRem: @json(route('update.net-remittance'))
     }
 
 

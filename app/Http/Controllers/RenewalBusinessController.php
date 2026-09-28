@@ -13,7 +13,7 @@ use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
 use App\Models\TransactionRBPayment;
 use App\Models\Notification;
-use App\Models\UploadedCustomer;
+use App\Models\TransactionRb;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -26,57 +26,93 @@ class RenewalBusinessController extends Controller
     public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
         $filters = $request->validated();     
-        $query = RenewalBusinessTransaction::with([
-                    'customer_details' => function ($q) {$q->select('Customer_No', 'Full_Name', 'Contact_No' ); }, // Select columns from Customer table
-                    'vehicle_details' => function ($q) {$q->select('VIN', 'Make', 'Model', 'Plate_No', 'Model_Year', 'Color', 'Engine_No', 'CS_No', 'Customer_No'); } // Select columns from Customer table
-            ])->select([
-                'Insurance_No',
-                'Trans_Date',
-                'Trans_Status',
-                'VIN',
-                'Customer_No', // Foreign key required for mapping
-                'Insurance_Company',
-            ]);
+
+        // 1. Build Base Query with Joins
+        $query = RenewalBusinessTransaction::query()
+            ->leftJoin('customer_information', 'transactions_rb.Customer_No', '=', 'customer_information.Customer_No')
+            ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No
+            ->select([
+                // Primary table columns (prefixed to avoid ambiguous column collisions)
+                'transactions_rb.Insurance_No',
+                'transactions_rb.Trans_Date',
+                'transactions_rb.Trans_Status',
+                'transactions_rb.VIN',
+                'transactions_rb.Customer_No',
+                'transactions_rb.Insurance_Company',
+                'transactions_rb.Option_Type',
+                'transactions_rb.Policy_Expiration',
+
+                // Columns from Related Tables (Flattened directly for DataTables)
+                'customer_information.Full_Name',
+                'customer_information.Contact_No',
+                'vehicle_information.CS_No',
+                'vehicle_information.Plate_No',
+                'vehicle_information.Make',
+                'vehicle_information.Model',
+                'vehicle_information.Model_Year',
+                'vehicle_information.Variant'
+        ]);
 
         
-        // 1. Pending Filter (Priority 1)
+        // 2. Pending Filter
         if (! empty($filters['viewpending'])) {
-            $query->where('Trans_Status', 'PENDING');
+            $query->where('transactions_rb.Trans_Status', 'PENDING');
+        }
 
-        // 2. Expiring Filter (Priority 2)
-        } elseif (! empty($filters['viewexpiring'])) {
-            $query->whereBetween('Policy_Expiration', [
+        // 3. Expiring Filter
+        if (! empty($filters['viewexpiring'])) {
+            $query->whereBetween('transactions_rb.Policy_Expiration', [
                 now()->startOfDay(),
                 now()->addDays(90)->endOfDay(),
             ]);
+        }
 
-        // 3. Search Filter (Priority 3)
-        } elseif (! empty($filters['searchval'])) {
-            $search = '%' . $filters['searchval'] . '%';
+        // 4. Custom Search Filter (Runs regardless of Date Range)
+        if (! empty($filters['searchval'])) {
+            $search = '%' . trim($filters['searchval']) . '%';
 
             $query->where(function ($q) use ($search) {
-                $q->where('Insurance_No', 'like', $search)
-                  ->orWhere('VIN', 'like', $search)
-                  ->orWhere('CS_No', 'like', $search)
-                  ->orWhere('Plate_No', 'like', $search)
-                  ->orWhere('Customer_No', 'like', $search)
-                  ->orWhere('Full_Name', 'like', $search);
+                $q->where('transactions_rb.Insurance_No', 'like', $search)
+                ->orWhere('transactions_rb.VIN', 'like', $search)
+                ->orWhere('transactions_rb.Customer_No', 'like', $search)
+                ->orWhere('customer_information.Full_Name', 'like', $search)
+                ->orWhere('customer_information.Contact_No', 'like', $search)
+                ->orWhere('vehicle_information.CS_No', 'like', $search)
+                ->orWhere('vehicle_information.Plate_No', 'like', $search);
             });
-
-        // 4. Date Range Filter (Priority 4 - Only when chkall is 0/false)
-        } elseif (
-            empty($filters['chkall']) &&
-            ! empty($filters['datefrom']) &&
-            ! empty($filters['dateto'])
-        ) {
-            $query->whereBetween('Trans_Date', [
-                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ]);
         }
+
+        // 5. Date Range Filter (Only applies when chkall is false AND searchval is empty)
+            if (
+                empty($filters['chkall']) &&
+                empty($filters['searchval']) &&
+                ! empty($filters['datefrom']) &&
+                ! empty($filters['dateto'])
+            ) {
+                $query->whereBetween('transactions_rb.Trans_Date', [
+                    Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                    Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+                ]);
+            }
+
 
         return DataTables::eloquent($query)
             ->addIndexColumn() // Provides DT_RowIndex / urutan
+            ->editColumn('Trans_Status', function($transaction): string{
+                    $insuranceNo = e($transaction->Insurance_No);
+                    $statusRaw   = $transaction->Trans_Status ?? '';
+                    $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
+
+
+                    $statusColors = [
+                        'PENDING'   => '#5bc0de',
+                        'COMPLETED' => '#22bb33',
+                        'CANCELLED' => '#bb2124',
+                    ];
+
+                $labelClass = $statusColors[$status] ?? '#777777';
+                return '<span insuranceno="' . $insuranceNo . '" class="badge" style="background-color:' . $labelClass . ';">' . e($statusRaw) . '</span>';
+            })
             ->addColumn('button', function ($transaction): string {
                 $insuranceNo = e($transaction->Insurance_No);
                 $buttons = '';
@@ -448,6 +484,87 @@ class RenewalBusinessController extends Controller
                 'error'  => $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    /**
+     * Update existing transaction status and net remittance info.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    public function updateNetRemittance(Request $request): JsonResponse
+    {
+        // 1. Input Validation
+        $validated = $request->validate([
+            'insuranceno'   => 'required|string',
+            'insgpremium'   => 'nullable|numeric',
+            'netrem'        => 'nullable|numeric',
+            'inscommission' => 'nullable|numeric',
+        ]);
+
+        try {
+            // 2. Database Transaction
+            return DB::transaction(function () use ($validated) {
+                
+                $insuranceNo = $validated['insuranceno'];
+
+                // 3. Update existing transaction record using Eloquent
+                $updated = TransactionRb::where('Insurance_No', $insuranceNo)
+                    ->update([
+                        'Gross_Premium' => $validated['insgpremium'] ?? '',
+                        'Net_Rem'       => $validated['netrem'] ?? '',
+                        'Net_Rem_Date'  => now(),
+                        'Commission'    => $validated['inscommission'] ?? '',
+                        'User_ID'       => Auth::id(),
+                    ]);
+
+                if (!$updated) {
+                    return response()->json([
+                        'result'  => 0,
+                        'message' => 'Transaction record not found.',
+                    ], 404);
+                }
+
+                // 4. Return successful response
+                return response()->json([
+                    'result'       => 1,
+                    'Insurance_No' => $insuranceNo,
+                ]);
+            });
+
+        } catch (Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Get transaction details by Insurance Number.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getTransactionByInsuranceNo(Request $request): JsonResponse
+    {
+        // 1. Input Validation
+        $validated = $request->validate([
+            'insuranceno' => 'nullable|string',
+        ]);
+
+        $data = [];
+
+        // 2. Query Record using Eloquent if parameter is supplied
+        if (!empty($validated['insuranceno'])) {
+            $data = TransactionRb::where('Insurance_No', $validated['insuranceno'])->get();
+        }
+
+        // 3. Return JSON Response
+        return response()->json($data);
     }
 
         
