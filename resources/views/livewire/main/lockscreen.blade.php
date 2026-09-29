@@ -118,8 +118,7 @@
             <img
                 src="{{ asset('tmia-assets/images/logo.png') }}"
                 style="width:340px;height:190px;"
-                alt="Logo"
-            >
+                alt="Logo">
         </div>
 
         <div class="lockscreen-name" id="lockscreenname">

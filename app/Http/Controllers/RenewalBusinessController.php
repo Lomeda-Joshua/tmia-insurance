@@ -17,7 +17,7 @@ use App\Models\TransactionRb;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
-class RenewalBusinessController extends Controller
+class RenewalBusinessController extends Controller 
 {
     public function index(){
         return view('livewire.main.transactions.renewal_business');
@@ -32,6 +32,7 @@ class RenewalBusinessController extends Controller
             ->leftJoin('customer_information', 'transactions_rb.Customer_No', '=', 'customer_information.Customer_No')
             ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No\
             ->leftJoin('user', 'transactions_rb.User_ID', '=', 'user.User_ID') 
+            ->leftJoin('user as ise_name', 'transactions_rb.ISE_No', '=', 'ise_name.User_ID')
             ->select([
                 // Primary table columns (prefixed to avoid ambiguous column collisions)
                 'transactions_rb.Insurance_No',
@@ -42,7 +43,9 @@ class RenewalBusinessController extends Controller
                 'transactions_rb.Insurance_Company',
                 'transactions_rb.Option_Type',
                 'transactions_rb.Policy_Expiration',
-                'transactions_rb.ISE_Name',
+                'transactions_rb.ISE_No',
+
+                'ise_name.Display_Name as ise_name',
 
                 // Columns from Related Tables (Flattened directly for DataTables)
                 'customer_information.Full_Name',
@@ -551,7 +554,7 @@ class RenewalBusinessController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function getTransactionByInsuranceNo(Request $request): JsonResponse
+    public function getTransactionsRb(Request $request): JsonResponse
     {
         // 1. Input Validation
         $validated = $request->validate([

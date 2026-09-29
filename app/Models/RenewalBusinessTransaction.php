@@ -52,6 +52,7 @@ class RenewalBusinessTransaction extends Model
     }
 
     public function ise_name(){
-        return $this->belongsTo(User::class, "User_ID", "User_ID" );
+        return $this->belongsTo(User::class, "ISE_No", "User_ID" );
     }
+
 }

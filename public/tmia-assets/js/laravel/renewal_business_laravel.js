@@ -1503,9 +1503,11 @@ function LoadTransactionData(ulevel_declartion) {
   ];
 
   if( ulevel_declartion == 1 ){
-      tableColumns.push(
-        { data: "ISE_Name", name: "ISE_Name", defaultContent: "" },
-      );
+      tableColumns.push({
+        data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+        name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+        defaultContent: "" 
+    });
   }
 
   tableColumns.push(
@@ -2572,13 +2574,17 @@ function LoadNetRemData(insuranceno) {
   $(".box-body").validator('reset');
 }
 
+
+
 function LoadStatusData() {
   $.ajax({
     type:"POST",
-    url:window.getData.getRenewalInsuranceno,
+    url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      console.log(data);
+
+      console.log("Status data",data);
+
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2601,13 +2607,14 @@ function LoadStatusData() {
   if ($('#modal-modify-status').is(':visible') == false) {
     $('#modal-modify-status').iziModal('open');
   }
+
   $(".box-body").validator('reset');
 }
 
 function LoadCallData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transaction_rb_call.php",
+    url:,
     data:{insuranceno:insuranceno},
     success: function(data){
       var data = jQuery.parseJSON(data);
@@ -5163,8 +5170,8 @@ $(document).on( "click", ".btncalllog", function () {
 
 $(document).on( "click", ".btnedit", function () {
   insuranceno = $(this).attr('insuranceno');
-  $.post("send_variable.php", { insuranceno:insuranceno }) .done(function(data) {
-    window.open('renewal_business_modify.php', '_self');
+  $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
+    window.open(window.LaravelRoutes.loadModifyPage, '_self');
   });
 });
 

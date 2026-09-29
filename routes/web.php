@@ -17,6 +17,7 @@ use App\Http\Controllers\GeneralReportingController;
 use App\Http\Controllers\VehicleLookupController;
 use App\Http\Controllers\PolicyExpirationController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CallEntryController;
 
 
 /**
@@ -76,13 +77,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
     // Transactions Group
     Route::prefix('transactions')->group(function () {
-
-        Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
-        Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
-        Route::post('/transaction/update-net-remittance', [RenewalBusinessController::class, 'updateNetRemittance'])->name('update.net-remittance');
-        Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
-
-
         // New Business Insurance
         Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
         Route::post('/new-business/data', [NewBusinessController::class, 'getNewBusinessTableData'])->name('newbusiness.data');
@@ -92,18 +86,14 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
         Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
         Route::post('/new-business/specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');
-        Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
-        Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
-        Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');
         Route::post('/new-business/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
         Route::post('/new-business/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
         Route::post('/new-business/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
         Route::post('/new-business/update-net-rem', [TransactionController::class, 'updateNetRemittance'])->name('update.netrem');
-
-        
+        Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
+        Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
+        Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');        
         Route::post('/new-business/vin-lookup', [VehicleLookupController::class, 'lookupByVin'])->name('vehicle.lookup');
-
-        Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
 
         // Customers Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
@@ -144,6 +134,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalTableData'])->name('renewal_business.data');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
         Route::post('/renewal-business/get-transaction-by-insuranceno', [RenewalBusinessController::class, 'getTransactionByInsuranceNo'])->name('renewal_business_insurance_no');
+        Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
+
+        Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
+        Route::post('/renewal-business/gettransactions', [RenewalBusinessController::class, 'getTransactionsRb'])->name('getTransactionRB.data');
+        Route::post('/transaction/get-by-insurance', [TransactionController::class, 'getByInsuranceNo'])->name('transaction.by_insurance_no');
+        Route::post('/transaction/renewal-metrics', [RenewalBusinessController::class, 'getTransactionMetrics'])->name('getTransactions.count');
+        Route::post('/transaction/update-net-remittance', [RenewalBusinessController::class, 'updateNetRemittance'])->name('update.net-remittance');
 
 
         // Vehicle
@@ -189,3 +186,4 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 });
 
 require __DIR__.'/auth.php';
+

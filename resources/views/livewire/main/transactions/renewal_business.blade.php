@@ -1825,6 +1825,10 @@
         loadModifyPage: @json(route('getModifyView.data'))
     }
 
+    window.calllogs = {
+        renewal@json(route("getTransactionRB.data")),
+    }
+
     window.tableRoutes = {
         renewalBusinessData: @json(route('renewal_business.data')),
         customerData: @json(route('customers.data')),
@@ -1853,7 +1857,7 @@
     }
 
     window.loadData = {
-        loadPaymentData : @json(route('getTransactionNB.data')),
+        loadPaymentData : @json(route('getTransactionRB.data')),
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
         loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),

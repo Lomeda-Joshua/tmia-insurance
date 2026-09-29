@@ -382,7 +382,6 @@ class NewBusinessController extends Controller
             // $data = \DB::table('transactions_nb')->where('Insurance_No', $insuranceNo)->get();
         }
         
-
         return response()->json($data);
     }
 
