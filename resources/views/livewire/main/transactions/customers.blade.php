@@ -82,7 +82,7 @@
         <div class="box-body" style="max-width:100%;">
           <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             
-            @if(Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 6)
+            
               <div id="viewaction" class="row">
                 <div class="col-md-12 cellborder">
                   <label><u>Modify Button</u></label>
@@ -93,7 +93,7 @@
                   </div>
                 </div>
               </div>
-            @endif
+            
 
             <div class="row">
               <div class="col-md-6">
@@ -274,8 +274,7 @@
                 </div>
               </div>
 
-              @if(Auth::user()->User_Level_ID == 1)
-                  <div class="col-md-12" id="viewaction1">
+                  <div class="col-md-12" id="viewaction1" style="display:none;">
                     <div class="col-md-6">
                       <!-- Nothing here -->
                     </div>
@@ -288,7 +287,6 @@
                       </div>
                     </div>
                   </div>
-              @endif
              
 
 
@@ -791,13 +789,18 @@
 <!-- /.content-wrapper -->
 
 @push('scripts')
-
 <script>
-    window.userLevel = @json(Auth::user()?->User_Level_Description);
-    window.currentUserId = {{ Auth::user()?->User_ID ?? 'null' }};
-</script>
 
-<script>
+    window.dataRoutes = {
+      userAccountSession : @json(route('getSession.variables'))
+    }
+
+
+    window.userAccount = {
+        ulevel: @json(Auth::user()?->User_Level_ID)
+    };
+
+
     window.LaravelRoutes = {
       csrfToken: "{{ csrf_token() }}",
       newBusinessData: @json(route('newbusiness.data')),

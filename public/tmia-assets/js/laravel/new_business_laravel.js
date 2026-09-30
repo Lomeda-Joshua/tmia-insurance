@@ -1511,6 +1511,16 @@ function LoadCustomerData() {
     $('#table_customerlist').DataTable().clear().destroy();               
   }
 
+  // 2. Conditional check for the button column
+  if (userLevel === 1) { // Replace 1 with your allowed User_Level_ID
+    tableColumns.push({
+      data: 'button',
+      name: 'button',
+      orderable: false,
+      searchable: false
+    });
+  } 
+
   table = $('#table_customerlist').DataTable({
     language: {
       processing: "Loading Customer List..."
@@ -1545,7 +1555,6 @@ function LoadCustomerData() {
           { data: "CS_No", name: "CS_No", defaultContent: "" },
           { data: "Plate_No", name: "Plate_No", defaultContent: "" },
           { data: "Variant", name: "Variant", defaultContent: "" },
-          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -5786,7 +5795,7 @@ function FormDisablePay(val) {
 
   // if (editpay == true) {
     if (val === true) {
-      $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();
+        $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();
     } else {
       if (balance <= 0) {
         $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();

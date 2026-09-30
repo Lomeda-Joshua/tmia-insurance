@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TransactionRbCallLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\CallLogRb;
+use App\Models\CallReason;
 
-
-class CallEntryController extends Controller
+class CallOperationController extends Controller
 {
     /**
      * Get the latest call log for a specific insurance number.
@@ -45,5 +46,50 @@ class CallEntryController extends Controller
 
         // 3. Return JSON response (Returns empty array if no record found to match original behavior)
         return response()->json($data ? [$data] : []);
+    }
+
+
+    /**
+     * Fetch call logs for a given insurance number
+     */
+    public function getCallLogs(Request $request): JsonResponse
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json(['data' => '']);
+        }
+
+        // Fetch logs using Eloquent scope
+        $logs = CallLogRb::byInsuranceNo($insuranceNo)->get();
+
+        if ($logs->isNotEmpty()) {
+            // Map over collection to inject 'urutan' sequence index
+            $data = $logs->values()->map(function ($log, $index) {
+                $item = $log->toArray();
+                $item['urutan'] = $index + 1;
+                return $item;
+            });
+        } else {
+            $data = '';
+        }
+
+        return response()->json(['data' => $data]);
+    }
+
+
+    /**
+     * Fetch call reasons based on Call_SID.
+     */
+    public function getCallReasons(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'callsid' => 'required|integer',
+        ]);
+
+        $reasons = CallReason::where('Call_SID', $validated['callsid'])
+            ->get(['Reason_ID', 'Reason_Desc']);
+
+        return response()->json($reasons);
     }
 }

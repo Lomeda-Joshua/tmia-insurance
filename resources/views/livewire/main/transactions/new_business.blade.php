@@ -138,7 +138,9 @@
                   <th>Insurance Partner</th>
                   <th>I.S.E</th>
                   <th>MP Name</th>
+                  @if(Auth::user()->User_Level_ID === 1)
                   <th>Action</th>
+                  @endif
               </tr>
           </thead>
           <tbody>
@@ -689,14 +691,14 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtgrosspremium">Gross Premium *</label>
-                              <input type="text" id="txtgrosspremium" class="form-control input-sm" value="0.00" required="required" data-error="Gross Premium is required." disabled>
+                              <input type="text" maxlength="10" id="txtgrosspremium" class="form-control input-sm" value="0.00" required="required" data-error="Gross Premium is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtnetremittance">Net Remittance *</label>
-                              <input type="text" id="txtnetremittance" class="form-control input-sm" value="0.00" required="required" data-error="Net Remittance is required." disabled>
+                              <input type="text" maxlength="10" id="txtnetremittance" class="form-control input-sm" value="0.00" required="required" data-error="Net Remittance is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -1097,14 +1099,13 @@
                     <div class="final-submit">
                       <h4>Please review your information one last time. If everything looks correct, click "Submit" to proceed.</h4>
                     </div>
-                    <div class="form-data">
 
+                    <div class="form-data">
                         <div class="box-header with-border">
                           <h4 style="font-weight:900; text-transform:uppercase;">Review form</h4>
                         </div>
 
                         <div class="row">
-
                           <div class="user-profile-information box-header with-border">
                               <h4 style="font-weight=900">User profile information</h4>
                               <div class="col-md-4">
@@ -1305,9 +1306,9 @@
                                 </div>
                               </div>
                           </div>
-                          
                         </div>
                     </div>
+
                   </div>
                   
 
@@ -2000,7 +2001,7 @@
         customerData: @json(route('customers.data')),
         uploadCustomers: @json(route('uploaded.customer')),
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
-        getPaymentData: @json(route('payments.get-data')),
+        getPaymentData: @json(route('new-business.payments.get-data')),
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }

@@ -30,9 +30,11 @@
                     </span>
                 </a>
                 <ul class="treeview-menu" id="mymenuchild0">
+                    @if(Auth::user()->User_Level_ID == 1)
                     <li class="{{ request()->routeIs('new_business.index*') ? 'active' : '' }}" >
                         <a href="{{ route('new_business.index') }}"><i class="fa-solid fa-car"></i> New Business Insurance</a>
                     </li>
+                    @endif
                     <li class="{{ request()->routeIs('renewal_business*') ? 'active' : '' }}" >
                         <a href="{{ route('renewal_business') }}"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a>
                     </li>
@@ -62,6 +64,11 @@
                     <li class="{{ request()->routeIs('user_account') ? 'active' : '' }}">
                         <a href="{{ route('user_account') }}"><i class="fa fa-user"></i> <span>Account</span></a>
                     </li>
+                    @if(Auth::user()->User_Level_ID == 1)
+                     <li class="{{ request()->routeIs('user_account') ? 'active' : '' }}">
+                        <a href="{{ route('user_account') }}"><i class="fa fa-user"></i> <span>General Settings</span></a>
+                    </li>
+                    @endif
                 </ul>
             </li>
             

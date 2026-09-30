@@ -130,13 +130,16 @@
               <th>Variant</th>
               <th>Insurance Partner</th>
 
-              @if(Auth::user()->User_Level_ID == 1)
+              @if(Auth::user()->User_Level_ID === 1)
                 <th>I.S.E</th>
               @endif
               
-              <th>MP Name</th>
-              <th>Call Attempts</th>
-              <th>Action</th>
+                <th>MP Name</th>
+                <th>Call Attempts</th>
+                
+              @if(Auth::user()->User_Level_ID === 1)
+                <th>Action</th>
+              @endif
             </tr>
           </thead>
           <tbody>
@@ -207,6 +210,7 @@
                   <div class="icon"><i class="fa fa-check"></i></div>
                   <div class="step-text">Final Submit</div>
               </div>
+
           </div>
 
           <div class="progress">
@@ -264,15 +268,15 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <label for="txtcustfname">First Name *</label>  
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." data-summary="txtcustfname_summary-get" disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" data-summary="txtcustmname_summary-get" disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -281,7 +285,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcustlname">Last Name *</label>
-                                  <input type="text" id="txtcustlname" class="form-control input-sm" required="required" data-error="Last Name is required." disabled>
+                                  <input type="text" id="txtcustlname" class="form-control input-sm" required="required" data-summary="txtcustlname_summary-get" data-error="Last Name is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -685,14 +689,14 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtgrosspremium">Gross Premium *</label>
-                              <input type="text" id="txtgrosspremium" class="form-control input-sm" value="0.00" required="required" data-error="Gross Premium is required." disabled>
+                              <input type="text" id="txtgrosspremium" maxlength="10" class="form-control input-sm" value="0.00" required="required" data-error="Gross Premium is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtnetremittance">Net Remittance *</label>
-                              <input type="text" id="txtnetremittance" class="form-control input-sm" value="0.00" required="required" data-error="Net Remittance is required." disabled>
+                              <input type="text" id="txtnetremittance" maxlength="10" class="form-control input-sm" value="0.00" required="required" data-error="Net Remittance is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -1084,9 +1088,7 @@
 
                               <div class="form-group">
                                 <label for="cboprevinsco">Previous Insurance Company *</label>
-                                <select id="cboprevinsco" class="form-control input-sm" required="required" data-error="Previous Insurance Company is required." disabled>
-                                  <option Value="">PLEASE SELECT</option>
-                                </select>
+                                <input type="text" id="cboprevinsco" class="form-control input-sm clearable-s" placeholder="Previous insurance company" autocomplete="off" readonly>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -1117,6 +1119,216 @@
                       <h4>Please review your information one last time. If everything looks correct, click "Submit" to proceed.</h4>
                     </div>
                   </div>
+
+                    <div class="form-data">
+                        <div class="box-header with-border">
+                          <h4 style="font-weight:900; text-transform:uppercase;">Review form</h4>
+                        </div>
+
+                        <div class="row">
+                          <div class="user-profile-information-summary box-header with-border">
+                              <h4 style="font-weight:900">User profile information</h4>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname_summary-get">First Name *</label>
+                                  <input type="text" id="txtcustfname_summary-get" class="form-control input-sm" required="required" readonly>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname_summary-get">Middle Name</label>
+                                  <input type="text" id="txtcustmname_summary-get" class="form-control input-sm" placeholder="Optional" readonly>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustlname_summary-get">Last Name</label>
+                                  <input type="text" id="txtcustlname_summary-get" class="form-control input-sm" placeholder="Optional" readonly>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                               <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                          </div>
+
+                          <div class="insurer-information box-header with-border">
+                            <h4 style="font-weight:900">Vehicle information</h4>
+                             <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                               <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                                 <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                          </div>
+
+                           <div class="vehicle-information box-header with-border">
+                            <h4 style="font-weight:900">Insurance information</h4>
+                             <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                               <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                                 <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="txtcustmname">Middle Name</label>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+
                   <div class="box-footer with-border">
                     <div class="pull-left">
                       <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous" class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
@@ -1826,7 +2038,7 @@
     }
 
     window.calllogs = {
-        renewal@json(route("getTransactionRB.data")),
+        renewalCallLogs: @json(route("getTransactionRB.data"))
     }
 
     window.tableRoutes = {
@@ -1834,13 +2046,15 @@
         customerData: @json(route('customers.data')),
         uploadCustomers: @json(route('uploaded.customer')),
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
-        getPaymentData: @json(route('payments.get-data')),
+        getPaymentData: @json(route('renewalpayments.get-data')),
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
     
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
+      callLogsData : @json(route('fetch.call.logs.rb')),
+      callReasonData : @json(route('fetch.call.reason.rb')),
     }
 
     window.getData = {
@@ -1848,12 +2062,17 @@
       vehicleInfo: @json(route('customercvehicleinfo.data')),
       vehicleSpecific: @json(route('vehicle.search')),
       edafVehicleSpecific: @json(route('edaf.vehicle.search')),
-      getRenewalInsuranceno: @json(route('renewal_business_insurance_no'))
+      getRenewalInsuranceno: @json(route('renewal_business_insurance_no')),
+      customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist'))
     }
 
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
+    }
+
+    window.deletefunction = {
+      deleteData : @json(route("delete.renewal_transaction")),
     }
 
     window.loadData = {

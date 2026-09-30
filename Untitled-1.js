@@ -37,7 +37,7 @@ $(document).ready( function () {
       }
   });
 
-  //================== GET USER LOG IN INFORMATION =================//
+//================== GET USER LOG IN INFORMATION =================//
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
@@ -1114,12 +1114,9 @@ $(document).ready( function () {
 
   //======= Bank =====//
   $.ajax({
-      type:"POST",
-      url:window.formRoutes.bankData,
-      headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-      },
-      success: function(data) {
+    type:"POST",
+    url:window.formRoutes.bankData,
+    success: function(data) {
           let options = '<option value="">PLEASE SELECT</option>';
 
           // Iterate over JSON objects and build <option> elements
@@ -1132,7 +1129,7 @@ $(document).ready( function () {
 
           // Force Select2 to refresh its display
           $("#cbomortgage").trigger('change.select2');
-      }
+    }
   });
 
   $("#cbomortgage").select2({
@@ -1146,22 +1143,22 @@ $(document).ready( function () {
   /*--------------------- CHANGE STATUS --------------------*/ 
   //======= Transaction Status =====//
   $.ajax({
-      type:"POST",
-      data:{ businesstype: "RENEWAL BUSINESS" },
-      url:window.loadData.getTransactionStatus,
-      success: function(data) {
-          let options = '<option disabled value="">PLEASE SELECT</option>';
-          // Iterate over JSON objects and build <option> elements
-          $.each(data, function(index, item) {
-            options += `<option value="${item.Trans_Status}">${item.Trans_Status}</option>`;
-          });
+    type:"POST",
+    data:{ businesstype: "RENEWAL BUSINESS" },
+    url:window.loadData.getTransactionStatus,
+    success: function(data) {
+        let options = '<option disabled value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+          options += `<option value="${item.Trans_Status}">${item.Trans_Status}</option>`;
+        });
 
-          // Inject populated options into dropdown
-          $("#cbotransstatus").html(options);
+        // Inject populated options into dropdown
+        $("#cbotransstatus").html(options);
 
-          // Force Select2 to refresh its display
-          $("#cbotransstatus").trigger('change.select2');
-      }
+        // Force Select2 to refresh its display
+        $("#cbotransstatus").trigger('change.select2');
+    }
   });
 
   $("#cbotransstatus").select2({
@@ -1398,28 +1395,56 @@ $(document).ready( function () {
 
   LoadStatusCounts();
 
-  // Automated populating of fields on summary
-  // Active listener: Listens for any change/typing on source inputs that have a corresponding _summary field
-  $(document).ready(function () {
-      // Actively listens for user input on any element with data-summary
-      $(document).on("input change", "[data-summary]", function () {
-          const summaryTargetId = $(this).attr("data-summary");
-          
-          if (summaryTargetId) {
-              const upperVal = $(this).val().toUpperCase();$(`#${summaryTargetId}`).val(upperVal);
-          }
-      });
+  $(document).on( "click", ".btnnetrem", function () {
+      var insuranceNo = $(this).data('insurance-no');
+      FormClearNetRem();
+      LoadNetRemData(insuranceNo);
+      FormDisableNetRem(true);
+
+      // Store the insurance number directly on the save button (or modal container)
+      $("#btnupdatenetrem").data('insurance-no', insuranceNo);
   });
 
 
+});
 
+// //======= Insurance  Staff =====//
+// $.ajax({
+//   type:"POST",
+//   url:window.loadData.getInsurance,
+//   headers: {
+//       'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+//   },
+//   success: function(data) {
+//       let options = '<option value="">PLEASE SELECT</option>';
+//       // Iterate over JSON objects and build <option> elements
+//       $.each(data, function(index, item) {
+//         options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+//       });
+
+//       // Inject populated options into dropdown
+//       $("#cboprevinsco").html(options);
+
+//       // Force Select2 to refresh its display
+//       $("#cboprevinsco").trigger('change.select2');
+//   }
+// });
+
+
+$(document).on("change", 'input[name="rdpolicyaction"]', function () {
+    const isTransfer = $(this).val() === "TRANSFER";
+    const $input = $("#cboprevinsco");
+
+    // Remove 'readonly' when TRANSFER is selected; add it when RETAIN is selected
+    $input.prop("readonly", !isTransfer);
+
+    // Clear value and reset validation styling when toggling back to RETAIN
+    if (!isTransfer) {
+      $input.val("");
+      $input.closest(".form-group").removeClass("has-error");
+    }
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
-
-
-
-
-
 
 //======= Function Load Master Data ============//
 //============== COUNTS PENDING ===============//
@@ -1434,15 +1459,6 @@ function LoadStatusCounts() {
     }
   });
 }
-
-// Trigger search when typing in search input field
-$('#txtsearch').on('keyup search', function (e) {
-    if (e.keyCode === 13 || $(this).val() === '') { // Enter key or clear
-        window.viewpending = false;
-        window.viewexpiring = false;
-        table.draw();
-    }
-});
 
 //============== Transaction List ============//
 function LoadTransactionData(ulevel_declartion) {
@@ -1463,66 +1479,53 @@ function LoadTransactionData(ulevel_declartion) {
     chkall: chkall
   };
 
-    if ($.fn.dataTable.isDataTable('#table_trans')) {
-        $('#table_trans').DataTable().ajax.reload(null, false);
-        return;
-    }
+  if ($.fn.dataTable.isDataTable('#table_trans')) {
+    $('#table_trans').DataTable().clear().destroy();               
+  }
 
-    let tableColumns = [
-          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { data: "Trans_Date", name: "Trans_Date", defaultContent: "- - -" },
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+  let tableColumns = [
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+        { data: "Trans_Date", name: "Trans_Date", defaultContent: "- - -" },
+        { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+        { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+        
+        // Flattened Columns (Matches leftJoin backend)
+        { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+        
+        { data: "VIN", name: "VIN", defaultContent: "- - -" },
+        { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+        { data: "Model", name: "Model", defaultContent: "- - -" },
+        { data: "Variant", name: "Variant", defaultContent: "- - -" },
           
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
-            
-            // Main Table Columns
-          { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "- - -" },                  
-          { data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" },
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-          {
-            data: "button",            
-              name: "button",
-              orderable: false,
-              searchable: false,
-              defaultContent: "- - -" 
-          }
-    ];
+          // Main Table Columns
+        { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "- - -" },                  
+  ];
 
-    if( ulevel_declartion === 1 ){
+  if( ulevel_declartion == 1 ){
+      tableColumns.push({
+          data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+          name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+          defaultContent: "- - -" 
+      });
+  }
+
+  tableColumns.push(
+        { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
+        { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+  )
+
+  if( ulevel_declartion == 1 ){
         tableColumns.push({
-            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+            data: "button",            
+            name: "button",
+            orderable: false,
             defaultContent: "- - -" 
         });
-    }
+  }
 
-  /*   tableColumns.push(
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-    ) */
-
-    if( ulevel_declartion === 1 ){
-          tableColumns.push({
-              data: "button",            
-              name: "button",
-              orderable: false,
-              searchable: false,
-              defaultContent: "- - -" 
-          });
-    }
 
   table = $('#table_trans').DataTable({
     language: {
@@ -1530,6 +1533,7 @@ function LoadTransactionData(ulevel_declartion) {
     },
     processing: true,
     serverSide: true,
+    searching: false,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -1592,7 +1596,11 @@ function LoadCustomerData() {
     ajax: {
       url: window.tableRoutes.customerData,
       type: "POST",
-      data: value
+      data: function (d) {
+        // Passes search parameters to Laravel request
+        d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+        d.btnselect = window.btnselect || '';
+      }
     },
     columns: [
       { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
@@ -1649,6 +1657,8 @@ function LoadCustomerData() {
     xplateno = table.cell(this, 11).data();
   });
 
+  
+
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
      $('#btncustselect').trigger("click");
@@ -1674,17 +1684,20 @@ function LoadCustomerDataEDAFSAP() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
       url: window.tableRoutes.uploadCustomers,
       type: "POST",
-      data: value
+      data: function (d) {
+        d.searchval = $('#txtsearch').val() ? $('#txtsearch').val().trim() : '';
+        d.btnselect = window.btnselect || '';
+      }
     },
     columns: [
-      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
         { data: "Customer_No", name: "Customer_No" },
         { data: "Group", name: "Group", defaultContent: "" },
         { data: "Full_Name", name: "Full_Name", defaultContent: "" },
@@ -1755,32 +1768,36 @@ function LoadVehicleData() {
       processing: "Loading Vehicle List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "renewal_business_vehicles.php",
+      url: window.tableRoutes.getVehiclesByCustomer,
       type: "POST",
-      data: {custno:xcustno}
+      data: function (d) {
+              d.custno = activeCustTab === '#uploadtab' ? xcustnoupload : xcustno;// Pass your dynamic customer number
+      }
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "VSI_Date" },
-      {
-        data: "SRP",
-        render: function (data) {
-          return NumberFormat(data);
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "VIN", name: "VIN", defaultContent: "" },
+        { data: "Model", name: "Model", defaultContent: "" },
+        { data: "Model_Year", name: "Model_Year", defaultContent: "" },
+        { data: "Variant", name: "Variant", defaultContent: "" },
+        { data: "Color", name: "Color", defaultContent: "" },
+        { data: "Engine_No", name: "Engine_No", defaultContent: "" },
+        { data: "CS_No", name: "CS_No", defaultContent: "" },
+        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+        { data: "VSI_Date", name: "VSI_Date", defaultContent: "" },
+        {
+            data: "SRP",
+            name: "SRP",
+            defaultContent: "0.00",
+            render: function (data) {
+                return typeof NumberFormat === "function" ? NumberFormat(data) : data;
+            }
         }
-      }
     ],
     columnDefs: [
       {
@@ -1833,27 +1850,22 @@ function LoadVehicleEDAFSAPData() {
     responsive: true,
     autoWidth: false,
     ajax: {
-      url: "fetch_vehicle_upload.php",
+      url: window.tableRoutes.getEdafVehicleByCustomer,
       type: "POST",
       data: {custno:xcustnoupload}
     },
     columns: [
-      { data: "urutan" },
-      { data: "VIN" },
-      { data: "Model" },
-      { data: "Model_Year" },
-      { data: "Variant" },
-      { data: "Color" },
-      { data: "Engine_No" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "VSI_Date" },
-      {
-        data: "SRP",
-        render: function (data) {
-          return NumberFormat(data);
-        }
-      }
+          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+          { data: "VIN", name: "VIN", defaultContent: "" },
+          { data: "Model", name: "Model", defaultContent: "" },
+          { data: "Variant", name: "Variant", defaultContent: "" },
+          { data: "Color", name: "Color", defaultContent: "" },
+          { data: "Engine_No", name: "Engine_No", defaultContent: "" },
+          { data: "CS_No", name: "CS_No", defaultContent: "" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+          { data: "VSI_Date", name: "VSI_Date", defaultContent: "" },
+          { data: "SRP", name: "SRP", defaultContent: "" },
+          { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -1912,7 +1924,7 @@ function LoadNBData() {
     fixedHeader: true,
     fixedColumns: { left: 2 },
     ajax: {
-      url: "renewal_business_nb_expired.php",
+      url: window.loadData.getPolicyExpiration,
       type: "POST"
     },
     columns: [
@@ -1966,16 +1978,17 @@ function LoadNBData() {
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_nblist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
      $('#btnnbselect').trigger("click");
-  });
+  });  
 }
 
-function LoadInsuranceInfo(insuranceno) {
+console.log("hello");
+
+function LoadInsuranceInfo(insuranceno) {  
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.getInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         $("#txtgrosspremium").val(NumberFormat(value.Gross_Premium));
         $("#txtnetremittance").val(NumberFormat(value.Net_Rem));
@@ -1989,13 +2002,16 @@ function LoadInsuranceInfo(insuranceno) {
   });
 }
 
+console.log("Load insurer info");
+console.log(insuranceno);
+
 function LoadInsurerInfo(insuranceno) {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
-    success: function(data){
-      var data = jQuery.parseJSON(data);
+    success: function(data){      
+      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2008,7 +2024,6 @@ function LoadInsurerInfo(insuranceno) {
             select.append(newOpt).trigger("change.select2");
           }
         }
-
         
         setSelectOption("#cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco", value.Insurance_Company, value.Insurance_Company);
@@ -2064,7 +2079,8 @@ function LoadCustomerInfo() {
     type:"POST",
     url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:xcustno},
-    success: function(data){
+    success: function(data){      
+
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2145,7 +2161,6 @@ function LoadCustomerEDAFSAPInfo() {
     data:{custno:xcustnoupload},
     success: function(data){
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2217,7 +2232,7 @@ function LoadCustomerEDAFSAPInfo() {
     }
   });
 
-  LoadVehicleEDAFSAPInfo();
+  LoadVehicleEDAFSAPInfo(xcustnoupload);
 
   $(".box-body").validator('reset');
 }
@@ -2227,9 +2242,8 @@ function LoadVehicleInfo() {
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){
+    success: function(data){      
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2294,15 +2308,14 @@ function LoadVehicleInfo() {
   $(".box-body").validator('reset');
 }
 
-function LoadVehicleEDAFSAPInfo() {
+function LoadVehicleEDAFSAPInfo(custNo) {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_upload_info.php",
-    data:{vin:xvin, csno:xcsno, plateno:xplateno},
+    url:window.getData.edafVehicleSpecific,
+    data:{vin:xvin, csno:xcsno, plateno:xplateno, custNo:custNo},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2366,7 +2379,6 @@ function LoadVehicleEDAFSAPInfo() {
   
   $(".box-body").validator('reset');
 }
-
 
 function LoadPayData() {
   $.ajax({
@@ -2399,7 +2411,7 @@ function LoadPaymentInfo() {
           processing: "Loading Payment List..."
       },
       processing: true,
-      serverSide: false,
+      serverSide: true,
       responsive: true,
       autoWidth: false,
       ordering: false,
@@ -2577,12 +2589,17 @@ function LoadNetRemData(insuranceno) {
   $(".box-body").validator('reset');
 }
 
+
+
 function LoadStatusData() {
   $.ajax({
     type:"POST",
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
+
+      console.log("Status data",data);
+
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2605,26 +2622,32 @@ function LoadStatusData() {
   if ($('#modal-modify-status').is(':visible') == false) {
     $('#modal-modify-status').iziModal('open');
   }
+
   $(".box-body").validator('reset');
 }
 
-function LoadCallData() {
+function LoadCallData(insuranceNumber) {
+  
+  let insuranceNo = insuranceNumber;
+
   $.ajax({
     type:"POST",
-    url:"fetch_transaction_rb_call.php",
-    data:{insuranceno:insuranceno},
+    url:window.calllogs.renewalCallLogs,
+    data:{insuranceNo_data:insuranceNo},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         $("#txtinsuranceno").val(value.Insurance_No);
+
         if(value.Communication_ID !== null){
           if ($("#cbomodecomm").find("option[value='" + value.Communication_ID + "']").length) {
-            $("#cbomodecomm").val(value.Communication_ID).trigger('change');
+                $("#cbomodecomm").val(value.Communication_ID).trigger('change');
           } else { 
             var newmodecomm = new Option(value.Communication_Type, value.Communication_ID, true, true);
-            $("#cbomodecomm").append(newmodecomm).trigger('change');
+                $("#cbomodecomm").append(newmodecomm).trigger('change');
           }
         }
+
+
         if(value.Call_SID !== null){
           if ($("#cbocallstatus").find("option[value='" + value.Call_SID + "']").length) {
             $("#cbocallstatus").val(value.Call_SID).trigger('change');
@@ -2634,11 +2657,15 @@ function LoadCallData() {
           } 
           FetchCall(value.Call_SID,value.Reason_ID);
         }
+
+
         if (value.Promised_Pay_Date !== null && value.Promised_Pay_Date !== ''){
           $("#dpppdate").datepicker("setDate", new Date(value.Promised_Pay_Date));
         } else {
           $("#dpppdate").val('');
         } 
+
+
         $("#txtcallremarks").val(value.Call_Remarks);
       });
     }
@@ -2678,7 +2705,7 @@ function LoadCallLogsData() {
     "autoWidth": false,
     "pageLength": 10,
     "ajax": {
-      "url": "fetch_call_logs_rb.php",
+      "url": window.fetchData.callLogsData,
       "type": "POST",
       "data": {insuranceno:insuranceno}
     },
@@ -2851,13 +2878,23 @@ function FetchProv(regcode,provcode) {
       data: {regcode:regcode},
       url:window.formRoutes.provinceData,
       success: function(data) {
-        console.log(regcode);
-        $("#cboprovince").html(data);
-        if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cboprovince").html(options);
+
+            // Pre-select province code if available
+            if (provcode !== null && provcode !== '') {
+              $("#cboprovince").val(provcode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cboprovince").trigger('change.select2');
       }
     });
   }
@@ -2870,7 +2907,7 @@ function FetchCM(provcode,cmcode) {
       data: {provcode:provcode},
       url:window.formRoutes.cityMunicipalData,
       success: function(data) {
-          let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
 
           // Iterate over JSON objects and build <option> elements
           $.each(data, function(index, item) {
@@ -2930,8 +2967,8 @@ $(document).on("change", "#cbopaytype", function () {
 
     // Map payment types to sections
     var sectionMap = {
-        // "CREDIT CARD": ".cc-section",
-        "POST-DATED CHECK (PDC)": ".pdc-section",
+        "CREDIT CARD": ".cc-section",
+        "POST-DATED CHECK (PDC)" : ".pdc-section",
         "E-WALLET": ".ew-section"
     };
 
@@ -2969,8 +3006,10 @@ $(document).on("click", "#ptwallet", function () {
 $(document).on("click", "#btnaddpay", function () {
   var tablepay = $("#table_payment").DataTable();
 
-  var paytype        = $("#cbopaytype").val();
-  var ewallet        = $("#cboewallet").val();
+  // var paytype        = $("#cbopaytype").val();
+  var paytype        = $("#cbopaytype option:selected").text().trim();
+  // var ewallet        = $("#cboewallet").val();
+  var ewallet        = $("#cboewallet option:selected").text().trim();
   var ccno           = $("#txtccno").val().trim();
   var ccholder       = $("#txtccholder").val().trim();
   var ccexpirydate   = $("#txtccexpirydate").val().trim();
@@ -3616,7 +3655,8 @@ $(document).on("click", "#btncancelnetrem", function() {
   $(".iziModal-wrap").scrollTop(0); 
 });
 
-$(document).on("click", "#btnupdatenetrem", function () {
+$(document).on("click", "#btnupdatenetrem", function (e) {
+  e.preventDefault();
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -3625,6 +3665,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   const getNum = (sel) => RemoveNumFormat(getVal(sel)) || "0";
   const getDate = (sel) => getSaveDateFormatted($(sel).val());
   const isEmpty = (v) => v === "" || v === null || v === undefined;
+  const insuranceNo = $(this).data('insurance-no');
 
   const showWarning = (selector, message) => {
     $(selector).focus();
@@ -3654,7 +3695,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // CHANGE TRANSACTION STATUS
   // ======================================================
   const NetRem = {
-    insuranceno,
+    insuranceno: insuranceNo,
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
     inscommission: getNum("#txtinscommission")
@@ -3679,17 +3720,14 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_update_netrem.php",
+    url: window.formRoutes.updateNetRem,
     method: "POST",
     data: formdata,
     processData: false,
     contentType: false,
     success: function (response) {
       $("#modalsaving").iziModal('close');
-
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Gross Premium / Net Rem!",
           text: "Gross Premium / Net Rem has been updated successfully.",
@@ -3745,8 +3783,9 @@ function FetchCall(callsid,reasonid) {
     $.ajax({
       type:"POST",
       data: {callsid:callsid},
-      url:"fetch_call_reason.php",
+      url:window.fetchData.callReasonData,
       success: function(data) {
+        console.log("reason_id", reasonid);
         $("#cbocallreason").html(data);
         if (reasonid != null || reasonid != '') {
           if ($("#cbocallreason").find("option[value='" + reasonid + "']").length) {
@@ -3925,7 +3964,7 @@ $(document).on("blur", "#txtvin", function () {
   if (vin === "") return; // do nothing if empty
 
   $.ajax({
-    url: window.getData.customer_vehicle_vin_exist,
+    url: "customer_vehicle_vin_exist.php",
     type: "POST",
     data: { vin: vin },
     dataType: "json",
@@ -4059,16 +4098,6 @@ $(document).on( "keydown", "#txtcustomersearch", function (e) {
 //Button Search 
 $(document).on( "click", "#btnfind", function () {
   LoadTransactionData();
-    // If search button is triggered, clear specific card quick-filters if needed
-    window.viewpending = false;
-    window.viewexpiring = false;
-    
-    // Trigger DataTable AJAX refresh[cite: 2]
-    if (table) {
-        table.draw(); 
-    } else {
-        initTable();
-    }
 });
 
 $(document).on( "click", "#btnfindcust", function () {
@@ -4212,10 +4241,10 @@ $(document).on("focus", "#txtinscommission", function () {
 
 /*====== LOST FOCUS ======*/
 /*---------- CUSTOMER INFO ---------------*/
-$(document).on( "blur", "#txtcustno", function () {
-  var txtcustno = $(this).val().toUpperCase().trim();
-  $(this).val(txtcustno);
-});
+// $(document).on( "blur", "#txtcustno", function () {
+//   var txtcustno = $(this).val().toUpperCase().trim();
+//   $(this).val(txtcustno);
+// });
 
 $(document).on( "blur", "#txtcustname", function () {
   var txtcustname = $(this).val().toUpperCase().trim();
@@ -4531,18 +4560,23 @@ $(document).ready( function () {
   $('#txtterms').on('input', calculateMonthlyPayment);
 
   $(document).on( "change", "#chkpayment", function () {
-    if ($(this).is(':checked')) {
-      $("#installpay-terms").fadeIn();
-      $("#installpay-mpay").fadeIn();
+        var $terms = $("#installpay-terms");
+        var $monthlyPay = $("#installpay-mpay");
 
-      calculateMonthlyPayment();
-    } else {
-      $("#installpay-terms").fadeOut();
-      $("#installpay-mpay").fadeOut();
+        if ($(this).is(":checked")) {
+            $terms.stop(true, true).css("display", "block").hide().fadeIn(300);
+            $monthlyPay.stop(true, true).css("display", "block").hide().fadeIn(300);
 
-      $("#txtterms").val("0");
-      $("#txtmonthpay").val("0.00");
-    }
+            if (typeof calculateMonthlyPayment === "function") {
+                calculateMonthlyPayment();
+            }
+        } else {
+            $terms.stop(true, true).fadeOut(200);
+            $monthlyPay.stop(true, true).fadeOut(200);
+
+            $("#txtterms").val("0");
+            $("#txtmonthpay").val("0.00");
+        }
   });
 
   $('input[name="rdoptiontype"]').on('change', function() {
@@ -4681,13 +4715,15 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadVehicleInfo();
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
-  if ( ulevel == 'INSURANCE STAFF') { 
+
+  if ( ulevel == 6 ) { 
     $("#cboise").val(userid).trigger("change.select2");
 
     $('#modal-add').iziModal('open');
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
 });
 
 $(document).on( "click", "#btnadd", function () {
@@ -5113,18 +5149,15 @@ $(document).on("click", function (e) {
 });
 
 $(document).on( "click", ".btnpay", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   FormClearPay();
   LoadPayData();
   FormDisablePay(true);
+
+  // Store the insurance number directly on the save button (or modal container)
+  $("#btnupdatenetrem").data('insurance-no', insuranceno);
 });
 
-$(document).on( "click", ".btnnetrem", function () {
-  insuranceNo = $(this).data('insurance-no');
-  FormClearNetRem();
-  LoadNetRemData(insuranceNo);
-  FormDisableNetRem(true);
-});
 
 $(document).on("click",".btnsoa",function(){
   insuranceno = $(this).attr('insuranceno');
@@ -5149,9 +5182,9 @@ $(document).on( "click", ".btnstatus", function () {
 });
 
 $(document).on( "click", ".btncall", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   FormClearCall();
-  LoadCallData();
+  LoadCallData(insuranceno);
   FormDisableCall(true);
 });
 
@@ -5161,14 +5194,14 @@ $(document).on( "click", ".btncalllog", function () {
 });
 
 $(document).on( "click", ".btnedit", function () {
-  insuranceno = $(this).data('insurance-no');
+  insuranceno = $(this).attr('insuranceno');
   $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
-    window.open('renewal_business_modify.php', '_self');
+    window.open(window.LaravelRoutes.loadModifyPage, '_self');
   });
 });
 
 $(document).on( "click", ".btndelete", function () {
-  insuranceno = $(this).data('insurance-no');
+  insuranceno = $(this).attr('insuranceno');
   swal({
     title: "Are you sure?",
     text: "Data record with Insurance No " + insuranceno + " will be permanently delete.",
@@ -5183,7 +5216,7 @@ $(document).on( "click", ".btndelete", function () {
     if (isConfirm) {
       $.ajax({
         type:"POST",
-        url:window.deletefunction.deleteData,
+        url:"renewal_business_delete.php",
         data:{ insuranceno:insuranceno },
         dataType: "json",   // keep this
         success: function(data){
@@ -5646,7 +5679,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_save.php",
+    url: window.saveData.saveRenewalBusinessData,
     method: "POST",
     data: formdata,
     processData: false,
@@ -5654,12 +5687,10 @@ $(document).on("click", "#btnsubmit", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Saved!",
-          text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",
+          text: "New record with Insurance No "+ response.Insurance_No +" has been created successfully.",
           type: "success",
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
@@ -5710,7 +5741,6 @@ $(document).on( "click", "#btndelete", function () {
         url:"customer_list_delete.php",
         data:{ transid:transid },
         success: function(data){
-          var data = jQuery.parseJSON(data);
           if(data.result == 1){
             swal({
               title: "Deleted!",
@@ -5873,7 +5903,7 @@ function FormDisable(val) {
 }
 
 function FormDisablePay(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditpay").show();
       $("#btnclosepay").show();
@@ -5933,7 +5963,7 @@ function FormDisablePay(val) {
 }
 
 function FormDisableNetRem(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditnetrem").show();
       $("#btnclosenetrem").show();

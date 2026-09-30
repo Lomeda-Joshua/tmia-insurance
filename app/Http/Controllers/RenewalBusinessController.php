@@ -561,6 +561,8 @@ class RenewalBusinessController extends Controller
             'insuranceno' => 'nullable|string',
         ]);
 
+        dd($request->all());
+
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
@@ -572,5 +574,75 @@ class RenewalBusinessController extends Controller
         return response()->json($data);
     }
 
-        
+    public function getRenewBusinessPayment(Request $request)
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json(['data' => []]);
+        }
+
+        // Fetch matching records via Eloquent
+        $payments = TransactionRBpayment::where('Insurance_No', $insuranceNo)->get();
+
+        // Transform the collection to attach row index ('urutan') and action buttons
+        $data = $payments->values()->map(function ($row, $index) {
+            $payId = e($row->Payment_ID);
+
+            return array_merge($row->toArray(), [
+                'urutan' => $index + 1,
+                'button' => '<label payid="' . $payId . '" class="btn btn-success btn-action btnremovepaysave" data-toggle="tooltip" data-placement="top" title="Remove">'
+                          . '<i class="fa-regular fa-trash-can"></i>'
+                          . '</label>',
+            ]);
+        });
+
+        return response()->json(['data' => $data]);
+    }
+
+    /**
+     * Delete a transaction record by Insurance Number.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteTransaction(Request $request): JsonResponse
+    {
+        // 1. Input Validation
+        $validated = $request->validate([
+            'insuranceno' => 'required|string',
+        ]);
+
+        try {
+            // 2. Perform deletion using Eloquent
+            $deletedCount = TransactionRb::where('Insurance_No', trim($validated['insuranceno']))->delete();
+
+            // 3. Check if record was deleted
+            if ($deletedCount > 0) {
+                return response()->json([
+                    'result' => 1
+                ]);
+            }
+
+            return response()->json([
+                'result' => 0,
+                'error'  => 'No matching record found'
+            ], 404);
+
+        } catch (Exception $e) {
+            // Log error internally automatically managed by Laravel logging
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Database error occurred'
+            ], 500);
+        }
+    }        
+
+
+
+
+    public function modifyIndex(){
+        return view("livewire.main.renewal_business_modify");
+    }
+
 }

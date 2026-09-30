@@ -17,6 +17,34 @@ var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
+  //================== GET USER LOG IN INFORMATION =================//
+  $.ajax({
+    url: window.dataRoutes.userAccountSession,
+    dataType: 'json',
+    type: "POST",
+    cache: false,
+    headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+    success: function(data) {
+      userid = data.userid;
+      logname = data.logname;
+      ulevel = data.ulevel;
+      regdate = data.regdate;
+      signin = data.signin;
+
+      if (ulevel == 1 || ulevel == 6) {
+          $(".btnactionud").removeAttr("hidden").show();
+      } else {
+          $(".btnactionud").hide();
+      }
+
+    }
+  });
+  //=============== END GET USER LOG IN INFORMATION  =================//
+
+
+
   //======= Province =====//
   $.ajax({
     type:"POST",

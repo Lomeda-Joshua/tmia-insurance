@@ -194,5 +194,53 @@ class VehicleController extends Controller
     }
 
 
+    /**
+     * Get customer and vehicle information by VIN.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getVehicleByVin(Request $request): JsonResponse
+    {
+        // 1. Validate Input (Format: Alphanumeric, exactly 17 characters)
+        $validated = $request->validate([
+            'vin' => ['nullable', 'string', 'regex:/^[A-Za-z0-9]{17}$/'],
+        ], [
+            'vin.regex' => 'Invalid VIN format',
+        ]);
+
+        // Default response payload matching original format
+        $response = [
+            'result'   => 0,
+            'fullname' => null,
+            'model'    => null,
+        ];
+
+        try {
+            if (!empty($validated['vin'])) {
+                // 2. Query vehicle with customer relationship using Eloquent
+                $vehicle = VehicleInformation::with('customer')
+                    ->where('VIN', trim($validated['vin']))
+                    ->first();
+
+                if ($vehicle) {
+                    $response['result']     = 1;
+                    $response['customerno'] = $vehicle->Customer_No;
+                    $response['fullname']   = $vehicle->customer->Full_Name ?? null;
+                    $response['model']      = $vehicle->Model;
+                }
+            }
+
+            return response()->json($response, 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Database error',
+            ], 500);
+        }
+    }
+
+
 }
  
