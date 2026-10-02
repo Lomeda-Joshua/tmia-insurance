@@ -14,6 +14,7 @@ use App\Models\VehicleInformation;
 use App\Models\TransactionRBPayment;
 use App\Models\Notification;
 use App\Models\TransactionRb;
+use App\Models\TransactionsNb;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -561,8 +562,6 @@ class RenewalBusinessController extends Controller
             'insuranceno' => 'nullable|string',
         ]);
 
-        dd($request->all());
-
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
@@ -636,7 +635,73 @@ class RenewalBusinessController extends Controller
                 'error'  => 'Database error occurred'
             ], 500);
         }
-    }        
+    }       
+    
+    
+    /**
+     * Get expiring transaction data using Eloquent models and relationships.
+     */
+    /**
+     * Server-side handler for Expiring DataTables.
+     */
+    public function getExpiringTransactions(Request $request): JsonResponse
+    {
+        $today = now()->format('Y-m-d');
+        $ninetyDaysLater = now()->addDays(90)->format('Y-m-d');
+
+        // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
+        $query = TransactionsNb::query()
+            ->from('transactions_nb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                't.Insurance_No',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+            ])
+            ->where(function ($q) use ($today, $ninetyDaysLater) {
+                $q->whereBetween('t.Policy_Expiration', [$today, $ninetyDaysLater])
+                  ->orWhere('t.Policy_Expiration', '<=', $today);
+            });
+
+        $statusColors = [
+            'PENDING'            => 'label label-default',
+            'IN PROCESS'         => 'label label-primary',
+            'COMPLETED'          => 'label label-success',
+            'PAYMENT PROCESSING' => 'label label-warning',
+            'PAYMENT CONFIRMED'  => 'label label-success',
+            'CANCELLED'          => 'label label-danger',
+            'PARTIALLY PAID'     => 'label bg-purple',
+            'FAILED TO ASSIGN'   => 'label bg-navy',
+        ];
+
+        // 2. Return Yajra Server-Side JSON Response
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' (replaces urutan)
+            ->editColumn('Trans_Status', function ($row) use ($statusColors) {
+                $insuranceNo = e($row->Insurance_No ?? '');
+                $statusRaw   = $row->Trans_Status ?? '';
+                $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
+                $labelClass  = $statusColors[$status] ?? 'label label-default';
+
+                return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+            })
+            ->rawColumns(['Trans_Status'])
+            ->make(true);
+    }
 
 
 

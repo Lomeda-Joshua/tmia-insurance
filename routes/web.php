@@ -143,7 +143,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
 
+        Route::post('/renewal-business/update-net-rem', [TransactionController::class, 'updateNetRenewalRemittance'])->name('renew-business-update.netrem');
 
+        Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
         Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify');
         Route::post('/delete-renewal-transaction', [RenewalBusinessController::class, 'deleteTransaction'])->name('delete.renewal_transaction');
 
@@ -185,6 +187,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // Report generation
         Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
+
+        // General Settings
+        Route::get('/general-settings', [GeneralReportingController::class, 'index'])->name('general_report.index');
 
     });
 

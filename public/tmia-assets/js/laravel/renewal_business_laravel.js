@@ -1149,7 +1149,7 @@ $(document).ready( function () {
       type:"POST",
       data:{ businesstype: "RENEWAL BUSINESS" },
       url:window.loadData.getTransactionStatus,
-      success: function(data) {
+      success: function(data) {    
           let options = '<option disabled value="">PLEASE SELECT</option>';
           // Iterate over JSON objects and build <option> elements
           $.each(data, function(index, item) {
@@ -1468,6 +1468,8 @@ function LoadTransactionData(ulevel_declartion) {
         return;
     }
 
+
+
     let tableColumns = [
           { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
           { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
@@ -1485,20 +1487,29 @@ function LoadTransactionData(ulevel_declartion) {
           { data: "Model", name: "Model", defaultContent: "- - -" },
           { data: "Variant", name: "Variant", defaultContent: "- - -" },
             
-            // Main Table Columns
+          // Main Table Columns
           { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "- - -" },                  
-          { data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+
+          {
+            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
             name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" },
+            defaultContent: "- - -" 
+          }, 
+
+         
           { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
           { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+
+
           {
-            data: "button",            
+              data: "button",            
               name: "button",
               orderable: false,
               searchable: false,
               defaultContent: "- - -" 
           }
+          
+          
     ];
 
     if( ulevel_declartion === 1 ){
@@ -1506,8 +1517,8 @@ function LoadTransactionData(ulevel_declartion) {
             data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
             name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
             defaultContent: "- - -" 
-        });
-    }
+        }
+    );}
 
   /*   tableColumns.push(
           { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
@@ -1902,7 +1913,7 @@ function LoadNBData() {
       processing: "Loading New Business List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     // responsive: true,
     autoWidth: false,
@@ -1912,39 +1923,39 @@ function LoadNBData() {
     fixedHeader: true,
     fixedColumns: { left: 2 },
     ajax: {
-      url: "renewal_business_nb_expired.php",
+      url: window.getData.renewal_business_expiring_transactions,
       type: "POST"
     },
     columns: [
-      { data: "urutan" },
-      { data: "Insurance_No" },
-      { data: "Trans_Date" },
-      { data: "Trans_Status" },
-      { data: "Customer_No" },
-      { data: "Full_Name" },
-      { data: "Contact_No" },
-      { data: "VIN" },
-      { data: "CS_No" },
-      { data: "Plate_No" },
-      { data: "Model" },
-      { data: "Variant" },
-      { data: "Insurance_Company" },
-      { data: "ISE_Name" },
-      { data: "Policy_Expiration" }
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false }, // Yajra auto index
+        { data: "Insurance_No", name: "t.Insurance_No" },
+        { data: "Trans_Date", name: "t.Trans_Date" },
+        { data: "Trans_Status", name: "t.Trans_Status" },
+        { data: "Customer_No", name: "t.Customer_No" },
+        { data: "Full_Name", name: "c.Full_Name" },
+        { data: "Contact_No", name: "c.Contact_No" },
+        { data: "VIN", name: "t.VIN" },
+        { data: "CS_No", name: "v.CS_No" },
+        { data: "Plate_No", name: "v.Plate_No" },
+        { data: "Model", name: "v.Model" },
+        { data: "Variant", name: "v.Variant" },
+        { data: "Insurance_Company", name: "t.Insurance_Company" },
+        { data: "ISE_Name", name: "i.ISE_Name" },
+        { data: "Policy_Expiration", name: "t.Policy_Expiration" }
     ],
     columnDefs: [
-      {
-        targets: [5,11,12,13],
-        render: function(data, type, row, meta) {
-          const maxLength = 30;
-          if (typeof data === 'string' && data.length > maxLength) {
-            const truncated = data.substring(0, maxLength) + '...';
-            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+        {
+          targets: [5, 11, 12, 13],
+          render: function (data, type, row, meta) {
+            const maxLength = 30;
+            if (typeof data === 'string' && data.length > maxLength) {
+              const truncated = data.substring(0, maxLength) + '...';
+              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+            }
+            return data ?? '';
           }
-          return data;
         }
-      }
-    ]
+      ]
   });
 
   // ✅ Bind row click for selection AFTER table initialization
@@ -1995,7 +2006,6 @@ function LoadInsurerInfo(insuranceno) {
     url:"fetch_transactions_nb.php",
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2577,11 +2587,11 @@ function LoadNetRemData(insuranceno) {
   $(".box-body").validator('reset');
 }
 
-function LoadStatusData() {
+function LoadStatusData(insuranceNo) {
   $.ajax({
     type:"POST",
     url:window.loadData.loadPaymentData,
-    data:{insuranceno:insuranceno},
+    data:{insuranceno:insuranceNo},
     success: function(data){
       $.each(data, function(i, value) {
 
@@ -2851,13 +2861,23 @@ function FetchProv(regcode,provcode) {
       data: {regcode:regcode},
       url:window.formRoutes.provinceData,
       success: function(data) {
-        console.log(regcode);
-        $("#cboprovince").html(data);
-        if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cboprovince").html(options);
+
+            // Pre-select province code if available
+            if (provcode !== null && provcode !== '') {
+              $("#cboprovince").val(provcode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cboprovince").trigger('change.select2');
       }
     });
   }
@@ -3559,9 +3579,7 @@ $(document).on("click", "#btnupdatestatus", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Status!",
           text: "Transaction status has been updated successfully.",
@@ -3679,7 +3697,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_update_netrem.php",
+    url: window.saveData.saveUpdatedNetRem,
     method: "POST",
     data: formdata,
     processData: false,
@@ -3687,9 +3705,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Updated Gross Premium / Net Rem!",
           text: "Gross Premium / Net Rem has been updated successfully.",
@@ -5113,7 +5129,7 @@ $(document).on("click", function (e) {
 });
 
 $(document).on( "click", ".btnpay", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   FormClearPay();
   LoadPayData();
   FormDisablePay(true);
@@ -5142,9 +5158,9 @@ $(document).on("click",".btnsoa",function(){
 });
 
 $(document).on( "click", ".btnstatus", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   FormClearStatus();
-  LoadStatusData();
+  LoadStatusData(insuranceno);
   FormDisableStatus(true);
 });
 
@@ -5163,7 +5179,7 @@ $(document).on( "click", ".btncalllog", function () {
 $(document).on( "click", ".btnedit", function () {
   insuranceno = $(this).data('insurance-no');
   $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
-    window.open('renewal_business_modify.php', '_self');
+    window.open(window.LaravelRoutes.loadModifyPage, '_self');
   });
 });
 
@@ -5646,7 +5662,7 @@ $(document).on("click", "#btnsubmit", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_save.php",
+    url: window.saveData.saveRenewalBusinessData,
     method: "POST",
     data: formdata,
     processData: false,
@@ -5654,9 +5670,7 @@ $(document).on("click", "#btnsubmit", function () {
     success: function (response) {
       $("#modalsaving").iziModal('close');
 
-      let result = jQuery.parseJSON(response);
-
-      if (result.result == 1) {
+      if (response.result == 1) {
         swal({
           title: "Saved!",
           text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",
@@ -5873,7 +5887,7 @@ function FormDisable(val) {
 }
 
 function FormDisablePay(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditpay").show();
       $("#btnclosepay").show();
@@ -5933,7 +5947,7 @@ function FormDisablePay(val) {
 }
 
 function FormDisableNetRem(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditnetrem").show();
       $("#btnclosenetrem").show();
@@ -5959,7 +5973,7 @@ function FormDisableNetRem(val) {
 }
 
 function FormDisableStatus(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6) {
     if (val == true) {
       $("#btneditstatus").show();
       $("#btnclosestatus").show();

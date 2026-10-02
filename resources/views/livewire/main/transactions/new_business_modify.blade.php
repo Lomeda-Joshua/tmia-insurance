@@ -1472,7 +1472,7 @@
       getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
       customerData: @json(route('customers.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
-      getPaymentData: @json(route('payments.get-data')),
+      getPaymentData: @json(route('new-business.payments.get-data')),
       getCustomerSpecificData : @json(route('getSpecificView.data'))
     }
 

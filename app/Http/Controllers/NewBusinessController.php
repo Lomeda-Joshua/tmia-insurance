@@ -83,6 +83,7 @@ class NewBusinessController extends Controller
                     $q->where('t.Insurance_No', 'LIKE', $search)
                     // ->orWhere('t.VIN', 'LIKE', $search)
                     // ->orWhere('v.Order_No', 'LIKE', $search)
+                    ->orWhere('t.VIN', 'LIKE', $search)
                     ->orWhere('v.CS_No', 'LIKE', $search)
                     ->orWhere('c.Contact_No', 'LIKE', $search)
                     ->orWhere('t.Customer_No', 'LIKE', $search)

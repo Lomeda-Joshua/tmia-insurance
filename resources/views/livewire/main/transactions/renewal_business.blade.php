@@ -130,16 +130,16 @@
               <th>Variant</th>
               <th>Insurance Partner</th>
 
-              @if(Auth::user()->User_Level_ID === 1)
+              {{-- @if(Auth::user()->User_Level_ID === 1) --}}
                 <th>I.S.E</th>
-              @endif
+              {{-- @endif --}}
               
                 <th>MP Name</th>
                 <th>Call Attempts</th>
                 
-              @if(Auth::user()->User_Level_ID === 1)
+              {{-- @if(Auth::user()->User_Level_ID === 1) --}}
                 <th>Action</th>
-              @endif
+              {{-- @endif --}}
             </tr>
           </thead>
           <tbody>
@@ -2029,6 +2029,10 @@
 @push('scripts')
 <script>
 
+    window.dataRoutes = {
+      userAccountSession : @json(route('getSession.variables'))
+    }
+
     window.LaravelRoutes = {
         csrfToken: "{{ csrf_token() }}",
         nbpendingcounts: @json(route('new_business.counts')),
@@ -2063,12 +2067,14 @@
       vehicleSpecific: @json(route('vehicle.search')),
       edafVehicleSpecific: @json(route('edaf.vehicle.search')),
       getRenewalInsuranceno: @json(route('renewal_business_insurance_no')),
-      customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist'))
+      customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist')),
+      renewal_business_expiring_transactions : @json(route('renewal-business.expiring-transactions'))
     }
 
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
+      saveUpdatedNetRem : @json(route('update.netrem'))
     }
 
     window.deletefunction = {
