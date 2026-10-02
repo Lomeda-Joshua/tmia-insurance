@@ -15,6 +15,7 @@ use App\Models\TransactionRBPayment;
 use App\Models\Notification;
 use App\Models\TransactionRb;
 use App\Models\TransactionsNb;
+use App\Models\ApprovalRbStatus;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -708,6 +709,108 @@ class RenewalBusinessController extends Controller
 
     public function modifyIndex(){
         return view("livewire.main.renewal_business_modify");
+    }
+
+    /**
+     * Get list of vehicles by Customer Number.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getVehiclesByCustomer(Request $request): JsonResponse
+    {
+        // 1. Validate request input
+        $validated = $request->validate([
+            'custno' => 'required|string',
+        ]);
+
+        $custNo = trim($validated['custno']);
+
+        // 2. Fetch records using Eloquent
+        $vehicles = VehicleInformation::where('Customer_No', $custNo)->get();
+
+        // 3. Process and enrich data
+        $data = $vehicles->map(function ($vehicle, $index) {
+            $row = $vehicle->toArray();
+            $row['urutan'] = $index + 1;
+            $row['button'] = ''; // Placeholder matching legacy script
+            return $row;
+        });
+
+        // 4. Return standard DataTables JSON response
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+
+    /**
+     * Update transaction status, add to approval status log, and trigger notification.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateStatus(Request $request): JsonResponse
+    {
+        // 1. Input Validation
+        $validated = $request->validate([
+            'insuranceno'    => 'required|string',
+            'transstatus'    => 'required|string',
+            'transsremarks' => 'nullable|string',
+        ]);
+
+        try {
+            // 2. Perform operations inside an automated DB Transaction
+            return DB::transaction(function () use ($validated) {
+                $userId      = Auth::id(); // Get authenticated user's ID
+                $insuranceNo = $validated['insuranceno'];
+                $transStatus = $validated['transstatus'];
+                $remarks     = $validated['transsremarks'] ?? '';
+
+                // A. Update existing transaction status
+                TransactionRb::where('Insurance_No', $insuranceNo)->update([
+                    'Trans_Status'         => $transStatus,
+                    'Trans_Status_Remarks' => $remarks,
+                    'Trans_Status_Date'    => now(),
+                    'User_ID'              => $userId,
+                ]);
+
+                // B. Insert into approval status log
+                ApprovalRbStatus::create([
+                    'Insurance_No'         => $insuranceNo,
+                    'User_ID'              => $userId,
+                    'Trans_Status'         => $transStatus,
+                    'Trans_Status_Remarks' => $remarks,
+                    'Trans_Status_Date'    => now(),
+                ]);
+
+                // C. Insert notification log
+                Notification::create([
+                    'Insurance_No'     => $insuranceNo,
+                    'Business_Type'    => 'RENEWAL BUSINESS',
+                    'Insurance_Status' => $transStatus,
+                    'Title'            => '[' . $transStatus . ' - ' . $insuranceNo . ']',
+                    'Message'          => 'The status of the request has been updated.',
+                    'Info_Type'        => 'info',
+                    'URL'              => 'renewal_business_modify',
+                    'Status'           => 'unread',
+                    'Created_Date'     => now(),
+                    'User_ID'          => $userId,
+                ]);
+
+                // D. Return success response
+                return response()->json([
+                    'result'       => 1,
+                    'Insurance_No' => $insuranceNo,
+                ]);
+            });
+
+        } catch (Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => $e->getMessage(),
+            ], 500);
+        }
     }
 
 }

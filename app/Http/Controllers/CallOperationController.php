@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\CallLogRb;
 use App\Models\CallReason;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class CallOperationController extends Controller
 {
@@ -92,4 +95,93 @@ class CallOperationController extends Controller
 
         return response()->json($reasons);
     }
+
+
+    /**
+     * Store or update the call log history entry.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function storeCallLog(Request $request): JsonResponse
+    {
+        // 1. Validation
+        $validated = $request->validate([
+            'insuranceno'     => 'required|string',
+            'commid'          => 'nullable|string',
+            'callsid'         => 'nullable|string',
+            'callreasonid'    => 'nullable|string',
+            'promisedpaydate' => 'nullable|date',
+            'callremarks'     => 'nullable|string',
+        ]);
+
+        $insuranceNo = $validated['insuranceno'];
+        $userId      = Auth::id(); // Replaces $_SESSION['userid']
+
+        try {
+            // 2. Wrap database operations inside a transaction
+            return DB::transaction(function () use ($validated, $insuranceNo, $userId) {
+
+                // Retrieve the latest call log for this insurance number
+                $existing = TransactionRbCallLog::where('Insurance_No', $insuranceNo)
+                    ->orderBy('Call_Log_Date', 'desc')
+                    ->first();
+
+                if ($existing) {
+                    // Check if key routing fields have changed
+                    $hasChanges = 
+                        (string)$existing->Communication_ID !== (string)($validated['commid'] ?? '') ||
+                        (string)$existing->Call_SID          !== (string)($validated['callsid'] ?? '') ||
+                        (string)$existing->Reason_ID           !== (string)($validated['callreasonid'] ?? '') ||
+                        (string)$existing->User_ID             !== (string)$userId;
+
+                    if ($hasChanges) {
+                        // Insert new historical log record
+                        TransactionRbCallLog::create([
+                            'Insurance_No'      => $insuranceNo,
+                            'Communication_ID'  => $validated['commid'] ?? null,
+                            'Call_SID'          => $validated['callsid'] ?? null,
+                            'Reason_ID'         => $validated['callreasonid'] ?? null,
+                            'Promised_Pay_Date' => $validated['promisedpaydate'] ?? null,
+                            'Call_Remarks'      => $validated['callremarks'] ?? null,
+                            'Call_Log_Date'     => now(),
+                            'User_ID'           => $userId,
+                        ]);
+                    } else {
+                        // Update existing record's remarks and timestamp only
+                        $existing->update([
+                            'Promised_Pay_Date' => $validated['promisedpaydate'] ?? null,
+                            'Call_Remarks'      => $validated['callremarks'] ?? null,
+                            'Call_Log_Date'     => now(),
+                        ]);
+                    }
+                } else {
+                    // First record entry
+                    TransactionRbCallLog::create([
+                        'Insurance_No'      => $insuranceNo,
+                        'Communication_ID'  => $validated['commid'] ?? null,
+                        'Call_SID'          => $validated['callsid'] ?? null,
+                        'Reason_ID'         => $validated['callreasonid'] ?? null,
+                        'Promised_Pay_Date' => $validated['promisedpaydate'] ?? null,
+                        'Call_Remarks'      => $validated['callremarks'] ?? null,
+                        'Call_Log_Date'     => now(),
+                        'User_ID'           => $userId,
+                    ]);
+                }
+
+                return response()->json([
+                    'result'       => 1,
+                    'Insurance_No' => $insuranceNo,
+                ]);
+            });
+
+        } catch (Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error'  => 'Something went wrong. Please try again.',
+            ], 500);
+        }
+    }
+
+    
 }

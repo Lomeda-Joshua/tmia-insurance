@@ -1766,7 +1766,7 @@ function LoadVehicleData() {
       processing: "Loading Vehicle List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -2621,10 +2621,10 @@ function LoadStatusData(insuranceNo) {
 function LoadCallData() {
   $.ajax({
     type:"POST",
-    url:"fetch_transaction_rb_call.php",
+    url:window.getData.get_latest_call_logs,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
         $("#txtinsuranceno").val(value.Insurance_No);
         if(value.Communication_ID !== null){
@@ -3571,7 +3571,7 @@ $(document).on("click", "#btnupdatestatus", function () {
   // AJAX SUBMISSION
   // ======================================================
   $.ajax({
-    url: "renewal_business_update_status.php",
+    url: window.getData.renewal_business_renewal_update_status,
     method: "POST",
     data: formdata,
     processData: false,
@@ -3760,17 +3760,34 @@ function FetchCall(callsid,reasonid) {
   if (callsid !== null) {
     $.ajax({
       type:"POST",
+      datatype: "json",
       data: {callsid:callsid},
-      url:"fetch_call_reason.php",
+      url:window.fetchData.callReasonData,
       success: function(data) {
-        $("#cbocallreason").html(data);
-        if (reasonid != null || reasonid != '') {
-          if ($("#cbocallreason").find("option[value='" + reasonid + "']").length) {
-            $("#cbocallreason").val(reasonid).trigger('change');
-          } 
-        }
-        
-        $(".box-body").validator('reset');
+          // Build options HTML dynamically from JSON response
+          let options = '<option value="">PLEASE SELECT</option>';
+          
+          $.each(data, function(index, item) {
+            options += `<option value="${item.Reason_ID}">${item.Reason_Desc}</option>`;
+          });
+
+          // Inject into dropdown
+          $("#cbocallreason").html(options);
+
+          // Pre-select saved reason if provided
+          if (reasonid != null && reasonid !== '') {
+            if ($("#cbocallreason").find("option[value='" + reasonid + "']").length) {
+              $("#cbocallreason").val(reasonid).trigger('change');
+            }
+          }
+
+          // Reset validator if present
+          if ($.fn.validator) {
+            $(".box-body").validator('reset');
+          }
+      },
+      error: function(xhr) {
+        console.error('Error fetching call reasons:', xhr.responseText);
       }
     });
   }
@@ -5165,14 +5182,14 @@ $(document).on( "click", ".btnstatus", function () {
 });
 
 $(document).on( "click", ".btncall", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   FormClearCall();
   LoadCallData();
   FormDisableCall(true);
 });
 
 $(document).on( "click", ".btncalllog", function () {
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
   LoadCallLogsData();
 });
 

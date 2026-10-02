@@ -11,7 +11,7 @@ class TransactionRbCallLog extends Model
     public $timestamps = false;
 
     // Relationships
-/*     public function communicationType()
+    public function communicationType()
     {
         return $this->belongsTo(CommunicationType::class, 'Communication_ID', 'Communication_ID');
     }
@@ -24,5 +24,5 @@ class TransactionRbCallLog extends Model
     public function callReason()
     {
         return $this->belongsTo(CallReason::class, 'Reason_ID', 'Reason_ID');
-    } */
+    }
 }

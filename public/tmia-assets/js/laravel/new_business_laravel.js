@@ -1426,10 +1426,11 @@ function LoadTransactionData() {
     },
     columns: [
           { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-          { data: 'Insurance_No', name: 't.Insurance_No' },
+          { data: 'Insurance_No', name: 't.Insurance_No',  defaultContent: '---' },
           { 
             data: 'Trans_Date', 
             name: 't.Trans_Date',
+            defaultContent: '---',
             render: function (data, type, row) {
                 // Return empty string if missing
                 if (!data) return ''; 
@@ -1463,19 +1464,19 @@ function LoadTransactionData() {
                 return data; 
             }
           },
-          { data: 'Trans_Status', name: 't.Trans_Status' },
-          { data: 'Customer_No', name: 't.Customer_No' },
-          { data: 'Full_Name', name: 'c.Full_Name' },
-          { data: 'Contact_No', name: 'c.Contact_No', searchable: true },
-          { data: 'VIN', name: 't.VIN' },
-          { data: 'CS_No', name: 'v.CS_No' },
-          { data: 'Plate_No', name: 'v.Plate_No' },
-          { data: 'Model', name: 'v.Model' },
-          { data: 'Variant', name: 'v.Variant' },
-          { data: 'Insurance_Company', name: 't.Insurance_Company' },
-          { data: 'ISE_Name', name: 'i.ISE_Name' },
-          { data: 'MP_Name', name: 'v.MP_Name' },
-          { data: 'button', name: 'button', orderable: false, searchable: false }
+          { data: 'Trans_Status', name: 't.Trans_Status', defaultContent: '---' },
+          { data: 'Customer_No', name: 't.Customer_No', defaultContent: '---'  },
+          { data: 'Full_Name', name: 'c.Full_Name', defaultContent: '---'  },
+          { data: 'Contact_No', name: 'c.Contact_No',defaultContent: '---',  searchable: true },
+          { data: 'VIN', name: 't.VIN', defaultContent: '---'},
+          { data: 'CS_No', name: 'v.CS_No', defaultContent: '---'},
+          { data: 'Plate_No', name: 'v.Plate_No', defaultContent: '---' },
+          { data: 'Model', name: 'v.Model', defaultContent: '---' },
+          { data: 'Variant', name: 'v.Variant', defaultContent: '---' },
+          { data: 'Insurance_Company', name: 't.Insurance_Company', defaultContent: '---' },
+          { data: 'ISE_Name', name: 'i.ISE_Name', defaultContent: '---' },
+          { data: 'MP_Name', name: 'v.MP_Name', defaultContent: '---' },
+          { data: 'button', name: 'button', defaultContent:"- - -", orderable: false, searchable: false }
     ],
     columnDefs: [
       {

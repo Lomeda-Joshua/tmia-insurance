@@ -1534,7 +1534,7 @@
                 </div>
 
                 <!-- Credit Card Section -->
-                <div class="row cc-section" hidden>
+                <div class="row cc-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="credit-card">
                       <div class="cc-header">
@@ -1584,7 +1584,7 @@
                 </div>
 
                 <!-- PDC Section -->
-                <div class="row pdc-section" hidden>
+                <div class="row pdc-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="post-dated-check">
                       <div class="pdc-header">
@@ -1637,7 +1637,7 @@
                 </div>
 
                 <!-- E-Wallet Section -->
-                <div class="row ew-section" hidden>
+                <div class="row ew-section" style="display: none;">
                   <div class="col-md-12">
                     <div class="col-md-4">
                       <div class="form-group">
@@ -2068,13 +2068,16 @@
       edafVehicleSpecific: @json(route('edaf.vehicle.search')),
       getRenewalInsuranceno: @json(route('renewal_business_insurance_no')),
       customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist')),
-      renewal_business_expiring_transactions : @json(route('renewal-business.expiring-transactions'))
+      renewal_business_expiring_transactions : @json(route('renewal-business.expiring-transactions')),
+      renewal_business_renewal_update_status : @json(route('renewal.update-status')),
+      get_latest_call_logs : @json(route('get.latest.call-logs'))
     }
 
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
-      saveUpdatedNetRem : @json(route('update.netrem'))
+      saveUpdatedNetRem : @json(route('update.netrem')),
+      callLogsStore : @json(route("call-logs.store"))
     }
 
     window.deletefunction = {
@@ -2089,7 +2092,8 @@
         getTransactionStatus : @json(route('gettransaction-status.data')),
         getPolicyExpiration : @json(route('loadpolicy.expiration')),
         getInsurance: @json(route('transaction.by_insurance_no')),
-        getRBCount : @json(route('getTransactions.count'))
+        getRBCount : @json(route('getTransactions.count')),
+        getVehicleByCustomer : @json(route('get.Vehicles.By.Customer'))
     }
 
     window.formRoutes = {
