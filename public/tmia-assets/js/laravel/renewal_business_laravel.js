@@ -5673,7 +5673,7 @@ $(document).on("click", "#btnsubmit", function () {
       if (response.result == 1) {
         swal({
           title: "Saved!",
-          text: "New record with Insurance No "+ result.Insurance_No +" has been created successfully.",
+          text: "New record with Insurance No "+ response.Insurance_No +" has been created successfully.",
           type: "success",
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
