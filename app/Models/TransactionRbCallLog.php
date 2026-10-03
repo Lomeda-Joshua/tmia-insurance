@@ -10,6 +10,22 @@ class TransactionRbCallLog extends Model
     protected $primaryKey = 'Call_logID';
     public $timestamps = false;
 
+    protected $fillable = [
+        'Insurance_No',
+        'Communication_ID',
+        'Call_SID',
+        'Reason_ID',
+        'Promised_Pay_Date',
+        'Call_Remarks',
+        'Call_Log_Date',
+        'User_ID',
+    ];
+
+    protected $casts = [
+        'Call_Log_Date' => 'datetime',
+        'Promised_Pay_Date' => 'date',
+    ];
+
     // Relationships
     public function communicationType()
     {

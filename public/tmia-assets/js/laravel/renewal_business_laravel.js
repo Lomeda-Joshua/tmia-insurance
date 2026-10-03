@@ -41,7 +41,7 @@ $(document).ready( function () {
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
-    type:"post",
+    type:"POST",
     cache: false,
     success: function(data) {
       userid = data.userid;
@@ -2688,7 +2688,7 @@ function LoadCallLogsData() {
     "autoWidth": false,
     "pageLength": 10,
     "ajax": {
-      "url": "fetch_call_logs_rb.php",
+      "url": window.loadData.getCallLogsByInsuranceNo,
       "type": "POST",
       "data": {insuranceno:insuranceno}
     },
@@ -3744,16 +3744,18 @@ $(document).on("click", "#btnupdatenetrem", function () {
 
 $(document).on( "change", "#cbocallstatus", function () {
   var callsid = $(this).val();
+
   if (editcall == true) {
     if (callsid === '1' || callsid === '') {
       $("#cbocallreason").attr("disabled",true);
     } else {
       $("#cbocallreason").attr("disabled",false);
     }
-    FetchCall(callsid,'');
+      FetchCall(callsid,'');
   } else {
-    $("#cbocallreason").attr("disabled",true);
+      $("#cbocallreason").attr("disabled",true);
   }
+  
 });
 
 function FetchCall(callsid,reasonid) {
@@ -3795,16 +3797,16 @@ function FetchCall(callsid,reasonid) {
 
 $(document).on( "change", "#cbocallreason", function () {
   var callreason = $("#cbocallreason :selected").text();
-  if (editcall == true) {
-    if (callreason == 'CONFIRM RENEWAL') {
-      $("#dpppdate").attr("disabled",false);
-    } else {
-      $("#dpppdate").attr("disabled",true);
-      $("#dpppdate").val("");
-    }
+
+  // Show only if reason is 'CONFIRM RENEWAL' and edit mode is enabled
+  if (editcall === true && callreason === 'CONFIRM RENEWAL') {
+      $("#div_promised_pay_date").show(); // Displays as block
   } else {
-    $("#dpppdate").attr("disabled",true);
+      // For any other selection (or when editcall is false), hide and clear
+      $("#div_promised_pay_date").hide(); // Hides (display: none)
+      $("#dpppdate").val("");             // Clears date value
   }
+
 });
 /////////////// END COMBO BOX EVENT ///////////////////
 
@@ -5196,7 +5198,7 @@ $(document).on( "click", ".btncalllog", function () {
 $(document).on( "click", ".btnedit", function () {
   insuranceno = $(this).data('insurance-no');
   $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
-    window.open(window.LaravelRoutes.loadModifyPage, '_self');
+    window.open(window.LaravelRoutes.loadModifyRenewalPage, '_self');
   });
 });
 
@@ -5359,7 +5361,7 @@ $(document).on("click", "#btnupdatecall", function () {
 
   // AJAX request
   $.ajax({
-    url: "renewal_business_call_status_save.php",
+    url: window.saveData.callLogsStore,
     method: "POST",
     data: formdata,
     processData: false,
@@ -6035,30 +6037,35 @@ function FormDisableCall(val) {
     $("#btnupdatecall").hide();
   }
   
-  $("#cbomodecomm").attr("disabled",val);
+  $("#cbomodecomm").attr("disabled", val);
 
-  $("#cbocallstatus").attr("disabled",val);
+  $("#cbocallstatus").attr("disabled", val);
 
   if (editcall == true) {
-      var callsid = $("#cbocallstatus").val();
-      if (callsid === '1' || callsid === '') {
-        $("#cbocallreason").attr("disabled",true);
-      } else {
-        $("#cbocallreason").attr("disabled",false);
-      }
+    var callsid = $("#cbocallstatus").val();
+    if (callsid === '1' || callsid === '') {
+      $("#div_call_reason").hide();
+      $("#cbocallreason").val("").trigger("change");
+    } else {
+      $("#div_call_reason").show();
+    }
 
-      var callreason = $("#cbocallreason :selected").text();
-      if (callreason === 'BOOKED APPOINTMENT'){
-        $("#dpppdate").attr("disabled",false);
-      } else {
-        $("#dpppdate").attr("disabled",true);
-      }
+    var callreason = $("#cbocallreason :selected").text();
+    if (callreason === 'CONFIRM RENEWAL' || callreason === 'BOOKED APPOINTMENT') {
+      $("#div_promised_pay_date").show();
+    } else {
+      $("#div_promised_pay_date").hide();
+      $("#dpppdate").val("");
+    }
   } else {
-    $("#cbocallreason").attr("disabled",true);
-    $("#dpppdate").attr("disabled",true);
+    $("#div_call_reason").hide();
+    $("#cbocallreason").val("").trigger("change");
+
+    $("#div_promised_pay_date").hide();
+    $("#dpppdate").val("");
   }
   
-  $("#txtcallremarks").attr("disabled",val);
+  $("#txtcallremarks").attr("disabled", val);
 
   $(".box-body").validator('reset');
 }

@@ -1466,6 +1466,117 @@
 <!-- /.content-wrapper -->
 
 @push('scripts')
+
+<script>
+
+    window.dataRoutes = {
+      userAccountSession : @json(route('getSession.variables'))
+    }
+
+    window.LaravelRoutes = {
+        csrfToken: "{{ csrf_token() }}",
+        nbpendingcounts: @json(route('new_business.counts')),
+        loadSelectedCustomer : @json(route('customer.get-by-no')),
+        loadVehicle: @json(route('vehicle.search')),
+        loadModifyPage: @json(route('getModifyView.data'))
+    }
+
+    window.calllogs = {
+        renewalCallLogs: @json(route("getTransactionRB.data"))
+    }
+
+    window.tableRoutes = {
+        renewalBusinessData: @json(route('renewal_business.data')),
+        customerData: @json(route('customers.data')),
+        uploadCustomers: @json(route('uploaded.customer')),
+        uploadEDAFcustomers: @json(route('customer.getCheck-data')),
+        getPaymentData: @json(route('renewalpayments.get-data')),
+        getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
+        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
+    }
+    
+    window.fetchData = {
+      variableData : @json(route('getSession.variables')),
+      callLogsData : @json(route('fetch.call.logs.rb')),
+      callReasonData : @json(route('fetch.call.reason.rb')),
+    }
+
+    window.getData = {
+      customerInfo : @json(route('customerinfo.data')),
+      vehicleInfo: @json(route('customercvehicleinfo.data')),
+      vehicleSpecific: @json(route('vehicle.search')),
+      edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+      getRenewalInsuranceno: @json(route('renewal_business_insurance_no')),
+      customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist')),
+      renewal_business_expiring_transactions : @json(route('renewal-business.expiring-transactions')),
+      renewal_business_renewal_update_status : @json(route('renewal.update-status')),
+      get_latest_call_logs : @json(route('get.latest.call-logs'))
+    }
+
+    window.saveData = {
+      saveNbCustomerData : @json(route('newbusiness.save')),
+      saveRenewalBusinessData : @json(route('renewalbusiness.save')),
+      saveUpdatedNetRem : @json(route('update.netrem')),
+      callLogsStore : @json(route("call-logs.store"))
+    }
+
+    window.deletefunction = {
+      deleteData : @json(route("delete.renewal_transaction")),
+    }
+
+    window.loadData = {
+        loadPaymentData : @json(route('getTransactionRB.data')),
+        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
+        loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
+        sessionSetTransaction : @json(route('session.set-transaction-data')),
+        getTransactionStatus : @json(route('gettransaction-status.data')),
+        getPolicyExpiration : @json(route('loadpolicy.expiration')),
+        getInsurance: @json(route('transaction.by_insurance_no')),
+        getRBCount : @json(route('getTransactions.count')),
+        getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
+        getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no'))
+    }
+
+    window.formRoutes = {
+        customerTypeData: @json(route('customers_type.data')),
+        insuranceStaffData: @json(route('insurance_staff.data')),
+
+        // Location
+        regionData: @json(route('region.data')),
+        provinceData: @json(route('province.data')),
+        cityMunicipalData: @json(route('citymunicipal.data')),
+        barangayData: @json(route('barangay.data')),
+
+        // vehicle info
+        bodyTypeData: @json(route('bodytype.data')),
+        fuelTypeData: @json(route('fueltype.data')),
+        productClassData: @json(route('productclass.data')),
+
+        // Payment type
+        paymentTypeData: @json(route('payments.data')),
+        ewalletTypeData: @json(route('ewalletype.data')),
+
+        // Insurances
+        insuranceTypeData: @json(route('insurancetype.data')),
+        insuranceCoData: @json(route('insuranceco.data')),
+
+        // Bank
+        bankData: @json(route('banks.data')),
+
+        // Transaction status
+        transactionStatusData: @json(route('transactionstatus.data')),
+
+        // Communication type
+        communicationTypeData: @json(route('communicationtype.data')),
+
+        // Call status
+        callStatusData: @json(route('callstatus.data')),
+
+        updateNetRem: @json(route('update.net-remittance'))
+    }
+</script>
+
+
 <script>
     let insuranceno = "<?php echo $_SESSION['insuranceno']; ?>";
     console.log("Insurance No:", insuranceno);

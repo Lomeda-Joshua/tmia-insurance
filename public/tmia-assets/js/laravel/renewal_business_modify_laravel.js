@@ -23,8 +23,9 @@ var modifyinfo;
 $(document).ready( function () {
   //================== GET USER LOG IN INFORMATION =================//
   $.ajax({
-    url: "fetch_variable.php",
+    url: window.fetchData.variableData,
     dataType: 'json',
+    type:"POST",
     cache: false,
     success: function(data) {
       userid = data.userid;
@@ -34,7 +35,7 @@ $(document).ready( function () {
       dealercode = data.dealercode;
       signin = data.signin;
 
-      if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+      if (ulevel == 1 || ulevel == 6) {
         $("#btneditcust").show();
         $("#btneditveh").show();
         $("#btneditinscalc").show();

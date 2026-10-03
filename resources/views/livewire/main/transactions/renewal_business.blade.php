@@ -1917,14 +1917,14 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6" id="div_promised_pay_date" style="display: none;">
                     <div class="form-group">
                       <label for="dpppdate">Promised Pay Date *</label>
                       <div class="input-group date">
                         <div class="input-group-addon">
                           <i class="fa fa-calendar"></i>
                         </div>
-                        <input id="dpppdate" type="text" class="form-control input-sm pull-right" required="required" data-error="Promised Pay Date is required." disabled>
+                        <input id="dpppdate" type="text" class="form-control input-sm pull-right" required="required" data-error="Promised Pay Date is required.">
                       </div>
                       <div class="help-block with-errors"></div>
                     </div>
@@ -2038,7 +2038,7 @@
         nbpendingcounts: @json(route('new_business.counts')),
         loadSelectedCustomer : @json(route('customer.get-by-no')),
         loadVehicle: @json(route('vehicle.search')),
-        loadModifyPage: @json(route('getModifyView.data'))
+        loadModifyRenewalPage : @json(route('renewal_business_modify.index'))
     }
 
     window.calllogs = {
@@ -2093,7 +2093,8 @@
         getPolicyExpiration : @json(route('loadpolicy.expiration')),
         getInsurance: @json(route('transaction.by_insurance_no')),
         getRBCount : @json(route('getTransactions.count')),
-        getVehicleByCustomer : @json(route('get.Vehicles.By.Customer'))
+        getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
+        getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no'))
     }
 
     window.formRoutes = {
@@ -2133,9 +2134,6 @@
 
         updateNetRem: @json(route('update.net-remittance'))
     }
-
-
-    
 </script>
 
 <script type="text/javascript" src="{{ asset("tmia-assets/js/laravel/renewal_business_laravel.js") }}"></script>

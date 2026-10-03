@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\CallLogRb;
 use App\Models\CallReason;
+use App\Models\VwCallLogsRb;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -181,6 +182,42 @@ class CallOperationController extends Controller
                 'error'  => 'Something went wrong. Please try again.',
             ], 500);
         }
+    }
+
+
+    /**
+     * Fetch all call logs for a specific insurance number.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCallLogsByInsuranceNo(Request $request): JsonResponse
+    {
+        // 1. Input Validation
+        $validated = $request->validate([
+            'insuranceno' => 'required|string',
+        ]);
+
+        // 2. Query view using Eloquent
+        $logs = VwCallLogsRb::where('Insurance_No', $validated['insuranceno'])
+            ->orderBy('Call_LogID', 'desc')
+            ->get();
+
+        // 3. Transform data to add index counter ('urutan')
+        if ($logs->isNotEmpty()) {
+            $data = $logs->map(function ($row, $index) {
+                $rowArray = $row->toArray();
+                $rowArray['urutan'] = $index + 1;
+                return $rowArray;
+            });
+        } else {
+            $data = ''; // Maintains original string fallback if empty
+        }
+
+        // 4. Return formatted JSON response
+        return response()->json([
+            'data' => $data,
+        ]);
     }
 
     

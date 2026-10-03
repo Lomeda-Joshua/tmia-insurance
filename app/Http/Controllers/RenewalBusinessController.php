@@ -707,8 +707,8 @@ class RenewalBusinessController extends Controller
 
 
 
-    public function modifyIndex(){
-        return view("livewire.main.renewal_business_modify");
+    public function renewalBusinessModify(){
+        return view("livewire.main.transactions.renewal_business_modify");
     }
 
     /**
