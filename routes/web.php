@@ -145,7 +145,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
         Route::post('/renewal-business/update-net-rem', [TransactionController::class, 'updateNetRenewalRemittance'])->name('renew-business-update.netrem');
         Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
-        Route::post('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify.index');
+        Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify.index');
         Route::post('/delete-renewal-transaction', [RenewalBusinessController::class, 'deleteTransaction'])->name('delete.renewal_transaction');
         Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
         Route::post('/renewal-business/gettransactions', [RenewalBusinessController::class, 'getTransactionsRb'])->name('getTransactionRB.data');

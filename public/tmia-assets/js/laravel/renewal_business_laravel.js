@@ -2035,7 +2035,7 @@ function LoadInsurerInfo(insuranceno) {
 
         // Safe date handling
         if (value.Issue_Date) {
-          const safeIDate = new Date(value.Issue_Date);
+          const safeIDate = new Date(value.Issue_Date) ?? new Date();
           if (!isNaN(safeIDate)) {
             $("#dpissuedate").datepicker("setDate", safeIDate);
           }
@@ -3677,6 +3677,8 @@ $(document).on("click", "#btnupdatenetrem", function () {
     netrem: getNum("#txtnetrem"),
     inscommission: getNum("#txtinscommission")
   };
+
+  
 
   if (!runValidation([
     { value: NetRem.insgpremium, selector: "#txtinsgpremium", message: "Please fill out Gross Premium." },

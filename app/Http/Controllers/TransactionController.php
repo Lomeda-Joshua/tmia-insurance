@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\TransactionsNb;
+use App\Models\TransactionRb;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -44,19 +45,23 @@ class TransactionController extends Controller
             'insgpremium'   => 'nullable|numeric',
             'netrem'        => 'nullable|numeric',
             'inscommission' => 'nullable|numeric',
-        ]);
+        ]);        
 
         try {
             // 2. Wrap operations inside Eloquent/DB Transaction
-            return DB::transaction(function () use ($validatedData) {
+            return DB::transaction(function () use ($validatedData, $request) {
+                $request_insuranceNo = $request->input('insuranceno');
+                $request_insgpremium = $request->input('insgpremium');
+                $request_netrem = $request->input('netrem');
+                $request_inscommission = $request->input('inscommission');
 
                 // 3. Perform Eloquent update directly by condition
-                $affectedRows = TransactionsNb::where('Insurance_No', $validatedData['insuranceno'])
+                $affectedRows = TransactionRb::where('Insurance_No', $request_insuranceNo)
                     ->update([
-                        'Gross_Premium' => $validatedData['insgpremium'] ?? null,
-                        'Net_Rem'       => $validatedData['netrem'] ?? null,
+                        'Gross_Premium' => $request_insgpremium ?? null,
+                        'Net_Rem'       => $request_netrem ?? null,
                         'Net_Rem_Date'  => now(),
-                        'Commission'    => $validatedData['inscommission'] ?? null,
+                        'Commission'    => $request_inscommission ?? null,
                         'User_ID'       => Auth::id(),
                     ]);
 
@@ -70,7 +75,7 @@ class TransactionController extends Controller
 
                 return response()->json([
                     'result'       => 1,
-                    'Insurance_No' => $validatedData['insuranceno'],
+                    'Insurance_No' => $request_insuranceNo,
                 ]);
             });
 
@@ -102,7 +107,7 @@ class TransactionController extends Controller
             return DB::transaction(function () use ($validatedData) {
 
                 // 3. Perform Eloquent update directly by condition
-                $affectedRows = TransactionsNb::where('Insurance_No', $validatedData['insuranceno'])
+                $affectedRows = TransactionsRb::where('Insurance_No', $validatedData['insuranceno'])
                     ->update([
                         'Gross_Premium' => $validatedData['insgpremium'] ?? null,
                         'Net_Rem'       => $validatedData['netrem'] ?? null,

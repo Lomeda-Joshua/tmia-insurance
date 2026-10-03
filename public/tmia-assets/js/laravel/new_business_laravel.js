@@ -44,6 +44,7 @@ $(document).ready( function () {
         userid = data.userid;
         logname = data.logname;
         ulevel = data.ulevel;
+        userLevel = data.ulevel;
         regdate = data.regdate;
         signin = data.signin;
 
@@ -1498,6 +1499,7 @@ function LoadTransactionData() {
 }
 //======================================//
 
+
 //============== Customer List ============//
 function LoadCustomerData() {
   const searchval = $("#txtcustomersearch").val().trim();
@@ -1511,16 +1513,6 @@ function LoadCustomerData() {
   if ($.fn.dataTable.isDataTable('#table_customerlist')) {
     $('#table_customerlist').DataTable().clear().destroy();               
   }
-
-  // 2. Conditional check for the button column
-  if (userLevel === 1) { // Replace 1 with your allowed User_Level_ID
-    tableColumns.push({
-      data: 'button',
-      name: 'button',
-      orderable: false,
-      searchable: false
-    });
-  } 
 
   table = $('#table_customerlist').DataTable({
     language: {
@@ -1556,6 +1548,12 @@ function LoadCustomerData() {
           { data: "CS_No", name: "CS_No", defaultContent: "" },
           { data: "Plate_No", name: "Plate_No", defaultContent: "" },
           { data: "Variant", name: "Variant", defaultContent: "" },
+          {
+            data: 'button',
+            name: 'button',
+            orderable: false,
+            searchable: false
+          }
     ],
     columnDefs: [
       {
@@ -2508,6 +2506,132 @@ function LoadCallLogsData() {
     $('#modal-logs').iziModal('open');
   }
 }
+
+
+
+function LoadSummaryCustomerInfo(){
+    $.ajax({
+      type:"POST",
+      url:window.LaravelRoutes.loadSelectedCustomer,
+      data:{custno:xcustno},
+      success: function(data){   
+        console.log(data);
+        $.each(data, function(i, value) {
+
+          // Helper: set select option safely
+          function setSelectOption(selector, text, val) {
+            const select = $(selector);
+            if (select.find(`option[value="${val}"]`).length) {
+              select.val(val).trigger("change.select2");
+            } else {
+              const newOpt = new Option(text, val, true, true);
+              select.append(newOpt).trigger("change.select2");
+            }
+          }
+
+
+          $("#txtcustfnameSummary").val(value.Full_Name);
+          $("#emailAddressSummary").val(value.Email_Address);
+          $("#txtcustbdaySummary").val(value.Birth_Date);
+          $("#txtContactNoSummary").val(value.Contact_No);
+          $("#txtAddressSummary").val(value.Group);
+          // Customer NO
+          // Group          
+          // TIN
+          // Address
+          // Region
+          // Province
+          // City/Municipal
+          // Barangay
+          // Zip Code
+          // Country
+
+          // VIN
+          // MAke
+          // Model
+          // Model Year
+          // Color
+          // Engine No
+          // CS NO
+          // Plate No
+          // Paid Price
+          // VSI Date
+          // Release Date
+          // Technical Date
+          // Variant
+          // Body type
+          // Power Transmission
+          // Fuel Type
+          // Seats
+          // Product Classification
+          // Owner Type
+          // Vehicle Owner Name
+          // Marketing Professional
+
+
+
+          xcustnoupload = value.Upload_Cust_No;
+          $("#txtcustnoupload").val(value.Upload_Cust_No);
+          setSelectOption("#cbogroup", value.Group, value.Group);
+
+          if (value.Group === "INDIVIDUAL") {
+            $(".customer-fleet-corp").fadeOut();
+            $(".customer-individual").fadeIn();
+            $(".birth-date").fadeIn();
+          } else {
+            $(".customer-fleet-corp").fadeIn();
+            $(".customer-individual").fadeOut();
+            $(".birth-date").fadeOut();
+          }
+
+          
+          $("#txtcustfname").val(value.First_Name);
+          $("#txtcustmname").val(value.Middle_Name);
+          $("#txtcustlname").val(value.Last_Name);
+          $("#txtcustsname").val(value.Suffix_Name);
+
+          // Safe date handling
+          if (value.Birth_Date) {
+            const safeDate = new Date(value.Birth_Date);
+            if (!isNaN(safeDate)) {
+              $("#dpbirthdate").datepicker("setDate", safeDate);
+            }
+          }
+          $("#txttin").val(value.TIN);
+          $("#txtcontactno").val(value.Contact_No);
+          $("#txtemailadd").val(value.Email_Address);
+          $("#txtaddress").val(value.Address);
+          
+          // Location: Region
+          if (value.RegCode) {
+            setSelectOption("#cboregion", value.Region, value.RegCode);
+            FetchProv(value.RegCode, value.ProvCode);
+          }
+
+          // Province
+          if (value.ProvCode) {
+            setSelectOption("#cboprovince", value.Province, value.ProvCode);
+            FetchCM(value.ProvCode, value.CMCode);
+          }
+
+          // City/Municipality
+          if (value.CMCode) {
+            setSelectOption("#cbocity", value.CityMunicipal, value.CMCode);
+            FetchBrgy(value.CMCode, value.BrgyCode);
+          }
+
+          $("#txtzipcode").val(value.Zip_Code);
+          setSelectOption("#cbocountry", value.Country, value.Country);
+        });
+      }
+    });
+    
+    LoadVehicleInfo();
+
+    $(".box-body").validator('reset');
+  
+}
+
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
 //============= TAB CUSTOMER ============//
@@ -4445,12 +4569,15 @@ $(document).on( "click", "#btnfindcustomer", function () {
 $(document).on( "click", "#btncustselect", function () {
   if (activeCustTab === '#tmiatab') {
     LoadCustomerInfo();
+
+    // Load Summary page
+    LoadSummaryCustomerInfo();
   }
 
   if (activeCustTab === '#uploadtab') {
-
     LoadCustomerEDAFSAPInfo();
   }
+
   $('#modal-customerlist').iziModal('close');
 });
 
@@ -5182,7 +5309,7 @@ function showReviewModal(onConfirmCallback) {
     "Insurance Co.": getVal("#cboinsco"),
     "Start Date": getDate("#dpstartdate"),
     "Policy No.": getUpper("#txtpolicyno"),
-    "Issue Date": getDate("#dpissuedate"),
+    "Issue Date": getDate("#dpissuedate") ?? new Date(),
     "Policy Expiry": getDate("#dppexpiredate"),
     "Mortgagee": getVal("#cbomortgage")
   };

@@ -197,11 +197,9 @@ class NewBusinessController extends Controller
             ];
 
             if ($existingCust) {
-                dd("true");
                 $existingCust->update($customerData);
                 $finalCustNo = $custno;
             } else {
-                dd("false");
                 $yearc = date("Y");
                 $prefixc = "TMIA-{$yearc}-";
 

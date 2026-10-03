@@ -35,6 +35,7 @@ class RenewalBusinessController extends Controller
             ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No\
             ->leftJoin('user', 'transactions_rb.User_ID', '=', 'user.User_ID') 
             ->leftJoin('user as ise_name', 'transactions_rb.ISE_No', '=', 'ise_name.User_ID')
+            ->leftJoin('vw_call_attempts_rb', 'vw_call_attempts_rb.Insurance_No', '=', 'transactions_rb.Insurance_No')
             ->select([
                 // Primary table columns (prefixed to avoid ambiguous column collisions)
                 'transactions_rb.Insurance_No',
@@ -59,6 +60,8 @@ class RenewalBusinessController extends Controller
                 'vehicle_information.Model',
                 'vehicle_information.Model_Year',
                 'vehicle_information.Variant',
+
+                'vw_call_attempts_rb.Call_Attempts'
         ]);
 
         

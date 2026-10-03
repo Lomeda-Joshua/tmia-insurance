@@ -60,7 +60,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="txtsearch">Search :</label>
-                <div class="input-group input-group-sm mb-5">
+                <div class="input-group input-group-sm">
                   <input type="text" id="txtsearch" class="form-control input-sm clearable" placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
                   <span class="input-group-btn">
                     <button type="button" id="btnfind" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
@@ -1110,36 +1110,36 @@
                               <h4 style="font-weight=900">User profile information</h4>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <label for="txtcustfnamesummary">Fullname: </label>
+                                  <input type="text" id="txtcustfnameSummary" class="form-control input-sm" required="required" data-error="First Name is required." readonly>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <label for="emailAddressSummary">E-mail address</label>
+                                  <input type="text" id="emailAddressSummary" class="form-control input-sm" placeholder="Optional" readonly>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <label for="txtcustmname">Birthdate</label>
+                                  <input type="text" id="txtcustbdaySummary" class="form-control input-sm" placeholder="Optional" disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                                <div class="col-md-4">
                                 <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
+                                  <label for="txtContactNoSummary">Contact Number *</label>
+                                  <input type="text" id="txtContactNoSummary" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
+                                  <label for="txtAddressSummary">Address                                                                                                                                                                                                        </label>
+                                  <input type="text" id="txtAddressSummary" class="form-control input-sm" placeholder="Optional" disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
