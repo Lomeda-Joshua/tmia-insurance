@@ -14,4 +14,8 @@ class TransactionRBPayment extends Model
         'PDC_No', 'PDC_Account_Name', 'PDC_Bank_Name', 'PDC_Date', 
         'Payment_Terms', 'Payment_Amount', 'Payment_Date'
     ];
+
+    public function transactionRb(){
+        return $this->belongsTo(TransactionRb::class, 'Insurance_No','Insurance_No' );
+    }
 }

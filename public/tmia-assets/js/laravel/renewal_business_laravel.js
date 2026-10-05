@@ -2023,13 +2023,22 @@ function LoadInsurerInfo(insuranceno) {
         setSelectOption("#cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco", value.Insurance_Company, value.Insurance_Company);
 
-        // Safe date handling
-        if (value.Start_Date) {
-          const safeSDate = new Date(value.Start_Date);
-          if (!isNaN(safeSDate)) {
-            $("#dpstartdate").datepicker("setDate", safeSDate);
-          }
+        // Safe date handling with default to today
+        if (value && value.Start_Date) {
+            const safeSDate = new Date(value.Start_Date);
+            
+            // Check if valid date format
+            if (!isNaN(safeSDate.getTime())) {
+                $("#dpstartdate").datepicker("setDate", safeSDate);
+            } else {
+                // Fallback to today if string is invalid date
+                $("#dpstartdate").datepicker("setDate", new Date());
+            }
+        } else {
+            // Default to today if Start_Date is null/undefined/empty
+            $("#dpstartdate").datepicker("setDate", new Date());
         }
+
 
         $("#txtpolicyno").val(value.Policy_No);
 
@@ -3352,46 +3361,43 @@ $(document).ready(function () {
     }
   }
 
-  $('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+$('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     var tablepay = $("#table_payment-n").DataTable();
+    var rowData = tablepay.row(this).data();
 
-    // if (!editpay) return; // 🚫 do nothing if editpay is false
+    if (!rowData) return; // Prevent clicking on empty table state
 
-    var balance = $("#tfoot_balance-n").text();
-    balance = RemoveNumFormat(balance);
-
-    // remove previous selection
+    // Highlight selected row
     tablepay.$('tr.selected').removeClass('selected');
-
-    // highlight clicked row
     $(this).addClass('selected');
 
-    // Get row data
-    var rowData = tablepay.row(this).data();
-    editingRow = tablepay.row(this); // store reference for later update
-
-    // Populate form fields
+    // Store global reference to the row being edited
+    editingRow = tablepay.row(this);
     xpayid = rowData.Payment_ID;
-    if (balance <= 0) {
-      $("#cbopaytype-n").val(rowData.Payment_Type).trigger("change");
-    } else {
-      $("#cbopaytype-n").val(rowData.Payment_Type).trigger("change");
-    }
-    $("#cboewallet-n").val(rowData.EWallet_Type).trigger("change");
 
+    // Ensure payment input sections are visible during edit mode
+    $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeIn();
+
+    // Populate dropdowns and text fields
+    $("#cbopaytype-n").val(rowData.Payment_Type).trigger("change");
+    $("#cboewallet-n").val(rowData.EWallet_Type || "").trigger("change");
+
+    // Populate Credit Card Fields
     $("#txtccno-n").val(rowData.CC_No || "");
     $("#txtccholder-n").val(rowData.CC_Holder || "");
     $("#txtccexpirydate-n").val(rowData.CC_Expiry || "");
     $("#txtccvv-n").val(rowData.CC_CVV || "");
 
+    // Populate PDC Check Fields
     $("#txtpdcno-n").val(rowData.PDC_No || "");
     $("#txtpdcholdername-n").val(rowData.PDC_Account_Name || "");
     $("#txtpdcbankname-n").val(rowData.PDC_Bank_Name || "");
     $("#dppdccheckdate-n").val(rowData.PDC_Date || "");
 
+    // Populate Terms & Payment Amounts
     $("#txtpayterms-n").val(rowData.Payment_Terms || "");
     $("#txtpayamount-n").val(rowData.Payment_Amount || "");
-  });
+});
 
 });
 

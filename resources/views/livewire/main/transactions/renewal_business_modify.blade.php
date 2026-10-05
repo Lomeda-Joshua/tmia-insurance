@@ -1,15 +1,16 @@
 <x-layouts.main>
-    <!-- Content Wrapper. Contains page content -->
+
+<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      New Business Insurance Information
+      Renewal Business Insurance Information
     </h1>
     <ol class="breadcrumb">
       <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
-      <li><a href="new_business"><i class="fa-solid fa-car"></i> New Business Insurance</a></li>
+      <li><a href="renewal_business"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a></li>
       <li class="active"><i class="fa fa-list-alt"></i> Modify Info.</li>
     </ol>
   </section>
@@ -31,15 +32,12 @@
                 <i class="fa-regular fa-circle-user fa-xl"></i>
                 Customer Information
               </h2>
-              
-              @if( Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 )
-                <a id="btneditcust" class="edit-btn" aria-label="Edit Customer Information">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
-                  </svg>
-                  Edit
-                </a>
-              @endif
+              <a id="btneditcust" class="edit-btn" aria-label="Edit Customer Information" style="display:none;">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
+                </svg>
+                Edit
+              </a>
             </div>
 
             <div class="fields">
@@ -81,14 +79,12 @@
                 <i class="fa-solid fa-car fa-xl"></i>
                 Vehicle Information
               </h2>
-              @if( Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 )
-              <a id="btneditveh" class="edit-btn" aria-label="Edit Vehicle Information">
+              <a id="btneditveh" class="edit-btn" aria-label="Edit Vehicle Information" style="display:none;">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
                 </svg>
                 Edit
               </a>
-              @endif
             </div>
 
             <div class="fields">
@@ -206,14 +202,12 @@
                 <i class="fa fa-calculator fa-xl"></i>
                 Insurance Calculations
               </h2>
-              @if( Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 )
-              <a id="btneditinscalc" class="edit-btn" aria-label="Edit Insurance Calculations">
+              <a id="btneditinscalc" class="edit-btn" aria-label="Edit Insurance Calculations" style="display:none;">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
                 </svg>
                 Edit
               </a>
-              @endif
             </div>
 
             <div class="calc-row">
@@ -241,22 +235,24 @@
             </div>
             <!-- <hr> -->
             <!-- OPTIONS -->
-            <div class="calc-row calc-options">
-              <div class="calc-col">
-                <label>Option Type</label>
-                <div class="radio-group">
-                  <label class="custom-radio">
-                    <input type="radio" name="rowoptiontype" value="FREE" checked disabled>
-                    <span class="checkmark"></span>
-                    FREE
-                  </label>
-                  <label class="custom-radio">
-                    <input type="radio" name="rowoptiontype" value="PAID" disabled>
-                    <span class="checkmark"></span>
-                    PAID
-                  </label>
-                </div>
-              </div> 
+            <div class="option-type" hidden>
+              <div class="calc-row calc-options">
+                <div class="calc-col">
+                  <label>Option Type</label>
+                  <div class="radio-group">
+                    <label class="custom-radio">
+                      <input type="radio" name="rowoptiontype" value="FREE" disabled>
+                      <span class="checkmark"></span>
+                      FREE
+                    </label>
+                    <label class="custom-radio">
+                      <input type="radio" name="rowoptiontype" value="PAID" checked disabled>
+                      <span class="checkmark"></span>
+                      PAID
+                    </label>
+                  </div>
+                </div> 
+              </div>
             </div>
             <div class="calc-paid-section">
               <div class="calc-row calc-options">
@@ -300,14 +296,12 @@
                 <i class="fa-solid fa-peso-sign fa-xl"></i>
                 Payment Information
               </h2>
-              @if( Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 ) 
-              <a id="btneditpayment" class="edit-btn" aria-label="Edit Payment Information">
+              <a id="btneditpayment" class="edit-btn" aria-label="Edit Payment Information" style="display:none;">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
                 </svg>
                 Edit
               </a>
-              @endif
             </div>
             <div class="table-responsive">
               <table id="table_paymentdisplay" class="table m-0">
@@ -347,14 +341,12 @@
                     <i class="fa fa-building-shield fa-xl"></i>
                     Insurer Information
                   </h2>
-                  @if( Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 7 )
-                  <a id="btneditinsurer" class="edit-btn" aria-label="Edit Insurer Information">
+                  <a id="btneditinsurer" class="edit-btn" aria-label="Edit Insurer Information" style="display:none;">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
                     </svg>
                     Edit
                   </a>
-                  @endif
                 </div>
 
                 <div class="fields">
@@ -990,7 +982,7 @@
       <div class="box box-solid">
         <div class="box-body" style="max-width:100%;">
           <div class="insurance-calc">
-            <form>
+            <form>             
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
@@ -1015,17 +1007,17 @@
                 </div>
               </div>
               <hr>
-              <div class="row">
+              <div class="row" hidden>
                 <div class="col-md-12">
                   <label>Option Type</label>
                   <div class="radio-group">
                     <label class="custom-radio">
-                      <input type="radio" name="rdoptiontype" value="FREE" checked>
+                      <input type="radio" name="rdoptiontype" value="FREE">
                       <span class="checkmark"></span>
                       FREE
                     </label>
                     <label class="custom-radio">
-                      <input type="radio" name="rdoptiontype" value="PAID">
+                      <input type="radio" name="rdoptiontype" value="PAID" checked>
                       <span class="checkmark"></span>
                       PAID
                     </label>
@@ -1042,14 +1034,14 @@
                         <span class="checkbox-label">Installment Payment</span>
                       </label>
                     </td>
-                    <td data-label="" id="installpay-terms" style="display: none;">
+                    <td data-label="" id="installpay-terms" hidden>
                       <div class="form-group">
                         <label for="txtterms">Terms (months)</label>
                         <input type="text" id="txtterms">
                         <div class="help-block with-errors"></div>
                       </div>
                     </td>
-                    <td data-label="" id="installpay-mpay" style="display: none;">
+                    <td data-label="" id="installpay-mpay" hidden>
                       <div class="form-group">
                         <label for="txtmonthpay">Monthly Payment(₱/month)</label>
                         <input type="text" id="txtmonthpay" style="font-weight: bold; background: #F3F3F3;" disabled>
@@ -1164,6 +1156,29 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <label>Policy Action</label>
+                    <div class="radio-group">
+                      <label class="custom-radio">
+                        <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
+                        <span class="checkmark"></span>
+                        RETAIN
+                      </label>
+                      <label class="custom-radio">
+                        <input type="radio" name="rdpolicyaction" value="TRANSFER">
+                        <span class="checkmark"></span>
+                        TRANSFER
+                      </label>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="cboprevinsco">Previous Insurance Company *</label>
+                      <select id="cboprevinsco" class="form-control input-sm" required="required" data-error="Previous Insurance Company is required." disabled>
+                        <option Value="">PLEASE SELECT</option>
+                      </select>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1204,9 +1219,9 @@
                       <div class="cc-header">
                         <h3>Credit Card Details</h3>
                         <div class="cc-icons">
-                            <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                            <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
-                            <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
+                          <img src="../assets/images/credit/visa.svg" alt="visa">
+                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
+                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
                         </div>
                       </div>
                       <div class="row">
@@ -1254,7 +1269,7 @@
                       <div class="pdc-header">
                         <h3>Post-Dated Check (PDC) Details</h3>
                         <div class="pdc-icons">
-                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
+                          <img src="../assets/images/credit/check.png" alt="cheque">
                         </div>
                       </div>
                       <div class="row">
@@ -1314,9 +1329,9 @@
                     </div>
                     <div class="col-md-8 ew-icons-col">
                       <div class="ew-icons">
-                            <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                            <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                            <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
+                        <img id="pgcash" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
+                        <img id="pmaya" src="../assets/images/e-wallet/maya.svg" alt="maya">
+                        <img id="ptwallet" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
                       </div>
                     </div>
                   </div>
@@ -1451,6 +1466,7 @@
 <!-- /.content-wrapper -->
 
 
+
 @push('scripts')
 <script>
     window.dataRoutes = {
@@ -1471,7 +1487,7 @@
 
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
-      getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
+      getInsuranceNo : @json(route('renewal_business_modify_data.index')),
       customerData: @json(route('customers.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
       getPaymentData: @json(route('new-business.payments.get-data')),
@@ -1552,7 +1568,7 @@
     });
 </script>
 
-<script type="text/javascript" src="{{ asset("tmia-assets/js/laravel/renewal_business_modify_laravel.js") }}"></script>
+<script type="text/javascript" src="{{asset("tmia-assets/js/laravel/renewal_business_modify_laravel.js") }}"></script>
 @endpush
 
 </x-layouts.main>   

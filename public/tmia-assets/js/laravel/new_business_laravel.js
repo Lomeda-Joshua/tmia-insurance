@@ -3235,41 +3235,83 @@ $(document).ready(function () {
     var tablepay = $("#table_payment-n").DataTable();
     var data = tablepay.rows().data();
 
-    var total = 0;
+    var totalPaid = 0;
     let hasMissingID = false;
 
-    data.each(function(row){
-      var amt = parseFloat(String(row.Payment_Amount).replace(/,/g, "")) || 0;
-      total += amt;
+    data.each(function (row) {
+        var amt = parseFloat(String(row.Payment_Amount || 0).replace(/,/g, "")) || 0;
+        totalPaid += amt;
 
-      if (row.Payment_ID === null || row.Payment_ID === '') {
-        hasMissingID = true;
-      }
+        if (row.Payment_ID === null || row.Payment_ID === '') {
+            hasMissingID = true;
+        }
     });
 
-    // Premium from input or hidden field
-    // Total Premium
-    var premium = $("#txtgrosspremium").val() || 0;
-    premium = RemoveNumFormat(premium);
-    var balance = premium - total;
+    // 1. Fetch Gross Premium safely from input or fallback data attributes
+    var rawPremium = $("#txtgrosspremium").val() || $("#txtgrosspremium").text() || "0";
+    
+    // 2. Convert string formatted numbers ("15,000.00") to clean floats
+    var premium = typeof RemoveNumFormat === 'function' 
+        ? parseFloat(RemoveNumFormat(rawPremium)) 
+        : parseFloat(String(rawPremium).replace(/,/g, "")) || 0;
 
-    premium = NumberFormat(premium);
-    total = NumberFormat(total);
-    balance = NumberFormat(balance);
+    // 3. Compute balance
+    var balance = premium - totalPaid;
 
-    // Display total payment
-    $("#tfoot_tpremium-n").text(premium);
-    $("#tfoot_total-n").text(total);
-    $("#tfoot_balance-n").text(balance);
+    // 4. Update Footer UI
+    $("#tfoot_tpremium-n").text(NumberFormat(premium));
+    $("#tfoot_total-n").text(NumberFormat(totalPaid));
+    $("#tfoot_balance-n").text(NumberFormat(balance));
 
-    if (editpay == true) {
-      if (balance <= 0) {
-        $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeOut();
-      } else {
-        $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeIn();
-      }
+    // 5. Toggle input sections dynamically
+    if (typeof editpay !== 'undefined' && editpay === true) {
+        if (balance <= 0 && !editingRow) {
+            // Only hide input section if fully paid AND NOT currently editing an existing row
+            $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeOut();
+        } else {
+            $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeIn();
+        }
     }
-  }
+}
+
+// Double-click row handler to populate form fields for editing
+$('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+    var tablepay = $("#table_payment-n").DataTable();
+    var rowData = tablepay.row(this).data();
+
+    if (!rowData) return; // Prevent clicking on empty table state
+
+    // Highlight selected row
+    tablepay.$('tr.selected').removeClass('selected');
+    $(this).addClass('selected');
+
+    // Store global reference to the row being edited
+    editingRow = tablepay.row(this);
+    xpayid = rowData.Payment_ID;
+
+    // Ensure payment input sections are visible during edit mode
+    $(".pay-section-n, .term-amount-section-n, .btnadd-section-n").fadeIn();
+
+    // Populate dropdowns and text fields
+    $("#cbopaytype-n").val(rowData.Payment_Type).trigger("change");
+    $("#cboewallet-n").val(rowData.EWallet_Type || "").trigger("change");
+
+    // Populate Credit Card Fields
+    $("#txtccno-n").val(rowData.CC_No || "");
+    $("#txtccholder-n").val(rowData.CC_Holder || "");
+    $("#txtccexpirydate-n").val(rowData.CC_Expiry || "");
+    $("#txtccvv-n").val(rowData.CC_CVV || "");
+
+    // Populate PDC Check Fields
+    $("#txtpdcno-n").val(rowData.PDC_No || "");
+    $("#txtpdcholdername-n").val(rowData.PDC_Account_Name || "");
+    $("#txtpdcbankname-n").val(rowData.PDC_Bank_Name || "");
+    $("#dppdccheckdate-n").val(rowData.PDC_Date || "");
+
+    // Populate Terms & Payment Amounts
+    $("#txtpayterms-n").val(rowData.Payment_Terms || "");
+    $("#txtpayamount-n").val(rowData.Payment_Amount || "");
+});
 
   $('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     var tablepay = $("#table_payment-n").DataTable();
@@ -3315,7 +3357,7 @@ $(document).ready(function () {
 });
 
 $(document).on("click", "#btnaddpay-n", function () {
-  var tablepay = $("#table_payment-n").DataTable();
+  var tablepay       = $("#table_payment-n").DataTable();
   var paytype        = $("#cbopaytype-n").val();
   // var paytype        = $("#cbopaytype-n option:selected").text().trim();
   var ewallet        = $("#cboewallet-n").val();

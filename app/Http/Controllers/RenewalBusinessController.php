@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
+
 use App\Models\RenewalBusinessTransaction;
 use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
@@ -16,8 +17,10 @@ use App\Models\Notification;
 use App\Models\TransactionRb;
 use App\Models\TransactionsNb;
 use App\Models\ApprovalRbStatus;
+
 use Illuminate\Support\Facades\Auth;
 use Exception;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RenewalBusinessController extends Controller 
 {
@@ -126,6 +129,11 @@ class RenewalBusinessController extends Controller
             ->addColumn('button', function ($transaction): string {
                 $insuranceNo = e($transaction->Insurance_No);
                 $buttons = '';
+
+                // Added Print PDF Button
+                $buttons .= '<a href="' . route('renewal.pdf.generate', ['insurance_no' => $insuranceNo]) . '" target="_blank" '
+                    . 'class="btn btn-sm btn-primary btn-action btnprintpdf me-1" title="Print PDF">'
+                    . '<i class="fa-solid fa-file-pdf"></i></a>';
 
                 if ($transaction->Option_Type === 'PAID') {
                     $buttons .= '<button type="button" class="btn btn-sm btn-success btn-action btnpay me-1" '
@@ -714,6 +722,21 @@ class RenewalBusinessController extends Controller
         return view("livewire.main.transactions.renewal_business_modify");
     }
 
+    public function getRbTransactionsByInsuranceNo(Request $request): JsonResponse
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json([]);
+        }
+
+        // Eloquent query matching "SELECT * FROM transactions_nb WHERE Insurance_No = :insuranceno"
+        $data = TransactionRb::where('Insurance_No', $insuranceNo)->get();
+
+        return response()->json($data);
+    }
+
+
     /**
      * Get list of vehicles by Customer Number.
      *
@@ -814,6 +837,33 @@ class RenewalBusinessController extends Controller
                 'error'  => $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function printPdf($insurance_no)
+    {
+       // 1. Fetch parent record with child payments relationship
+        $transaction = TransactionRb::with(['transaction_Rb_payment', 'customer_information', 'insurance_agent'])
+            ->where('Insurance_No', $insurance_no)
+            ->firstOrFail(); // Ensures a 404 response if record does not exist
+
+        // 2. Load the Blade view and pass variables
+        $pdf = Pdf::loadView('livewire.main.pdf.invoice', [
+            'transaction' => $transaction,
+            'customer_info' => $transaction->customer_information,
+            'payments'    => $transaction->transaction_Rb_payment,
+            'insurance_agent' => $transaction->insurance_agent,
+        ]);
+
+
+        // 3. Configure paper size and orientation (optional)
+        $pdf->setPaper('A4', 'portrait');
+
+        // 4. Stream directly to browser tab ('inline')
+        return $pdf->stream("Invoice_{$insurance_no}.pdf");
+        
+        // Alternatively, use download() to force immediate file download:
+        // return $pdf->download("Invoice_{$insurance_no}.pdf");
     }
 
 }

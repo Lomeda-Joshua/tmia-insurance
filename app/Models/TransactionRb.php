@@ -27,6 +27,14 @@ class TransactionRb extends Model
 
     public function insurance_agent() : BelongsTo
     {
-        return $this->belongsTo(User::class, "User_ID", "User_ID");
+        return $this->belongsTo(InsuranceStaff::class, "ISE_No", "ISE_No");
+    }
+
+    public function customer_information(){
+        return $this->belongsTo(CustomerInformation::class,'Customer_No', 'Customer_No');
+    }
+
+    public function transaction_Rb_payment(){
+        return $this->hasMany(TransactionRBPayment::class,'Insurance_No','Insurance_No' );
     }
 }

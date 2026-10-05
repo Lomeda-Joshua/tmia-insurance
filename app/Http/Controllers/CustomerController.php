@@ -10,6 +10,7 @@ use App\Models\CustomerInformation;
 use App\Models\VehicleInformation; 
 use App\Models\UploadedCustomer;
 use App\Models\TransactionsNb;
+use App\Models\TransactionRb;
 use App\Models\FileNbUpload;
 use App\Models\UploadedEdafCustomer;
 use Illuminate\Http\JsonResponse;
@@ -290,7 +291,7 @@ class CustomerController extends Controller
         return response()->json($data);
     }
 
-
+    
     /**
      * Fetch authenticated user state and attributes.
      */
