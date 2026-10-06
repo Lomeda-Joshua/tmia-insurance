@@ -65,8 +65,8 @@
                         <a href="{{ route('user_account') }}"><i class="fa fa-user"></i> <span>Account</span></a>
                     </li>
                     @if(Auth::user()->User_Level_ID == 1)
-                     <li class="{{ request()->routeIs('user_account') ? 'active' : '' }}">
-                        <a href="{{ route('user_account') }}"><i class="fa fa-user"></i> <span>General Settings</span></a>
+                     <li class="{{ request()->routeIs('general_settings.index') ? 'active' : '' }}">
+                        <a href="{{ route('general_settings.index') }}"><i class="fa fa-user"></i> <span>General Settings</span></a>
                     </li>
                     @endif
                 </ul>

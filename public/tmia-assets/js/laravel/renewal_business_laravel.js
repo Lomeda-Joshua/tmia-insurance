@@ -2096,10 +2096,10 @@ function LoadCustomerInfo() {
           }
         }
 
-        $("#txtcustno").val(value.Customer_No);
+        $("#txtcustno, .txtcustno").val(value.Customer_No);
         xcustnoupload = value.Upload_Cust_No;
-        $("#txtcustnoupload").val(value.Upload_Cust_No);
-        setSelectOption("#cbogroup", value.Group, value.Group);
+        $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
+        setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
         if (value.Group === "INDIVIDUAL") {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
@@ -2109,44 +2109,44 @@ function LoadCustomerInfo() {
           $(".customer-individual").fadeOut();
           $(".birth-date").fadeOut();
         }
-        $("#txtcustname").val(value.Full_Name);
-        $("#txtcustfname").val(value.First_Name);
-        $("#txtcustmname").val(value.Middle_Name);
-        $("#txtcustlname").val(value.Last_Name);
-        $("#txtcustsname").val(value.Suffix_Name);
+        $("#txtcustname, .txtcustname").val(value.Full_Name);
+        $("#txtcustfname, .txtcustfname").val(value.First_Name);
+        $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
+        $("#txtcustlname, .txtcustlname").val(value.Last_Name);
+        $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
 
         // Safe date handling
         if (value.Birth_Date) {
           const safeDate = new Date(value.Birth_Date);
           if (!isNaN(safeDate)) {
-            $("#dpbirthdate").datepicker("setDate", safeDate);
+            $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
           }
         }
 
-        $("#txttin").val(value.TIN);
-        $("#txtcontactno").val(value.Contact_No);
-        $("#txtemailadd").val(value.Email_Address);
-        $("#txtaddress").val(value.Address);
+        $("#txttin, .txttin").val(value.TIN);
+        $("#txtcontactno, .txtcontactno").val(value.Contact_No);
+        $("#txtemailadd, .txtemailadd").val(value.Email_Address);
+        $("#txtaddress, .txtaddress").val(value.Address);
         
         // Location: Region
         if (value.RegCode) {
-          setSelectOption("#cboregion", value.Region, value.RegCode);
+          setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
           FetchProv(value.RegCode, value.ProvCode);
         }
 
         // Province
         if (value.ProvCode) {
-          setSelectOption("#cboprovince", value.Province, value.ProvCode);
+          setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
           FetchCM(value.ProvCode, value.CMCode);
         }
 
         // City/Municipality
         if (value.CMCode) {
-          setSelectOption("#cbocity", value.CityMunicipal, value.CMCode);
+          setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
           FetchBrgy(value.CMCode, value.BrgyCode);
         }
 
-        $("#txtzipcode").val(value.Zip_Code);
+        $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
         setSelectOption("#cbocountry", value.Country, value.Country);
       });
     }
@@ -2195,7 +2195,7 @@ function LoadCustomerEDAFSAPInfo() {
           $(".birth-date").fadeOut();
         }
         $("#txtcustname").val(value.Full_Name);
-        $("#txtcustfname").val(value.First_Name);
+        $("#txtcustfname, .txtcustfname").val(value.First_Name);
         $("#txtcustmname").val(value.Middle_Name);
         $("#txtcustlname").val(value.Last_Name);
         $("#txtcustsname").val(value.Suffix_Name);
@@ -2246,7 +2246,7 @@ function LoadVehicleInfo() {
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){
+    success: function(data){      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -4265,7 +4265,7 @@ $(document).on( "blur", "#txtcustname", function () {
   $(this).val(txtcustname);
 });
 
-$(document).on( "blur", "#txtcustfname", function () {
+$(document).on( "blur", ".txtcustfname, #txtcustfname", function () {
   var txtcustfname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustfname);
 });

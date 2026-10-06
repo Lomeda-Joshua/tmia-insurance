@@ -8,7 +8,7 @@
       New Business Insurance
     </h1>
     <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
       <li class="active"><i class="fa-solid fa-car"></i> New Business Insurance</li>
     </ol>

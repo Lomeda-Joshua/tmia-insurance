@@ -13,7 +13,7 @@
       Dashboard
     </h1>
     <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li class="active">Dashboard</li>
     </ol>
   </section>
@@ -33,13 +33,8 @@
 
             <div id='bg'>
               <img src="{{ asset('tmia-assets/images/home/tmi' . strtolower(Auth::user()?->Dealer_ID) . '_building.png') }}" alt="Dealer Building">
-              <IMG SRC="{{ asset('tmia-assets/images/background.webp') }}">
+              <img SRC="{{ asset('tmia-assets/images/background.webp') }}">
             </div>
-
-
-          
-
-           
 
             <!--begin::Row-->
             <div class="box" style="padding: 5px 10px;">

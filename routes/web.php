@@ -18,6 +18,7 @@ use App\Http\Controllers\VehicleLookupController;
 use App\Http\Controllers\PolicyExpirationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CallOperationController;
+use App\Http\Controllers\GeneralSettingsController;
 
 use App\Http\Controllers\PdfController;
 
@@ -193,11 +194,12 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/user-account/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
         Route::post('/user-account/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
 
+        
         // Report generation
         Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
 
         // General Settings
-        Route::get('/general-settings', [GeneralReportingController::class, 'index'])->name('general_report.index');
+        Route::get('/general-settings', [GeneralSettingsController::class, 'index'])->name('general_settings.index');
 
     });
 

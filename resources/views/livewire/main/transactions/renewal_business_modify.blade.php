@@ -8,7 +8,7 @@
       Renewal Business Insurance Information
     </h1>
     <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
       <li><a href="renewal_business"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a></li>
       <li class="active"><i class="fa fa-list-alt"></i> Modify Info.</li>

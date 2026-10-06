@@ -7,7 +7,7 @@
       New Business / Renewal Business Report
     </h1>
     <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-book"></i> Reports</a></li>
       <li class="active"><i class="fa fa-file-text"></i> New Business / Renewal Business Report</li>
     </ol>

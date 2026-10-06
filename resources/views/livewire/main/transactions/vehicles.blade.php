@@ -8,7 +8,7 @@
       Vehicle List
     </h1>
     <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
       <li class="active"><i class="fa fa-list-alt"></i> Vehicle List</li>
     </ol>
@@ -586,7 +586,6 @@
       getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
       customerData: @json(route('customers.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
-      getPaymentData: @json(route('payments.get-data')),
       getCustomerSpecificData : @json(route('getSpecificView.data'))
     }
 

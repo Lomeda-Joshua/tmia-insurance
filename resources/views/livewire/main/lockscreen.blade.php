@@ -202,7 +202,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         Swal.fire({
             imageUrl: '{{ asset("tmia-assets/images/logo-mini.png") }}', // Path or URL to your custom image
-            imageWidth: 130,                                        // Custom width in pixels
+            imageWidth: 145,                                        // Custom width in pixels
             imageHeight: 100,                                       // Custom height in pixels
             imageAlt: 'Custom Error Icon',                          // Accessibility alt text
             title: 'Password Error',
