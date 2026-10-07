@@ -1,224 +1,233 @@
 <x-layouts.main>
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-  <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>
-      Renewal Business Insurance
-    </h1>
-    <ol class="breadcrumb">
-      <li><a href="home"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
-      <li class="active"><i class="fa-solid fa-car"></i> Renewal Business Insurance</li>
-    </ol>
-  </section>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Renewal Business Insurance
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
+        <li class="active"><i class="fa-solid fa-car"></i> Renewal Business Insurance</li>
+      </ol>
+    </section>
 
-  <!-- ========================================================================================================== -->
-  <!-- Main content -->
-  <section class="content">
-    <!-- box -->
-    <div class="box box-warning">
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-6 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-default">
-            <div class="inner">
-              <h3 id="pending-counts">0</h3>
-              <p>Pending Policies</p>
-            </div>
-            <div class="icon">
-              <i class="fa-solid fa-clock-rotate-left"></i>
-            </div>
-            <label id="viewpending" class="btn small-box-footer">View <i class="fa-solid fa-angles-right"></i></label>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-6 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-default">
-            <div class="inner">
-              <h3 id="expiring-counts">0</h3>
-              <p>Expiring soon policies (90 Days)</p>
-            </div>
-            <div class="icon">
-              <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
-            <label id="viewexpiring" class="btn small-box-footer">View <i class="fa-solid fa-angles-right"></i></label>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-      <!-- Search, Date Filter and Add New -->
-      <div class="box-header with-border">
+    <!-- ========================================================================================================== -->
+    <!-- Main content -->
+    <section class="content">
+      <!-- box -->
+      <div class="box box-warning">
+        <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-md-12">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="txtsearch">Search </label>
-                <div class="input-group input-group-sm">
-                  <input type="text" id="txtsearch" class="form-control input-sm clearable" placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
-                  <span class="input-group-btn">
-                    <button type="button" id="btnfind" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
-                <small class="text-muted d-block">
-                    <i class="fas fa-info-circle"></i> Searchable by: 
-                    <strong>Customer No</strong>, 
-                    <strong>Full Name</strong>, 
-                    <strong>Contact No</strong>, 
-                    <strong>VIN</strong>, 
-                    <strong>CS No</strong>, and 
+          <div class="col-lg-6 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-default">
+              <div class="inner">
+                <h3 id="pending-counts">0</h3>
+                <p>Pending Policies</p>
+              </div>
+              <div class="icon">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <label id="viewpending" class="btn small-box-footer">View <i class="fa-solid fa-angles-right"></i></label>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-6 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-default">
+              <div class="inner">
+                <h3 id="expiring-counts">0</h3>
+                <p>Expiring soon policies (90 Days)</p>
+              </div>
+              <div class="icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </div>
+              <label id="viewexpiring" class="btn small-box-footer">View <i
+                  class="fa-solid fa-angles-right"></i></label>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+        <!-- Search, Date Filter and Add New -->
+        <div class="box-header with-border">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="txtsearch">Search </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" id="txtsearch" class="form-control input-sm clearable"
+                      placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
+                    <span class="input-group-btn">
+                      <button type="button" id="btnfind" class="btn btn-success btn-flat"><i
+                          class="fa fa-search"></i></button>
+                    </span>
+                  </div>
+                  <small class="text-muted d-block">
+                    <i class="fas fa-info-circle"></i> Searchable by:
+                    <strong>Customer No</strong>,
+                    <strong>Full Name</strong>,
+                    <strong>Contact No</strong>,
+                    <strong>VIN</strong>,
+                    <strong>CS No</strong>, and
                     <strong>MP Name</strong>.
-                </small>
-                <div class="help-block with-errors"></div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label for="dpdatefrom">Date From</label>
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
-                  </div>
-                  <input id="dpdatefrom" type="text" class="form-control input-sm pull-right">
+                  </small>
+                  <div class="help-block with-errors"></div>
                 </div>
-                <div class="help-block with-errors"></div>
               </div>
-            </div>
-            <div class="col-md-3">
-              <div class="form-group">
-                <label for="dpdateto">Date To</label>
-                <div class="input-group date">
-                  <div class="input-group-addon">
-                    <i class="fa fa-calendar"></i>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="dpdatefrom">Date From</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input id="dpdatefrom" type="text" class="form-control input-sm pull-right">
                   </div>
-                  <input id="dpdateto" type="text" class="form-control input-sm pull-right">
+                  <div class="help-block with-errors"></div>
                 </div>
-                <div class="help-block with-errors"></div>
               </div>
-            </div>
-            <div class="col-md-2">
-              <div style="padding: 10px 0; width: 85px;">
-                <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Refresh</label>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="dpdateto">Date To</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input id="dpdateto" type="text" class="form-control input-sm pull-right">
+                  </div>
+                  <div class="help-block with-errors"></div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div style="padding: 10px 0; width: 85px;">
+                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
+                      class="fa-solid fa-rotate"></i> Refresh</label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="btnactionud pull-right" style="display: none;">
-            <button type="button" id="btnnblist" class="btn btn-box-tool" style="font-size: 15px !important;" data-toggle="tooltip" title="New Business Expired & Expiring Soon (90Days)"><i class="fa fa-list"></i> NB Expired & 90D</button>
-            <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i class="fa fa-plus"></i> Add New</button>
+          <div class="row">
+            <div class="btnactionud pull-right" style="display: none;">
+              <button type="button" id="btnnblist" class="btn btn-box-tool" style="font-size: 15px !important;"
+                data-toggle="tooltip" title="New Business Expired & Expiring Soon (90Days)"><i class="fa fa-list"></i>
+                NB Expired & 90D</button>
+              <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i
+                  class="fa fa-plus"></i> Add New</button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="box-body" style="max-width:100%;">
-        <table id="table_trans" class="table table-striped table-bordered table-hover">
-          <thead>
-            <tr class="tableheader">
-              <th>No.</th>
-              <th>Insurance No.</th>
-              <th>Trans. Date & Time</th>
-              <th>Status</th>
-              <th>Customer No.</th>
-              <th>Customer Name</th>
-              <th>Contact No.</th>
-              <th>VIN</th>
-              <th>CS No.</th>
-              <th>Plate No.</th>
-              <th>Model</th>
-              <th>Variant</th>
-              <th>Insurance Partner</th>
+        <div class="box-body" style="max-width:100%;">
+          <table id="table_trans" class="table table-striped table-bordered table-hover">
+            <thead>
+              <tr class="tableheader">
+                <th>No.</th>
+                <th>Insurance No.</th>
+                <th>Trans. Date & Time</th>
+                <th>Status</th>
+                <th>Customer No.</th>
+                <th>Customer Name</th>
+                <th>Contact No.</th>
+                <th>VIN</th>
+                <th>CS No.</th>
+                <th>Plate No.</th>
+                <th>Model</th>
+                <th>Variant</th>
+                <th>Insurance Partner</th>
 
-              {{-- @if(Auth::user()->User_Level_ID === 1) --}}
+                {{-- @if(Auth::user()->User_Level_ID === 1) --}}
                 <th>I.S.E</th>
-              {{-- @endif --}}
-              
+                {{-- @endif --}}
+
                 <th>MP Name</th>
                 <th>Call Attempts</th>
-                
-              {{-- @if(Auth::user()->User_Level_ID === 1) --}}
+
+                {{-- @if(Auth::user()->User_Level_ID === 1) --}}
                 <th>Action</th>
-              {{-- @endif --}}
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+                {{-- @endif --}}
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    
-    <!-- MODAL MODIFY ISE -->
-    <div id="modal-modify-ise" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <div class="insurer-info">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="cboise">Insurance Staff *</label>
-                      <select id="cboise" class="form-control input-sm" required="required" data-error="Insurance Staff is required.">
-                        <option Value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
+
+      <!-- MODAL MODIFY ISE -->
+      <div id="modal-modify-ise" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <div class="insurer-info">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="cboise">Insurance Staff *</label>
+                        <select id="cboise" class="form-control input-sm" required="required"
+                          data-error="Insurance Staff is required.">
+                          <option Value="">PLEASE SELECT</option>
+                        </select>
+                        <div class="help-block with-errors"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btncancelise" class="btn btn-success"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnselectise" class="btn btn-success"><i class="fa-regular fa-circle-check"></i> Select</button>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btncancelise" class="btn btn-success"><i class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnselectise" class="btn btn-success"><i class="fa-regular fa-circle-check"></i>
+                Select</button>
+            </div>
           </div>
-        </div>  
+        </div>
       </div>
-    </div>
-    <!-- END MODAL MODIFY ISE -->
-    <!-- MODAL ADD -->
-    <div id="modal-add" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <!-- Stepper -->
-          <div class="stepper" id="stepper">
+      <!-- END MODAL MODIFY ISE -->
+      <!-- MODAL ADD -->
+      <div id="modal-add" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <!-- Stepper -->
+            <div class="stepper" id="stepper">
               <div class="step active" data-step="1">
-                  <div class="step-number">Step 1</div>
-                  <div class="icon"><i class="fa fa-user"></i></div>
-                  <div class="step-text">Customer Information</div>
+                <div class="step-number">Step 1</div>
+                <div class="icon"><i class="fa fa-user"></i></div>
+                <div class="step-text">Customer Information</div>
               </div>
               <div class="step" data-step="2">
-                  <div class="step-number">Step 2</div>
-                  <div class="icon"><i class="fa fa-car"></i></div>
-                  <div class="step-text">Vehicle Information</div>
+                <div class="step-number">Step 2</div>
+                <div class="icon"><i class="fa fa-car"></i></div>
+                <div class="step-text">Vehicle Information</div>
               </div>
               <div class="step" data-step="3">
-                  <div class="step-number">Step 3</div>
-                  <div class="icon"><i class="fa fa-calculator"></i></div>
-                  <div class="step-text">Insurance Calculation</div>
+                <div class="step-number">Step 3</div>
+                <div class="icon"><i class="fa fa-calculator"></i></div>
+                <div class="step-text">Insurance Calculation</div>
               </div>
               <div class="step" data-step="4">
-                  <div class="step-number">Step 4</div>
-                  <div class="icon"><i class="fa fa-building-shield"></i></div>
-                  <div class="step-text">Insurance Company</div>
+                <div class="step-number">Step 4</div>
+                <div class="icon"><i class="fa fa-building-shield"></i></div>
+                <div class="step-text">Insurance Company</div>
               </div>
               <div class="step" data-step="5">
-                  <div class="step-number">Step 5</div>
-                  <div class="icon"><i class="fa fa-check"></i></div>
-                  <div class="step-text">Final Submit</div>
+                <div class="step-number">Step 5</div>
+                <div class="icon"><i class="fa fa-check"></i></div>
+                <div class="step-text">Final Submit</div>
               </div>
 
-          </div>
+            </div>
 
-          <div class="progress">
+            <div class="progress">
               <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" id="progressBar"></div>
-          </div>
+            </div>
 
-          <!-- Form -->
-          <form id="multiStepForm">
+            <!-- Form -->
+            <form id="multiStepForm">
               <!-- Step 1 -->
               <div class="page active" id="page1">
                 <div class="box box-solid">
@@ -234,19 +243,23 @@
                               <div class="form-group">
                                 <label for="txtcustno">Customer No. *</label>
                                 <div class="input-group input-group-sm">
-                                  <input type="text" id="txtcustno" class="form-control input-sm" placeholder="Auto Generated" disabled>
+                                  <input type="text" id="txtcustno" class="form-control input-sm"
+                                    placeholder="Auto Generated" disabled>
                                   <input type="hidden" id="txtcustnoupload" class="form-control input-sm">
                                   <span class="input-group-btn">
-                                    <button type="button" id="btnfindcustomer" data-toggle="tooltip" data-placement="top" title="Find Customer" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
+                                    <button type="button" id="btnfindcustomer" data-toggle="tooltip"
+                                      data-placement="top" title="Find Customer" class="btn btn-success btn-flat"><i
+                                        class="fa fa-search"></i></button>
                                   </span>
-                              </div>
+                                </div>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbogroup">Group *</label>
-                                <select id="cbogroup" class="form-control input-sm" required="required" data-error="Group is required." disabled>
+                                <select id="cbogroup" class="form-control input-sm" required="required"
+                                  data-error="Group is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -258,7 +271,8 @@
                               <div class="col-md-12">
                                 <div class="form-group">
                                   <label for="txtcustname">Customer Name *</label>
-                                  <textarea id="txtcustname" class="form-control input-sm" rows="2" required="required" data-error="Customer Name is required." disabled></textarea>
+                                  <textarea id="txtcustname" class="form-control input-sm" rows="2" required="required"
+                                    data-error="Customer Name is required." disabled></textarea>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -268,15 +282,17 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>  
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." data-summary="txtcustfname_summary-get" disabled>
+                                  <label for="txtcustfname">First Name *</label>
+                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required"
+                                    data-error="First Name is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" data-summary="txtcustmname_summary-get" disabled>
+                                  <input type="text" id="txtcustmname" class="form-control input-sm"
+                                    placeholder="Optional" disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -285,14 +301,17 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcustlname">Last Name *</label>
-                                  <input type="text" id="txtcustlname" class="form-control input-sm" required="required" data-summary="txtcustlname_summary-get" data-error="Last Name is required." disabled>
+                                  <input type="text" id="txtcustlname" class="form-control input-sm" required="required"
+                                    data-summary="txtcustlname_summary-get" data-error="Last Name is required."
+                                    disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcustsname">Suffix Name</label>
-                                  <input type="text" id="txtcustsname" class="form-control input-sm" placeholder="Optional Ex. Jr, II & etc." disabled>
+                                  <input type="text" id="txtcustsname" class="form-control input-sm txtcustsname"
+                                    placeholder="Optional Ex. Jr, II & etc." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -306,7 +325,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dpbirthdate" type="text" class="form-control input-sm pull-right" required="required" data-error="Birth Date  is required." disabled>
+                                  <input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="Birth Date  is required." disabled>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -314,14 +334,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txttin">TIN *</label>
-                                <input type="text" id="txttin" class="form-control input-sm" required="required" data-error="TIN is required." disabled>
+                                <input type="text" id="txttin" class="form-control input-sm" required="required"
+                                  data-error="TIN is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtcontactno">Contact No. *</label>
-                                <input type="text" id="txtcontactno" class="form-control input-sm" required="required" data-error="Contact No. is required." disabled>
+                                <input type="text" id="txtcontactno" class="form-control input-sm" required="required"
+                                  data-error="Contact No. is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -332,7 +354,8 @@
                                   <span class="input-group-addon">
                                     <i class="fa fa-envelope"></i>
                                   </span>
-                                  <input type="text" id="txtemailadd" class="form-control input-sm" required="required" data-error="Email is required.">
+                                  <input type="text" id="txtemailadd" class="form-control input-sm" required="required"
+                                    data-error="Email is required.">
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -342,7 +365,8 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="txtaddress">Address *</label>
-                                <textarea id="txtaddress" class="form-control input-sm" placeholder="Address here!" rows="3" required="required" data-error="Address is required." disabled></textarea>
+                                <textarea id="txtaddress" class="form-control input-sm" placeholder="Address here!"
+                                  rows="3" required="required" data-error="Address is required." disabled></textarea>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -351,7 +375,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboregion">Region *</label>
-                                <select id="cboregion" class="form-control input-sm" required="required" data-error="Region is required." disabled>
+                                <select id="cboregion" class="form-control input-sm" required="required"
+                                  data-error="Region is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -360,7 +385,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboprovince">Province *</label>
-                                <select id="cboprovince" class="form-control input-sm" required="required" data-error="Province is required." disabled>
+                                <select id="cboprovince" class="form-control input-sm" required="required"
+                                  data-error="Province is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -371,7 +397,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbocity">City / Municipal *</label>
-                                <select id="cbocity" class="form-control input-sm" required="required" data-error="City / Municipal is required." disabled>
+                                <select id="cbocity" class="form-control input-sm" required="required"
+                                  data-error="City / Municipal is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -380,7 +407,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbobrgy">Barangay *</label>
-                                <select id="cbobrgy" class="form-control input-sm" required="required" data-error="Barangay is required." disabled>
+                                <select id="cbobrgy" class="form-control input-sm" required="required"
+                                  data-error="Barangay is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -391,14 +419,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtzipcode">Zip Code / Postal Code *</label>
-                                <input type="text" id="txtzipcode" class="form-control input-sm" required="required" data-error="Zip Code / Postal Code is required." disabled>
+                                <input type="text" id="txtzipcode" class="form-control input-sm" required="required"
+                                  data-error="Zip Code / Postal Code is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbocountry">Country *</label>
-                                <select id="cbocountry" class="form-control input-sm" required="required" data-error="Country is required." disabled>
+                                <select id="cbocountry" class="form-control input-sm" required="required"
+                                  data-error="Country is required." disabled>
                                   <option Value="PHILIPPINES" selected>PHILIPPINES</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -411,9 +441,10 @@
                   </div>
                   <div class="box-footer with-border">
                     <div class="pull-right">
-                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next" class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
+                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next"
+                        class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               </div>
 
@@ -423,7 +454,7 @@
                   <div class="box-header with-border">
                     <h2 class="box-title"><i class="fa-solid fa-car"></i> Vehicle Information</h2>
                   </div>
-                  <div class="box-body" style="max-width:100%;"> 
+                  <div class="box-body" style="max-width:100%;">
                     <div class="vehicle-info">
                       <div class="row">
                         <div class="col-md-12">
@@ -432,18 +463,22 @@
                               <div class="form-group">
                                 <label for="txtvin">VIN *</label>
                                 <div class="input-group input-group-sm">
-                                  <input type="text" id="txtvin" class="form-control input-sm" required="required" data-error="VIN is required." disabled>
+                                  <input type="text" id="txtvin" class="form-control input-sm" required="required"
+                                    data-error="VIN is required." disabled>
                                   <span class="input-group-btn">
-                                    <button type="button" id="btnfindvehicle" data-toggle="tooltip" data-placement="top" title="Find Vehicle" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
+                                    <button type="button" id="btnfindvehicle" data-toggle="tooltip" data-placement="top"
+                                      title="Find Vehicle" class="btn btn-success btn-flat"><i
+                                        class="fa fa-search"></i></button>
                                   </span>
-                              </div>
+                                </div>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmake">Make *</label>
-                                <input type="text" id="txtmake" class="form-control input-sm" required="required" data-error="Make is required." disabled>
+                                <input type="text" id="txtmake" class="form-control input-sm" required="required"
+                                  data-error="Make is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -452,14 +487,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmodel">Model *</label>
-                                <input type="text" id="txtmodel" class="form-control input-sm" required="required" data-error="Model is required." disabled>
+                                <input type="text" id="txtmodel" class="form-control input-sm" required="required"
+                                  data-error="Model is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmodelyear">Mode Year *</label>
-                                <input type="text" id="txtmodelyear" class="form-control input-sm" required="required" data-error="Model Year is required." disabled>
+                                <input type="text" id="txtmodelyear" class="form-control input-sm" required="required"
+                                  data-error="Model Year is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -468,14 +505,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtcolor">Color *</label>
-                                <input type="text" id="txtcolor" class="form-control input-sm" required="required" data-error="Color is required." disabled>
+                                <input type="text" id="txtcolor" class="form-control input-sm" required="required"
+                                  data-error="Color is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtengineno">Engine No. *</label>
-                                <input type="text" id="txtengineno" class="form-control input-sm" required="required" data-error="Engine No. is required." disabled>
+                                <input type="text" id="txtengineno" class="form-control input-sm" required="required"
+                                  data-error="Engine No. is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -484,14 +523,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtcsno">CS No. *</label>
-                                <input type="text" id="txtcsno" class="form-control input-sm" required="required" data-error="CS No. is required." disabled>
+                                <input type="text" id="txtcsno" class="form-control input-sm" required="required"
+                                  data-error="CS No. is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtplateno">Plate No. *</label>
-                                <input type="text" id="txtplateno" class="form-control input-sm" required="required" data-error="Plate No. is required." disabled>
+                                <input type="text" id="txtplateno" class="form-control input-sm" required="required"
+                                  data-error="Plate No. is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -516,7 +557,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtsrp">Paid Price *</label>
-                                <input type="text" id="txtsrp" class="form-control input-sm" required="required" data-error="Paid Price is required." disabled>
+                                <input type="text" id="txtsrp" class="form-control input-sm" required="required"
+                                  data-error="Paid Price is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -527,7 +569,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dpvsidate" type="text" class="form-control input-sm pull-right" required="required" data-error="VSI Date is required." disabled>
+                                  <input id="dpvsidate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="VSI Date is required." disabled>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -548,7 +591,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dpreldate" type="text" class="form-control input-sm pull-right" required="required" data-error="Released Date is required." disabled>
+                                  <input id="dpreldate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="Released Date is required." disabled>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -568,7 +612,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtvariant">Variant *</label>
-                                <textarea id="txtvariant" class="form-control input-sm" rows="2" required="required" data-error="Variant is required." disabled></textarea>
+                                <textarea id="txtvariant" class="form-control input-sm" rows="2" required="required"
+                                  data-error="Variant is required." disabled></textarea>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -577,7 +622,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbobodytype">Body Type *</label>
-                                <select id="cbobodytype" class="form-control input-sm" required="required" data-error="Body Type is required." disabled>
+                                <select id="cbobodytype" class="form-control input-sm" required="required"
+                                  data-error="Body Type is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -586,7 +632,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txttransmission">Power Transmission *</label>
-                                <input type="text" id="txttransmission" class="form-control input-sm" required="required" data-error="Power Transmission is required." disabled>
+                                <input type="text" id="txttransmission" class="form-control input-sm"
+                                  required="required" data-error="Power Transmission is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -595,7 +642,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbofueltype">Fuel Type *</label>
-                                <select id="cbofueltype" class="form-control input-sm" required="required" data-error="Fuel Type is required." disabled>
+                                <select id="cbofueltype" class="form-control input-sm" required="required"
+                                  data-error="Fuel Type is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -604,7 +652,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtseats">Seats *</label>
-                                <input type="text" id="txtseats" class="form-control input-sm" required="required" data-error="Seats is required." disabled>
+                                <input type="text" id="txtseats" class="form-control input-sm" required="required"
+                                  data-error="Seats is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -629,7 +678,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboprodclass">Product Classification *</label>
-                                <select id="cboprodclass" class="form-control input-sm" required="required" data-error="Product Classification is required." disabled>
+                                <select id="cboprodclass" class="form-control input-sm" required="required"
+                                  data-error="Product Classification is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -638,7 +688,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboowntype">Owner Type *</label>
-                                <select id="cboowntype" class="form-control input-sm" required="required" data-error="Owner Type is required." disabled>
+                                <select id="cboowntype" class="form-control input-sm" required="required"
+                                  data-error="Owner Type is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -649,14 +700,16 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtvoname">Vehicle Owner Name *</label>
-                                <input type="text" id="txtvoname" class="form-control input-sm" required="required" data-error="Vehicle Owner Name is required." disabled>
+                                <input type="text" id="txtvoname" class="form-control input-sm" required="required"
+                                  data-error="Vehicle Owner Name is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmpname">Marketing Professional *</label>
-                                <input type="text" id="txtmpname" class="form-control input-sm" required="required" data-error="Marketing Professional is required." disabled>
+                                <input type="text" id="txtmpname" class="form-control input-sm" required="required"
+                                  data-error="Marketing Professional is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -667,12 +720,14 @@
                   </div>
                   <div class="box-footer with-border">
                     <div class="pull-left">
-                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous" class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
+                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous"
+                        class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
                     </div>
                     <div class="pull-right">
-                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next" class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
+                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next"
+                        class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               </div>
 
@@ -682,28 +737,32 @@
                   <div class="box-header with-border">
                     <h2 class="box-title"><i class="fa fa-calculator"></i> Insurance Calculation</h2>
                   </div>
-                  <div class="box-body" style="max-width:100%;"> 
+                  <div class="box-body" style="max-width:100%;">
                     <div class="insurance-calc">
                       <form>
                         <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtgrosspremium">Gross Premium *</label>
-                              <input type="text" id="txtgrosspremium" maxlength="10" class="form-control input-sm" value="0.00" required="required" data-error="Gross Premium is required." disabled>
+                              <input type="text" id="txtgrosspremium" maxlength="10" class="form-control input-sm"
+                                value="0.00" required="required" data-error="Gross Premium is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtnetremittance">Net Remittance *</label>
-                              <input type="text" id="txtnetremittance" maxlength="10" class="form-control input-sm" value="0.00" required="required" data-error="Net Remittance is required." disabled>
+                              <input type="text" id="txtnetremittance" maxlength="10" class="form-control input-sm"
+                                value="0.00" required="required" data-error="Net Remittance is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="txtcommission">Commission *</label>
-                              <input type="text" id="txtcommission" class="form-control input-sm" value="0.00" style="font-weight: bold; background: #F3F3F3;" required="required" data-error="Commission is required." disabled>
+                              <input type="text" id="txtcommission" class="form-control input-sm" value="0.00"
+                                style="font-weight: bold; background: #F3F3F3;" required="required"
+                                data-error="Commission is required." disabled>
                               <div class="help-block with-errors"></div>
                             </div>
                           </div>
@@ -724,14 +783,14 @@
                                 PAID
                               </label>
                             </div>
-                          </div>  
+                          </div>
                         </div>
                         <table class="installment-section">
                           <tbody>
                             <tr>
                               <td data-label="" style="text-align: left;">
                                 <label class="custom-checkbox">
-                                  <input type="checkbox" id="chkpayment"/>
+                                  <input type="checkbox" id="chkpayment" />
                                   <span class="checkbox-icon"></span>
                                   <span class="checkbox-label">Installment Payment</span>
                                 </label>
@@ -746,7 +805,8 @@
                               <td data-label="" id="installpay-mpay" style="display: none;">
                                 <div class="form-group">
                                   <label for="txtmonthpay">Monthly Payment(₱/month)</label>
-                                  <input type="text" id="txtmonthpay" style="font-weight: bold; background: #F3F3F3;" disabled>
+                                  <input type="text" id="txtmonthpay" style="font-weight: bold; background: #F3F3F3;"
+                                    disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </td>
@@ -757,14 +817,15 @@
                       <hr>
                       <div class="box box-solid payment-new">
                         <div class="box-body" style="max-width:100%;">
-                          <div class="payment-info-n" >
+                          <div class="payment-info-n">
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="row pay-section-n">
                                   <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="cbopaytype-n">Payment Type *</label>
-                                      <select id="cbopaytype-n" class="form-control input-sm" required data-error="Payment Type is required." disabled>
+                                      <select id="cbopaytype-n" class="form-control input-sm" required
+                                        data-error="Payment Type is required." disabled>
                                         <option value="">PLEASE SELECT</option>
                                       </select>
                                       <div class="help-block with-errors"></div>
@@ -780,7 +841,8 @@
                                         <h3>Credit Card Details</h3>
                                         <div class="cc-icons">
                                           <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}"
+                                            alt="mastercard">
                                           <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                                         </div>
                                       </div>
@@ -788,7 +850,8 @@
                                         <div class="col-md-4">
                                           <div class="form-group">
                                             <label for="txtccno-n">Card No. *</label>
-                                            <input type="text" id="txtccno-n" class="form-control input-sm" required data-error="Card No. is required." disabled>
+                                            <input type="text" id="txtccno-n" class="form-control input-sm" required
+                                              data-error="Card No. is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -797,7 +860,8 @@
                                         <div class="col-md-12">
                                           <div class="form-group">
                                             <label for="txtccholder-n">Holder Name *</label>
-                                            <input type="text" id="txtccholder-n" class="form-control input-sm" required data-error="Holder Name is required." disabled>
+                                            <input type="text" id="txtccholder-n" class="form-control input-sm" required
+                                              data-error="Holder Name is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -806,14 +870,16 @@
                                         <div class="col-md-4">
                                           <div class="form-group">
                                             <label for="txtccexpirydate-n">Expiry Date (MM/YY) *</label>
-                                            <input type="text" id="txtccexpirydate-n" class="form-control input-sm" required data-error="Expiry Date is required." disabled>
+                                            <input type="text" id="txtccexpirydate-n" class="form-control input-sm"
+                                              required data-error="Expiry Date is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
                                         <div class="col-md-4">
                                           <div class="form-group">
                                             <label for="txtccvv-n">CVV / CVC *</label>
-                                            <input type="text" id="txtccvv-n" class="form-control input-sm" required data-error="CVV / CVC is required." disabled>
+                                            <input type="text" id="txtccvv-n" class="form-control input-sm" required
+                                              data-error="CVV / CVC is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -836,7 +902,8 @@
                                         <div class="col-md-4">
                                           <div class="form-group">
                                             <label for="txtpdcno-n">Check No. *</label>
-                                            <input type="text" id="txtpdcno-n" class="form-control input-sm" required data-error="Check No. is required." disabled>
+                                            <input type="text" id="txtpdcno-n" class="form-control input-sm" required
+                                              data-error="Check No. is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -845,7 +912,8 @@
                                         <div class="col-md-12">
                                           <div class="form-group">
                                             <label for="txtpdcholdername-n">Account Holder Name *</label>
-                                            <input type="text" id="txtpdcholdername-n" class="form-control input-sm" required data-error="Account Holder Name is required." disabled>
+                                            <input type="text" id="txtpdcholdername-n" class="form-control input-sm"
+                                              required data-error="Account Holder Name is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -854,7 +922,8 @@
                                         <div class="col-md-4">
                                           <div class="form-group">
                                             <label for="txtpdcbankname-n">Bank Name *</label>
-                                            <input type="text" id="txtpdcbankname-n" class="form-control input-sm" required data-error="Bank Name is required." disabled>
+                                            <input type="text" id="txtpdcbankname-n" class="form-control input-sm"
+                                              required data-error="Bank Name is required." disabled>
                                             <div class="help-block with-errors"></div>
                                           </div>
                                         </div>
@@ -865,7 +934,9 @@
                                               <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                               </div>
-                                              <input id="dppdccheckdate-n" type="text" class="form-control input-sm pull-right"  required="required" data-error="Check Date is required." disabled>
+                                              <input id="dppdccheckdate-n" type="text"
+                                                class="form-control input-sm pull-right" required="required"
+                                                data-error="Check Date is required." disabled>
                                             </div>
                                             <div class="help-block with-errors"></div>
                                           </div>
@@ -881,7 +952,8 @@
                                     <div class="col-md-4">
                                       <div class="form-group">
                                         <label for="cboewallet-n">E-Wallet Type *</label>
-                                        <select id="cboewallet-n" class="form-control input-sm" required data-error="E-Wallet Type is required." disabled>
+                                        <select id="cboewallet-n" class="form-control input-sm" required
+                                          data-error="E-Wallet Type is required." disabled>
                                           <option value="">PLEASE SELECT</option>
                                         </select>
                                         <div class="help-block with-errors"></div>
@@ -889,15 +961,19 @@
                                     </div>
                                     <div class="col-md-8 ew-icons-col">
                                       <div class="ew-icons">
-                                        <img id="pgcash-n" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                                        <img id="pmaya-n" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                                        <img id="ptwallet-n" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
+                                        <img id="pgcash-n" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}"
+                                          alt="gcash">
+                                        <img id="pmaya-n" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}"
+                                          alt="maya">
+                                        <img id="ptwallet-n"
+                                          src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}"
+                                          alt="toyotawallet">
                                       </div>
                                     </div>
                                   </div>
                                 </div>
 
-                                <div class="row term-amount-section-n">  
+                                <div class="row term-amount-section-n">
                                   <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="txtpayterms-n">Terms</label>
@@ -909,7 +985,8 @@
                                   <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="txtpayamount-n">Amount *</label>
-                                      <input type="text" id="txtpayamount-n" class="form-control input-sm" required data-error="Amount is required." disabled>
+                                      <input type="text" id="txtpayamount-n" class="form-control input-sm" required
+                                        data-error="Amount is required." disabled>
                                       <div class="help-block with-errors"></div>
                                     </div>
                                   </div>
@@ -926,7 +1003,7 @@
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div class="table-responsive">
                               <table id="table_payment-n" class="table m-0" style="width:100%; table-layout:fixed;">
                                 <thead>
@@ -956,16 +1033,21 @@
                                 <thead>
                                   <tr>
                                     <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
-                                    <th id="tfoot_tpremium-n" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                                    <th id="tfoot_tpremium-n" style="text-align:right; background-color: #f4f4f4;">0.00
+                                    </th>
                                     <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
-                                    <th id="tfoot_total-n" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                                    <th id="tfoot_total-n" style="text-align:right; background-color: #f4f4f4;">0.00
+                                    </th>
                                     <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
-                                    <th id="tfoot_balance-n" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                                    <th id="tfoot_balance-n" style="text-align:right; background-color: #f4f4f4;">0.00
+                                    </th>
                                   </tr>
                                 </thead>
                               </table>
                               <p style="font-size:12px;font-style: italic;">
-                                <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After making the necessary changes in the input fields, click the ‘Add Payment’ button to save the updates to the payment list.
+                                <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After
+                                making the necessary changes in the input fields, click the ‘Add Payment’ button to save
+                                the updates to the payment list.
                               </p>
                             </div>
                           </div>
@@ -975,12 +1057,14 @@
                   </div>
                   <div class="box-footer with-border">
                     <div class="pull-left">
-                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous" class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
+                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous"
+                        class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
                     </div>
                     <div class="pull-right">
-                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next" class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
+                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Next"
+                        class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               </div>
 
@@ -990,7 +1074,7 @@
                   <div class="box-header with-border">
                     <h2 class="box-title"><i class="fa fa-building-shield"></i> Insurer Information</h2>
                   </div>
-                  <div class="box-body" style="max-width:100%;"> 
+                  <div class="box-body" style="max-width:100%;">
                     <div class="insurer-info">
                       <div class="row">
                         <div class="col-md-12">
@@ -998,7 +1082,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboinstype">Insurance Type *</label>
-                                <select id="cboinstype" class="form-control input-sm" required="required" data-error="Insurance Type is required." disabled>
+                                <select id="cboinstype" class="form-control input-sm" required="required"
+                                  data-error="Insurance Type is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1007,7 +1092,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboinsco">Insurance Company *</label>
-                                <select id="cboinsco" class="form-control input-sm" required="required" data-error="Insurance Company is required." disabled>
+                                <select id="cboinsco" class="form-control input-sm" required="required"
+                                  data-error="Insurance Company is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1022,7 +1108,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dpstartdate" type="text" class="form-control input-sm pull-right" required="required" data-error="Start / Inception Date is required.">
+                                  <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="Start / Inception Date is required.">
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -1030,7 +1117,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtpolicyno">Policy No. *</label>
-                                <input type="text" id="txtpolicyno" class="form-control input-sm" required="required" data-error="Policy No. is required.">
+                                <input type="text" id="txtpolicyno" class="form-control input-sm" required="required"
+                                  data-error="Policy No. is required.">
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -1043,7 +1131,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dpissuedate" type="text" class="form-control input-sm pull-right" required="required" data-error="Issue Date is required.">
+                                  <input id="dpissuedate" type="text" class="form-control input-sm pull-right"
+                                    data-error="Issue Date is required." disabled>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -1055,7 +1144,8 @@
                                   <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                   </div>
-                                  <input id="dppexpiredate" type="text" class="form-control input-sm pull-right" required="required" data-error="Expiration Date is required.">
+                                  <input id="dppexpiredate" type="text" class="form-control input-sm pull-right"
+                                    data-error="Expiration Date is required." disabled>
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -1065,7 +1155,8 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cbomortgage">Mortgage *</label>
-                                <select id="cbomortgage" class="form-control input-sm" required="required" data-error="Mortgage is required.">
+                                <select id="cbomortgage" class="form-control input-sm" required="required"
+                                  data-error="Mortgage is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1088,7 +1179,8 @@
 
                               <div class="form-group">
                                 <label for="cboprevinsco">Previous Insurance Company *</label>
-                                <input type="text" id="cboprevinsco" class="form-control input-sm clearable-s" placeholder="Previous insurance company" autocomplete="off" readonly>
+                                <input type="text" id="cboprevinsco" class="form-control input-sm clearable-s"
+                                  placeholder="Previous insurance company" autocomplete="off" readonly>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
@@ -1099,936 +1191,1018 @@
                   </div>
                   <div class="box-footer with-border">
                     <div class="pull-left">
-                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
+                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Save"
+                        class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
                     </div>
                     <div class="pull-right">
-                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Save" class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
+                      <button type="button" id="nextBtn" data-toggle="tooltip" data-placement="top" title="Save"
+                        class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Next</button>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               </div>
 
               <!-- Step 5 -->
               <div class="page" id="page5">
                 <div class="box box-solid">
+
                   <div class="box-header with-border">
                     <h2 class="box-title"><i class="fa fa-check"></i> Final Step: Submit</h2>
                   </div>
-                  <div class="box-body" style="max-width:100%;"> 
+
+                  <div class="box-body" style="max-width:100%;">
                     <div class="final-submit">
-                      <h4>Please review your information one last time. If everything looks correct, click "Submit" to proceed.</h4>
+                      <h4>Please review your information one last time. If everything looks correct, click "Submit" to
+                        proceed.</h4>
                     </div>
                   </div>
 
-                    <div class="form-data">
-                        <div class="box-header with-border">
-                          <h4 style="font-weight:900; text-transform:uppercase;">Review form</h4>
-                        </div>
+                  <div class="form-data">
 
-                        <div class="row">
-                          <div class="user-profile-information-summary box-header with-border">
-                              <h4 style="font-weight:900">User profile information</h4>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname_summary-get">First Name *</label>
-                                  <input type="text" id="txtcustfname_summary-get" class="form-control input-sm" required="required" readonly>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname_summary-get">Middle Name</label>
-                                  <input type="text" id="txtcustmname_summary-get" class="form-control input-sm" placeholder="Optional" readonly>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustlname_summary-get">Last Name</label>
-                                  <input type="text" id="txtcustlname_summary-get" class="form-control input-sm" placeholder="Optional" readonly>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                               <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                          </div>
-
-                          <div class="insurer-information box-header with-border">
-                            <h4 style="font-weight:900">Vehicle information</h4>
-                             <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                               <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                                 <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                          </div>
-
-                           <div class="vehicle-information box-header with-border">
-                            <h4 style="font-weight:900">Insurance information</h4>
-                             <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                               <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                                 <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustfname">First Name *</label>
-                                  <input type="text" id="txtcustfname" class="form-control input-sm" required="required" data-error="First Name is required." disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <div class="form-group">
-                                  <label for="txtcustmname">Middle Name</label>
-                                  <input type="text" id="txtcustmname" class="form-control input-sm" placeholder="Optional" disabled>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
+                    <div class="box-header with-border">
+                      <h4 style="font-weight:900; text-transform:uppercase;">Review form</h4>
                     </div>
 
-                  <div class="box-footer with-border">
-                    <div class="pull-left">
-                      <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous" class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
-                    </div>
-                    <div class="pull-right">
-                      <button type="button" id="btnsubmit" data-toggle="tooltip" data-placement="top" title="Submit" class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Submit</button>
-                    </div>
-                  </div>  
-                </div>
-              </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <!-- END MODAL ADD -->
-    <!-- MODAL CUSTOMER LIST -->
-    <div id="modal-customerlist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box">
-        <div class="box-header with-border">
-          <!-- <h2 class="box-title">Customer List</h2> -->
-          <div class="row">
-            <div class="col-md-6" style="padding: 0; margin-bottom: 5px;">
-              <div class="form-group">
-                <label>Search </label>
-                <div class="input-group input-group-sm">
-                  <input type="text" id="txtcustomersearch" class="form-control input-sm clearable-s" placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
-                  <span class="input-group-btn">
-                    <button type="button" id="btnfindcust" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
-                <div class="help-block with-errors"></div>
-              </div>
-            </div>
-          </div>  
-          <div class="alphabet-buttons" id="alphabet-container"></div>  
-        </div>
-        <div class="box-body">
-          <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs customertab">
-              <li class="active"><a href="#tmiatab" data-toggle="tab">TMIA Customer List</a></li>
-              <li><a href="#uploadtab" data-toggle="tab">Uploaded Customer List (EDAF/SAP)</a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="active tab-pane" id="tmiatab">
-                <div class="box">
-                  <div class="box-body">
-                    <!-- /.box-header -->
-                    <div class="box-body" style="max-width:100%;">
-                      <table id="table_customerlist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
-                        <thead>
-                          <tr class="tableheader">
-                            <th>No.</th>
-                            <th>Customer No.</th>
-                            <th>Group</th>
-                            <th>Customer Name</th>
-                            <th>Birth Date</th>
-                            <th>Contact No.</th>
-                            <th>Email Add</th>
-                            <th>Address</th>
-                            <th>Upload Cust. No</th>
-                            <th>VIN</th>
-                            <th>CS No.</th>
-                            <th>Plate No.</th>
-                            <th>Variant</th>
-                            <!-- <th>Status</th>
-                            <th>Inactive Date</th> -->
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
-                  <!-- / box-body -->
-                </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="uploadtab">
-                <div class="box">
-                  <div class="box-body">
-                    <!-- /.box-header -->
-                    <div class="box-body" style="max-width:100%;">
-                      <table id="table_customerlistupload" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
-                        <thead>
-                          <tr class="tableheader">
-                            <th>No.</th>
-                            <th>Customer No.</th>
-                            <th>Group</th>
-                            <th>Customer Name</th>
-                            <th>Birth Date</th>
-                            <th>Contact No.</th>
-                            <th>Email Add</th>
-                            <th>Address</th>
-                            <th>VIN</th>
-                            <th>CS No.</th>
-                            <th>Plate No.</th>
-                            <th>Variant</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div>
-                  </div>
-                  <!-- / box-body -->
-                </div>
-              </div>
-              <!-- /.tab-pane -->
-            </div>
-            <!-- /.tab-content -->
-          </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
-          </div>
-        </div>  
-      </div>
-    </div>
-    <!-- END MODAL CUSTOMER LIST -->
-    <!-- MODAL VEHICLE LIST -->
-    <div id="modal-vehiclelist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box">
-        <!-- <div class="box-header with-border">
-          <h2 class="box-title">Vehicle List</h2>
-        </div> -->
-        <div class="box-body">
-          <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs customervehtab">
-              <li class="active"><a href="#tmiavehtab" data-toggle="tab">TMIA Customer Vehicle List</a></li>
-              <li><a href="#uploadvehtab" data-toggle="tab">Uploaded Customer Vehicle List (EDAF/SAP)</a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="active tab-pane" id="tmiavehtab">
-                <div class="box-body">
-                  <table id="table_vehiclelist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
-                    <thead>
-                      <tr class="tableheader">
-                        <th>No.</th>
-                        <th>VIN</th>
-                        <th>Model</th>
-                        <th>Model Year</th>
-                        <th>Variant</th>
-                        <th>Color</th>
-                        <th>Engine No.</th>
-                        <th>CS No.</th>
-                        <th>Plate No.</th>
-                        <th>VSI Date</th>
-                        <th>SRP</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>
-              </div>
-              <!-- /.tab-pane -->
-              <div class="tab-pane" id="uploadvehtab">
-                <div class="box-body">
-                  <table id="table_uploadvehlist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
-                    <thead>
-                      <tr class="tableheader">
-                        <th>No.</th>
-                        <th>VIN</th>
-                        <th>Model</th>
-                        <th>Model Year</th>
-                        <th>Variant</th>
-                        <th>Color</th>
-                        <th>Engine No.</th>
-                        <th>CS No.</th>
-                        <th>Plate No.</th>
-                        <th>VSI Date</th>
-                        <th>SRP</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </div>    
-              </div>
-              <!-- /.tab-pane -->
-            </div>
-            <!-- /.tab-content -->  
-          </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btnvehselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
-          </div>
-        </div>  
-      </div>
-    </div>
-    <!-- END MODAL VEHICLE LIST -->
-    <!-- MODAL MODIFY PAYMENT INFO -->
-    <div id="modal-modify-pay" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <div class="payment-info">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row pay-section">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="cbopaytype">Payment Type *</label>
-                      <select id="cbopaytype" class="form-control input-sm" required data-error="Payment Type is required." disabled>
-                        <option value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
+                    {{-- User profile information review --}}
+                    <div class="row">
 
-                <!-- Credit Card Section -->
-                <div class="row cc-section" style="display: none;">
-                  <div class="col-md-12">
-                    <div class="credit-card">
-                      <div class="cc-header">
-                        <h3>Credit Card Details</h3>
-                        <div class="cc-icons">
-                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
-                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <label for="txtccno">Card No. *</label>
-                            <input type="text" id="txtccno" class="form-control input-sm" required data-error="Card No. is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="txtccholder">Holder Name *</label>
-                            <input type="text" id="txtccholder" class="form-control input-sm" required data-error="Holder Name is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <label for="txtccexpirydate">Expiry Date (MM/YY) *</label>
-                            <input type="text" id="txtccexpirydate" class="form-control input-sm" required data-error="Expiry Date is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <label for="txtccvv">CVV / CVC *</label>
-                            <input type="text" id="txtccvv" class="form-control input-sm" required data-error="CVV / CVC is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      {{-- User profile information --}}
+                      <div class="user-profile-information-summary box-header with-border">
+                        <h4 style="font-weight:900">User profile information</h4>
 
-                <!-- PDC Section -->
-                <div class="row pdc-section" style="display: none;">
-                  <div class="col-md-12">
-                    <div class="post-dated-check">
-                      <div class="pdc-header">
-                        <h3>Post-Dated Check (PDC) Details</h3>
-                        <div class="pdc-icons">
-                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
-                            <label for="txtpdcno">Check No. *</label>
-                            <input type="text" id="txtpdcno" class="form-control input-sm" required data-error="Check No. is required." disabled>
+                            <label for="txtcustfname">First Name *</label>
+                            <input type="text" id="txtcustfname" class="form-control input-sm txtcustfname"
+                              required="required" readonly>
                             <div class="help-block with-errors"></div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-12">
+
+                        <div class="col-md-3">
                           <div class="form-group">
-                            <label for="txtpdcholdername">Account Holder Name *</label>
-                            <input type="text" id="txtpdcholdername" class="form-control input-sm" required data-error="Account Holder Name is required." disabled>
+                            <label for="txtcustmname">Middle Name</label>
+                            <input type="text" id="txtcustmname" class="form-control input-sm txtcustmname"
+                              placeholder="Optional" readonly>
                             <div class="help-block with-errors"></div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
+
+                        <div class="col-md-3">
                           <div class="form-group">
-                            <label for="txtpdcbankname">Bank Name *</label>
-                            <input type="text" id="txtpdcbankname" class="form-control input-sm" required data-error="Bank Name is required." disabled>
+                            <label for="txtcustlname">Last Name</label>
+                            <input type="text" id="txtcustlname" class="form-control input-sm txtcustlname"
+                              placeholder="Optional" readonly>
                             <div class="help-block with-errors"></div>
                           </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-3">
                           <div class="form-group">
-                            <label for="dppdccheckdate">Check Date *</label>
+                            <label for="txtcustsname">Suffix *</label>
+                            <input type="text" id="txtcustsname" class="form-control input-sm txtcustsname"
+                              required="required" data-error="First Name is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="dpbirthdate">Birth Date *</label>
                             <div class="input-group date">
                               <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                               </div>
-                              <input id="dppdccheckdate" type="text" class="form-control input-sm pull-right"  required="required" data-error="Check Date is required." disabled>
+                              <input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
+                                required="required" data-error="Birth Date  is required." disabled>
                             </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txttin">TIN *</label>
+                            <input type="text" id="txttin" class="form-control input-sm txttin" required="required"
+                              data-error="TIN is required." disabled>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtcontactno">Contact No. *</label>
+                            <input type="text" id="txtcontactno" class="form-control input-sm" required="required"
+                              data-error="Contact No. is required." disabled>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtemailadd">E-Mail Address *</label>
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <i class="fa fa-envelope"></i>
+                              </span>
+                              <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
+                                required="required" data-error="Email is required." readonly disable>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="txtaddress">Address *</label>
+                                <textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Address here!"
+                                  rows="3" required="required" data-error="Address is required." disabled></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>                          
+                        </div>
+                      </div>
+
+                      {{-- Review vehicle information --}}
+                      <div class="insurer-information box-header with-border">
+                        <h4 style="font-weight:900">Vehicle information</h4>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtvin">VIN *</label>
+                            <div class="input-group input-group-sm">
+                              <input type="text" id="txtvin" class="form-control input-sm"
+                                data-error="VIN is required." disabled><span class="input-group-btn">
+                              </span>    
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="txtmake">Make *</label>
+                              <input type="text" id="txtmake" class="form-control input-sm txtmake"
+                                data-error="Make is required." disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtmodel">Model *</label>
+                              <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
+                                data-error="Model is required." disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtmodelyear">Mode Year *</label>
+                              <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
+                                data-error="Model Year is required." disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="txtcolor">Color *</label>
+                              <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
+                                data-error="Color is required." disabled>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtengineno">Engine type</label>
+                            <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional"
+                              disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtcsno">CS No</label>
+                            <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
+                              data-error="First Name is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtplateno">Plate no</label>
+                            <input type="text" id="txtplateno" class="form-control input-sm txtplateno" placeholder="Optional"
+                              disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtsrp">Paid Price *</label>
+                            <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
+                                data-error="Paid Price is required." disabled>
                             <div class="help-block with-errors"></div>
                           </div>
                         </div>
                       </div>
+
+                      {{-- Insurance company information --}}
+                      <div class="vehicle-information box-header with-border">
+                        <h4 style="font-weight:900">Insurance information</h4>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="cboinstype_summary">Insurance Type *</label>
+                                <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
+                                  data-error="Insurance Type is required." disabled>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="cboinsco_summary">Insurance Company *</label>
+                              <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
+                                  data-error="Insurance Company is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="dpstartdate_summary">Start / Inception Date *</label>
+                            <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
+                                  data-error="Start / Inception Date is required." disabled>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                              <label for="txtpolicyno_summary">Policy No. *</label>
+                              <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
+                                  data-error="Policy No. is required." disabled>
+                          </div>
+                        </div>
+
+                         <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="dpissuedate_summary">Issue Date *</label>
+                            <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
+                                  data-error="Issue Date is required." disabled>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="dppexpiredate_summary">Policy Expiration Date *</label>
+                            <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
+                                  data-error="Expiration Date is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="cbomortgage_summary">Mortgage *</label>
+                              <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
+                                data-error="Mortgage is required." disabled>
+                          </div>
+                        </div>
+   
+                      </div>
+
+                    </div>
+
+                    <div class="box-footer with-border">
+                      <div class="pull-left">
+                        <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous"
+                          class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
+                      </div>
+                      <div class="pull-right">
+                        <button type="button" id="btnsubmit" data-toggle="tooltip" data-placement="top" title="Submit"
+                          class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Submit</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <!-- E-Wallet Section -->
-                <div class="row ew-section" style="display: none;">
-                  <div class="col-md-12">
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL ADD -->
+      <!-- MODAL CUSTOMER LIST -->
+      <div id="modal-customerlist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box">
+          <div class="box-header with-border">
+            <!-- <h2 class="box-title">Customer List</h2> -->
+            <div class="row">
+              <div class="col-md-6" style="padding: 0; margin-bottom: 5px;">
+                <div class="form-group">
+                  <label>Search </label>
+                  <div class="input-group input-group-sm">
+                    <input type="text" id="txtcustomersearch" class="form-control input-sm clearable-s"
+                      placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
+                    <span class="input-group-btn">
+                      <button type="button" id="btnfindcust" class="btn btn-success btn-flat"><i
+                          class="fa fa-search"></i></button>
+                    </span>
+                  </div>
+                  <div class="help-block with-errors"></div>
+                </div>
+              </div>
+            </div>
+            <div class="alphabet-buttons" id="alphabet-container"></div>
+          </div>
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs customertab">
+                <li class="active"><a href="#tmiatab" data-toggle="tab">TMIA Customer List</a></li>
+                <li><a href="#uploadtab" data-toggle="tab">Uploaded Customer List (EDAF/SAP)</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="active tab-pane" id="tmiatab">
+                  <div class="box">
+                    <div class="box-body">
+                      <!-- /.box-header -->
+                      <div class="box-body" style="max-width:100%;">
+                        <table id="table_customerlist" class="table table-striped table-bordered table-hover nowrap"
+                          style="width:100%">
+                          <thead>
+                            <tr class="tableheader">
+                              <th>No.</th>
+                              <th>Customer No.</th>
+                              <th>Group</th>
+                              <th>Customer Name</th>
+                              <th>Birth Date</th>
+                              <th>Contact No.</th>
+                              <th>Email Add</th>
+                              <th>Address</th>
+                              <th>Upload Cust. No</th>
+                              <th>VIN</th>
+                              <th>CS No.</th>
+                              <th>Plate No.</th>
+                              <th>Variant</th>
+                              <!-- <th>Status</th>
+                            <th>Inactive Date</th> -->
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- / box-body -->
+                  </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="uploadtab">
+                  <div class="box">
+                    <div class="box-body">
+                      <!-- /.box-header -->
+                      <div class="box-body" style="max-width:100%;">
+                        <table id="table_customerlistupload"
+                          class="table table-striped table-bordered table-hover nowrap" style="width:100%">
+                          <thead>
+                            <tr class="tableheader">
+                              <th>No.</th>
+                              <th>Customer No.</th>
+                              <th>Group</th>
+                              <th>Customer Name</th>
+                              <th>Birth Date</th>
+                              <th>Contact No.</th>
+                              <th>Email Add</th>
+                              <th>Address</th>
+                              <th>VIN</th>
+                              <th>CS No.</th>
+                              <th>Plate No.</th>
+                              <th>Variant</th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- / box-body -->
+                  </div>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btncustselect" data-toggle="tooltip" data-placement="top" title="Go"
+                class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL CUSTOMER LIST -->
+      <!-- MODAL VEHICLE LIST -->
+      <div id="modal-vehiclelist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box">
+          <!-- <div class="box-header with-border">
+          <h2 class="box-title">Vehicle List</h2>
+        </div> -->
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs customervehtab">
+                <li class="active"><a href="#tmiavehtab" data-toggle="tab">TMIA Customer Vehicle List</a></li>
+                <li><a href="#uploadvehtab" data-toggle="tab">Uploaded Customer Vehicle List (EDAF/SAP)</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="active tab-pane" id="tmiavehtab">
+                  <div class="box-body">
+                    <table id="table_vehiclelist" class="table table-striped table-bordered table-hover nowrap"
+                      style="width:100%">
+                      <thead>
+                        <tr class="tableheader">
+                          <th>No.</th>
+                          <th>VIN</th>
+                          <th>Model</th>
+                          <th>Model Year</th>
+                          <th>Variant</th>
+                          <th>Color</th>
+                          <th>Engine No.</th>
+                          <th>CS No.</th>
+                          <th>Plate No.</th>
+                          <th>VSI Date</th>
+                          <th>SRP</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="uploadvehtab">
+                  <div class="box-body">
+                    <table id="table_uploadvehlist" class="table table-striped table-bordered table-hover nowrap"
+                      style="width:100%">
+                      <thead>
+                        <tr class="tableheader">
+                          <th>No.</th>
+                          <th>VIN</th>
+                          <th>Model</th>
+                          <th>Model Year</th>
+                          <th>Variant</th>
+                          <th>Color</th>
+                          <th>Engine No.</th>
+                          <th>CS No.</th>
+                          <th>Plate No.</th>
+                          <th>VSI Date</th>
+                          <th>SRP</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btnvehselect" data-toggle="tooltip" data-placement="top" title="Go"
+                class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL VEHICLE LIST -->
+      <!-- MODAL MODIFY PAYMENT INFO -->
+      <div id="modal-modify-pay" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <div class="payment-info">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row pay-section">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label for="cboewallet">E-Wallet Type *</label>
-                        <select id="cboewallet" class="form-control input-sm" required data-error="E-Wallet Type is required." disabled>
+                        <label for="cbopaytype">Payment Type *</label>
+                        <select id="cbopaytype" class="form-control input-sm" required
+                          data-error="Payment Type is required." disabled>
                           <option value="">PLEASE SELECT</option>
                         </select>
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                    <div class="col-md-8 ew-icons-col">
-                      <div class="ew-icons">
-                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                        <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                        <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
+                  </div>
+
+                  <!-- Credit Card Section -->
+                  <div class="row cc-section" style="display: none;">
+                    <div class="col-md-12">
+                      <div class="credit-card">
+                        <div class="cc-header">
+                          <h3>Credit Card Details</h3>
+                          <div class="cc-icons">
+                            <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                            <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                            <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtccno">Card No. *</label>
+                              <input type="text" id="txtccno" class="form-control input-sm" required
+                                data-error="Card No. is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="txtccholder">Holder Name *</label>
+                              <input type="text" id="txtccholder" class="form-control input-sm" required
+                                data-error="Holder Name is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtccexpirydate">Expiry Date (MM/YY) *</label>
+                              <input type="text" id="txtccexpirydate" class="form-control input-sm" required
+                                data-error="Expiry Date is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtccvv">CVV / CVC *</label>
+                              <input type="text" id="txtccvv" class="form-control input-sm" required
+                                data-error="CVV / CVC is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="row term-amount-section">  
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="txtpayterms">Terms</label>
-                      <input type="text" id="txtpayterms" class="form-control input-sm" disabled>
-                      <div class="help-block with-errors"></div>
+                  <!-- PDC Section -->
+                  <div class="row pdc-section" style="display: none;">
+                    <div class="col-md-12">
+                      <div class="post-dated-check">
+                        <div class="pdc-header">
+                          <h3>Post-Dated Check (PDC) Details</h3>
+                          <div class="pdc-icons">
+                            <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtpdcno">Check No. *</label>
+                              <input type="text" id="txtpdcno" class="form-control input-sm" required
+                                data-error="Check No. is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="txtpdcholdername">Account Holder Name *</label>
+                              <input type="text" id="txtpdcholdername" class="form-control input-sm" required
+                                data-error="Account Holder Name is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtpdcbankname">Bank Name *</label>
+                              <input type="text" id="txtpdcbankname" class="form-control input-sm" required
+                                data-error="Bank Name is required." disabled>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="dppdccheckdate">Check Date *</label>
+                              <div class="input-group date">
+                                <div class="input-group-addon">
+                                  <i class="fa fa-calendar"></i>
+                                </div>
+                                <input id="dppdccheckdate" type="text" class="form-control input-sm pull-right"
+                                  required="required" data-error="Check Date is required." disabled>
+                              </div>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="txtpayamount">Amount *</label>
-                      <input type="text" id="txtpayamount" class="form-control input-sm" required data-error="Amount is required." disabled>
-                      <div class="help-block with-errors"></div>
+                  <!-- E-Wallet Section -->
+                  <div class="row ew-section" style="display: none;">
+                    <div class="col-md-12">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="cboewallet">E-Wallet Type *</label>
+                          <select id="cboewallet" class="form-control input-sm" required
+                            data-error="E-Wallet Type is required." disabled>
+                            <option value="">PLEASE SELECT</option>
+                          </select>
+                          <div class="help-block with-errors"></div>
+                        </div>
+                      </div>
+                      <div class="col-md-8 ew-icons-col">
+                        <div class="ew-icons">
+                          <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                          <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                          <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}"
+                            alt="toyotawallet">
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                </div>
+                  <div class="row term-amount-section">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="txtpayterms">Terms</label>
+                        <input type="text" id="txtpayterms" class="form-control input-sm" disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
 
-                <!-- Button Row -->
-                <div class="row btnadd-section">
-                  <div class="col-md-12 text-right">
-                    <label type="button" id="btnaddpay" class="btn btn-success">
-                      <i class="fa fa-plus-circle"></i> Add Payment
-                    </label>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="txtpayamount">Amount *</label>
+                        <input type="text" id="txtpayamount" class="form-control input-sm" required
+                          data-error="Amount is required." disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Button Row -->
+                  <div class="row btnadd-section">
+                    <div class="col-md-12 text-right">
+                      <label type="button" id="btnaddpay" class="btn btn-success">
+                        <i class="fa fa-plus-circle"></i> Add Payment
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="table-responsive">
-              <table id="table_payment" class="table m-0">
-                <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Payment ID</th>
-                  <th>Mode of Payment</th>
-                  <th>E-wallet Type</th>
-                  <!-- <th>CC No.</th>
+              <div class="table-responsive">
+                <table id="table_payment" class="table m-0">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Payment ID</th>
+                      <th>Mode of Payment</th>
+                      <th>E-wallet Type</th>
+                      <!-- <th>CC No.</th>
                   <th>CC Holder Name</th>
                   <th>CC Expiry Date</th>
                   <th>CC CVV</th> -->
-                  <th>PDC No.</th>
-                  <th>PDC Account Name</th>
-                  <th>PDC Bank Name</th>
-                  <th>PDC Date</th>
-                  <th>Terms</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                  <th class="col-action">Action</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-                </tfoot>
-              </table>
-              <table class="table m-0">
+                      <th>PDC No.</th>
+                      <th>PDC Account Name</th>
+                      <th>PDC Bank Name</th>
+                      <th>PDC Date</th>
+                      <th>Terms</th>
+                      <th>Amount</th>
+                      <th>Date</th>
+                      <th class="col-action">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                  </tfoot>
+                </table>
+                <table class="table m-0">
+                  <thead>
+                    <tr>
+                      <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
+                      <th id="tfoot_tpremium" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                      <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
+                      <th id="tfoot_total" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                      <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
+                      <th id="tfoot_balance" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                    </tr>
+                  </thead>
+                </table>
+                <p style="font-size:12px;font-style: italic;">
+                  <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After making the
+                  necessary changes in the input fields, click the ‘Add Payment’ button to save the updates to the
+                  payment list.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btneditpay" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+              <button type="button" id="btnclosepay" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
+              <label type="button" id="btncancelpay" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-ban"></i> Cancel</label>
+              <label type="button" id="btnupdatepay" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-save"></i> Update Info.</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL MODIFY PAYMENT INFO -->
+      <!-- MODAL MODIFY CHANGE STATUS -->
+      <div id="modal-modify-status" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <div class="insurer-info">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="cbotransstatus">Status *</label>
+                        <select id="cbotransstatus" class="form-control input-sm" required="required"
+                          data-error="Status is required." disabled>
+                          <option Value="">PLEASE SELECT</option>
+                        </select>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txttranssremarks">Remarks</label>
+                        <textarea id="txttranssremarks" class="form-control input-sm" placeholder="Address here!"
+                          rows="2" disabled></textarea>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btneditstatus" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+              <button type="button" id="btnclosestatus" class="btn btn-success"><i class="fa fa-close"></i>
+                Close</button>
+              <button type="button" id="btncancelstatus" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatestatus" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-save"></i> Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL MODIFY CHANGE STATUS -->
+      <!-- MODAL MODIFY NET REM -->
+      <div id="modal-modify-netrem" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <div class="insurer-info">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtinsgpremium">Gross Premium *</label>
+                        <input type="text" id="txtinsgpremium" class="form-control input-sm" required="required"
+                          data-error="Gross Premium is required." disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtnetrem">Net Rem *</label>
+                        <input type="text" id="txtnetrem" class="form-control input-sm" required="required"
+                          data-error="Net Rem is required." disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtinscommission">Commission *</label>
+                        <input type="text" id="txtinscommission" class="form-control input-sm" disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btneditnetrem" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+              <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i>
+                Close</button>
+              <button type="button" id="btncancelnetrem" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-save"></i> Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL MODIFY NET REM -->
+      <!-- MODAL CALL STATUS -->
+      <div id="modal-call" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box box-solid">
+          <div class="box-body" style="max-width:100%;">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="row">
+                <h4>Customer Information</h4>
+                <hr class="newline">
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="txtinsuranceno">Insurance No.</label>
+                        <input type="text" id="txtinsuranceno" class="form-control input-sm" disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtsfcustname">Customer Name</label>
+                        <textarea id="txtsfcustname" class="form-control input-sm" rows="2" disabled></textarea>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="txtsfcontactno">Contact No.</label>
+                        <input type="text" id="txtsfcontactno" class="form-control input-sm" disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="txtsfvin">VIN</label>
+                        <input type="text" id="txtsfvin" class="form-control input-sm" disabled>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <h4>Call Status Information</h4>
+                    <hr class="newline">
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="cbomodecomm">Mode of Communication *</label>
+                        <select id="cbomodecomm" class="form-control input-sm" required="required"
+                          data-error="Call Status is required." disabled>
+                          <option Value="">PLEASE SELECT</option>
+                        </select>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="cbocallstatus">Call Status *</label>
+                        <select id="cbocallstatus" class="form-control input-sm" required="required"
+                          data-error="Call Status is required." disabled>
+                          <option Value="">PLEASE SELECT</option>
+                        </select>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="cbocallreason">Call Reason *</label>
+                        <select id="cbocallreason" class="form-control input-sm" required="required"
+                          data-error="Call Reason is required." disabled>
+                          <option Value="">PLEASE SELECT</option>
+                        </select>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" id="div_promised_pay_date" style="display: none;">
+                      <div class="form-group">
+                        <label for="dpppdate">Promised Pay Date *</label>
+                        <div class="input-group date">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input id="dpppdate" type="text" class="form-control input-sm pull-right" required="required"
+                            data-error="Promised Pay Date is required.">
+                        </div>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="txtcallremarks">Call Remarks</label>
+                        <textarea id="txtcallremarks" class="form-control input-sm" placeholder="Call Remarks here!"
+                          rows="2" disabled></textarea>
+                        <div class="help-block with-errors"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btneditcall" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+              <button type="button" id="btnclosecall" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
+              <button type="button" id="btncancelcall" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatecall" class="btn btn-success" style="display:none;"><i
+                  class="fa fa-save"></i> Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL CALL STATUS -->
+      <!-- MODAL CALL LOGS -->
+      <div id="modal-logs" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box">
+          <!-- <div class="box-header with-border">
+          <h3 class="box-title">Call Logs History</h3>
+        </div> -->
+          <div class="box-body">
+            <div class="col-md-12">
+              <table id="table_logs" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
                 <thead>
-                  <tr>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
-                    <th id="tfoot_tpremium" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
-                    <th id="tfoot_total" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
-                    <th id="tfoot_balance" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                  <tr class="tableheader">
+                    <th>No.</th>
+                    <th>Call Log ID</th>
+                    <th>Call Log Date</th>
+                    <th>Insurance No.</th>
+                    <th>Customer Name</th>
+                    <th>Contact No.</th>
+                    <th>VIN</th>
+                    <th>Mode of Comm.</th>
+                    <th>Call Status</th>
+                    <th>Reason Desc</th>
+                    <th>Promised Pay Date</th>
+                    <th>Call Remarks</th>
+                    <th>User Name</th>
                   </tr>
                 </thead>
               </table>
-              <p style="font-size:12px;font-style: italic;">
-                <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After making the necessary changes in the input fields, click the ‘Add Payment’ button to save the updates to the payment list.
-              </p>
             </div>
           </div>
         </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditpay" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosepay" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <label type="button" id="btncancelpay" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</label>
-            <label type="button" id="btnupdatepay" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update Info.</label>
-          </div>
-        </div>  
       </div>
-    </div>
-    <!-- END MODAL MODIFY PAYMENT INFO -->
-    <!-- MODAL MODIFY CHANGE STATUS -->
-    <div id="modal-modify-status" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <div class="insurer-info">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="cbotransstatus">Status *</label>
-                      <select id="cbotransstatus" class="form-control input-sm" required="required" data-error="Status is required." disabled>
-                        <option Value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txttranssremarks">Remarks</label>
-                      <textarea id="txttranssremarks" class="form-control input-sm" placeholder="Address here!" rows="2" disabled></textarea>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditstatus" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosestatus" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <button type="button" id="btncancelstatus" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnupdatestatus" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
-          </div>
-        </div>  
-      </div>
-    </div>
-    <!-- END MODAL MODIFY CHANGE STATUS -->
-    <!-- MODAL MODIFY NET REM -->
-    <div id="modal-modify-netrem" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <div class="insurer-info">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txtinsgpremium">Gross Premium *</label>
-                      <input type="text" id="txtinsgpremium" class="form-control input-sm" required="required" data-error="Gross Premium is required." disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txtnetrem">Net Rem *</label>
-                      <input type="text" id="txtnetrem" class="form-control input-sm" required="required" data-error="Net Rem is required." disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txtinscommission">Commission *</label>
-                      <input type="text" id="txtinscommission" class="form-control input-sm" disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditnetrem" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <button type="button" id="btncancelnetrem" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
-          </div>
-        </div>  
-      </div>
-    </div>
-    <!-- END MODAL MODIFY NET REM -->
-    <!-- MODAL CALL STATUS -->
-    <div id="modal-call" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box box-solid">
-        <div class="box-body" style="max-width:100%;">
-          <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="row">
-              <h4>Customer Information</h4>
-              <hr class="newline">
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="txtinsuranceno">Insurance No.</label>
-                      <input type="text" id="txtinsuranceno" class="form-control input-sm" disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txtsfcustname">Customer Name</label>
-                      <textarea id="txtsfcustname" class="form-control input-sm" rows="2" disabled></textarea>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="txtsfcontactno">Contact No.</label>
-                      <input type="text" id="txtsfcontactno" class="form-control input-sm" disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="txtsfvin">VIN</label>
-                      <input type="text" id="txtsfvin" class="form-control input-sm" disabled>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <h4>Call Status Information</h4>
-                  <hr class="newline">
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="cbomodecomm">Mode of Communication *</label>
-                      <select id="cbomodecomm" class="form-control input-sm" required="required" data-error="Call Status is required." disabled>
-                        <option Value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="cbocallstatus">Call Status *</label>
-                      <select id="cbocallstatus" class="form-control input-sm" required="required" data-error="Call Status is required." disabled>
-                        <option Value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="cbocallreason">Call Reason *</label>
-                      <select id="cbocallreason" class="form-control input-sm" required="required" data-error="Call Reason is required." disabled>
-                        <option Value="">PLEASE SELECT</option>
-                      </select>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6" id="div_promised_pay_date" style="display: none;">
-                    <div class="form-group">
-                      <label for="dpppdate">Promised Pay Date *</label>
-                      <div class="input-group date">
-                        <div class="input-group-addon">
-                          <i class="fa fa-calendar"></i>
-                        </div>
-                        <input id="dpppdate" type="text" class="form-control input-sm pull-right" required="required" data-error="Promised Pay Date is required.">
-                      </div>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="txtcallremarks">Call Remarks</label>
-                      <textarea id="txtcallremarks" class="form-control input-sm" placeholder="Call Remarks here!" rows="2" disabled></textarea>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>  
-            </div>
-          </div>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btneditcall" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-            <button type="button" id="btnclosecall" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-            <button type="button" id="btncancelcall" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
-            <button type="button" id="btnupdatecall" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
-          </div>
-        </div>  
-      </div>
-    </div>
-    <!-- END MODAL CALL STATUS -->
-    <!-- MODAL CALL LOGS -->
-    <div id="modal-logs" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box">
-        <!-- <div class="box-header with-border">
-          <h3 class="box-title">Call Logs History</h3>
-        </div> -->
-        <div class="box-body">
-          <div class="col-md-12">
-            <table id="table_logs" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
+      <!-- END MODAL CALL LOGS -->
+      <!-- MODAL NB LIST -->
+      <div id="modal-nblist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box">
+          <div class="box-body">
+            <table id="table_nblist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
               <thead>
                 <tr class="tableheader">
                   <th>No.</th>
-                  <th>Call Log ID</th>
-                  <th>Call Log Date</th>
                   <th>Insurance No.</th>
+                  <th>Trans. Date & Time</th>
+                  <th>Status</th>
+                  <th>Customer No.</th>
                   <th>Customer Name</th>
                   <th>Contact No.</th>
                   <th>VIN</th>
-                  <th>Mode of Comm.</th>
-                  <th>Call Status</th>
-                  <th>Reason Desc</th>
-                  <th>Promised Pay Date</th>
-                  <th>Call Remarks</th>
-                  <th>User Name</th>
+                  <th>CS No.</th>
+                  <th>Plate No.</th>
+                  <th>Model</th>
+                  <th>Variant</th>
+                  <th>Insurance Partner</th>
+                  <th>I.S.E</th>
+                  <th>Expiration Date</th>
                 </tr>
               </thead>
             </table>
           </div>
-        </div>
-      </div>
-    </div>
-    <!-- END MODAL CALL LOGS -->
-    <!-- MODAL NB LIST -->
-    <div id="modal-nblist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-      <div class="box">
-        <div class="box-body">
-          <table id="table_nblist" class="table table-striped table-bordered table-hover nowrap" style="width:100%">
-            <thead>
-              <tr class="tableheader">
-                <th>No.</th>
-                <th>Insurance No.</th>
-                <th>Trans. Date & Time</th>
-                <th>Status</th>
-                <th>Customer No.</th>
-                <th>Customer Name</th>
-                <th>Contact No.</th>
-                <th>VIN</th>
-                <th>CS No.</th>
-                <th>Plate No.</th>
-                <th>Model</th>
-                <th>Variant</th>
-                <th>Insurance Partner</th>
-                <th>I.S.E</th>
-                <th>Expiration Date</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div class="box-footer with-border">
-          <div class="pull-right">
-            <button type="button" id="btnnbselect" data-toggle="tooltip" data-placement="top" title="Go" class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+          <div class="box-footer with-border">
+            <div class="pull-right">
+              <button type="button" id="btnnbselect" data-toggle="tooltip" data-placement="top" title="Go"
+                class="btn btn-success"><i class="fa-solid fa-clipboard-check"></i> Go</button>
+            </div>
           </div>
-        </div>  
+        </div>
       </div>
-    </div>
-    <!-- END MODAL NB LIST -->
-  </section>
-</div>
-<!-- /.content-wrapper -->
+      <!-- END MODAL NB LIST -->
+    </section>
+  </div>
+  <!-- /.content-wrapper -->
 
-{{-- renewalBusinessCounts: @json(route('renewal_business.counts')) --}}
+  {{-- renewalBusinessCounts: @json(route('renewal_business.counts')) --}}
 
-@push('scripts')
-<script>
-
+  @push('scripts')
+  <script>
     window.dataRoutes = {
       userAccountSession : @json(route('getSession.variables'))
     }
@@ -2134,9 +2308,9 @@
 
         updateNetRem: @json(route('update.net-remittance'))
     }
-</script>
+  </script>
 
-<script type="text/javascript" src="{{ asset("tmia-assets/js/laravel/renewal_business_laravel.js") }}"></script>
-@endpush
+  <script type="text/javascript" src="{{ asset("tmia-assets/js/laravel/renewal_business_laravel.js") }}"></script>
+  @endpush
 
 </x-layouts.main>

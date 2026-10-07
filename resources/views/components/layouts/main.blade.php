@@ -208,7 +208,7 @@
                             "X-CSRF-TOKEN": "{{ csrf_token() }}"
                         }
                     }).then(() => {
-                        window.location.href = "{{ route('lockscreen') }}";
+                        window.location.href = "{{ redirect()->route('lockscreen') }}";
                     });
                 }
 

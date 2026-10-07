@@ -25,22 +25,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body" style="max-width:100%;" >
-          <table id="table_user" class="table table-striped table-bordered table-hover">
-            <thead>
-              <tr class="tableheader">
-                <th>User ID</th>
-                <th>Name</th>
-                <th>Username</th>
-                <th>User Level</th>
-                <th>Active</th>
-                <th>Enabled 2FA</th>
-                <th>Password Expiration</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
+          
         </div>
       </div>
       <!-- / box-body -->

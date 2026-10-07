@@ -111,14 +111,16 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
         Route::post('/customer/get-check-data', [CustomerController::class, 'checkCustomerData'])->name('customer.getCheck-data');
         Route::post('/customer/get-by-no', [CustomerController::class, 'getCustomerByNo'])->name('customer.get-by-no');
+        Route::post('/customer/file-nb-upload', [CustomerController::class, 'fileNbUpload'])->name('file.nbupload');
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
         Route::post('/vehicle/edaf-search', [CustomerController::class, 'getEdafCustomerVehicle'])->name('edaf.vehicle.search');
-        Route::post('/customer/file-nb-upload', [CustomerController::class, 'fileNbUpload'])->name('file.nbupload');
         
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
         Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
         Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
         Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
+
+        // Route::post('/renewal-business/')->name('');
 
         
 
@@ -161,11 +163,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/get-vehicle-by-customer', [RenewalBusinessController::class, 'getVehiclesByCustomer'])->name("get.Vehicles.By.Customer");
         Route::post('/renewal-business/update-status', [RenewalBusinessController::class, 'updateStatus'])->name('renewal.update-status');
         
-
-
         Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify.index');
-        Route::post('/renewal-business/data/modify', [RenewalBusinessController::class, 'getRbTransactionsByInsuranceNo'])->name('renewal_business_modify_data.index');
-
+        Route::post('/renewal-business/data/modify', [RenewalBusinessController::class, 'getRbTransactionsByInsuranceNo'])->name('renewal_business_modify_data.index');        
 
         // Vehicle
         Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');

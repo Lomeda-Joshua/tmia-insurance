@@ -240,10 +240,11 @@ class CustomerController extends Controller
         }
 
         // Query view via Eloquent
-        $data = CustomerInformation::where('Customer_No', $custNo)->get();
+        $data = CustomerInformation::with('renewBusinessData')->where('Customer_No', $custNo)->get();
 
         return response()->json($data);
     }
+    
 
 
     /**

@@ -1120,6 +1120,8 @@ $(document).ready( function () {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       },
       success: function(data) {
+
+          console.log(data);
           let options = '<option value="">PLEASE SELECT</option>';
 
           // Iterate over JSON objects and build <option> elements
@@ -1276,9 +1278,9 @@ $(document).ready( function () {
   /*--------------------- INSURER INFO --------------------*/
   $("#dpstartdate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
+  }).datepicker('setDate', new Date());
 
   $("#dpissuedate").datepicker({
     autoclose: true,
@@ -2020,8 +2022,8 @@ function LoadInsurerInfo(insuranceno) {
         }
 
         
-        setSelectOption("#cboinstype", value.Insurance_Type, value.Insurance_Type);
-        setSelectOption("#cboinsco", value.Insurance_Company, value.Insurance_Company);
+        setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
+        setSelectOption("#cboinsco, .cboinsco", value.Insurance_Company, value.Insurance_Company);
 
         // Safe date handling with default to today
         if (value && value.Start_Date) {
@@ -2260,17 +2262,17 @@ function LoadVehicleInfo() {
           }
         }
 
-        $("#txtvin").val(value.VIN);
-        $("#txtmake").val(value.Make);
-        $("#txtmodel").val(value.Model);
-        $("#txtmodelyear").val(value.Model_Year);
-        $("#txtcolor").val(value.Color);
-        $("#txtengineno").val(value.Engine_No);
-        $("#txtcsno").val(value.CS_No);
-        $("#txtplateno").val(value.Plate_No);
+        $("#txtvin, .txtvin").val(value.VIN);
+        $("#txtmake, .txtmake").val(value.Make);
+        $("#txtmodel, .txtmodel").val(value.Model);
+        $("#txtmodelyear, .txtmodelyear").val(value.Model_Year);
+        $("#txtcolor, .txtcolor").val(value.Color);
+        $("#txtengineno, .txtengineno").val(value.Engine_No);
+        $("#txtcsno, .txtcsno").val(value.CS_No);
+        $("#txtplateno, .txtplateno").val(value.Plate_No);
         // $("#txtorderno").val(value.Order_No);
         // $("#txtorderstatus").val(value.Order_Status);
-        $("#txtsrp").val(NumberFormat(value.SRP));
+        $("#txtsrp, .txtsrp").val(NumberFormat(value.SRP));
         
         // Safe date handling
         if (value.VSI_Date) {
@@ -2385,7 +2387,6 @@ function LoadVehicleEDAFSAPInfo() {
   
   $(".box-body").validator('reset');
 }
-
 
 function LoadPayData() {
   $.ajax({
@@ -2735,6 +2736,66 @@ function LoadCallLogsData() {
     $('#modal-logs').iziModal('open');
   }
 }
+
+
+
+function LoadPreviousInsuranceCo(){
+      $.ajax({
+        type:"POST",
+        url:window.LaravelRoutes.loadSelectedCustomer,
+        data:{custno:xcustno},
+        success: function(data){
+          $.each(data, function(i, value) {
+            
+
+            $("#txtcustno, .txtcustno").val(value.Customer_No);
+            xcustnoupload = value.Upload_Cust_No;
+            $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
+            $("#txtcustname, .txtcustname").val(value.Full_Name);
+            $("#txtcustfname, .txtcustfname").val(value.First_Name);
+            $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
+            $("#txtcustlname, .txtcustlname").val(value.Last_Name);
+            $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
+
+            // Safe date handling
+            if (value.Birth_Date) {
+              const safeDate = new Date(value.Birth_Date);
+              if (!isNaN(safeDate)) {
+                $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
+              }
+            }
+
+            $("#txttin, .txttin").val(value.TIN);
+            $("#txtcontactno, .txtcontactno").val(value.Contact_No);
+            $("#txtemailadd, .txtemailadd").val(value.Email_Address);
+            $("#txtaddress, .txtaddress").val(value.Address);
+            
+            // Location: Region
+            if (value.RegCode) {
+              setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
+              FetchProv(value.RegCode, value.ProvCode);
+            }
+
+            // Province
+            if (value.ProvCode) {
+              setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
+              FetchCM(value.ProvCode, value.CMCode);
+            }
+
+            // City/Municipality
+            if (value.CMCode) {
+              setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
+              FetchBrgy(value.CMCode, value.BrgyCode);
+            }
+
+            $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
+            setSelectOption("#cbocountry", value.Country, value.Country);
+          });
+        }
+      });
+}
+
+
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
 //============= TAB CUSTOMER ============//
@@ -4724,7 +4785,7 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadVehicleInfo();
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
-  if ( ulevel == 'INSURANCE STAFF') { 
+  if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
 
     $('#modal-add').iziModal('open');
@@ -4748,6 +4809,19 @@ $(document).on( "click", "#btnadd", function () {
     $('#modal-modify-ise').iziModal('open');
   }
 });
+
+
+
+const fields = ["#cboinstype", "#cboinsco", "#dpstartdate", "#txtpolicyno", "#dpissuedate", "#dppexpiredate", "#cbomortgage"];
+
+$(document).on("input change", fields.join(", "), function () {
+  const currentValue = $(this).val();
+  const targetId = `#${this.id}_summary`;
+
+  console.log(`Updated ${this.id}:`, currentValue);
+  $(targetId).val(currentValue);
+});
+
 
 $(document).on( "click", "#btnselectise", function () {
   var selectise = $("#cboise").val();
@@ -5659,7 +5733,7 @@ $(document).on("click", "#btnsubmit", function () {
     mortgage: getVal("#cbomortgage"),
     // mortaddress: getUpper("#txtmortaddress"),
     // selectedPromo: $('input[name="promo"]:checked').val() === "YES" ? 1 : 0
-  };
+  };  
 
   if (!runValidation([
     { value: insurerFields.instype, selector: "#cboinstype", message: "Please fill out Insurance Type." },
@@ -6496,4 +6570,33 @@ function convertFinancialNumber(value, decimals = 2) {
   // Positive numbers → format to specified decimals
   return num.toFixed(decimals);
 }
+
+
+ function loadInsuranceInfoReview(){
+    const selectedValue = $("#cboinstype").val();
+
+    console.log(selectedValue);
+
+ }
+
+ function loadPreviousInsuranceCompany(){
+          $.ajax({
+            type:"POST",
+            url:window.formRoutes.insuranceStaffData,
+            success: function(data) {
+                let options = '<option value="">PLEASE SELECT</option>';
+                // Iterate over JSON objects and build <option> elements
+                $.each(data, function(index, item) {
+                  options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+                });
+
+                // Inject populated options into dropdown
+                $("#cboise").html(options);
+
+                // Force Select2 to refresh its display
+                $("#cboise").trigger('change.select2');
+            }
+          });
+
+ }
 /////////// END FORMATTING SETTING ///////////

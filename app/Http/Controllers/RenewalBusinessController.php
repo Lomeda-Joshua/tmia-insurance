@@ -840,6 +840,7 @@ class RenewalBusinessController extends Controller
     }
 
 
+
     public function printPdf($insurance_no)
     {
        // 1. Fetch parent record with child payments relationship

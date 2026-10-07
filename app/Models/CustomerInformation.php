@@ -55,5 +55,8 @@ class CustomerInformation extends Model
         return $this->hasMany(VehicleInformation::class, 'Customer_No', 'Customer_No');
     }
 
+    public function renewBusinessData(){
+        return $this->hasMany( RenewBusinessTransactionView::class, 'Customer_No', 'Customer_No');
+    }
 
 }

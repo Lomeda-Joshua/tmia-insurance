@@ -31,7 +31,6 @@ class EnsureLockscreenIsUnlocked
 
         // 3. Enforce lockscreen restriction on all protected routes
         if ($request->session()->get('lockscreen') === true) {
-
             return redirect()->route('lockscreen');            
         }
 
