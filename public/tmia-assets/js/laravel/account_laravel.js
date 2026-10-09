@@ -349,7 +349,7 @@ var xuname;
     if (xuname != uname)  {
       CheckUserName();
     } else {
-      SaveData();
+      SaveData(value);
     }
 
     function CheckUserName() {
@@ -394,7 +394,7 @@ var xuname;
         });
     }
 
-    function SaveData() {
+    function SaveData(formData) {
       showLoading("Saving user record..."); // Show spinner before sending request
 
       $.ajax({

@@ -1816,3 +1816,13 @@ input[type=checkbox]:checked:disabled + label:before {
 .notifications-menu .menu li {
     border-bottom: 1px solid rgba(0,0,0,0.04);
 }
+
+/* Custom link hover css */
+.custom-link-hover {
+    color: inherit;
+    transition: color 0.15s ease-in-out;
+}
+
+.custom-link-hover:hover {
+    color: #dc3545 !important; /* Change to your preferred hover color */
+}

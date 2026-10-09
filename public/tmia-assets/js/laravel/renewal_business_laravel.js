@@ -1061,7 +1061,7 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.insuranceTypeData,
     success: function(data) {
-      let options = '<option value="">PLEASE SELECT</option>';
+        let options = '<option value="">PLEASE SELECT</option>';
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
@@ -2003,13 +2003,14 @@ function LoadInsuranceInfo(insuranceno) {
 }
 
 function LoadInsurerInfo(insuranceno) {
+  console.log("hello");
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
+      console.log(data);
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2022,6 +2023,7 @@ function LoadInsurerInfo(insuranceno) {
         }
 
         
+
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco, .cboinsco", value.Insurance_Company, value.Insurance_Company);
 
@@ -2036,6 +2038,7 @@ function LoadInsurerInfo(insuranceno) {
                 // Fallback to today if string is invalid date
                 $("#dpstartdate").datepicker("setDate", new Date());
             }
+
         } else {
             // Default to today if Start_Date is null/undefined/empty
             $("#dpstartdate").datepicker("setDate", new Date());
@@ -2048,7 +2051,8 @@ function LoadInsurerInfo(insuranceno) {
         if (value.Issue_Date) {
           const safeIDate = new Date(value.Issue_Date) ?? new Date();
           if (!isNaN(safeIDate)) {
-            $("#dpissuedate").datepicker("setDate", safeIDate);
+            // $("#dpissuedate").datepicker("setDate", safeIDate);
+            $("#dpissuedate").datepicker("setDate", new Date());
           }
         }
 
@@ -2086,6 +2090,9 @@ function LoadCustomerInfo() {
     url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:xcustno},
     success: function(data){
+
+      console.log("Customer data", data)
+
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2150,6 +2157,10 @@ function LoadCustomerInfo() {
 
         $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
         setSelectOption("#cbocountry", value.Country, value.Country);
+
+        // Loading of previoous insurance details on the creation of Renewal business insurance
+        LoadPreviousInsuranceCo(value.renew_business_data);
+
       });
     }
   });
@@ -2737,64 +2748,46 @@ function LoadCallLogsData() {
   }
 }
 
+// Loading of previous insurance details
+function LoadPreviousInsuranceCo(data){
+      console.log(data);
 
+      // 1. Guard check: Ensure data exists and is an array with items
+      if (!Array.isArray(data) || data.length === 0) {
+          console.warn("No insurance history data available.");
+          return;
+      }
 
-function LoadPreviousInsuranceCo(){
-      $.ajax({
-        type:"POST",
-        url:window.LaravelRoutes.loadSelectedCustomer,
-        data:{custno:xcustno},
-        success: function(data){
-          $.each(data, function(i, value) {
-            
+      // 2. Get the latest/most recent entry from the array (Index 0 or last index)
+      // Assuming data[0] is the latest entry based on your array log
+      const latestItem = data[0]; 
 
-            $("#txtcustno, .txtcustno").val(value.Customer_No);
-            xcustnoupload = value.Upload_Cust_No;
-            $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
-            $("#txtcustname, .txtcustname").val(value.Full_Name);
-            $("#txtcustfname, .txtcustfname").val(value.First_Name);
-            $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
-            $("#txtcustlname, .txtcustlname").val(value.Last_Name);
-            $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
+      // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
+    if (latestItem) {
+        // Set dropdown values & trigger Select2 updates
+        $("#cboinstype").val(latestItem.Insurance_Type).trigger('change.select2');
+        $("#cboinsco, #cboprevinsco").val(latestItem.Insurance_Company).trigger('change.select2');
+        $("#cbomortgage").val(latestItem.Mortgage).trigger('change.select2');
 
-            // Safe date handling
-            if (value.Birth_Date) {
-              const safeDate = new Date(value.Birth_Date);
-              if (!isNaN(safeDate)) {
-                $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
-              }
+        // Set text inputs & date fields from the latest record
+        $("#txtpolicyno").val(latestItem.Policy_No || "");
+
+        // Set datepicker fields cleanly
+        if (latestItem.Start_Date) {
+            $("#dpstartdate").val(latestItem.Start_Date);
+            if ($.fn.datepicker) {
+                $("#dpstartdate").datepicker("setDate", new Date(latestItem.Start_Date));
             }
-
-            $("#txttin, .txttin").val(value.TIN);
-            $("#txtcontactno, .txtcontactno").val(value.Contact_No);
-            $("#txtemailadd, .txtemailadd").val(value.Email_Address);
-            $("#txtaddress, .txtaddress").val(value.Address);
-            
-            // Location: Region
-            if (value.RegCode) {
-              setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
-              FetchProv(value.RegCode, value.ProvCode);
-            }
-
-            // Province
-            if (value.ProvCode) {
-              setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
-              FetchCM(value.ProvCode, value.CMCode);
-            }
-
-            // City/Municipality
-            if (value.CMCode) {
-              setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
-              FetchBrgy(value.CMCode, value.BrgyCode);
-            }
-
-            $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
-            setSelectOption("#cbocountry", value.Country, value.Country);
-          });
         }
-      });
-}
 
+        if (latestItem.Issue_Date) {
+            $("#dpissuedate").val(latestItem.Issue_Date);
+            if ($.fn.datepicker) {
+                $("#dpissuedate").datepicker("setDate", new Date(latestItem.Issue_Date));
+            }
+        }
+    }
+}
 
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
@@ -3702,6 +3695,9 @@ $(document).on("click", "#btncancelnetrem", function() {
 });
 
 $(document).on("click", "#btnupdatenetrem", function () {
+
+
+
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -3771,8 +3767,10 @@ $(document).on("click", "#btnupdatenetrem", function () {
     data: formdata,
     processData: false,
     contentType: false,
-    success: function (response) {
+    success: function (response) {      
       $("#modalsaving").iziModal('close');
+
+
 
       if (response.result == 1) {
         swal({
@@ -6579,24 +6577,4 @@ function convertFinancialNumber(value, decimals = 2) {
 
  }
 
- function loadPreviousInsuranceCompany(){
-          $.ajax({
-            type:"POST",
-            url:window.formRoutes.insuranceStaffData,
-            success: function(data) {
-                let options = '<option value="">PLEASE SELECT</option>';
-                // Iterate over JSON objects and build <option> elements
-                $.each(data, function(index, item) {
-                  options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
-                });
-
-                // Inject populated options into dropdown
-                $("#cboise").html(options);
-
-                // Force Select2 to refresh its display
-                $("#cboise").trigger('change.select2');
-            }
-          });
-
- }
 /////////// END FORMATTING SETTING ///////////

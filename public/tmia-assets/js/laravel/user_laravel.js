@@ -495,7 +495,7 @@ var xuname;
     } else if (appmethod == "U" && xuname != uname)  {
       CheckUserName();
     } else {
-      SaveData();
+      SaveData(value);
     }
 
     function CheckUserName() {
@@ -536,7 +536,7 @@ var xuname;
         });
     }
 
-    function SaveData() {
+    function SaveData(value) {
       showLoading("Saving user record..."); // Show spinner before sending request
       $.ajax({
         url : window.SaveRoute.saveNewUserData,

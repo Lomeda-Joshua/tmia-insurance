@@ -1093,7 +1093,7 @@
                               <div class="form-group">
                                 <label for="cboinsco">Insurance Company *</label>
                                 <select id="cboinsco" class="form-control input-sm" required="required"
-                                  data-error="Insurance Company is required." disabled>
+                                  data-error="Insurance Company is required.">
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1200,6 +1200,286 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Modal Window Trigger Button -->
+<button type="button" class="btn btn-primary" onclick="openReceiptModal()">
+    <i class="fa fa-receipt"></i> View Receipt
+</button>
+
+<!-- Receipt Modal Window -->
+<div id="receiptModal" class="receipt-modal-overlay" style="display: none;">
+    <div class="receipt-modal-window">
+        <!-- Modal Header -->
+        <div class="receipt-modal-header">
+            <h5 class="m-0"><i class="fa fa-file-invoice"></i> Official Receipt</h5>
+            <button type="button" class="close-btn" onclick="closeReceiptModal()">&times;</button>
+        </div>
+
+        <!-- Printable Receipt Content Area -->
+        <div class="receipt-container" id="printableReceipt">
+            <!-- Header Logos & Info -->
+            <table class="receipt-header-table">
+                <tr>
+                    <td style="text-align: left; width: 60%;">
+                        <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
+                        <span style="font-size: 10px; color: #666;">Official Transaction Receipt</span>
+                    </td>
+                    <td style="text-align: right; width: 40%;">
+                        <span style="font-size: 11px; font-weight: bold; color: #222;">OR #: 2026-00891</span><br>
+                        <span style="font-size: 10px; color: #666;">Date: Oct 09, 2026</span>
+                    </td>
+                </tr>
+            </table>
+
+            <hr class="divider">
+
+            <!-- Customer & Transaction Information -->
+            <div class="receipt-section-title">CUSTOMER INFORMATION</div>
+            <table class="receipt-details-table">
+                <tr>
+                    <th>Customer Name:</th>
+                    <td>ALAISAH DIMA AMPAO SAID</td>
+                    <th>Contact No:</th>
+                    <td>09277226339</td>
+                </tr>
+                <tr>
+                    <th>Insurance No:</th>
+                    <td>RB-2026-0000006</td>
+                    <th>Policy No:</th>
+                    <td>123132</td>
+                </tr>
+            </table>
+
+            <!-- Itemized Summary Table -->
+            <div class="receipt-section-title">PAYMENT DETAILS</div>
+            <table class="receipt-items-table">
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Description</th>
+                        <th style="text-align: center;">Mode</th>
+                        <th style="text-align: right;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TOYOTA INSURE - Comprehensive Coverage</td>
+                        <td style="text-align: center;">CASH</td>
+                        <td style="text-align: right;">₱ 18,000.00</td>
+                    </tr>
+                    <tr>
+                        <td>Processing & Documentary Stamps</td>
+                        <td style="text-align: center;">CASH</td>
+                        <td style="text-align: right;">₱ 2,000.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Total Calculation -->
+            <table class="receipt-total-table">
+                <tr>
+                    <td class="text-right"><strong>Subtotal:</strong></td>
+                    <td class="text-right" style="width: 120px;">₱ 20,000.00</td>
+                </tr>
+                <tr>
+                    <td class="text-right"><strong>Vat (12%):</strong></td>
+                    <td class="text-right">Included</td>
+                </tr>
+                <tr class="total-row">
+                    <td class="text-right"><strong>Total Paid:</strong></td>
+                    <td class="text-right"><strong>₱ 20,000.00</strong></td>
+                </tr>
+            </table>
+
+            <div class="receipt-footer">
+                <p>Thank you for your business!</p>
+                <small>This serves as an official proof of payment.</small>
+            </div>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="receipt-modal-footer">
+            <button type="button" class="btn-close-modal" onclick="closeReceiptModal()">Close</button>
+            <button type="button" class="btn-print-modal" onclick="printReceipt('printableReceipt')">
+                <i class="fa fa-print"></i> Print Receipt
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Embedded CSS Styling -->
+<style>
+/* Modal Window Overlay */
+.receipt-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Modal Outer Card */
+.receipt-modal-window {
+    background: #fff;
+    width: 520px;
+    max-width: 95%;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.receipt-modal-header {
+    background: #222;
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Printable Inner Container */
+.receipt-container {
+    padding: 20px;
+    background: #fff;
+    color: #333;
+}
+
+.receipt-header-table, .receipt-details-table, .receipt-items-table, .receipt-total-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.divider {
+    border: none;
+    border-top: 1px dashed #ccc;
+    margin: 12px 0;
+}
+
+.receipt-section-title {
+    background: #f4f4f4;
+    padding: 4px 8px;
+    font-weight: bold;
+    font-size: 11px;
+    color: #333;
+    margin: 10px 0 6px 0;
+    border-left: 3px solid #222;
+}
+
+.receipt-details-table th, .receipt-details-table td {
+    padding: 4px;
+    font-size: 11px;
+    text-align: left;
+}
+
+.receipt-details-table th {
+    color: #666;
+    font-weight: 600;
+}
+
+.receipt-items-table {
+    margin-top: 8px;
+}
+
+.receipt-items-table th {
+    border-bottom: 2px solid #ddd;
+    padding: 6px;
+    font-size: 11px;
+    background: #fafafa;
+}
+
+.receipt-items-table td {
+    border-bottom: 1px solid #eee;
+    padding: 6px;
+    font-size: 11px;
+}
+
+.receipt-total-table td {
+    padding: 4px 6px;
+    font-size: 12px;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.total-row td {
+    font-size: 14px;
+    border-top: 2px solid #222;
+    padding-top: 6px;
+}
+
+.receipt-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    color: #777;
+}
+
+/* Modal Footer Action Buttons */
+.receipt-modal-footer {
+    background: #f8f9fa;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.btn-close-modal {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-print-modal {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-close-modal:hover { background: #5a6268; }
+.btn-print-modal:hover { background: #218838; }
+
+/* CSS Media Query for Printing direct content */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #printableReceipt, #printableReceipt * {
+        visibility: visible;
+    }
+    #printableReceipt {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+}
+</style>
+
+
+
+
+
               </div>
 
               <!-- Step 5 -->
@@ -1452,7 +1732,7 @@
                           <div class="form-group">
                             <label for="cbomortgage_summary">Mortgage *</label>
                               <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
-                                data-error="Mortgage is required." disabled>
+                                data-error="Mortgage is required." disabledv />
                           </div>
                         </div>
    
@@ -1992,12 +2272,9 @@
           <div class="box-footer with-border">
             <div class="pull-right">
               <button type="button" id="btneditnetrem" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-              <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i>
-                Close</button>
-              <button type="button" id="btncancelnetrem" class="btn btn-success" style="display:none;"><i
-                  class="fa fa-ban"></i> Cancel</button>
-              <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display:none;"><i
-                  class="fa fa-save"></i> Update</button>
+              <button type="button" id="btnclosenetrem" class="btn btn-success"><i class="fa fa-close"></i>Close</button>
+              <button type="button" id="btncancelnetrem" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</button>
+              <button type="button" id="btnupdatenetrem" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update</button>
             </div>
           </div>
         </div>
@@ -2202,6 +2479,29 @@
   {{-- renewalBusinessCounts: @json(route('renewal_business.counts')) --}}
 
   @push('scripts')
+
+  <!-- JavaScript Controls -->
+<script>
+function openReceiptModal() {
+    document.getElementById('receiptModal').style.display = 'flex';
+}
+
+function closeReceiptModal() {
+    document.getElementById('receiptModal').style.display = 'none';
+}
+
+function printReceipt(divId) {
+    var printContents = document.getElementById(divId).innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // Reloads page state after print dialog closes
+}
+</script>
+
+
   <script>
     window.dataRoutes = {
       userAccountSession : @json(route('getSession.variables'))

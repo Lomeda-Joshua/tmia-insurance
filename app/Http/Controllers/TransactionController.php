@@ -47,6 +47,8 @@ class TransactionController extends Controller
             'inscommission' => 'nullable|numeric',
         ]);        
 
+        dd($validatedData);
+
         try {
             // 2. Wrap operations inside Eloquent/DB Transaction
             return DB::transaction(function () use ($validatedData, $request) {
