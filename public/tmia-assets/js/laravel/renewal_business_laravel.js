@@ -2091,8 +2091,6 @@ function LoadCustomerInfo() {
     data:{custno:xcustno},
     success: function(data){
 
-      console.log("Customer data", data)
-
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2160,6 +2158,16 @@ function LoadCustomerInfo() {
 
         // Loading of previoous insurance details on the creation of Renewal business insurance
         LoadPreviousInsuranceCo(value.renew_business_data);
+
+        $("#cboinstype").prop('disabled', true).trigger('change.select2');
+        $("#cboinstype").prop('disabled', true).trigger('change.select2');
+
+        // Condition: Disable the entire dropdown if no data or custom rule met
+        // if (data.length > 0) {
+            
+        // } else {
+        //     $("#cboinstype").prop('disabled', false);
+        // }
 
       });
     }

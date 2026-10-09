@@ -1289,11 +1289,6 @@
                     <td class="text-right"><strong>₱ 20,000.00</strong></td>
                 </tr>
             </table>
-
-            <div class="receipt-footer">
-                <p>Thank you for your business!</p>
-                <small>This serves as an official proof of payment.</small>
-            </div>
         </div>
 
         <!-- Modal Footer Actions -->
