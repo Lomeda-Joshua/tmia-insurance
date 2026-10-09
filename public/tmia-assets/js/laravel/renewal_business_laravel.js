@@ -2337,10 +2337,9 @@ function LoadVehicleInfo() {
 function LoadVehicleEDAFSAPInfo() {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_upload_info.php",
+    url:window.getData.edafVehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -3703,9 +3702,6 @@ $(document).on("click", "#btncancelnetrem", function() {
 });
 
 $(document).on("click", "#btnupdatenetrem", function () {
-
-
-
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -3743,12 +3739,11 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // CHANGE TRANSACTION STATUS
   // ======================================================
   const NetRem = {
-    insuranceno,
+    insuranceno: $("#insurance_no_input").val(),
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
     inscommission: getNum("#txtinscommission")
   };
-
   
 
   if (!runValidation([
@@ -3775,10 +3770,8 @@ $(document).on("click", "#btnupdatenetrem", function () {
     data: formdata,
     processData: false,
     contentType: false,
-    success: function (response) {      
+    success: function (response) {   
       $("#modalsaving").iziModal('close');
-
-
 
       if (response.result == 1) {
         swal({
@@ -3792,6 +3785,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
           editnetrem = false;
           FormDisableNetRem(true);
           LoadNetRemData();
+          $('#table_trans').DataTable().ajax.reload(null, false);
           $(".iziModal-wrap").scrollTop(0);
         });
       } else {
@@ -5243,10 +5237,12 @@ $(document).on( "click", ".btnpay", function () {
 });
 
 $(document).on( "click", ".btnnetrem", function () {
-  insuranceNo = $(this).data('insurance-no');
+  let insuranceNo = $(this).data('insurance-no');
   FormClearNetRem();
   LoadNetRemData(insuranceNo);
   FormDisableNetRem(true);
+
+  $("#insurance_no_input").val(insuranceNo);
 });
 
 $(document).on("click",".btnsoa",function(){

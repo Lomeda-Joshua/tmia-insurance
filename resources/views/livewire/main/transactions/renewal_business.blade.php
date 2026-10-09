@@ -2224,6 +2224,7 @@
       <div id="modal-modify-netrem" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
           <div class="box-body" style="max-width:100%;">
+            <input hidden id="insurance_no_input" />
             <div class="insurer-info">
               <div class="row">
                 <div class="col-md-12">
@@ -2545,7 +2546,7 @@ function printReceipt(divId) {
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
-      saveUpdatedNetRem : @json(route('update.netrem')),
+      saveUpdatedNetRem : @json(route('update.net-remittance')),
       callLogsStore : @json(route("call-logs.store"))
     }
 
@@ -2600,8 +2601,6 @@ function printReceipt(divId) {
 
         // Call status
         callStatusData: @json(route('callstatus.data')),
-
-        updateNetRem: @json(route('update.net-remittance'))
     }
   </script>
 
