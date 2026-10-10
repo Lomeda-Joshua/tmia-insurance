@@ -571,14 +571,14 @@ class RenewalBusinessController extends Controller
     {
         // 1. Input Validation
         $validated = $request->validate([
-            'insuranceno' => 'nullable|string',
+            'insuranceNo' => 'nullable|string',
         ]);
 
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
-        if (!empty($validated['insuranceno'])) {
-            $data = TransactionRb::where('Insurance_No', $validated['insuranceno'])->get();
+        if (!empty($validated['insuranceNo'])) {
+            $data = TransactionRb::where('Insurance_No', $validated['insuranceNo'])->get();
         }
 
         // 3. Return JSON Response
@@ -594,17 +594,18 @@ class RenewalBusinessController extends Controller
         }
 
         // Fetch matching records via Eloquent
-        $payments = TransactionRBpayment::where('Insurance_No', $insuranceNo)->get();
+        $payments = TransactionRBPayment::where('Insurance_No', $insuranceNo)->get();
 
         // Transform the collection to attach row index ('urutan') and action buttons
         $data = $payments->values()->map(function ($row, $index) {
             $payId = e($row->Payment_ID);
 
-            return array_merge($row->toArray(), [
+            // Use attributesToArray() instead of toArray() to avoid circular reference loops
+            return array_merge($row->attributesToArray(), [
                 'urutan' => $index + 1,
                 'button' => '<label payid="' . $payId . '" class="btn btn-success btn-action btnremovepaysave" data-toggle="tooltip" data-placement="top" title="Remove">'
-                          . '<i class="fa-regular fa-trash-can"></i>'
-                          . '</label>',
+                        . '<i class="fa-regular fa-trash-can"></i>'
+                        . '</label>',
             ]);
         });
 

@@ -292,6 +292,22 @@ class CustomerController extends Controller
         return response()->json($data);
     }
 
+
+
+        public function getRenewalBusinessTransactionsByInsuranceNo(Request $request): JsonResponse
+    {
+        $insuranceNo = $request->input('insuranceno');
+
+        if (empty($insuranceNo)) {
+            return response()->json([]);
+        }
+
+        // Eloquent query matching "SELECT * FROM transactions_nb WHERE Insurance_No = :insuranceno"
+        $data = TransactionRb::where('Insurance_No', $insuranceNo)->get();
+
+        return response()->json($data);
+    }
+
     
     /**
      * Fetch authenticated user state and attributes.

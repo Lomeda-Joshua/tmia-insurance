@@ -98,7 +98,7 @@ class TransactionController extends Controller
     {
         // 1. Validate inputs (replaces manual fallbacks)
         $validatedData = $request->validate([
-            'insuranceno'   => 'required|string',
+            'insuranceNo'   => 'required|string',
             'insgpremium'   => 'nullable|numeric',
             'netrem'        => 'nullable|numeric',
             'inscommission' => 'nullable|numeric',
@@ -109,7 +109,7 @@ class TransactionController extends Controller
             return DB::transaction(function () use ($validatedData) {
 
                 // 3. Perform Eloquent update directly by condition
-                $affectedRows = TransactionsRb::where('Insurance_No', $validatedData['insuranceno'])
+                $affectedRows = TransactionRb::where('Insurance_No', $validatedData['insuranceNo'])
                     ->update([
                         'Gross_Premium' => $validatedData['insgpremium'] ?? null,
                         'Net_Rem'       => $validatedData['netrem'] ?? null,
@@ -128,7 +128,7 @@ class TransactionController extends Controller
 
                 return response()->json([
                     'result'       => 1,
-                    'Insurance_No' => $validatedData['insuranceno'],
+                    'Insurance_No' => $validatedData['insuranceNo'],
                 ]);
             });
 

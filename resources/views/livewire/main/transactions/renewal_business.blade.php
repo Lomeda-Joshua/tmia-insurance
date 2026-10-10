@@ -977,7 +977,7 @@
                                   <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="txtpayterms-n">Terms</label>
-                                      <input type="text" id="txtpayterms-n" class="form-control input-sm" disabled>
+                                      <input type="text" id="txtpayterms-n" class="form-control input-sm">
                                       <div class="help-block with-errors"></div>
                                     </div>
                                   </div>
@@ -1093,7 +1093,7 @@
                               <div class="form-group">
                                 <label for="cboinsco">Insurance Company *</label>
                                 <select id="cboinsco" class="form-control input-sm" required="required"
-                                  data-error="Insurance Company is required.">
+                                  data-error="Insurance Company is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -1595,142 +1595,169 @@
 
                       {{-- Review vehicle information --}}
                       <div class="insurer-information box-header with-border">
-                        <h4 style="font-weight:900">Vehicle information</h4>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtvin">VIN *</label>
-                            <div class="input-group input-group-sm">
-                              <input type="text" id="txtvin" class="form-control input-sm"
-                                data-error="VIN is required." disabled><span class="input-group-btn">
-                              </span>    
+                          <h4 style="font-weight:900">Vehicle information</h4>
 
-                            </div>
+                          {{-- Row 1: First 4 items --}}
+                          <div class="row">
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtvin">VIN *</label>
+                                      <div class="input-group input-group-sm">
+                                          <input type="text" id="txtvin" class="form-control input-sm"
+                                              data-error="VIN is required." disabled>
+                                          <span class="input-group-btn"></span>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtmake">Make *</label>
+                                      <input type="text" id="txtmake" class="form-control input-sm txtmake"
+                                          data-error="Make is required." disabled>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtmodel">Model *</label>
+                                      <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
+                                          data-error="Model is required." disabled>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtmodelyear">Mode Year *</label>
+                                      <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
+                                          data-error="Model Year is required." disabled>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                              <label for="txtmake">Make *</label>
-                              <input type="text" id="txtmake" class="form-control input-sm txtmake"
-                                data-error="Make is required." disabled>
+
+                          {{-- Row 2: Next 4 items --}}
+                          <div class="row mt-2">
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtcolor">Color *</label>
+                                      <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
+                                          data-error="Color is required." disabled>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtengineno">Engine type</label>
+                                      <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional" disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtcsno">CS No</label>
+                                      <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
+                                          data-error="CS No is required." disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtplateno">Plate no</label>
+                                      <input type="text" id="txtplateno" class="form-control input-sm txtplateno" placeholder="Optional" disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtmodel">Model *</label>
-                              <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
-                                data-error="Model is required." disabled>
+
+                          {{-- Row 3: Final item + 3 blank alignment slots --}}
+                          <div class="row mt-2">
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtsrp">Paid Price *</label>
+                                      <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
+                                          data-error="Paid Price is required." disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
+                              
+                              <div class="col-md-3"></div>
+                              <div class="col-md-3"></div>
+                              <div class="col-md-3"></div>
                           </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtmodelyear">Mode Year *</label>
-                              <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
-                                data-error="Model Year is required." disabled>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                              <label for="txtcolor">Color *</label>
-                              <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
-                                data-error="Color is required." disabled>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtengineno">Engine type</label>
-                            <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional"
-                              disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcsno">CS No</label>
-                            <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
-                              data-error="First Name is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtplateno">Plate no</label>
-                            <input type="text" id="txtplateno" class="form-control input-sm txtplateno" placeholder="Optional"
-                              disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtsrp">Paid Price *</label>
-                            <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
-                                data-error="Paid Price is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
                       </div>
 
                       {{-- Insurance company information --}}
                       <div class="vehicle-information box-header with-border">
-                        <h4 style="font-weight:900">Insurance information</h4>
+                          <h4 style="font-weight:900">Insurance information</h4>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="cboinstype_summary">Insurance Type *</label>
-                                <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
-                                  data-error="Insurance Type is required." disabled>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-3">
-                          <div class="form-group">
-                              <label for="cboinsco_summary">Insurance Company *</label>
-                              <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
-                                  data-error="Insurance Company is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
+                          <div class="row">
+                              {{-- Row 1: First 4 items --}}
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="cboinstype_summary">Insurance Type *</label>
+                                      <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
+                                          data-error="Insurance Type is required." disabled>
+                                  </div>
+                              </div>
+                              
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="cboinsco_summary">Insurance Company *</label>
+                                      <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
+                                          data-error="Insurance Company is required." disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="dpstartdate_summary">Start / Inception Date *</label>
-                            <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
-                                  data-error="Start / Inception Date is required." disabled>
-                          </div>
-                        </div>
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="dpstartdate_summary">Start / Inception Date *</label>
+                                      <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
+                                          data-error="Start / Inception Date is required." disabled>
+                                  </div>
+                              </div>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                              <label for="txtpolicyno_summary">Policy No. *</label>
-                              <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
-                                  data-error="Policy No. is required." disabled>
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="txtpolicyno_summary">Policy No. *</label>
+                                      <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
+                                          data-error="Policy No. is required." disabled>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
 
-                         <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="dpissuedate_summary">Issue Date *</label>
-                            <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
-                                  data-error="Issue Date is required." disabled>
-                          </div>
-                        </div>
+                          <div class="row mt-2">
+                              {{-- Row 2: Remaining 3 items + clean spacing --}}
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="dpissuedate_summary">Issue Date *</label>
+                                      <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
+                                          data-error="Issue Date is required." disabled>
+                                  </div>
+                              </div>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="dppexpiredate_summary">Policy Expiration Date *</label>
-                            <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
-                                  data-error="Expiration Date is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="dppexpiredate_summary">Policy Expiration Date *</label>
+                                      <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
+                                          data-error="Expiration Date is required." disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="cbomortgage_summary">Mortgage *</label>
-                              <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
-                                data-error="Mortgage is required." disabledv />
+                              <div class="col-md-3">
+                                  <div class="form-group">
+                                      <label for="cbomortgage_summary">Mortgage *</label>
+                                      <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
+                                          data-error="Mortgage is required." disabled>
+                                  </div>
+                              </div>
+                              
+                              {{-- Empty column slot to keep the 4-column alignment balanced --}}
+                              <div class="col-md-3"></div>
                           </div>
-                        </div>
-   
                       </div>
 
                     </div>
@@ -1930,249 +1957,237 @@
         </div>
       </div>
       <!-- END MODAL VEHICLE LIST -->
-      <!-- MODAL MODIFY PAYMENT INFO -->
-      <div id="modal-modify-pay" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
-        <div class="box box-solid">
-          <div class="box-body" style="max-width:100%;">
-            <div class="payment-info">
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="row pay-section">
+
+    <!-- MODAL MODIFY PAYMENT INFO -->
+    <div id="modal-modify-pay" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+      <div class="box box-solid">
+        <div class="box-body" style="max-width:100%;">
+          <div class="payment-info">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row pay-section">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="cbopaytype">Payment Type *</label>
+                      <select id="cbopaytype" class="form-control input-sm" required data-error="Payment Type is required.">
+                        <option value="">PLEASE SELECT</option>
+                      </select>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Credit Card Section -->
+                <div class="row cc-section" style="display: none;">
+                  <div class="col-md-12">
+                    <div class="credit-card">
+                      <div class="cc-header">
+                        <h3>Credit Card Details</h3>
+                        <div class="cc-icons">
+                          <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                          <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                          <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="txtccno">Card No. *</label>
+                            <input type="text" id="txtccno" class="form-control input-sm" required data-error="Card No. is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="txtccholder">Holder Name *</label>
+                            <input type="text" id="txtccholder" class="form-control input-sm" required data-error="Holder Name is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="txtccexpirydate">Expiry Date (MM/YY) *</label>
+                            <input type="text" id="txtccexpirydate" class="form-control input-sm" required data-error="Expiry Date is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="txtccvv">CVV / CVC *</label>
+                            <input type="text" id="txtccvv" class="form-control input-sm" required data-error="CVV / CVC is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PDC Section -->
+                <div class="row pdc-section" style="display: none;">
+                  <div class="col-md-12">
+                    <div class="post-dated-check">
+                      <div class="pdc-header">
+                        <h3>Post-Dated Check (PDC) Details</h3>
+                        <div class="pdc-icons">
+                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="txtpdcno">Check No. *</label>
+                            <input type="text" id="txtpdcno" class="form-control input-sm" required data-error="Check No. is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="txtpdcholdername">Account Holder Name *</label>
+                            <input type="text" id="txtpdcholdername" class="form-control input-sm" required data-error="Account Holder Name is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="txtpdcbankname">Bank Name *</label>
+                            <input type="text" id="txtpdcbankname" class="form-control input-sm" required data-error="Bank Name is required." disabled>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="dppdccheckdate">Check Date *</label>
+                            <div class="input-group date">
+                              <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                              </div>
+                              <input id="dppdccheckdate" type="text" class="form-control input-sm pull-right"  required="required" data-error="Check Date is required." disabled>
+                            </div>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- E-Wallet Section -->
+                <div class="row ew-section" style="display: none;">
+                  <div class="col-md-12">
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label for="cbopaytype">Payment Type *</label>
-                        <select id="cbopaytype" class="form-control input-sm" required
-                          data-error="Payment Type is required." disabled>
+                        <label for="cboewallet">E-Wallet Type *</label>
+                        <select id="cboewallet" class="form-control input-sm" required data-error="E-Wallet Type is required." disabled>
                           <option value="">PLEASE SELECT</option>
                         </select>
                         <div class="help-block with-errors"></div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Credit Card Section -->
-                  <div class="row cc-section" style="display: none;">
-                    <div class="col-md-12">
-                      <div class="credit-card">
-                        <div class="cc-header">
-                          <h3>Credit Card Details</h3>
-                          <div class="cc-icons">
-                            <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
-                            <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
-                            <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="txtccno">Card No. *</label>
-                              <input type="text" id="txtccno" class="form-control input-sm" required
-                                data-error="Card No. is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="txtccholder">Holder Name *</label>
-                              <input type="text" id="txtccholder" class="form-control input-sm" required
-                                data-error="Holder Name is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="txtccexpirydate">Expiry Date (MM/YY) *</label>
-                              <input type="text" id="txtccexpirydate" class="form-control input-sm" required
-                                data-error="Expiry Date is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="txtccvv">CVV / CVC *</label>
-                              <input type="text" id="txtccvv" class="form-control input-sm" required
-                                data-error="CVV / CVC is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="col-md-8 ew-icons-col">
+                      <div class="ew-icons">
+                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                        <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                        <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                       </div>
-                    </div>
-                  </div>
-
-                  <!-- PDC Section -->
-                  <div class="row pdc-section" style="display: none;">
-                    <div class="col-md-12">
-                      <div class="post-dated-check">
-                        <div class="pdc-header">
-                          <h3>Post-Dated Check (PDC) Details</h3>
-                          <div class="pdc-icons">
-                            <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="txtpdcno">Check No. *</label>
-                              <input type="text" id="txtpdcno" class="form-control input-sm" required
-                                data-error="Check No. is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="txtpdcholdername">Account Holder Name *</label>
-                              <input type="text" id="txtpdcholdername" class="form-control input-sm" required
-                                data-error="Account Holder Name is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="txtpdcbankname">Bank Name *</label>
-                              <input type="text" id="txtpdcbankname" class="form-control input-sm" required
-                                data-error="Bank Name is required." disabled>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="dppdccheckdate">Check Date *</label>
-                              <div class="input-group date">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-calendar"></i>
-                                </div>
-                                <input id="dppdccheckdate" type="text" class="form-control input-sm pull-right"
-                                  required="required" data-error="Check Date is required." disabled>
-                              </div>
-                              <div class="help-block with-errors"></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- E-Wallet Section -->
-                  <div class="row ew-section" style="display: none;">
-                    <div class="col-md-12">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label for="cboewallet">E-Wallet Type *</label>
-                          <select id="cboewallet" class="form-control input-sm" required
-                            data-error="E-Wallet Type is required." disabled>
-                            <option value="">PLEASE SELECT</option>
-                          </select>
-                          <div class="help-block with-errors"></div>
-                        </div>
-                      </div>
-                      <div class="col-md-8 ew-icons-col">
-                        <div class="ew-icons">
-                          <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
-                          <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
-                          <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}"
-                            alt="toyotawallet">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row term-amount-section">
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label for="txtpayterms">Terms</label>
-                        <input type="text" id="txtpayterms" class="form-control input-sm" disabled>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label for="txtpayamount">Amount *</label>
-                        <input type="text" id="txtpayamount" class="form-control input-sm" required
-                          data-error="Amount is required." disabled>
-                        <div class="help-block with-errors"></div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <!-- Button Row -->
-                  <div class="row btnadd-section">
-                    <div class="col-md-12 text-right">
-                      <label type="button" id="btnaddpay" class="btn btn-success">
-                        <i class="fa fa-plus-circle"></i> Add Payment
-                      </label>
                     </div>
                   </div>
                 </div>
+
+                <div class="row term-amount-section">  
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="txtpayterms">Terms</label>
+                      <input type="text" id="txtpayterms" class="form-control input-sm" disabled>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="txtpayamount">Amount *</label>
+                      <input type="text" id="txtpayamount" class="form-control input-sm" required data-error="Amount is required." disabled>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Button Row -->
+                <div class="row btnadd-section">
+                  <div class="col-md-12 text-right">
+                    <label type="button" id="btnaddpay" class="btn btn-success">
+                      <i class="fa fa-plus-circle"></i> Add Payment
+                    </label>
+                  </div>
+                </div>
               </div>
-              <div class="table-responsive">
-                <table id="table_payment" class="table m-0">
-                  <thead>
-                    <tr>
-                      <th>No.</th>
-                      <th>Payment ID</th>
-                      <th>Mode of Payment</th>
-                      <th>E-wallet Type</th>
-                      <!-- <th>CC No.</th>
+            </div>
+            <div class="table-responsive">
+              <table id="table_payment" class="table m-0">
+                <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Payment ID</th>
+                  <th>Mode of Payment</th>
+                  <th>E-wallet Type</th>
+                  <!-- <th>CC No.</th>
                   <th>CC Holder Name</th>
                   <th>CC Expiry Date</th>
                   <th>CC CVV</th> -->
-                      <th>PDC No.</th>
-                      <th>PDC Account Name</th>
-                      <th>PDC Bank Name</th>
-                      <th>PDC Date</th>
-                      <th>Terms</th>
-                      <th>Amount</th>
-                      <th>Date</th>
-                      <th class="col-action">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                  </tfoot>
-                </table>
-                <table class="table m-0">
-                  <thead>
-                    <tr>
-                      <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
-                      <th id="tfoot_tpremium" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                      <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
-                      <th id="tfoot_total" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                      <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
-                      <th id="tfoot_balance" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                    </tr>
-                  </thead>
-                </table>
-                <p style="font-size:12px;font-style: italic;">
-                  <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After making the
-                  necessary changes in the input fields, click the ‘Add Payment’ button to save the updates to the
-                  payment list.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="box-footer with-border">
-            <div class="pull-right">
-              <button type="button" id="btneditpay" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
-              <button type="button" id="btnclosepay" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
-              <label type="button" id="btncancelpay" class="btn btn-success" style="display:none;"><i
-                  class="fa fa-ban"></i> Cancel</label>
-              <label type="button" id="btnupdatepay" class="btn btn-success" style="display:none;"><i
-                  class="fa fa-save"></i> Update Info.</label>
+                  <th>PDC No.</th>
+                  <th>PDC Account Name</th>
+                  <th>PDC Bank Name</th>
+                  <th>PDC Date</th>
+                  <th>Terms</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th class="col-action">Action</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+                </tfoot>
+              </table>
+              <table class="table m-0">
+                <thead>
+                  <tr>
+                    <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
+                    <th id="tfoot_tpremium" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                    <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
+                    <th id="tfoot_total" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                    <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
+                    <th id="tfoot_balance" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                  </tr>
+                </thead>
+              </table>
+              <p style="font-size:12px;font-style: italic;">
+                <b>Note:</b> To modify or update a payment, double-click the row you wish to edit. After making the necessary changes in the input fields, click the ‘Add Payment’ button to save the updates to the payment list.
+              </p>
             </div>
           </div>
         </div>
+        <div class="box-footer with-border">
+          <div class="pull-right">
+            <button type="button" id="btneditpay" class="btn btn-success"><i class="fa fa-edit"></i> Edit</button>
+            <button type="button" id="btnclosepay" class="btn btn-success"><i class="fa fa-close"></i> Close</button>
+            <label type="button" id="btncancelpay" class="btn btn-success" style="display:none;"><i class="fa fa-ban"></i> Cancel</label>
+            <label type="button" id="btnupdatepay" class="btn btn-success" style="display:none;"><i class="fa fa-save"></i> Update Info.</label>
+          </div>
+        </div>  
       </div>
-      <!-- END MODAL MODIFY PAYMENT INFO -->
+    </div>
+    <!-- END MODAL MODIFY PAYMENT INFO -->
+
+
+
       <!-- MODAL MODIFY CHANGE STATUS -->
       <div id="modal-modify-status" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
@@ -2224,7 +2239,7 @@
       <div id="modal-modify-netrem" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
           <div class="box-body" style="max-width:100%;">
-            <input hidden id="insurance_no_input" />
+            <input id="insurance_no_input" hidden readonly disabled />
             <div class="insurer-info">
               <div class="row">
                 <div class="col-md-12">
@@ -2524,6 +2539,8 @@ function printReceipt(divId) {
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
+
+    console.log("hello", window.tableRoutes.getPaymentData);
     
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
@@ -2546,7 +2563,7 @@ function printReceipt(divId) {
     window.saveData = {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
-      saveUpdatedNetRem : @json(route('update.net-remittance')),
+      saveUpdatedNetRem : @json(route('renew-business-update.netrem')),
       callLogsStore : @json(route("call-logs.store"))
     }
 
@@ -2557,7 +2574,7 @@ function printReceipt(divId) {
     window.loadData = {
         loadPaymentData : @json(route('getTransactionRB.data')),
         loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
-        loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
+        loadTransactionByInsurance: @json(route('transactions-renewal.get-by-insurance-no')),
         sessionSetTransaction : @json(route('session.set-transaction-data')),
         getTransactionStatus : @json(route('gettransaction-status.data')),
         getPolicyExpiration : @json(route('loadpolicy.expiration')),

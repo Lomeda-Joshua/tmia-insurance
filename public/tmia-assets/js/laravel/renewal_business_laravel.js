@@ -1414,6 +1414,26 @@ $(document).ready( function () {
   });
 
 
+  // Listen for changes on the radio action group
+  $(document).on("change", "input[name='rdpolicyaction']", function () {
+      let actionVal = $("input[name='rdpolicyaction']:checked").val();
+
+      if (actionVal === "TRANSFER") {
+          // --- TO ENABLE THE 4 INPUTS ---
+          $("#cboinstype").prop("disabled", false).trigger("change.select2");
+          $("#cboinsco").prop("disabled", false).trigger("change.select2");
+          $("#cbomortgage").prop("disabled", false).trigger("change.select2");
+          $("#cboprevinsco").prop("disabled", false);
+      } else {
+          // --- TO DISABLE THE 4 INPUTS ---
+          $("#cboinstype").prop("disabled", true).trigger("change.select2");
+          $("#cboinsco").prop("disabled", true).trigger("change.select2");
+          $("#cbomortgage").prop("disabled", true).trigger("change.select2");
+          $("#cboprevinsco").prop("disabled", true).trigger("change.select2");
+      }
+  });
+
+
 
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
@@ -2003,13 +2023,12 @@ function LoadInsuranceInfo(insuranceno) {
 }
 
 function LoadInsurerInfo(insuranceno) {
-  console.log("hello");
   $.ajax({
     type:"POST",
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      console.log(data);
+      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2160,7 +2179,8 @@ function LoadCustomerInfo() {
         LoadPreviousInsuranceCo(value.renew_business_data);
 
         $("#cboinstype").prop('disabled', true).trigger('change.select2');
-        $("#cboinstype").prop('disabled', true).trigger('change.select2');
+        $("#cboinsco").prop('disabled', true).trigger('change.select2');
+        $("#cbomortgage").prop('disabled', true).trigger('change.select2');
 
         // Condition: Disable the entire dropdown if no data or custom rule met
         // if (data.length > 0) {
@@ -2340,6 +2360,7 @@ function LoadVehicleEDAFSAPInfo() {
     url:window.getData.edafVehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
+      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2594,6 +2615,14 @@ function updatePaymentTotals() {
     }
   }
 }
+
+$(document).on( "click", ".btnnetrem", function () {
+    let insuranceNo = $(this).data('insurance-no');
+    $("#insurance_no_input").val(insuranceNo);
+    FormClearNetRem();
+    FormDisableNetRem(true);
+    LoadNetRemData(insuranceNo);
+});
 
 function LoadNetRemData(insuranceno) {
   $.ajax({
@@ -3697,8 +3726,8 @@ $(document).on("click", "#btncancelnetrem", function() {
   editnetrem = false;
   FormClearNetRem();
   FormDisableNetRem(true);
-  LoadNetRemData();
   $(".iziModal-wrap").scrollTop(0); 
+  LoadNetRemData();
 });
 
 $(document).on("click", "#btnupdatenetrem", function () {
@@ -3737,14 +3766,13 @@ $(document).on("click", "#btnupdatenetrem", function () {
 
   // ======================================================
   // CHANGE TRANSACTION STATUS
-  // ======================================================
-  const NetRem = {
-    insuranceno: $("#insurance_no_input").val(),
+  // ======================================================    
+    const NetRem = { 
+    insuranceNo: $("#insurance_no_input").val(),
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
     inscommission: getNum("#txtinscommission")
   };
-  
 
   if (!runValidation([
     { value: NetRem.insgpremium, selector: "#txtinsgpremium", message: "Please fill out Gross Premium." },
@@ -3770,7 +3798,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
     data: formdata,
     processData: false,
     contentType: false,
-    success: function (response) {   
+    success: function (response) {      
       $("#modalsaving").iziModal('close');
 
       if (response.result == 1) {
@@ -3781,12 +3809,12 @@ $(document).on("click", "#btnupdatenetrem", function () {
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
         }, function () {
-          // $("#modal-modify-netrem").iziModal("close");
+          $("#modal-modify-netrem").iziModal("close");
           editnetrem = false;
           FormDisableNetRem(true);
-          LoadNetRemData();
           $('#table_trans').DataTable().ajax.reload(null, false);
           $(".iziModal-wrap").scrollTop(0);
+          LoadNetRemData();
         });
       } else {
         swal({
@@ -5236,17 +5264,10 @@ $(document).on( "click", ".btnpay", function () {
   FormDisablePay(true);
 });
 
-$(document).on( "click", ".btnnetrem", function () {
-  let insuranceNo = $(this).data('insurance-no');
-  FormClearNetRem();
-  LoadNetRemData(insuranceNo);
-  FormDisableNetRem(true);
 
-  $("#insurance_no_input").val(insuranceNo);
-});
 
 $(document).on("click",".btnsoa",function(){
-  insuranceno = $(this).attr('insuranceno');
+  insuranceno = $(this).data('insurance-no');
 
   window.location = 'renewal_business_soa_xls.php?insuranceno='+insuranceno;
 
@@ -5286,7 +5307,7 @@ $(document).on( "click", ".btnedit", function () {
   });
 });
 
-$(document).on( "click", ".btndelete", function () {
+$(document).on( "clic;k", ".btndelete", function () {
   insuranceno = $(this).data('insurance-no');
   swal({
     title: "Are you sure?",
@@ -5781,10 +5802,9 @@ $(document).on("click", "#btnsubmit", function () {
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
         }, function () {
-          $("#modal-add").iziModal("close");
-          if ($.fn.dataTable.isDataTable("#table_trans")) {
-            $('#table_trans').DataTable().ajax.reload(null, false);
-          }
+              $("#modal-add").iziModal("close");
+              console.log("reload");
+              $('#table_trans').DataTable().ajax.reload(null, false);
         });
       } else {
         swal({
@@ -5985,7 +6005,6 @@ function FormDisable(val) {
   // $("#txtmortaddress").attr("disabled",val);
   // $("#promoNo").prop("disabled", val);
   // $("#promoYes").prop("disabled", val);
-
   $(".box-body").validator('reset');
 }
 
@@ -6573,12 +6592,5 @@ function convertFinancialNumber(value, decimals = 2) {
   return num.toFixed(decimals);
 }
 
-
- function loadInsuranceInfoReview(){
-    const selectedValue = $("#cboinstype").val();
-
-    console.log(selectedValue);
-
- }
 
 /////////// END FORMATTING SETTING ///////////
