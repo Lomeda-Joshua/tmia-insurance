@@ -2539,8 +2539,6 @@ function printReceipt(divId) {
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
     }
-
-    console.log("hello", window.tableRoutes.getPaymentData);
     
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
@@ -2564,7 +2562,8 @@ function printReceipt(divId) {
       saveNbCustomerData : @json(route('newbusiness.save')),
       saveRenewalBusinessData : @json(route('renewalbusiness.save')),
       saveUpdatedNetRem : @json(route('renew-business-update.netrem')),
-      callLogsStore : @json(route("call-logs.store"))
+      callLogsStore : @json(route("call-logs.store")),
+      saveRenewalPayments: @json(route('renewal-business.save-payments'))
     }
 
     window.deletefunction = {

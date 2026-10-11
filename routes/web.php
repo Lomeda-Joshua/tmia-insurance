@@ -105,7 +105,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-        Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+        Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.s how');
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
         Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
@@ -150,6 +150,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
         Route::post('/renewal-business/update-net-rem', [TransactionController::class, 'updateNetRenewalRemittance'])->name('renew-business-update.netrem');
         Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
+
+        Route::post('/renewal-business/save-new-payments', [RenewalBusinessController::class, 'savePayments'])->name('renewal-business.save-payments');
         
         Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
 

@@ -594,7 +594,7 @@ class RenewalBusinessController extends Controller
         }
 
         // Fetch matching records via Eloquent
-        $payments = TransactionRBPayment::where('Insurance_No', $insuranceNo)->get();
+        $payments = TransactionRBPayment::where('Insurance_No', $insuranceNo)->orderBy('Payment_Terms','desc')->get();
 
         // Transform the collection to attach row index ('urutan') and action buttons
         $data = $payments->values()->map(function ($row, $index) {
@@ -662,9 +662,10 @@ class RenewalBusinessController extends Controller
         $today = now()->format('Y-m-d');
         $ninetyDaysLater = now()->addDays(90)->format('Y-m-d');
 
+
         // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
-        $query = TransactionsNb::query()
-            ->from('transactions_nb as t')
+        $query = TransactionRb::query()
+            ->from('transactions_rb as t')
             ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
             ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
             ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
@@ -838,6 +839,140 @@ class RenewalBusinessController extends Controller
                 'error'  => $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    /**
+     * Process, update, insert, or delete renewal business payments.
+     */
+    public function savePayments(Request $request): JsonResponse
+    {
+        // 1. Validate inputs
+        $validated = $request->validate([
+            'insuranceno'       => ['required', 'string'],
+            'payments'          => ['required', 'json'],
+        ]);
+
+        $insuranceNo = $validated['insuranceno'];
+        $userId = auth()->id() ?? $request->user()->User_ID ?? 1; // Retrieve authenticated user ID
+
+        $payments = json_decode($validated['payments'], true);
+
+        if (!is_array($payments)) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid JSON data']);
+        }
+
+        try {
+            DB::transaction(function () use ($insuranceNo, $userId, $payments) {
+                
+                // 2a. Fetch existing payment IDs for this insurance number
+                $existingRows = TransactionRbPayment::where('Insurance_No', $insuranceNo)
+                    ->pluck('Payment_ID')
+                    ->toArray();
+
+                $receivedIDs = [];
+
+                // 2b. Loop through each payment payload
+                foreach ($payments as $p) {
+                    $pdcDate = !empty($p['PDC_Date']) ? Carbon::parse($p['PDC_Date'])->format('Y-m-d') : null;
+
+                    $paymentData = [
+                        'Insurance_No'      => $insuranceNo,
+                        'User_ID'           => $userId,
+                        'Payment_Type'      => $p['Payment_Type'] ?? null,
+                        'EWallet_Type'      => $p['EWallet_Type'] ?? null,
+                        'PDC_No'            => $p['PDC_No'] ?? null,
+                        'PDC_Account_Name'  => $p['PDC_Account_Name'] ?? null,
+                        'PDC_Bank_Name'     => $p['PDC_Bank_Name'] ?? null,
+                        'PDC_Date'          => $pdcDate,
+                        'Payment_Terms'     => $p['Payment_Terms'] ?? null,
+                        'Payment_Amount'    => isset($p['Payment_Amount']) ? floatval($p['Payment_Amount']) : null,
+                    ];
+
+                    if (!empty($p['Payment_ID'])) {
+                        $paymentID = $p['Payment_ID'];
+                        $receivedIDs[] = $paymentID;
+
+                        $existing = TransactionRbPayment::where('Payment_ID', $paymentID)
+                            ->where('Insurance_No', $insuranceNo)
+                            ->first();
+
+                        if (!$existing) {
+                            continue;
+                        }
+
+                        // Check for changes to determine if Payment_Date should be refreshed
+                        $changed = $this->hasChanges($existing->toArray(), $p);
+
+                        if ($changed) {
+                            $paymentData['Payment_Date'] = now();
+                        }
+
+                        $existing->update($paymentData);
+                    } else {
+                        // Insert new payment record
+                        $paymentData['Payment_Date'] = now();
+                        $newPayment = TransactionRbPayment::create($paymentData);
+                        $receivedIDs[] = $newPayment->Payment_ID;
+                    }
+                }
+
+                // 2c. Delete payments omitted by the client payload
+                if (!empty($existingRows)) {
+                    $idsToDelete = array_diff($existingRows, $receivedIDs);
+                    if (!empty($idsToDelete)) {
+                        TransactionRbPayment::whereIn('Payment_ID', $idsToDelete)
+                            ->where('Insurance_No', $insuranceNo)
+                            ->delete();
+                    }
+                }
+            });
+
+            return response()->json(['result' => 1, 'Insurance_No' => $insuranceNo]);
+
+        } catch (Exception $e) {
+            \Log::error('Payment transaction error: ' . $e->getMessage());
+            return response()->json(['result' => 0, 'error' => 'An internal error occurred.']);
+        }
+    }
+
+
+    /**
+     * Helper Function: Detect structural changes in payment fields.
+     */
+    private function hasChanges(array $old, array $new): bool
+    {
+        $fields = [
+            'Payment_Type',
+            'EWallet_Type',
+            'PDC_No',
+            'PDC_Account_Name',
+            'PDC_Bank_Name',
+            'PDC_Date',
+            'Payment_Terms',
+            'Payment_Amount'
+        ];
+
+        foreach ($fields as $f) {
+            $oldVal = $old[$f] ?? null;
+            $newVal = $new[$f] ?? null;
+
+            if ($f === 'PDC_Date') {
+                $oldVal = !empty($oldVal) ? Carbon::parse($oldVal)->format('Y-m-d') : null;
+                $newVal = !empty($newVal) ? Carbon::parse($newVal)->format('Y-m-d') : null;
+            }
+
+            if ($f === 'Payment_Amount') {
+                $oldVal = $oldVal !== null ? floatval($oldVal) : null;
+                $newVal = $newVal !== null ? floatval($newVal) : null;
+            }
+
+            if ($oldVal !== $newVal) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

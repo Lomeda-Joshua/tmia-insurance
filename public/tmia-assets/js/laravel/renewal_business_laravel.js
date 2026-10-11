@@ -1491,7 +1491,7 @@ function LoadTransactionData(ulevel_declartion) {
     }
 
 
-
+    //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
     let tableColumns = [
           { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
           { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
@@ -1542,11 +1542,6 @@ function LoadTransactionData(ulevel_declartion) {
         }
     );}
 
-  /*   tableColumns.push(
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-    ) */
-
     if( ulevel_declartion === 1 ){
           tableColumns.push({
               data: "button",            
@@ -1563,6 +1558,7 @@ function LoadTransactionData(ulevel_declartion) {
     },
     processing: true,
     serverSide: true,
+    searching: false,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -1578,20 +1574,21 @@ function LoadTransactionData(ulevel_declartion) {
             d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
       }
     },
-    columns: tableColumns,
-    columnDefs: [
-      {
-        targets: [5, 11, 12, 13, 14],
-        render: function(data, type, row, meta) {
-          const maxLength = 30;
-          if (typeof data === 'string' && data.length > maxLength) {
-            const truncated = data.substring(0, maxLength) + '...';
-            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+      order: [[1, 'desc']],
+      columns: tableColumns,
+      columnDefs: [
+        {
+          targets: [5, 11, 12, 13, 14],
+          render: function(data, type, row, meta) {
+            const maxLength = 30;
+            if (typeof data === 'string' && data.length > maxLength) {
+              const truncated = data.substring(0, maxLength) + '...';
+              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+            }
+            return data;
           }
-          return data;
         }
-      }
-    ]
+      ]
   });
   
   viewpending = false;
@@ -1937,7 +1934,7 @@ function LoadNBData() {
     processing: true,
     serverSide: true,
     pageLength: 10,
-    // responsive: true,
+    responsive: true,
     autoWidth: false,
     scrollY: "500px",
     scrollX: true,
@@ -2433,10 +2430,10 @@ function LoadPayData() {
     url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
+
       $.each(data, function(i, value) {
         // xtpremium = value.Total_Premium;
         xtpremium = value.Gross_Premium;
-        $("#txtpayterms").val(value.Month_Terms);
         $("#txtpayamount").val(NumberFormat(value.Month_Pay));
       });
 
@@ -2446,12 +2443,39 @@ function LoadPayData() {
   });
 }
 
+
+// ============================
+// FOR LOADING: Payment Information Details
+// ============================
 function LoadPaymentInfo() {
+
   // Destroy existing table if present
   if ($.fn.dataTable.isDataTable('#table_payment')) {
     $('#table_payment').DataTable().clear().destroy();
     $('#table_payment tbody').off(); // remove previous event handlers
   }
+
+
+  $.ajax({
+      type: "POST",
+      url: window.tableRoutes.getPaymentData,
+      data: { insuranceno: insuranceno },
+      success: function(response){
+          // Safely handle both single object or array responses
+          const dataList = Array.isArray(response) ? response : [response];
+
+          // Grab the very first (most recent) item
+          if (dataList.length > 0) {
+              const latestItem = dataList[0].data[0]['Payment_Terms'];
+              
+              if (latestItem !== undefined) {
+                  $("#txtpayterms").val(latestItem - 1);
+              }
+          }
+          
+      }
+
+  });
 
   var tablepay = $('#table_payment').DataTable({
       language: {
@@ -2513,6 +2537,7 @@ function LoadPaymentInfo() {
       ]
   });
 
+
   // ============================
   // FIXED: Row click selection
   // ============================
@@ -2527,6 +2552,7 @@ function LoadPaymentInfo() {
   //   let selectedPaymentID = tablepay.row(this).data().Payment_ID;
   //   console.log("Selected Payment ID:", selectedPaymentID);
   // });
+
 
   // ============================
   // Row double-click event
@@ -3266,7 +3292,7 @@ $(document).on("click", "#btnupdatepay", function() {
   // }
 
   $.ajax({
-    url: "renewal_business_payment_save.php", // Your PHP endpoint
+    url: window.saveData.saveRenewalPayments, // Your PHP endpoint
     type: "POST",
     data: {insuranceno:insuranceno, payments:JSON.stringify(allData) },
     success: function(response) {
@@ -3298,6 +3324,7 @@ $(document).on("click", "#btnupdatepay", function() {
     }
   });
 });
+
 
 $(document).on("change", "#cbopaytype-n", function () {
     var paytype = $(this).val();
