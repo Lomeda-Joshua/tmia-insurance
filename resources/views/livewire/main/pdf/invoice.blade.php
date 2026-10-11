@@ -80,13 +80,13 @@
     <table class="data-table">
             <tr>
                 <th class="col-25">Customer No:</th>
-                <td class="col-25">{{ $customer_info->Customer_No ?? 'N/A' }}</td>
+                <td class="col-25">{{ $transaction->Customer_No ?? 'N/A' }}</td>
                 <th class="col-25">Full Name:</th>
-                <td class="col-25">{{ $customer_info->Full_Name ?? 'N/A' }}</td>
+                <td class="col-25">{{ $transaction->Full_Name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <th class="col-25">Contact No:</th>
-                <td class="col-25">{{ $customer_info->Contact_No ?? 'N/A' }}</td>
+                <td class="col-25">{{ $transaction->Contact_No ?? 'N/A' }}</td>
                 <th class="col-25">Transaction Date:</th>
                 <td class="col-25">{{ $transaction->Trans_Date ?? 'N/A' }}</td>
             </tr>
@@ -122,13 +122,18 @@
             <th class="col-25">Expiration Date:</th>
             <td class="col-25">{{ $transaction->Policy_Expiration ?? 'N/A' }}</td>
             <th class="col-25">Staff (ISE):</th>
-            <td class="col-25">{{ $insurance_agent->ISE_Name ?? 'N/A' }}</td>
+            <td class="col-25">{{ $transaction->ISE_Name ?? 'N/A' }}</td>
         </tr>
     </table>
 
     <!-- Payment History -->
     <div class="section-title-sub">PAYMENT HISTORY</div>
-    <table class="data-table">
+
+    <h3>Total amount:<span style='font-weight:900;'><span>
+        {{ $transaction->Gross_Premium }}
+    </span></h3>
+
+    <table class="data-table"> 
         <thead>
             <tr>
                 <th style="width: 25%; text-align: center;">Payment Date</th>
@@ -137,7 +142,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($payments ?? [] as $payment)
+            @forelse ($transaction->rbPaymentInfo as $payment)
                 <tr>
                     <td class="text-center">{{ $payment->Payment_Date ?? $payment['Payment_Date'] ?? 'N/A' }}</td>
                     <td class="text-center">{{ $payment->Payment_Type ?? $payment['Payment_Type'] ?? $payment->Payment_Mode ?? 'N/A' }}</td>

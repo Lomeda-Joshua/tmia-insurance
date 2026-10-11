@@ -17,6 +17,7 @@ use App\Models\Notification;
 use App\Models\TransactionRb;
 use App\Models\TransactionsNb;
 use App\Models\ApprovalRbStatus;
+use App\Models\VwTransactionsRb;
 
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -980,16 +981,13 @@ class RenewalBusinessController extends Controller
     public function printPdf($insurance_no)
     {
        // 1. Fetch parent record with child payments relationship
-        $transaction = TransactionRb::with(['transaction_Rb_payment', 'customer_information', 'insurance_agent'])
+        $rbTransaction = VwTransactionsRb::with('rbPaymentInfo')
             ->where('Insurance_No', $insurance_no)
             ->firstOrFail(); // Ensures a 404 response if record does not exist
 
         // 2. Load the Blade view and pass variables
         $pdf = Pdf::loadView('livewire.main.pdf.invoice', [
-            'transaction' => $transaction,
-            'customer_info' => $transaction->customer_information,
-            'payments'    => $transaction->transaction_Rb_payment,
-            'insurance_agent' => $transaction->insurance_agent,
+            'transaction' => $rbTransaction,
         ]);
 
 

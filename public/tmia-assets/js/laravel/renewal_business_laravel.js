@@ -2673,9 +2673,11 @@ function LoadNetRemData(insuranceno) {
 function LoadStatusData(insuranceNo) {
   $.ajax({
     type:"POST",
-    url:window.loadData.loadPaymentData,
+    url:window.loadData.getTransactionStatus,
     data:{insuranceno:insuranceNo},
     success: function(data){
+
+      console.log(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely

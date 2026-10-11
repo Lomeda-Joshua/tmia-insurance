@@ -118,7 +118,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
         Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
         Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
-        Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getRenewalBusinessTransactionsByInsuranceNo'])->name('transactions-renewal.get-by-insurance-no');
+        Route::post('/renewal-business/get-by-insurance-no', [CustomerController::class, 'getRenewalBusinessTransactionsByInsuranceNo'])->name('transactions-renewal.get-by-insurance-no');
         Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
 
         // Route::post('/renewal-business/')->name('');
