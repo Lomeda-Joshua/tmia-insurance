@@ -2677,7 +2677,8 @@ function LoadStatusData(insuranceNo) {
     data:{insuranceno:insuranceNo},
     success: function(data){
 
-      console.log(data);
+      console.log('Transaction status',data);
+
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2693,6 +2694,7 @@ function LoadStatusData(insuranceNo) {
 
         setSelectOption("#cbotransstatus", value.Trans_Status, value.Trans_Status); 
         $("#txttranssremarks").val(value.Trans_Status_Remarks);
+
       });
     }
   });

@@ -426,8 +426,6 @@ class CustomerController extends Controller
                 'Business_Type',
             ]);
             
-        dd($transactionStatus);
-
         return response()->json($transactionStatus);
     }
 
