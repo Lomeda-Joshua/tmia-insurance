@@ -54,7 +54,8 @@
         <div class="box-header with-border">
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+              
+              <div class="col-md-3">
                 <div class="form-group">
                   <label for="txtsearch">Search </label>
                   <div class="input-group input-group-sm">
@@ -77,47 +78,93 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="dpdatefrom">Date From</label>
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
+
+              <div class="col-md-6">
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cbofilter">Filter select *</label>
+                                <select id="cbofilter" class="form-control input-sm">
+                                    <option Value="" selected>Transaction Date</option>
+                                    <option Value="">Insurance Inception date</option>
+                                    <option Value="">Policy Expiration</option>
+                                    <option Value="">Issue date</option>
+                                </select>
+                            </div>
                     </div>
-                    <input id="dpdatefrom" type="text" class="form-control input-sm pull-right">
-                  </div>
-                  <div class="help-block with-errors"></div>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label for="dpdateto">Date To</label>
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
+
+                    <div class="col-md-8">
+
+                        <div class="row">
+
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="dpdatefrom">Date From</label>
+                                    <div class="input-group date">
+                                      <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                      </div>
+                                      <input id="dpdatefrom" type="text" class="form-control input-sm pull-right">
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>  
+
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="dpdateto">Date To</label>
+                                    <div class="input-group date">
+                                      <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                      </div>
+                                      <input id="dpdateto" type="text" class="form-control input-sm pull-right">
+                                    </div>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div style="padding: 10px 0;">
+                                      <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
+                                          class="fa-solid fa-rotate"></i> Refresh</label>
+                                  </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div style="padding: 10px 0;"">
+                                  <label id="dateSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Search</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+
                     </div>
-                    <input id="dpdateto" type="text" class="form-control input-sm pull-right">
-                  </div>
-                  <div class="help-block with-errors"></div>
+
+                    
+                  
                 </div>
+
               </div>
-              <div class="col-md-2">
-                <div style="padding: 10px 0; width: 85px;">
-                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
-                      class="fa-solid fa-rotate"></i> Refresh</label>
-                </div>
-              </div>
+              
             </div>
           </div>
+
+
           <div class="row">
             <div class="btnactionud pull-right" style="display: none;">
+
               <button type="button" id="btnnblist" class="btn btn-box-tool" style="font-size: 15px !important;"
                 data-toggle="tooltip" title="New Business Expired & Expiring Soon (90Days)"><i class="fa fa-list"></i>
                 NB Expired & 90D</button>
+
               <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i
                   class="fa fa-plus"></i> Add New</button>
+
             </div>
           </div>
+
         </div>
         <div class="box-body" style="max-width:100%;">
           <table id="table_trans" class="table table-striped table-bordered table-hover">

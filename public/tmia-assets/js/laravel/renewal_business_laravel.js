@@ -1434,6 +1434,12 @@ $(document).ready( function () {
   });
 
 
+  //============= SEARCH FUNCTION ============//
+  function LoadFilterSearch(){
+      
+  }
+
+
 
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
@@ -1530,8 +1536,6 @@ function LoadTransactionData(ulevel_declartion) {
               searchable: false,
               defaultContent: "- - -" 
           }
-          
-          
     ];
 
     if( ulevel_declartion === 1 ){
