@@ -2608,6 +2608,8 @@ function LoadSummaryCustomerInfo(){
             FetchProv(value.RegCode, value.ProvCode);
           }
 
+          console.log();
+
           // Province
           if (value.ProvCode) {
             setSelectOption("#cboprovince", value.Province, value.ProvCode);

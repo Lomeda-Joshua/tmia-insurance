@@ -1498,6 +1498,14 @@
       getCustomerSpecificData : @json(route('getSpecificView.data'))
     }
 
+      window.getData = {
+        customerInfo : @json(route('customerinfo.data')),
+        vehicleInfo: @json(route('customercvehicleinfo.data')),
+        vehicleSpecific: @json(route('vehicle.search')),
+        edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+        vehicleLookUp : @json(route('vehicle.lookup'))
+    }
+
     window.formRoutes = {
       insuranceStaffData: @json(route('insurance_staff.data')),
       customerTypeData: @json(route('customers_type.data')),

@@ -1342,7 +1342,7 @@ function LoadCustomerInfo(custno) {
           setSelectOption("#cboregion", value.Region, value.RegCode);
           FetchProv(value.RegCode, value.ProvCode);
         }
-
+        
         // Province
         if (value.ProvCode) {
           setSelectOption("#cboprovince", value.Province, value.ProvCode);
@@ -1367,8 +1367,8 @@ function LoadCustomerInfo(custno) {
 function LoadVehicleInfo(vin) {
   $.ajax({
     type:"POST",
-    url:"fetch_vehicle_info.php",
-    data:{vin:vin},
+    url:window.getData.vehicleSpecific,
+    data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
       
       $.each(data, function(i, value) {
@@ -2060,14 +2060,27 @@ function FetchProv(regcode,provcode) {
     $.ajax({
       type:"POST",
       data: {regcode:regcode},
-      url:"fetch_province.php",
+      url:window.formRoutes.provinceData,
       success: function(data) {
-        $("#cboprovince").html(data);
-        if (provcode !== null && provcode !== '') {
-          if ($("#cboprovince").find("option[value='" + provcode + "']").length) {
-            $("#cboprovince").val(provcode).trigger('change.select2');
-          } 
-        }
+
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+            options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cboprovince").html(options);
+
+            // Pre-select province code if available
+            if (provcode !== null && provcode !== '') {
+            $("#cboprovince").val(provcode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cboprovince").trigger('change.select2');
+
       }
     });
   }
@@ -2078,14 +2091,25 @@ function FetchCM(provcode,cmcode) {
     $.ajax({
       type:"POST",
       data: {provcode:provcode},
-      url:"fetch_city_municipal.php",
+      url:window.formRoutes.cityMunicipalData,
       success: function(data) {
-        $("#cbocity").html(data);
-        if (cmcode !== null && cmcode !== '') {
-          if ($("#cbocity").find("option[value='" + cmcode + "']").length) {
-            $("#cbocity").val(cmcode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+                options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbocity").html(options);
+
+            // Pre-select province code if available
+            if (provcode !== null && provcode !== '') {
+                $("#cbocity").val(cmcode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cbocity").trigger('change.select2');
       }
     });
   }
@@ -2096,14 +2120,25 @@ function FetchBrgy(cmcode,brgycode) {
     $.ajax({
       type:"POST",
       data: {cmcode:cmcode},
-      url:"fetch_barangay.php",
+      url:window.formRoutes.barangayData,
       success: function(data) {
-        $("#cbobrgy").html(data);
-        if (brgycode !== null && brgycode !== '') {
-          if ($("#cbobrgy").find("option[value='" + brgycode + "']").length) {
-            $("#cbobrgy").val(brgycode).trigger('change.select2');
-          } 
-        }
+            let options = '<option value="">PLEASE SELECT</option>';
+
+            // Iterate over JSON objects and build <option> elements
+            $.each(data, function(index, item) {
+              options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
+            });
+
+            // Inject populated options into dropdown
+            $("#cbobrgy").html(options);
+
+            // Pre-select province code if available
+            if (brgycode !== null && brgycode !== '') {
+              $("#cbobrgy").val(brgycode);
+            }
+
+            // Force Select2 to refresh its display
+            $("#cbobrgy").trigger('change.select2');
       }
     });
   }
