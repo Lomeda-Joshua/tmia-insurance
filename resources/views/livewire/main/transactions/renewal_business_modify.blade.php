@@ -1219,9 +1219,9 @@
                       <div class="cc-header">
                         <h3>Credit Card Details</h3>
                         <div class="cc-icons">
-                          <img src="../assets/images/credit/visa.svg" alt="visa">
-                          <img src="../assets/images/credit/mastercard.svg" alt="mastercard">
-                          <img src="../assets/images/credit/jcb.svg" alt="jcb">
+                           <img src="{{ asset('tmia-assets/images/credit/visa.svg') }}" alt="visa">
+                            <img src="{{ asset('tmia-assets/images/credit/mastercard.svg') }}" alt="mastercard">
+                            <img src="{{ asset('tmia-assets/images/credit/jcb.svg') }}" alt="jcb">
                         </div>
                       </div>
                       <div class="row">
@@ -1269,7 +1269,7 @@
                       <div class="pdc-header">
                         <h3>Post-Dated Check (PDC) Details</h3>
                         <div class="pdc-icons">
-                          <img src="../assets/images/credit/check.png" alt="cheque">
+                          <img src="{{ asset('tmia-assets/images/credit/check.png') }}" alt="cheque">
                         </div>
                       </div>
                       <div class="row">
@@ -1329,9 +1329,9 @@
                     </div>
                     <div class="col-md-8 ew-icons-col">
                       <div class="ew-icons">
-                        <img id="pgcash" src="../assets/images/e-wallet/gcash.svg" alt="gcash">
-                        <img id="pmaya" src="../assets/images/e-wallet/maya.svg" alt="maya">
-                        <img id="ptwallet" src="../assets/images/e-wallet/toyotawallet.svg" alt="toyotawallet">
+                        <img id="pgcash" src="{{ asset('tmia-assets/images/e-wallet/gcash.svg') }}" alt="gcash">
+                            <img id="pmaya" src="{{ asset('tmia-assets/images/e-wallet/maya.svg') }}" alt="maya">
+                            <img id="ptwallet" src="{{ asset('tmia-assets/images/e-wallet/toyotawallet.svg') }}" alt="toyotawallet">
                       </div>
                     </div>
                   </div>
@@ -1479,6 +1479,10 @@
       loadSelectedCustomer : @json(route('customer.get-by-no')),
       loadVehicle: @json(route('vehicle.search')),
       loadModifyPage: @json(route('getModifyView.data'))
+    }
+
+    window.tableRoutes = {
+      getPaymentData: @json(route('renewalpayments.get-data')),
     }
 
     window.SaveRoute = {

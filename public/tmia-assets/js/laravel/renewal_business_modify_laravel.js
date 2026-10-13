@@ -1234,7 +1234,7 @@ function LoadPaymentInfoDisplay(insuranceno) {
     ],
 
     ajax: {
-      url: window.fetchData.getPaymentData,
+      url: window.tableRoutes.getPaymentData,
       type: "POST",
       data: { insuranceno: insuranceno }
     },
@@ -1291,12 +1291,11 @@ function LoadPaymentInfoDisplay(insuranceno) {
 function LoadCustomerInfo(custno) {
   $.ajax({
     type:"POST",
-    url:"fetch_customer_info.php",
+    url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:custno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -1371,7 +1370,7 @@ function LoadVehicleInfo(vin) {
     url:"fetch_vehicle_info.php",
     data:{vin:vin},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
