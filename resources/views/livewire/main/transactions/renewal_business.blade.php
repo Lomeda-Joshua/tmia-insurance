@@ -54,8 +54,7 @@
         <div class="box-header with-border">
           <div class="row">
             <div class="col-md-12">
-              
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="form-group">
                   <label for="txtsearch">Search </label>
                   <div class="input-group input-group-sm">
@@ -78,80 +77,45 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-
-              <div class="col-md-6">
-
-                <div class="row">
-
-                    <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="cbofilter">Filter select *</label>
-                                <select id="cbofilter" class="form-control input-sm">
-                                    <option Value="" selected>Transaction Date</option>
-                                    <option Value="">Insurance Inception date</option>
-                                    <option Value="">Policy Expiration</option>
-                                    <option Value="">Issue date</option>
-                                </select>
-                            </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="dpdatefrom">Date From</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
                     </div>
-
-                    <div class="col-md-8">
-
-                        <div class="row">
-
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="dpdatefrom">Date From</label>
-                                    <div class="input-group date">
-                                      <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                      </div>
-                                      <input id="dpdatefrom" type="text" class="form-control input-sm pull-right">
-                                    </div>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>  
-
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="dpdateto">Date To</label>
-                                    <div class="input-group date">
-                                      <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                      </div>
-                                      <input id="dpdateto" type="text" class="form-control input-sm pull-right">
-                                    </div>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div style="padding: 10px 0;">
-                                      <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
-                                          class="fa-solid fa-rotate"></i> Refresh</label>
-                                  </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div style="padding: 10px 0;"">
-                                  <label id="dateSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Search</label>
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                    </div>
-
-                    
-                  
+                      <input id="dpdatefrom" hidden type="text" class="form-control input-sm pull-right" name="datefrom">
+                      <input id="dpdatefrom_text" type="text" class="form-control input-sm pull-right">
+                  </div>
+                  <div class="help-block with-errors"></div>
                 </div>
-
               </div>
-              
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="dpdateto">Date To</label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                      <input id="dpdateto" hidden type="text" class="form-control input-sm pull-right" name="dateto">
+                      <input id="dpdateto_text" type="text" class="form-control input-sm pull-right">
+                  </div>
+                  <div class="help-block with-errors"></div>
+                </div>
+              </div>
+              <div class="col-md-2" style="padding: 10px 0; width: 85px;">
+                <div >
+
+                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
+                      class="fa-solid fa-rotate"></i> Refresh</label>
+
+                  <label id="btnSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
+                      class="fa-solid fa-magnifying-glass"></i> Search</label>
+
+                
+              </div>
             </div>
           </div>
-
-
           <div class="row">
             <div class="btnactionud pull-right" style="display: none;">
 
@@ -161,10 +125,8 @@
 
               <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i
                   class="fa fa-plus"></i> Add New</button>
-
             </div>
           </div>
-
         </div>
         <div class="box-body" style="max-width:100%;">
           <table id="table_trans" class="table table-striped table-bordered table-hover">
@@ -241,27 +203,27 @@
           <div class="box-body" style="max-width:100%;">
             <!-- Stepper -->
             <div class="stepper" id="stepper">
-              <div class="step active" data-step="1">
+              <div class="step active" data-step="1" id="step-1">
                 <div class="step-number">Step 1</div>
                 <div class="icon"><i class="fa fa-user"></i></div>
                 <div class="step-text">Customer Information</div>
               </div>
-              <div class="step" data-step="2">
+              <div class="step" data-step="2" id="step-2">
                 <div class="step-number">Step 2</div>
                 <div class="icon"><i class="fa fa-car"></i></div>
                 <div class="step-text">Vehicle Information</div>
               </div>
-              <div class="step" data-step="3">
+              <div class="step" data-step="3" id="step-3">
                 <div class="step-number">Step 3</div>
                 <div class="icon"><i class="fa fa-calculator"></i></div>
                 <div class="step-text">Insurance Calculation</div>
               </div>
-              <div class="step" data-step="4">
+              <div class="step" data-step="4" id="step-4">
                 <div class="step-number">Step 4</div>
                 <div class="icon"><i class="fa fa-building-shield"></i></div>
                 <div class="step-text">Insurance Company</div>
               </div>
-              <div class="step" data-step="5">
+              <div class="step" data-step="5" id="step-5">
                 <div class="step-number">Step 5</div>
                 <div class="icon"><i class="fa fa-check"></i></div>
                 <div class="step-text">Final Submit</div>
@@ -1249,279 +1211,274 @@
                 </div>
 
                 <!-- Modal Window Trigger Button -->
-<button type="button" class="btn btn-primary" onclick="openReceiptModal()">
-    <i class="fa fa-receipt"></i> View Receipt
-</button>
+                <button type="button" class="btn btn-primary" onclick="openReceiptModal()">
+                    <i class="fa fa-receipt"></i> View Receipt
+                </button>
 
-<!-- Receipt Modal Window -->
-<div id="receiptModal" class="receipt-modal-overlay" style="display: none;">
-    <div class="receipt-modal-window">
-        <!-- Modal Header -->
-        <div class="receipt-modal-header">
-            <h5 class="m-0"><i class="fa fa-file-invoice"></i> Official Receipt</h5>
-            <button type="button" class="close-btn" onclick="closeReceiptModal()">&times;</button>
-        </div>
+                <!-- Receipt Modal Window -->
+                <div id="receiptModal" class="receipt-modal-overlay" style="display: none;">
+                    <div class="receipt-modal-window">
+                        <!-- Modal Header -->
+                        <div class="receipt-modal-header">
+                            <h5 class="m-0"><i class="fa fa-file-invoice"></i> Official Receipt</h5>
+                            <button type="button" class="close-btn" onclick="closeReceiptModal()">&times;</button>
+                        </div>
 
-        <!-- Printable Receipt Content Area -->
-        <div class="receipt-container" id="printableReceipt">
-            <!-- Header Logos & Info -->
-            <table class="receipt-header-table">
-                <tr>
-                    <td style="text-align: left; width: 60%;">
-                        <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
-                        <span style="font-size: 10px; color: #666;">Official Transaction Receipt</span>
-                    </td>
-                    <td style="text-align: right; width: 40%;">
-                        <span style="font-size: 11px; font-weight: bold; color: #222;">OR #: 2026-00891</span><br>
-                        <span style="font-size: 10px; color: #666;">Date: Oct 09, 2026</span>
-                    </td>
-                </tr>
-            </table>
+                        <!-- Printable Receipt Content Area -->
+                        <div class="receipt-container" id="printableReceipt">
+                            <!-- Header Logos & Info -->
+                            <table class="receipt-header-table">
+                                <tr>
+                                    <td style="text-align: left; width: 60%;">
+                                        <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
+                                        <span style="font-size: 10px; color: #666;">Official Transaction Receipt</span>
+                                    </td>
+                                    <td style="text-align: right; width: 40%;">
+                                        <span style="font-size: 11px; font-weight: bold; color: #222;">OR #: 2026-00891</span><br>
+                                        <span style="font-size: 10px; color: #666;">Date: Oct 09, 2026</span>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <hr class="divider">
+                            <hr class="divider">
 
-            <!-- Customer & Transaction Information -->
-            <div class="receipt-section-title">CUSTOMER INFORMATION</div>
-            <table class="receipt-details-table">
-                <tr>
-                    <th>Customer Name:</th>
-                    <td>ALAISAH DIMA AMPAO SAID</td>
-                    <th>Contact No:</th>
-                    <td>09277226339</td>
-                </tr>
-                <tr>
-                    <th>Insurance No:</th>
-                    <td>RB-2026-0000006</td>
-                    <th>Policy No:</th>
-                    <td>123132</td>
-                </tr>
-            </table>
+                            <!-- Customer & Transaction Information -->
+                            <div class="receipt-section-title">CUSTOMER INFORMATION</div>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th>Customer Name:</th>
+                                    <td>ALAISAH DIMA AMPAO SAID</td>
+                                    <th>Contact No:</th>
+                                    <td>09277226339</td>
+                                </tr>
+                                <tr>
+                                    <th>Insurance No:</th>
+                                    <td>RB-2026-0000006</td>
+                                    <th>Policy No:</th>
+                                    <td>123132</td>
+                                </tr>
+                            </table>
 
-            <!-- Itemized Summary Table -->
-            <div class="receipt-section-title">PAYMENT DETAILS</div>
-            <table class="receipt-items-table">
-                <thead>
-                    <tr>
-                        <th style="text-align: left;">Description</th>
-                        <th style="text-align: center;">Mode</th>
-                        <th style="text-align: right;">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>TOYOTA INSURE - Comprehensive Coverage</td>
-                        <td style="text-align: center;">CASH</td>
-                        <td style="text-align: right;">₱ 18,000.00</td>
-                    </tr>
-                    <tr>
-                        <td>Processing & Documentary Stamps</td>
-                        <td style="text-align: center;">CASH</td>
-                        <td style="text-align: right;">₱ 2,000.00</td>
-                    </tr>
-                </tbody>
-            </table>
+                            <!-- Itemized Summary Table -->
+                            <div class="receipt-section-title">PAYMENT DETAILS</div>
+                            <table class="receipt-items-table">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left;">Description</th>
+                                        <th style="text-align: center;">Mode</th>
+                                        <th style="text-align: right;">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>TOYOTA INSURE - Comprehensive Coverage</td>
+                                        <td style="text-align: center;">CASH</td>
+                                        <td style="text-align: right;">₱ 18,000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Processing & Documentary Stamps</td>
+                                        <td style="text-align: center;">CASH</td>
+                                        <td style="text-align: right;">₱ 2,000.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-            <!-- Total Calculation -->
-            <table class="receipt-total-table">
-                <tr>
-                    <td class="text-right"><strong>Subtotal:</strong></td>
-                    <td class="text-right" style="width: 120px;">₱ 20,000.00</td>
-                </tr>
-                <tr>
-                    <td class="text-right"><strong>Vat (12%):</strong></td>
-                    <td class="text-right">Included</td>
-                </tr>
-                <tr class="total-row">
-                    <td class="text-right"><strong>Total Paid:</strong></td>
-                    <td class="text-right"><strong>₱ 20,000.00</strong></td>
-                </tr>
-            </table>
-        </div>
+                            <!-- Total Calculation -->
+                            <table class="receipt-total-table">
+                                <tr>
+                                    <td class="text-right"><strong>Subtotal:</strong></td>
+                                    <td class="text-right" style="width: 120px;">₱ 20,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right"><strong>Vat (12%):</strong></td>
+                                    <td class="text-right">Included</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td class="text-right"><strong>Total Paid:</strong></td>
+                                    <td class="text-right"><strong>₱ 20,000.00</strong></td>
+                                </tr>
+                            </table>
+                        </div>
 
-        <!-- Modal Footer Actions -->
-        <div class="receipt-modal-footer">
-            <button type="button" class="btn-close-modal" onclick="closeReceiptModal()">Close</button>
-            <button type="button" class="btn-print-modal" onclick="printReceipt('printableReceipt')">
-                <i class="fa fa-print"></i> Print Receipt
-            </button>
-        </div>
-    </div>
-</div>
+                        <!-- Modal Footer Actions -->
+                        <div class="receipt-modal-footer">
+                            <button type="button" class="btn-close-modal" onclick="closeReceiptModal()">Close</button>
+                            <button type="button" class="btn-print-modal" onclick="printReceipt('printableReceipt')">
+                                <i class="fa fa-print"></i> Print Receipt
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-<!-- Embedded CSS Styling -->
-<style>
-/* Modal Window Overlay */
-.receipt-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
+                <!-- Embedded CSS Styling -->
+                <style>
+                      /* Modal Window Overlay */
+                      .receipt-modal-overlay {
+                          position: fixed;
+                          top: 0;
+                          left: 0;
+                          width: 100%;
+                          height: 100%;
+                          background: rgba(0, 0, 0, 0.5);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          z-index: 9999;
+                      }
 
-/* Modal Outer Card */
-.receipt-modal-window {
-    background: #fff;
-    width: 520px;
-    max-width: 95%;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-}
+                      /* Modal Outer Card */
+                      .receipt-modal-window {
+                          background: #fff;
+                          width: 520px;
+                          max-width: 95%;
+                          border-radius: 8px;
+                          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                          overflow: hidden;
+                          font-family: Arial, sans-serif;
+                      }
 
-.receipt-modal-header {
-    background: #222;
-    color: #fff;
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+                      .receipt-modal-header {
+                          background: #222;
+                          color: #fff;
+                          padding: 12px 20px;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: center;
+                      }
 
-.close-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-}
+                      .close-btn {
+                          background: none;
+                          border: none;
+                          color: #fff;
+                          font-size: 20px;
+                          cursor: pointer;
+                      }
 
-/* Printable Inner Container */
-.receipt-container {
-    padding: 20px;
-    background: #fff;
-    color: #333;
-}
+                      /* Printable Inner Container */
+                      .receipt-container {
+                          padding: 20px;
+                          background: #fff;
+                          color: #333;
+                      }
 
-.receipt-header-table, .receipt-details-table, .receipt-items-table, .receipt-total-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+                      .receipt-header-table, .receipt-details-table, .receipt-items-table, .receipt-total-table {
+                          width: 100%;
+                          border-collapse: collapse;
+                      }
 
-.divider {
-    border: none;
-    border-top: 1px dashed #ccc;
-    margin: 12px 0;
-}
+                      .divider {
+                          border: none;
+                          border-top: 1px dashed #ccc;
+                          margin: 12px 0;
+                      }
 
-.receipt-section-title {
-    background: #f4f4f4;
-    padding: 4px 8px;
-    font-weight: bold;
-    font-size: 11px;
-    color: #333;
-    margin: 10px 0 6px 0;
-    border-left: 3px solid #222;
-}
+                      .receipt-section-title {
+                          background: #f4f4f4;
+                          padding: 4px 8px;
+                          font-weight: bold;
+                          font-size: 11px;
+                          color: #333;
+                          margin: 10px 0 6px 0;
+                          border-left: 3px solid #222;
+                      }
 
-.receipt-details-table th, .receipt-details-table td {
-    padding: 4px;
-    font-size: 11px;
-    text-align: left;
-}
+                      .receipt-details-table th, .receipt-details-table td {
+                          padding: 4px;
+                          font-size: 11px;
+                          text-align: left;
+                      }
 
-.receipt-details-table th {
-    color: #666;
-    font-weight: 600;
-}
+                      .receipt-details-table th {
+                          color: #666;
+                          font-weight: 600;
+                      }
 
-.receipt-items-table {
-    margin-top: 8px;
-}
+                      .receipt-items-table {
+                          margin-top: 8px;
+                      }
 
-.receipt-items-table th {
-    border-bottom: 2px solid #ddd;
-    padding: 6px;
-    font-size: 11px;
-    background: #fafafa;
-}
+                      .receipt-items-table th {
+                          border-bottom: 2px solid #ddd;
+                          padding: 6px;
+                          font-size: 11px;
+                          background: #fafafa;
+                      }
 
-.receipt-items-table td {
-    border-bottom: 1px solid #eee;
-    padding: 6px;
-    font-size: 11px;
-}
+                      .receipt-items-table td {
+                          border-bottom: 1px solid #eee;
+                          padding: 6px;
+                          font-size: 11px;
+                      }
 
-.receipt-total-table td {
-    padding: 4px 6px;
-    font-size: 12px;
-}
+                      .receipt-total-table td {
+                          padding: 4px 6px;
+                          font-size: 12px;
+                      }
 
-.text-right {
-    text-align: right;
-}
+                      .text-right {
+                          text-align: right;
+                      }
 
-.total-row td {
-    font-size: 14px;
-    border-top: 2px solid #222;
-    padding-top: 6px;
-}
+                      .total-row td {
+                          font-size: 14px;
+                          border-top: 2px solid #222;
+                          padding-top: 6px;
+                      }
 
-.receipt-footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 11px;
-    color: #777;
-}
+                      .receipt-footer {
+                          text-align: center;
+                          margin-top: 20px;
+                          font-size: 11px;
+                          color: #777;
+                      }
 
-/* Modal Footer Action Buttons */
-.receipt-modal-footer {
-    background: #f8f9fa;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    border-top: 1px solid #ddd;
-}
+                      /* Modal Footer Action Buttons */
+                      .receipt-modal-footer {
+                          background: #f8f9fa;
+                          padding: 10px 20px;
+                          display: flex;
+                          justify-content: flex-end;
+                          gap: 10px;
+                          border-top: 1px solid #ddd;
+                      }
 
-.btn-close-modal {
-    background: #6c757d;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+                      .btn-close-modal {
+                          background: #6c757d;
+                          color: white;
+                          border: none;
+                          padding: 6px 14px;
+                          border-radius: 4px;
+                          cursor: pointer;
+                      }
 
-.btn-print-modal {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+                      .btn-print-modal {
+                          background: #28a745;
+                          color: white;
+                          border: none;
+                          padding: 6px 14px;
+                          border-radius: 4px;
+                          cursor: pointer;
+                      }
 
-.btn-close-modal:hover { background: #5a6268; }
-.btn-print-modal:hover { background: #218838; }
+                      .btn-close-modal:hover { background: #5a6268; }
+                      .btn-print-modal:hover { background: #218838; }
 
-/* CSS Media Query for Printing direct content */
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    #printableReceipt, #printableReceipt * {
-        visibility: visible;
-    }
-    #printableReceipt {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-    }
-}
-</style>
-
-
-
-
-
+                      /* CSS Media Query for Printing direct content */
+                      @media print {
+                          body * {
+                              visibility: hidden;
+                          }
+                          #printableReceipt, #printableReceipt * {
+                              visibility: visible;
+                          }
+                          #printableReceipt {
+                              position: absolute;
+                              left: 0;
+                              top: 0;
+                              width: 100%;
+                          }
+                      }
+                </style>
               </div>
 
               <!-- Step 5 -->
@@ -1540,7 +1497,6 @@
                   </div>
 
                   <div class="form-data">
-
                     <div class="box-header with-border">
                       <h4 style="font-weight:900; text-transform:uppercase;">Review form</h4>
                     </div>
@@ -1550,7 +1506,16 @@
 
                       {{-- User profile information --}}
                       <div class="user-profile-information-summary box-header with-border">
-                        <h4 style="font-weight:900">User profile information</h4>
+                        <h4 style="font-weight:900">User profile information</h4> 
+                        
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label for="txtcustfname">fULL NAME*</label>
+                            <input type="text" id="txtcustname" class="form-control input-sm txtcustname"
+                              required="required" readonly>
+                            <div class="help-block with-errors"></div>
+                          </div>
+                        </div>
 
                         <div class="col-md-3">
                           <div class="form-group">
