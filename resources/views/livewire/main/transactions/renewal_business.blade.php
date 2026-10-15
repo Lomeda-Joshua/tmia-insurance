@@ -54,15 +54,15 @@
         <div class="box-header with-border">
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+
+              <div class="col-md-3">
                 <div class="form-group">
                   <label for="txtsearch">Search </label>
                   <div class="input-group input-group-sm">
                     <input type="text" id="txtsearch" class="form-control input-sm clearable"
                       placeholder="Press <Enter> key or click icon search button to search." autocomplete="off">
                     <span class="input-group-btn">
-                      <button type="button" id="btnfind" class="btn btn-success btn-flat"><i
-                          class="fa fa-search"></i></button>
+                      <button type="button" id="btnfind" class="btn btn-success btn-flat"><i class="fa fa-search"></i></button>
                     </span>
                   </div>
                   <small class="text-muted d-block">
@@ -77,44 +77,52 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-3">
+
+
+              <div class="col-md-2">
+                  <div class="form-group">
+                      <label for="dpFilterSelect">Filter</label>
+                      <select id="dpFilterSelect" class="form-control input-sm" data-error="Insurance Staff is required.">
+                        <option Value="1" selected>Transaction date</option>
+                        <option Value="2">Issue date</option>
+                        <option Value="3">Start Inception date</option>
+                        <option Value="4">Policy Expiration date</option>
+                      </select>
+                  </div>
+                  <div class="help-block with-errors"></div>
+              </div>
+
+              <div class="col-md-2">
                 <div class="form-group">
                   <label for="dpdatefrom">Date From</label>
                   <div class="input-group date">
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                      <input id="dpdatefrom" hidden type="text" class="form-control input-sm pull-right" name="datefrom">
-                      <input id="dpdatefrom_text" type="text" class="form-control input-sm pull-right">
+                      <input id="dpdatefrom" type="text" class="form-control input-sm pull-right" name="datefrom">
                   </div>
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-3">
+
+              <div class="col-md-2">
                 <div class="form-group">
                   <label for="dpdateto">Date To</label>
                   <div class="input-group date">
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                      <input id="dpdateto" hidden type="text" class="form-control input-sm pull-right" name="dateto">
-                      <input id="dpdateto_text" type="text" class="form-control input-sm pull-right">
+                      <input id="dpdateto" type="text" class="form-control input-sm pull-right" name="dateto">
                   </div>
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
+
               <div class="col-md-2" style="padding: 10px 0; width: 85px;">
-                <div >
-
-                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
-                      class="fa-solid fa-rotate"></i> Refresh</label>
-
-                  <label id="btnSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
-                      class="fa-solid fa-magnifying-glass"></i> Search</label>
-
-                
+                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Refresh</label>
+                  <label id="btnSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
               </div>
-            </div>
+
           </div>
           <div class="row">
             <div class="btnactionud pull-right" style="display: none;">

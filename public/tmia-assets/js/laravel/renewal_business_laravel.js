@@ -31,11 +31,14 @@ var activeVehTab;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
+  //=============== CSRF token javascript one-time setup  =================//
   $.ajaxSetup({
       headers: {
           'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
       }
   });
+  //=============== End CSRF token javascript one-time setup  =================//
+
 
   //================== GET USER LOG IN INFORMATION =================//
   $.ajax({
@@ -64,6 +67,7 @@ $(document).ready( function () {
     }
   });
   //=============== END GET USER LOG IN INFORMATION  =================//
+
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -1433,8 +1437,6 @@ $(document).ready( function () {
       }
   });
 
-
-
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
@@ -1468,28 +1470,11 @@ $('#txtsearch').on('keyup search', function (e) {
 
 //============== Transaction List ============//
 function LoadTransactionData(ulevel_declartion) {
-  const searchval = $("#txtsearch").val().trim();
-  const datefromRaw = $("#dpdatefrom").val();
-  const datetoRaw = $("#dpdateto").val();
-  const chkall = $("#chkall").is(":checked") ? 1 : 0;  
-
-  const datefrom = formatDate(datefromRaw);
-  const dateto = formatDate(datetoRaw);
-
-  const value = {
-    viewpending: viewpending,
-    viewexpiring: viewexpiring,
-    searchval: searchval,
-    datefrom: datefrom,
-    dateto: dateto,
-    chkall: chkall
-  };
 
     if ($.fn.dataTable.isDataTable('#table_trans')) {
         $('#table_trans').DataTable().ajax.reload(null, false);
         return;
     }
-
 
     //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
     let tableColumns = [
@@ -1572,6 +1557,7 @@ function LoadTransactionData(ulevel_declartion) {
             d.datefrom     = $('#dpdatefrom').val();
             d.dateto       = $('#dpdateto').val();
             d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
+            d.dpFilter     = 
       }
     },
       order: [[1, 'desc']],
@@ -4222,7 +4208,8 @@ $(document).on( "keydown", "#txtcustomersearch", function (e) {
 
 //Button Search 
 $(document).on( "click", "#btnfind", function () {
-  LoadTransactionData();
+    LoadTransactionData();
+
     // If search button is triggered, clear specific card quick-filters if needed
     window.viewpending = false;
     window.viewexpiring = false;
@@ -5548,6 +5535,18 @@ $(document).on("click", "#btnupdatecall", function () {
   });
 });
 
+
+// * * * * * * New function added * * * * * * //
+/// * * * * * * Filter on Renewal of business * * * * * * ///    
+$(document).on("change", "#dpFilterSelect", function(){
+
+    LoadTransactionData();
+ 
+});
+/////////// Filter on Renewal of business ///////////
+
+
+
 $(document).on("click", "#btnsubmit", function () {
   // ======================================================
   // Helper Utilities
@@ -6623,6 +6622,4 @@ function convertFinancialNumber(value, decimals = 2) {
   // Positive numbers → format to specified decimals
   return num.toFixed(decimals);
 }
-
-
 /////////// END FORMATTING SETTING ///////////
