@@ -2539,12 +2539,12 @@
             }
       </style>
     
-      <!-- MODAL SHOW EXPIRING POLICIES -->
+      <!-- MODAL SHOW EXPIRING POLICIES -->s
       <div id="modal-show-expiring-policies" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box">
           <!-- <div class="box-header with-border">
-          <h2 class="box-title">Vehicle List</h2>
-        </div> -->
+                <h2 class="box-title">Vehicle List</h2>
+          </div> -->
             <div class="box-body">
                 <div class="table-responsive">
                   <table id="table_expiring_list" class="table table-striped table-bordered table-hover">

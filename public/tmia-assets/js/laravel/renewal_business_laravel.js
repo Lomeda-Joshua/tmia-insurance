@@ -1186,7 +1186,6 @@ $(document).ready( function () {
       },
       success: function(data) {
 
-          console.log(data);
           let options = '<option value="">PLEASE SELECT</option>';
 
           // Iterate over JSON objects and build <option> elements
@@ -1638,7 +1637,6 @@ function LoadTransactionData(ulevel_declartion) {
       processing: true,
       serverSide: true,
       searching: false,
-      deferLoading: 0,
       pageLength: 10,
       responsive: true,
       autoWidth: false,
@@ -1654,7 +1652,7 @@ function LoadTransactionData(ulevel_declartion) {
           d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
           d.dpFilter     = $('#dpFilterSelect').val();
         }
-      },                                   // <-- closes ajax
+      },                                   
       order: [[1, 'desc']],
       columns: tableColumns,
       columnDefs: [
@@ -1672,12 +1670,12 @@ function LoadTransactionData(ulevel_declartion) {
       ]
     });  
 
-
-  $("#modal-show-expiring-policies").iziModal('open');
   viewpending = false;
   viewexpiring = false;
 }
 //======================================//
+
+$("#modal-show-expiring-policies").iziModal('open');
 
 
 // * * * * * * New function added October 16, 2026 * * * * * * //
@@ -1685,10 +1683,10 @@ function LoadTransactionData(ulevel_declartion) {
 $(document).on("click", "#btnSearch", function () {
 
   let dpFilter_selected = $('#dpFilterSelect').find("option:selected").text();
-  
-  if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
-    $('#table_expiring_list').DataTable().ajax.reload(function (json) {
 
+  
+  if ($.fn.dataTable.isDataTable('#table_trans')) {
+    $('#table_trans').DataTable().ajax.reload(function (json) {
       swal({
         title: "Search complete",
         text: dpFilter_selected,
@@ -1696,116 +1694,97 @@ $(document).on("click", "#btnSearch", function () {
         confirmButtonColor: "#00a65a",
         confirmButtonText: "OK"
       });
-
-
     }, true);   // true = go back to page 1
   }
 });
 
 
-$('#table_expiring_list').DataTable({
-      language: {
-        processing: "Loading Transaction List..."
-      },
-      processing: true,
-      serverSide: true,
-      searching: false,
-      deferLoading: 0,
-      pageLength: 10,
-      responsive: true,
-      autoWidth: false,
-      ajax: {
-        url: window.tableRoutes.getExpiringPolicies,
-        type: "POST",
-        data: function (d) {
-          d.viewpending  = window.viewpending === true;
-          d.viewexpiring = window.viewexpiring === true;
-          d.searchval    = $('#txtsearch').val().trim();
-          d.datefrom     = $('#dpdatefrom').val();
-          d.dateto       = $('#dpdateto').val();
-          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-          d.dpFilter     = $('#dpFilterSelect').val();
-        }
-      },                                   // <-- closes ajax
-      order: [[1, 'desc']],
-      columns: [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          
-          { 
-              data: "Trans_Date", 
-              name: "Trans_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-              }
-          },
+function initExpiringTable() {
+  const $t = $('#table_expiring_list');
 
-          { 
-              data: "Policy_Expiration", 
-              name: "Policy_Expiration", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+  if ($.fn.dataTable.isDataTable($t)) {
+    $t.DataTable().ajax.reload(null, false);
+    return;
+  }
 
-          { 
-              data: "Issue_Date", 
-              name: "Issue_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
 
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-          
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+    $('#table_expiring_list').DataTable({
+        language: {
+          processing: "Loading Expiration List..."
+        },
+        processing: true,
+        serverSide: true,
+        searching: false,
+        pageLength: 10,
+        responsive: true,
+        autoWidth: false,
+        ajax: {
+          url: window.tableRoutes.getExpiringPolicies,
+          type: "POST",
+          headers: {
+            'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+          },
+        },                                
+        columns: [
+            { 
+              data: "Insurance_No", 
+              name: "Insurance_No", 
+              defaultContent: "- - -" 
+            },
+            { 
+                data: "Trans_Date", 
+                name: "Trans_Date", 
+                defaultContent: "- - -", 
+            },
+            { 
+                data: "Policy_Expiration", 
+                name: "Policy_Expiration", 
+                defaultContent: "- - -", 
+            },
+
+            { 
+                data: "Issue_Date", 
+                name: "Issue_Date", 
+                defaultContent: "- - -", 
+            },
+
+            { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+            { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
             
-          // Main Table Columns
-          { 
-            data: "Insurance_Company", 
-            name: "Insurance_Company", 
-            defaultContent: "- - -" 
-          },                  
-
-
+            // Flattened Columns (Matches leftJoin backend)
+            { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+            { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+            
+            { data: "VIN", name: "VIN", defaultContent: "- - -" },
+            { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+            { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+            { data: "Model", name: "Model", defaultContent: "- - -" },
+            { data: "Variant", name: "Variant", defaultContent: "- - -" },
+              
+            // Main Table Columns
+            { 
+              data: "Insurance_Company", 
+              name: "Insurance_Company", 
+              defaultContent: "- - -" 
+            },                  
+          
+        ],
+        columnDefs: [
           {
-            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" 
-          }, 
-
-         
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-      ],
-      columnDefs: [
-        {
-          targets: [5, 11, 12, 13, 14],
-          render: function (data, type, row, meta) {
-            const maxLength = 30;
-            if (typeof data === 'string' && data.length > maxLength) {
-              const truncated = data.substring(0, maxLength) + '...';
-              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+            targets: [5],
+            render: function (data, type, row, meta) {
+              const maxLength = 30;
+              if (typeof data === 'string' && data.length > maxLength) {
+                const truncated = data.substring(0, maxLength) + '...';
+                return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+              }
+              return data;
             }
-            return data;
           }
-        }
-      ]
+        ]
     }); 
+
+}
 /////////// End Filter on Renewal of business ///////////
 
 
@@ -2890,8 +2869,6 @@ function LoadStatusData(insuranceNo) {
     url:window.loadData.getTransactionStatus,
     data:{insuranceno:insuranceNo},
     success: function(data){
-
-      console.log('Transaction status',data);
 
       $.each(data, function(i, value) {
 
