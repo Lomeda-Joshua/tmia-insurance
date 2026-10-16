@@ -683,6 +683,67 @@ $(document).ready( function () {
     // console.log('Fullscreen: '+modal.isFullscreen);
   });
 
+
+
+
+  /* MODAL SHOWING EXPIRING POLICIES */
+  $("#modal-show-expiring-policies").iziModal({
+    title: 'Expiring policies',
+    subtitle: 'List of expiring policies within 90 days.',
+    headerColor: '#dc3545', 
+    icon: 'fa-solid fa-chart-bar',
+    iconColor: '#fcfbfb',
+    zindex: 9999,
+    width: 1500,
+    padding: 20,
+    radius: 10,
+    focusInput: true,
+    loop: true,
+    arrowKeys: true,
+    navigateCaption: true,
+    navigateArrows: true, // Boolean, 'closeToModal', 'closeScreenEdge'
+    //history: true,
+    //restoreDefaultContent: true,
+    fullscreen: true,
+    // openFullscreen: true,
+    overlay: true,
+    overlayClose: false,
+    overlayColor: 'rgba(0, 0, 0, 0.4)',
+    transitionIn: 'bounceInDown',
+    transitionOut: 'bounceOutDown',
+    transitionInOverlay: 'fadeIn',
+    transitionOutOverlay: 'fadeOut',
+    onResize: function(modal){
+      // console.log(modal.modalHeight);
+    },
+    afterRender: function(modal){
+      // modal.open();
+    }
+  });
+
+  $(document).on('fullscreen', '#modal-modify-status', function (e, modal) {
+    // console.log('Fullscreen: '+modal.isFullscreen);
+  });
+
+  $(document).on('opening', '#modal-modify-status', function (e) {
+    //console.dir(e);=
+  });
+
+  $(document).on('opened', '#modal-modify-status', function (e) {
+    $(".iziModal-wrap").scrollTop(0); 
+  });
+
+  $(document).on('closing', '#modal-modify-status', function (e) {
+    // Fix accessibility warning: blur focused element before aria-hidden is set
+    if (document.activeElement) {
+        document.activeElement.blur();
+    }
+  });
+
+  $(document).on('closed', '#modal-modify-status', function (e) {
+    //console.dir(e);
+  });
+
   $(document).on('opening', '#modal-upload', function (e) {
     //============= DRAW TABLE ============//
     if ($.fn.DataTable.isDataTable("#table_upload") == false) {
@@ -1468,9 +1529,9 @@ $('#txtsearch').on('keyup search', function (e) {
     }
 });
 
+
 //============== Transaction List ============//
 function LoadTransactionData(ulevel_declartion) {
-
     if ($.fn.dataTable.isDataTable('#table_trans')) {
         $('#table_trans').DataTable().ajax.reload(null, false);
         return;
@@ -1478,9 +1539,37 @@ function LoadTransactionData(ulevel_declartion) {
 
     //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
     let tableColumns = [
-          { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
           { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { data: "Trans_Date", name: "Trans_Date", defaultContent: "- - -" },
+          { 
+              data: "Trans_Date", 
+              name: "Trans_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+              }
+          },
+
+          { 
+              data: "Policy_Expiration", 
+              name: "Policy_Expiration", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
+          { 
+              data: "Issue_Date", 
+              name: "Issue_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
           { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
           { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
           
@@ -1495,7 +1584,12 @@ function LoadTransactionData(ulevel_declartion) {
           { data: "Variant", name: "Variant", defaultContent: "- - -" },
             
           // Main Table Columns
-          { data: "Insurance_Company", name: "Insurance_Company", defaultContent: "- - -" },                  
+          { 
+            data: "Insurance_Company", 
+            name: "Insurance_Company", 
+            defaultContent: "- - -" 
+          },                  
+
 
           {
             data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
@@ -1528,44 +1622,45 @@ function LoadTransactionData(ulevel_declartion) {
     );}
 
     if( ulevel_declartion === 1 ){
-          tableColumns.push({
-              data: "button",            
-              name: "button",
-              orderable: false,
-              searchable: false,
-              defaultContent: "- - -" 
-          });
+        tableColumns.push({
+            data: "button",            
+            name: "button",
+            orderable: false,
+            searchable: false,
+            defaultContent: "- - -" 
+        });
     }
 
-  table = $('#table_trans').DataTable({
-    language: {
-      processing: "Loading Transaction List..."
-    },
-    processing: true,
-    serverSide: true,
-    searching: false,
-    pageLength: 10,
-    responsive: true,
-    autoWidth: false,
-    ajax: {
-      url: window.tableRoutes.renewalBusinessData,
-      type: "POST",
-      data: function (d) {
-            d.viewpending  = window.viewpending === true;
-            d.viewexpiring = window.viewexpiring === true;
-            d.searchval    = $('#txtsearch').val().trim();
-            d.datefrom     = $('#dpdatefrom').val();
-            d.dateto       = $('#dpdateto').val();
-            d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-            d.dpFilter     = 
-      }
-    },
+    table = $('#table_trans').DataTable({
+      language: {
+        processing: "Loading Transaction List..."
+      },
+      processing: true,
+      serverSide: true,
+      searching: false,
+      deferLoading: 0,
+      pageLength: 10,
+      responsive: true,
+      autoWidth: false,
+      ajax: {
+        url: window.tableRoutes.renewalBusinessData,
+        type: "POST",
+        data: function (d) {
+          d.viewpending  = window.viewpending === true;
+          d.viewexpiring = window.viewexpiring === true;
+          d.searchval    = $('#txtsearch').val().trim();
+          d.datefrom     = $('#dpdatefrom').val();
+          d.dateto       = $('#dpdateto').val();
+          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
+          d.dpFilter     = $('#dpFilterSelect').val();
+        }
+      },                                   // <-- closes ajax
       order: [[1, 'desc']],
       columns: tableColumns,
       columnDefs: [
         {
           targets: [5, 11, 12, 13, 14],
-          render: function(data, type, row, meta) {
+          render: function (data, type, row, meta) {
             const maxLength = 30;
             if (typeof data === 'string' && data.length > maxLength) {
               const truncated = data.substring(0, maxLength) + '...';
@@ -1575,12 +1670,145 @@ function LoadTransactionData(ulevel_declartion) {
           }
         }
       ]
-  });
-  
+    });  
+
+
+  $("#modal-show-expiring-policies").iziModal('open');
   viewpending = false;
   viewexpiring = false;
 }
 //======================================//
+
+
+// * * * * * * New function added October 16, 2026 * * * * * * //
+/// * * * * * * Filter on Renewal of business * * * * * * ///    
+$(document).on("click", "#btnSearch", function () {
+
+  let dpFilter_selected = $('#dpFilterSelect').find("option:selected").text();
+  
+  if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
+    $('#table_expiring_list').DataTable().ajax.reload(function (json) {
+
+      swal({
+        title: "Search complete",
+        text: dpFilter_selected,
+        type: "info",
+        confirmButtonColor: "#00a65a",
+        confirmButtonText: "OK"
+      });
+
+
+    }, true);   // true = go back to page 1
+  }
+});
+
+
+$('#table_expiring_list').DataTable({
+      language: {
+        processing: "Loading Transaction List..."
+      },
+      processing: true,
+      serverSide: true,
+      searching: false,
+      deferLoading: 0,
+      pageLength: 10,
+      responsive: true,
+      autoWidth: false,
+      ajax: {
+        url: window.tableRoutes.getExpiringPolicies,
+        type: "POST",
+        data: function (d) {
+          d.viewpending  = window.viewpending === true;
+          d.viewexpiring = window.viewexpiring === true;
+          d.searchval    = $('#txtsearch').val().trim();
+          d.datefrom     = $('#dpdatefrom').val();
+          d.dateto       = $('#dpdateto').val();
+          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
+          d.dpFilter     = $('#dpFilterSelect').val();
+        }
+      },                                   // <-- closes ajax
+      order: [[1, 'desc']],
+      columns: [
+          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+          
+          { 
+              data: "Trans_Date", 
+              name: "Trans_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+              }
+          },
+
+          { 
+              data: "Policy_Expiration", 
+              name: "Policy_Expiration", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
+          { 
+              data: "Issue_Date", 
+              name: "Issue_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
+          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+          
+          // Flattened Columns (Matches leftJoin backend)
+          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+          
+          { data: "VIN", name: "VIN", defaultContent: "- - -" },
+          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+          { data: "Model", name: "Model", defaultContent: "- - -" },
+          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+            
+          // Main Table Columns
+          { 
+            data: "Insurance_Company", 
+            name: "Insurance_Company", 
+            defaultContent: "- - -" 
+          },                  
+
+
+          {
+            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+            defaultContent: "- - -" 
+          }, 
+
+         
+          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
+          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+      ],
+      columnDefs: [
+        {
+          targets: [5, 11, 12, 13, 14],
+          render: function (data, type, row, meta) {
+            const maxLength = 30;
+            if (typeof data === 'string' && data.length > maxLength) {
+              const truncated = data.substring(0, maxLength) + '...';
+              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
+            }
+            return data;
+          }
+        }
+      ]
+    }); 
+/////////// End Filter on Renewal of business ///////////
+
+
 
 //============== Customer List ============//
 function LoadCustomerData() {
@@ -2802,8 +3030,6 @@ function LoadCallLogsData() {
 
 // Loading of previous insurance details
 function LoadPreviousInsuranceCo(data){
-      console.log(data);
-
       // 1. Guard check: Ensure data exists and is an array with items
       if (!Array.isArray(data) || data.length === 0) {
           console.warn("No insurance history data available.");
@@ -2841,6 +3067,14 @@ function LoadPreviousInsuranceCo(data){
     }
 }
 
+$(document).on("change", "#cboinsco", function () {
+  const value = $(this).val();                          // selected option's value
+  const text  = $(this).find("option:selected").text(); // selected option's visible text
+
+  // use value here, e.g. put it in a field, filter a table, etc.
+  $("#cboprevinsco").val(text);
+
+});
 
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
@@ -5534,17 +5768,6 @@ $(document).on("click", "#btnupdatecall", function () {
     }
   });
 });
-
-
-// * * * * * * New function added * * * * * * //
-/// * * * * * * Filter on Renewal of business * * * * * * ///    
-$(document).on("change", "#dpFilterSelect", function(){
-
-    LoadTransactionData();
- 
-});
-/////////// Filter on Renewal of business ///////////
-
 
 
 $(document).on("click", "#btnsubmit", function () {

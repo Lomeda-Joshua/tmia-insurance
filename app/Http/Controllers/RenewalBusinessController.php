@@ -43,14 +43,17 @@ class RenewalBusinessController extends Controller
             ->select([
                 // Primary table columns (prefixed to avoid ambiguous column collisions)
                 'transactions_rb.Insurance_No',
-                'transactions_rb.Trans_Date',
                 'transactions_rb.Trans_Status',
                 'transactions_rb.VIN',
                 'transactions_rb.Customer_No',
                 'transactions_rb.Insurance_Company',
                 'transactions_rb.Option_Type',
-                'transactions_rb.Policy_Expiration',
                 'transactions_rb.ISE_No',
+
+                'transactions_rb.Start_Date',
+                'transactions_rb.Trans_Date',
+                'transactions_rb.Issue_Date',
+                'transactions_rb.Policy_Expiration',
 
                 'ise_name.Display_Name as ise_name',
 
@@ -74,12 +77,28 @@ class RenewalBusinessController extends Controller
             $query->where('transactions_rb.Trans_Status', 'PENDING');
         }
 
-        // 3. Expiring Filter
-        if (! empty($filters['viewexpiring'])) {
+        // 2. Transaction date Filter
+        if ($filters['dpFilter'] == "trans_date") {
+            $query->whereBetween('transactions_rb.Trans_Date', [
+                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            ])->orderBy('transactions_rb.Trans_Date', 'desc');
+        }
+
+         // 2. Transaction date Filter
+        if ($filters['dpFilter'] == "Policy_Expiration") {
             $query->whereBetween('transactions_rb.Policy_Expiration', [
-                now()->startOfDay(),
-                now()->addDays(90)->endOfDay(),
-            ]);
+                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            ])->orderBy('transactions_rb.Policy_Expiration', 'desc');
+        }
+
+        // 2. Policy  date Filter
+        if ($filters['dpFilter'] == "Policy_Expiration") {
+            $query->whereBetween('transactions_rb.Policy_Expiration', [
+                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            ])->orderBy('transactions_rb.Policy_Expiration', 'desc');
         }
 
         // 4. Custom Search Filter (Runs regardless of Date Range)
@@ -98,17 +117,17 @@ class RenewalBusinessController extends Controller
         }
 
         // 5. Date Range Filter (Only applies when chkall is false AND searchval is empty)
-            if (
-                empty($filters['chkall']) &&
-                empty($filters['searchval']) &&
-                ! empty($filters['datefrom']) &&
-                ! empty($filters['dateto'])
-            ) {
-                $query->whereBetween('transactions_rb.Trans_Date', [
-                    Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                    Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-                ]);
-            }
+        if (
+            empty($filters['chkall']) &&
+            empty($filters['searchval']) &&
+            ! empty($filters['datefrom']) &&
+            ! empty($filters['dateto'])
+        ){
+            $query->whereBetween('transactions_rb.Trans_Date', [
+                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+            ]);
+        }
 
 
         return DataTables::eloquent($query)

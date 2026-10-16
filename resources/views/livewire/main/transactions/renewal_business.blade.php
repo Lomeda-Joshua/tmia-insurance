@@ -83,10 +83,10 @@
                   <div class="form-group">
                       <label for="dpFilterSelect">Filter</label>
                       <select id="dpFilterSelect" class="form-control input-sm" data-error="Insurance Staff is required.">
-                        <option Value="1" selected>Transaction date</option>
-                        <option Value="2">Issue date</option>
-                        <option Value="3">Start Inception date</option>
-                        <option Value="4">Policy Expiration date</option>
+                        <option Value="trans_date" selected>Transaction date</option>
+                        <option Value="issue_date">Issue date</option>
+                        <option Value="incep_date">Start Inception date</option>
+                        <option Value="polexpire_date">Policy Expiration date</option>
                       </select>
                   </div>
                   <div class="help-block with-errors"></div>
@@ -118,9 +118,15 @@
                 </div>
               </div>
 
-              <div class="col-md-2" style="padding: 10px 0; width: 85px;">
-                  <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Refresh</label>
-                  <label id="btnSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+              <div class="col-md-3">
+                  <div class="row">
+                      <div class ="col-md-3">
+                            <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i> Refresh</label>
+                      </div>
+                      <div class ="col-md-3">
+                            <label id="btnSearch" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i class="fa-solid fa-magnifying-glass"></i> Search</label>
+                      </div>
+                  </div>
               </div>
 
           </div>
@@ -139,10 +145,12 @@
         <div class="box-body" style="max-width:100%;">
           <table id="table_trans" class="table table-striped table-bordered table-hover">
             <thead>
+              
               <tr class="tableheader">
-                <th>No.</th>
                 <th>Insurance No.</th>
-                <th>Trans. Date & Time</th>
+                <th style="background-color: #87CEEB; color:black;">Trans. Date & Time</th>
+                <th style="background-color:red; color:white;">Policy Expiration</th>
+                <th style="background-color:#E5E500; color:black;">Issue Date</th>
                 <th>Status</th>
                 <th>Customer No.</th>
                 <th>Customer Name</th>
@@ -153,7 +161,7 @@
                 <th>Model</th>
                 <th>Variant</th>
                 <th>Insurance Partner</th>
-
+                
                 {{-- @if(Auth::user()->User_Level_ID === 1) --}}
                 <th>I.S.E</th>
                 {{-- @endif --}}
@@ -205,6 +213,8 @@
         </div>
       </div>
       <!-- END MODAL MODIFY ISE -->
+
+
       <!-- MODAL ADD -->
       <div id="modal-add" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
@@ -1799,6 +1809,8 @@
         </div>
       </div>
       <!-- END MODAL ADD -->
+
+
       <!-- MODAL CUSTOMER LIST -->
       <div id="modal-customerlist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box">
@@ -1905,6 +1917,8 @@
         </div>
       </div>
       <!-- END MODAL CUSTOMER LIST -->
+
+
       <!-- MODAL VEHICLE LIST -->
       <div id="modal-vehiclelist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box">
@@ -2255,6 +2269,9 @@
         </div>
       </div>
       <!-- END MODAL MODIFY CHANGE STATUS -->
+
+
+
       <!-- MODAL MODIFY NET REM -->
       <div id="modal-modify-netrem" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
@@ -2311,6 +2328,9 @@
         </div>
       </div>
       <!-- END MODAL MODIFY NET REM -->
+
+
+
       <!-- MODAL CALL STATUS -->
       <div id="modal-call" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box box-solid">
@@ -2436,6 +2456,9 @@
         </div>
       </div>
       <!-- END MODAL CALL STATUS -->
+
+
+
       <!-- MODAL CALL LOGS -->
       <div id="modal-logs" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box">
@@ -2468,6 +2491,8 @@
         </div>
       </div>
       <!-- END MODAL CALL LOGS -->
+
+
       <!-- MODAL NB LIST -->
       <div id="modal-nblist" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
         <div class="box">
@@ -2503,6 +2528,58 @@
         </div>
       </div>
       <!-- END MODAL NB LIST -->
+
+      
+      
+      {{-- Added Showing policy expiration --}}
+      <style>
+            #modal-show-expiring-policies .iziModal-header-title,
+              #modal-show-expiring-policies .iziModal-header-subtitle {
+              color: #fff !important;
+            }
+      </style>
+    
+      <!-- MODAL SHOW EXPIRING POLICIES -->
+      <div id="modal-show-expiring-policies" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+        <div class="box">
+          <!-- <div class="box-header with-border">
+          <h2 class="box-title">Vehicle List</h2>
+        </div> -->
+            <div class="box-body">
+                <div class="table-responsive">
+                  <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                          <thead>
+                            <tr class="tableheader">
+                              <th>Insurance No.</th>
+                              <th>Trans. Date & Time</th>
+                              <th>Policy Expiration</th>
+                              <th>Issue Date</th>
+                              <th>Status</th>
+                              <th>Customer No.</th>
+                              <th>Customer Name</th>
+                              <th>Contact No.</th>
+                              <th>VIN</th>
+                              <th>CS No.</th>
+                              <th>Plate No.</th>
+                              <th>Model</th>
+                              <th>Variant</th>
+                              <th>Insurance Partner</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          </tbody>
+                    </table>
+                  <p style="font-size:12px;font-style: italic;">
+                    <b>Note:</b> The entries included within this list are expiring within 90 days. 
+                  </p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END MODAL SHOW EXPIRING POLICIES -->
+
+
     </section>
   </div>
   <!-- /.content-wrapper -->
@@ -2557,7 +2634,8 @@ function printReceipt(divId) {
         uploadEDAFcustomers: @json(route('customer.getCheck-data')),
         getPaymentData: @json(route('renewalpayments.get-data')),
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
-        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
+        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get')),
+        getExpiringPolicies: @json(route('renewal-business.expiring-transactions'))
     }
     
     window.fetchData = {

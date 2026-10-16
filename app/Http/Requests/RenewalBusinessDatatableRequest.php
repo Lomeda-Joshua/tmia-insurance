@@ -48,6 +48,7 @@ class RenewalBusinessDatatableRequest extends FormRequest
                 'date_format:d-m-Y',
                 'after_or_equal:datefrom',
             ],
+            'dpFilter' => ['nullable']
         ];
     }
 
