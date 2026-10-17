@@ -685,7 +685,6 @@ $(document).ready( function () {
 
 
 
-
   /* MODAL SHOWING EXPIRING POLICIES */
   $("#modal-show-expiring-policies").iziModal({
     title: 'Expiring policies',
@@ -1498,6 +1497,7 @@ $(document).ready( function () {
       }
   });
 
+  
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
@@ -1657,6 +1657,9 @@ function LoadTransactionData(ulevel_declartion) {
       },                                   // <-- closes ajax
       order: [[1, 'desc']],
       columns: tableColumns,
+      initComplete: function(){
+        $('#modal-show-expiring-policies').iziModal('open'); 
+      },
       columnDefs: [
         {
           targets: [5, 11, 12, 13, 14],
@@ -1673,7 +1676,6 @@ function LoadTransactionData(ulevel_declartion) {
     });  
 
 
-  $("#modal-show-expiring-policies").iziModal('open');
   viewpending = false;
   viewexpiring = false;
 }
@@ -1683,12 +1685,10 @@ function LoadTransactionData(ulevel_declartion) {
 // * * * * * * New function added October 16, 2026 * * * * * * //
 /// * * * * * * Filter on Renewal of business * * * * * * ///    
 $(document).on("click", "#btnSearch", function () {
-
   let dpFilter_selected = $('#dpFilterSelect').find("option:selected").text();
-  
-  if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
-    $('#table_expiring_list').DataTable().ajax.reload(function (json) {
 
+  if ($.fn.dataTable.isDataTable('#table_trans')) {
+    $('#table_trans').DataTable().ajax.reload(function (json) {
       swal({
         title: "Search complete",
         text: dpFilter_selected,
@@ -1703,14 +1703,20 @@ $(document).on("click", "#btnSearch", function () {
 });
 
 
-$('#table_expiring_list').DataTable({
+function initExpiringTable() {
+  // Already initialized: just refetch data and keep the current page
+  if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
+     $('#table_expiring_list').DataTable().ajax.reload(); 
+    return;
+  }
+
+  $('#table_expiring_list').DataTable({
       language: {
         processing: "Loading Transaction List..."
       },
       processing: true,
       serverSide: true,
       searching: false,
-      deferLoading: 0,
       pageLength: 10,
       responsive: true,
       autoWidth: false,
@@ -1727,10 +1733,8 @@ $('#table_expiring_list').DataTable({
           d.dpFilter     = $('#dpFilterSelect').val();
         }
       },                                   // <-- closes ajax
-      order: [[1, 'desc']],
       columns: [
           { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          
           { 
               data: "Trans_Date", 
               name: "Trans_Date", 
@@ -1806,6 +1810,12 @@ $('#table_expiring_list').DataTable({
         }
       ]
     }); 
+
+}
+
+$(document).ready(function(){
+    $('#modal-show-expiring-policies').on('opened', initExpiringTable);
+});
 /////////// End Filter on Renewal of business ///////////
 
 
@@ -4803,7 +4813,7 @@ $(document).on( "blur", "#txtcallremarks", function () {
 /////////////// END TEXTBOX EVENT ///////////////////
 
 //////////// Date Picker Event ///////
-$(document).on("changeDate", "#dpdatefrom, #dpdateto", function () {
+$(document).ready(function () {
   const dateFrom = $("#dpdatefrom").val();
   const dateTo   = $("#dpdateto").val();
 
