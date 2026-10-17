@@ -712,6 +712,7 @@ class RenewalBusinessController extends Controller
                 'v.Model',
                 'v.Variant',
                 'i.ISE_Name',
+                DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
             ])
             ->where(function ($q) use ($today, $ninetyDaysLater) {
                 $q->whereBetween('t.Policy_Expiration', [$today, $ninetyDaysLater])
@@ -740,7 +741,19 @@ class RenewalBusinessController extends Controller
 
                 return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
             })
-            ->rawColumns(['Trans_Status'])
+            ->editColumn('Days_To_Expiry', function ($row) {
+                $days = (int) $row->Days_To_Expiry;
+                if ($days < 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expired ' . abs($days) . ' day(s) ago</span>';
+                } elseif ($days === 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expires today</span>';
+                } elseif ($days <= 30) {
+                    return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+                }
+
+                return '<span class="label label-success" style="font-size:15px">' . $days . ' day(s)</span>';
+            })
+            ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
             ->make(true);
     }
 

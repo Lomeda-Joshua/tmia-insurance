@@ -1710,6 +1710,19 @@ function initExpiringTable() {
     return;
   }
 
+  function stripHtml(html) {
+    return $('<div>').html(html).text();
+  }
+
+  function escapeAttr(str) {
+      return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+  }
+
+
   $('#table_expiring_list').DataTable({
       language: {
         processing: "Loading Transaction List..."
@@ -1745,6 +1758,9 @@ function initExpiringTable() {
               }
           },
 
+          { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
+
+
           { 
               data: "Policy_Expiration", 
               name: "Policy_Expiration", 
@@ -1766,6 +1782,7 @@ function initExpiringTable() {
           },
 
           { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+          
           { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
           
           // Flattened Columns (Matches leftJoin backend)
@@ -1784,28 +1801,31 @@ function initExpiringTable() {
             name: "Insurance_Company", 
             defaultContent: "- - -" 
           },                  
-
-
-          {
-            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" 
-          }, 
-
-         
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
       ],
       columnDefs: [
         {
-          targets: [5, 11, 12, 13, 14],
+          targets: [5, 11, 12, 13],
           render: function (data, type, row, meta) {
-            const maxLength = 30;
-            if (typeof data === 'string' && data.length > maxLength) {
-              const truncated = data.substring(0, maxLength) + '...';
-              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
-            }
-            return data;
+              // Use plain text for sorting, searching, and export
+              if (type !== 'display') {
+                return typeof data === 'string' ? stripHtml(data) : data;
+              }
+
+              const maxLength = 30;
+              if (typeof data !== 'string') return data;
+
+              // Cell contains HTML (e.g. status badges): return as-is, no truncation
+              if (/<[a-z][\s\S]*>/i.test(data)) {
+                return data;
+              }
+
+              if (data.length > maxLength) {
+                const truncated = data.substring(0, maxLength) + '...';
+                const safe = escapeAttr(data);
+                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+              }
+
+              return data;
           }
         }
       ]
@@ -2894,6 +2914,7 @@ function LoadNetRemData(insuranceno) {
   $(".box-body").validator('reset');
 }
 
+
 function LoadStatusData(insuranceNo) {
   $.ajax({
     type:"POST",
@@ -2928,6 +2949,7 @@ function LoadStatusData(insuranceNo) {
   }
   $(".box-body").validator('reset');
 }
+
 
 function LoadCallData() {
   $.ajax({
@@ -5049,6 +5071,7 @@ $(document).on( "click", "#btnfindvehicle", function () {
   $('#modal-vehiclelist').iziModal('open');
 });
 
+
 $(document).on( "click", "#btnvehselect", function () {
   if (activeVehTab === '#tmiavehtab') {
     LoadVehicleInfo();
@@ -5060,10 +5083,13 @@ $(document).on( "click", "#btnvehselect", function () {
   $('#modal-vehiclelist').iziModal('close');
 });
 
+
 $(document).on( "click", "#btnnblist", function () {
-  LoadNBData();
-  $('#modal-nblist').iziModal('open');
+  // LoadNBData();
+  // $('#modal-nblist').iziModal('open');
+  $('#modal-show-expiring-policies').iziModal('open');
 });
+
 
 $(document).on( "click", "#btnnbselect", function () {
   newdata = true;
