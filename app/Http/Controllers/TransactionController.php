@@ -20,13 +20,14 @@ class TransactionController extends Controller
 
         // 1. Request validation handles empty/missing parameter checks
         $validated = $request->validate([
-            'insuranceno' => ['nullable', 'string'],
+            'insurance_no' => ['nullable', 'string'],
         ]);
 
         // 2. Query builder replaces manual PDO connection instantiation
         $transactions = DB::table('transactions_rb')
-            ->where('Insurance_No', $validated['insuranceno'])
+            ->where('Insurance_No', $validated['insurance_no'])
             ->get();
+
 
         // 3. Return structured JSON response
         return response()->json($transactions);

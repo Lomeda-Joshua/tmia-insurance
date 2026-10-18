@@ -2892,8 +2892,10 @@ function LoadNetRemData(insuranceno) {
   $.ajax({
     type:"POST",
     url:window.loadData.getInsurance,
-    data:{insuranceNo:insuranceno},
+    data:{insurance_no:insuranceno},
     success: function(data){
+      console.log("load net rem data", data);
+
       $.each(data, function(i, value) {
         $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
         $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));
@@ -2910,16 +2912,11 @@ function LoadNetRemData(insuranceno) {
 
 
 function LoadStatusData(insuranceNo) {
-
-  console.log('insurance no', insuranceNo);
-
   $.ajax({
     type:"POST",
     url:window.loadData.getInsurance,
-    data:{insuranceno:insuranceNo},
+    data:{insurance_no:insuranceNo},
     success: function(data){
-
-      console.log('Load status data',data);
 
       $.each(data, function(i, value) {
 
