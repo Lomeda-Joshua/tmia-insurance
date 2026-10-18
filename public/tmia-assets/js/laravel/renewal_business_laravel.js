@@ -2910,11 +2910,16 @@ function LoadNetRemData(insuranceno) {
 
 
 function LoadStatusData(insuranceNo) {
+
+  console.log('insurance no', insuranceNo);
+
   $.ajax({
     type:"POST",
-    url:window.loadData.getTransactionStatus,
+    url:window.loadData.getInsurance,
     data:{insuranceno:insuranceNo},
     success: function(data){
+
+      console.log('Load status data',data);
 
       $.each(data, function(i, value) {
 

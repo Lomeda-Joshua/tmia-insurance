@@ -601,6 +601,7 @@ class RenewalBusinessController extends Controller
             'insuranceNo' => 'nullable|string',
         ]);
 
+    
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
