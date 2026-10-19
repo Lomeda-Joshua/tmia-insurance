@@ -1402,7 +1402,7 @@
                 <div class="receipt-card-window">
                     <!-- Header -->
                     <div class="receipt-card-header">
-                        <h5 class="m-0"><i class="fa fa-file-invoice"></i> REVIEW FORM</h5>
+                        <h5 class="m-0"><i class="fa fa-file-invoice"></i> REVIEW</h5>
                     </div>
 
                     <!-- Printable Receipt Content Area -->
@@ -1424,337 +1424,159 @@
                         <hr class="divider">
 
                         <!-- Customer & Transaction Information -->
-                        <div class="receipt-section-title">CUSTOMER INFORMATION</div>
-                        <table class="receipt-details-table">
-                            <tr>
-                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Customer Name:</th>
-                                <td> <input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                              required="required" readonly></td>
-                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Contact No:</th>
-                                <td><input type="text" id="txtcontactno" class="form-control input-sm" required="required"
-                                        data-error="Contact No. is required." disabled></td>
-                            </tr>
-                            <tr>
-                                <th>Insurance No:</th>
-                                <td>RB-2026-0000006</td>
-                                <th>Policy No:</th>
-                                <td>123132</td>
-                            </tr>
-                        </table>
-
-                        <!-- Itemized Summary Table -->
-                        <div class="receipt-section-title">PAYMENT DETAILS</div>
-                        <table class="receipt-items-table">
-                            <thead>
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">CUSTOMER INFORMATION</div>
+                            <table class="receipt-details-table">
                                 <tr>
-                                    <th style="text-align: left;">Description</th>
-                                    <th style="text-align: center;">Mode</th>
-                                    <th style="text-align: right;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>TOYOTA INSURE - Comprehensive Coverage</td>
-                                    <td style="text-align: center;">CASH</td>
-                                    <td style="text-align: right;">₱ 18,000.00</td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Customer Name:</th>
+                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
+                                  required="required" readonly></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Contact No:</th>
+                                    <td><input type="text" id="txtcontactno" class="form-control input-sm" required="required"
+                                            data-error="Contact No. is required." disabled></td>
                                 </tr>
                                 <tr>
-                                    <td>Processing & Documentary Stamps</td>
-                                    <td style="text-align: center;">CASH</td>
-                                    <td style="text-align: right;">₱ 2,000.00</td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Birthdate:</th>
+                                    <td><input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="Birth Date  is required." disabled></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">E-Mail Address *</th>
+                                    <td><input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
+                                    required="required" data-error="Email is required." readonly disable></td>
                                 </tr>
-                            </tbody>
-                        </table>
+                            </table>
 
-                        <!-- Total Calculation -->
-                        <table class="receipt-total-table">
-                            <tr>
-                                <td class="text-right"><strong>Subtotal:</strong></td>
-                                <td class="text-right" style="width: 120px;">₱ 20,000.00</td>
-                            </tr>
-                            <tr>
-                                <td class="text-right"><strong>Vat (12%):</strong></td>
-                                <td class="text-right">Included</td>
-                            </tr>
-                            <tr class="total-row">
-                                <td class="text-right"><strong>Total Paid:</strong></td>
-                                <td class="text-right"><strong>₱ 20,000.00</strong></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">TIN: </th>
+                                    <td><input type="text" id="txttin" class="form-control input-sm txttin" required="required"
+                                  data-error="TIN is required." disabled></td>
+                                  <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Address:</th>
+                                    <td><textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Address here!"
+                                      rows="3" required="required" data-error="Address is required." disabled></textarea></td>
+                                </tr>
+                            </table>
 
-                      {{-- User profile information --}}
-                      <div class="user-profile-information-summary box-header with-border">
-                        <h4 style="font-weight:900">User profile information</h4> 
-                        
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcustfname">fULL NAME*</label>
-                            <input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                              required="required" readonly>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcustfname">First Name *</label>
-                            <input type="text" id="txtcustfname" class="form-control input-sm txtcustfname"
-                              required="required" readonly>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
+                          <!-- Customer & Transaction Information -->
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">VEHICLE INFORMATION</div>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">VIN :</th>
+                                    <td> <input type="text" id="txtvin" class="form-control input-sm" data-error="VIN is r equired." disabled><span class="input-group-btn"></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Make :</th>
+                                    <td><input type="text" id="txtmake" class="form-control input-sm txtmake" data-error="Make is required." disabled></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model:</th>
+                                    <td><input type="text" id="txtmodel" class="form-control input-sm txtmodel"
+                                          data-error="Model is required." disabled></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model year</th>
+                                    <td><input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
+                                          data-error="Model Year is required." disabled></td>
+                                </tr>
+                            </table>
 
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcustmname">Middle Name</label>
-                            <input type="text" id="txtcustmname" class="form-control input-sm txtcustmname"
-                              placeholder="Optional" readonly>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcustlname">Last Name</label>
-                            <input type="text" id="txtcustlname" class="form-control input-sm txtcustlname"
-                              placeholder="Optional" readonly>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcustsname">Suffix *</label>
-                            <input type="text" id="txtcustsname" class="form-control input-sm txtcustsname"
-                              required="required" data-error="First Name is required." disabled>
-                            <div class="help-block with-errors"></div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="dpbirthdate">Birth Date *</label>
-                            <div class="input-group date">
-                              <div class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                              </div>
-                              <input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
-                                required="required" data-error="Birth Date  is required." disabled>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txttin">TIN *</label>
-                            <input type="text" id="txttin" class="form-control input-sm txttin" required="required"
-                              data-error="TIN is required." disabled>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtcontactno">Contact No. *</label>
-                            <input type="text" id="txtcontactno" class="form-control input-sm" required="required"
-                              data-error="Contact No. is required." disabled>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <label for="txtemailadd">E-Mail Address *</label>
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                <i class="fa fa-envelope"></i>
-                              </span>
-                              <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
-                                required="required" data-error="Email is required." readonly disable>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="txtaddress">Address *</label>
-                                <textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Address here!"
-                                  rows="3" required="required" data-error="Address is required." disabled></textarea>
-                                <div class="help-block with-errors"></div>
-                            </div>                          
-                        </div>
-                      </div>
-
-                      {{-- Review vehicle information --}}
-                      <div class="insurer-information box-header with-border">
-                          <h4 style="font-weight:900">Vehicle information</h4>
-
-                          {{-- Row 1: First 4 items --}}
-                          <div class="row">
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtvin">VIN *</label>
-                                      <div class="input-group input-group-sm">
-                                          <input type="text" id="txtvin" class="form-control input-sm"
-                                              data-error="VIN is required." disabled>
-                                          <span class="input-group-btn"></span>
-                                      </div>
-                                  </div>
-                              </div>
-                              
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtmake">Make *</label>
-                                      <input type="text" id="txtmake" class="form-control input-sm txtmake"
-                                          data-error="Make is required." disabled>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtmodel">Model *</label>
-                                      <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
-                                          data-error="Model is required." disabled>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtmodelyear">Mode Year *</label>
-                                      <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
-                                          data-error="Model Year is required." disabled>
-                                  </div>
-                              </div>
-                          </div>
-
-                          {{-- Row 2: Next 4 items --}}
-                          <div class="row mt-2">
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtcolor">Color *</label>
-                                      <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
-                                          data-error="Color is required." disabled>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtengineno">Engine type</label>
-                                      <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional" disabled>
-                                      <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtcsno">CS No</label>
-                                      <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
-                                          data-error="CS No is required." disabled>
-                                      <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtplateno">Plate no</label>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Color</th>
+                                    <td>
+                                        <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
+                                              data-error="Color is required." disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Engine Type</th>
+                                    <td>
+                                        <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional" disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">CS No</th>
+                                    <td>
+                                        <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
+                                              data-error="CS No is required." disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                   <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Plate No</th>
+                                  <td>
                                       <input type="text" id="txtplateno" class="form-control input-sm txtplateno" placeholder="Optional" disabled>
                                       <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
-                          </div>
+                                  </td>
+                                </tr>
+                            </table>
 
-                          {{-- Row 3: Final item + 3 blank alignment slots --}}
-                          <div class="row mt-2">
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtsrp">Paid Price *</label>
-                                      <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
+                            <table class="receipt-details-table">
+                              <tr>
+                                     <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Paid Price</th>
+                                    <td>
+                                         <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
                                           data-error="Paid Price is required." disabled>
-                                      <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
-                              
-                              <div class="col-md-3"></div>
-                              <div class="col-md-3"></div>
-                              <div class="col-md-3"></div>
-                          </div>
-                      </div>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                              </tr>
+                            </table>
 
-                      {{-- Insurance company information --}}
-                      <div class="vehicle-information box-header with-border">
-                          <h4 style="font-weight:900">Insurance information</h4>
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">INSURANCE INFORMATION</div>
 
-                          <div class="row">
-                              {{-- Row 1: First 4 items --}}
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="cboinstype_summary">Insurance Type *</label>
-                                      <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
+                            <table class="receipt-details-table">
+                                  <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Insurance Type</th>
+                                      <td>
+                                          <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
                                           data-error="Insurance Type is required." disabled>
-                                  </div>
-                              </div>
-                              
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="cboinsco_summary">Insurance Company *</label>
-                                      <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Insurance Company</th>
+                                       <td>
+                                          <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
                                           data-error="Insurance Company is required." disabled>
-                                      <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
+                                      </td>
+                                  </tr>
+                            </table>
 
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="dpstartdate_summary">Start / Inception Date *</label>
-                                      <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
+                            <table class="receipt-details-table">
+                                  <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Start / Inception Date</th>
+                                      <td>
+                                         <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
                                           data-error="Start / Inception Date is required." disabled>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="txtpolicyno_summary">Policy No. *</label>
-                                      <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Policy No.</th>
+                                       <td>
+                                         <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
                                           data-error="Policy No. is required." disabled>
-                                  </div>
-                              </div>
-                          </div>
+                                      </td>
+                                  </tr>
+                            </table>
 
-                          <div class="row mt-2">
-                              {{-- Row 2: Remaining 3 items + clean spacing --}}
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="dpissuedate_summary">Issue Date *</label>
-                                      <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
+                            <table class="receipt-details-table">
+                                <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Issue date:</th>
+                                      <td>
+                                          <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
                                           data-error="Issue Date is required." disabled>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="dppexpiredate_summary">Policy Expiration Date *</label>
-                                      <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Policy Expiration date</th>
+                                       <td>
+                                         <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
                                           data-error="Expiration Date is required." disabled>
-                                      <div class="help-block with-errors"></div>
-                                  </div>
-                              </div>
-
-                              <div class="col-md-3">
-                                  <div class="form-group">
-                                      <label for="cbomortgage_summary">Mortgage *</label>
-                                      <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
-                                          data-error="Mortgage is required." disabled>
-                                  </div>
-                              </div>
-                              
-                              {{-- Empty column slot to keep the 4-column alignment balanced --}}
-                              <div class="col-md-3"></div>
-                          </div>
-                      </div>
+                                      </td>
+                                  </tr>
+                            </table>
+                            <table>
+                              <tr>
+                                  <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Mortgage</th>
+                                        <td>
+                                        <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary" data-error="Mortgage is required." disabled>
+                                  </td>
+                              </tr>
+                            
+                            </table>
 
                     </div>
 
-                    <div class="box-footer with-border">
+                 
+                  </div>
+
+                     <div class="box-footer with-border">
                       <div class="pull-left">
                         <button type="button" id="prevBtn" data-toggle="tooltip" data-placement="top" title="Previous"
                           class="btn btn-success"><i class="fa-solid fa-backward-step"></i> Previous</button>
@@ -1764,7 +1586,6 @@
                           class="btn btn-success"><i class="fa-solid fa-forward-step"></i> Submit</button>
                       </div>
                     </div>
-                  </div>
 
 
                 </div>
@@ -2558,7 +2379,7 @@
 function openReceiptModal() {
     document.getElementById('receiptModal').style.display = 'flex';
 }
-
+  
 function closeReceiptModal() {
     document.getElementById('receiptModal').style.display = 'none';
 }
