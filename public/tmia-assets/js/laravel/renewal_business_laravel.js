@@ -3036,7 +3036,7 @@ function LoadCallLogsData() {
     ],
     "columnDefs": [
       {
-        "targets": [4, 9, 11],  // Modify this if you want to target multiple columns
+        "targets": [4, 9],  // Modify this if you want to target multiple columns
         "render": function(data, type, row, meta) {
           var maxLength = 25; // Set max length for truncation
           if (data.length > maxLength) {

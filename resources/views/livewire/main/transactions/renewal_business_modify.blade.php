@@ -1,5 +1,150 @@
 <x-layouts.main>
 
+    <style>
+    /* In-Flow Container Card */
+    .receipt-card-window {
+        background: #fff;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    .receipt-card-header {
+        background: #d6c50e;
+        color: #fff;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .receipt-card-header h5 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    /* Inner Content Area */
+    .receipt-container {
+        padding: 20px;
+        background: #fff;
+        color: #333;
+    }
+
+    .receipt-header-table, 
+    .receipt-details-table, 
+    .receipt-items-table, 
+    .receipt-total-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .divider {
+        border: none;
+        border-top: 1px dashed #ccc;
+        margin: 12px 0;
+    }
+
+    .receipt-section-title {
+        background: #f4f4f4;
+        padding: 4px 8px;
+        font-weight: bold;
+        font-size: 11px;
+        color: #333;
+        margin: 10px 0 6px 0;
+        border-left: 3px solid #222;
+    }
+
+    .receipt-details-table th, 
+    .receipt-details-table td {
+        padding: 4px;
+        font-size: 11px;
+        text-align: left;
+    }
+
+    .receipt-details-table th {
+        color: #666;
+        font-weight: 600;
+    }
+
+    .receipt-items-table {
+        margin-top: 8px;
+    }
+
+    .receipt-items-table th {
+        border-bottom: 2px solid #ddd;
+        padding: 6px;
+        font-size: 11px;
+        background: #fafafa;
+    }
+
+    .receipt-items-table td {
+        border-bottom: 1px solid #eee;
+        padding: 6px;
+        font-size: 11px;
+    }
+
+    .receipt-total-table td {
+        padding: 4px 6px;
+        font-size: 12px;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .total-row td {
+        font-size: 14px;
+        border-top: 2px solid #222;
+        padding-top: 6px;
+    }
+
+    /* In-Flow Actions Footer */
+    .receipt-card-footer {
+        background: #f8f9fa;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: flex-end;
+        border-top: 1px solid #ddd;
+    }
+
+    .btn-print-receipt {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .btn-print-receipt:hover { 
+        background: #218838; 
+    }
+
+    /* Print Media Directives */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #printableReceipt, #printableReceipt * {
+            visibility: visible;
+        }
+        #printableReceipt {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
+</style>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -194,6 +339,191 @@
               </div>
             </div>
           </div>
+
+
+          <!-- VEHICLE INFO -->
+          <div class="box vehicle-info">
+
+                <!-- Receipt Embedded Container -->
+                <div class="receipt-card-window">
+                    <!-- Header -->
+                    <div class="receipt-card-header">
+                        <h5 class="m-0"><i class="fa fa-car fa-xl"></i> VEHICLE PROTECTION NOTICE</h5>
+                    </div>
+
+                    <!-- Printable Receipt Content Area -->
+                    <div class="receipt-container" id="printableReceipt">
+                        <!-- Header Logos & Info -->
+                        <table class="receipt-header-table">
+                            <tr>
+                                <td style="text-align: left; width: 60%;">
+                                    <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
+                                    <span style="font-size: 10px; color: #666;">Official Transaction Receipt</span>
+                                </td>
+                                <td style="text-align: right; width: 40%;">
+                                    <span style="font-size: 11px; font-weight: bold; color: #222;">OR #: 2026-00891</span><br>
+                                    <span style="font-size: 10px; color: #666;">Date: Oct 09, 2026</span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr class="divider">
+
+                        <!-- Customer & Transaction Information -->
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">CUSTOMER INFORMATION</div>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Customer Name:</th>
+                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
+                                  required="required" readonly></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Contact No:</th>
+                                    <td><input type="text" id="txtcontactno" class="form-control input-sm" required="required"
+                                            data-error="Contact No. is required." disabled></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Birthdate:</th>
+                                    <td><input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
+                                    required="required" data-error="Birth Date  is required." disabled></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">E-Mail Address *</th>
+                                    <td><input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
+                                    required="required" data-error="Email is required." readonly disable></td>
+                                </tr>
+                            </table>
+
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">TIN: </th>
+                                    <td><input type="text" id="txttin" class="form-control input-sm txttin" required="required"
+                                  data-error="TIN is required." disabled></td>
+                                  <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Address:</th>
+                                    <td><textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Address here!"
+                                      rows="3" required="required" data-error="Address is required." disabled></textarea></td>
+                                </tr>
+                            </table>
+
+
+                          <!-- Customer & Transaction Information -->
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">VEHICLE INFORMATION</div>
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">VIN :</th>
+                                    <td> <input type="text" id="txtvin" class="form-control input-sm" data-error="VIN is r equired." disabled><span class="input-group-btn"></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Make :</th>
+                                    <td><input type="text" id="txtmake" class="form-control input-sm txtmake" data-error="Make is required." disabled></td>
+                                </tr>
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model:</th>
+                                    <td><input type="text" id="txtmodel" class="form-control input-sm txtmodel"
+                                          data-error="Model is required." disabled></td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model year</th>
+                                    <td><input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" 
+                                          data-error="Model Year is required." disabled></td>
+                                </tr>
+                            </table>
+
+                            <table class="receipt-details-table">
+                                <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Color</th>
+                                    <td>
+                                        <input type="text" id="txtcolor" class="form-control input-sm txtcolor" 
+                                              data-error="Color is required." disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Engine Type</th>
+                                    <td>
+                                        <input type="text" id="txtengineno" class="form-control input-sm txtengineno" placeholder="Optional" disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                </tr>
+                                  <tr>
+                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">CS No</th>
+                                    <td>
+                                        <input type="text" id="txtcsno" class="form-control input-sm txtcsno" required="required"
+                                              data-error="CS No is required." disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                                   <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Plate No</th>
+                                  <td>
+                                      <input type="text" id="txtplateno" class="form-control input-sm txtplateno" placeholder="Optional" disabled>
+                                      <div class="help-block with-errors"></div>
+                                  </td>
+                                </tr>
+                            </table>
+
+                            <table class="receipt-details-table">
+                              <tr>
+                                     <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Paid Price</th>
+                                    <td>
+                                         <input type="text" id="txtsrp" class="form-control input-sm txtsrp" required="required"
+                                          data-error="Paid Price is required." disabled>
+                                        <div class="help-block with-errors"></div>
+                                    </td>
+                              </tr>
+                            </table>
+
+                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">INSURANCE INFORMATION</div>
+
+                            <table class="receipt-details-table">
+                                  <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Insurance Type</th>
+                                      <td>
+                                          <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
+                                          data-error="Insurance Type is required." disabled>
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Insurance Company</th>
+                                       <td>
+                                          <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
+                                          data-error="Insurance Company is required." disabled>
+                                      </td>
+                                  </tr>
+                            </table>
+
+                            <table class="receipt-details-table">
+                                  <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Start / Inception Date</th>
+                                      <td>
+                                         <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary"
+                                          data-error="Start / Inception Date is required." disabled>
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Policy No.</th>
+                                       <td>
+                                         <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" 
+                                          data-error="Policy No. is required." disabled>
+                                      </td>
+                                  </tr>
+                            </table>
+
+                            <table class="receipt-details-table">
+                                <tr>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Issue date:</th>
+                                      <td>
+                                          <input id="dpissuedate_summary" type="text" class="form-control input-sm dpissuedate_summary"
+                                          data-error="Issue Date is required." disabled>
+                                      </td>
+                                      <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Policy Expiration date</th>
+                                       <td>
+                                         <input id="dppexpiredate_summary" type="text" class="form-control input-sm dppexpiredate_summary"
+                                          data-error="Expiration Date is required." disabled>
+                                      </td>
+                                  </tr>
+                            </table>
+                            <table>
+                              <tr>
+                                  <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Mortgage</th>
+                                        <td>
+                                        <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary" data-error="Mortgage is required." disabled>
+                                  </td>
+                              </tr>
+                            
+                            </table>
+
+                    </div>
+
+                 
+                  </div>
+          </div>
+
+
 
           <!-- INSURANCE CALCULATION -->
           <div class="box insurance-calc">
@@ -690,6 +1020,9 @@
       </div>
     </div>
     <!-- END MODAL CUSTOMER LIST -->
+
+
+
     <!-- MODAL MODIFY VEHICLE INFO -->
     <div id="modal-modify-veh" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
@@ -944,6 +1277,7 @@
       </div>
     </div>
     <!-- END MODAL MODIFY VEHICLE INFO -->
+
     <!-- MODAL VEHICLE LIST -->
     <div id="modal-vehiclelist" aria-hidden="false" aria-labelledby="modal-upload" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box">
@@ -977,6 +1311,9 @@
       </div>
     </div>
     <!-- END MODAL VEHICLE LIST -->
+
+
+
     <!-- MODAL MODIFY INSURANCE CALCULATION -->
     <div id="modal-modify-calc" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">

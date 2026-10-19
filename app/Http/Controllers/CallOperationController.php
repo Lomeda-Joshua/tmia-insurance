@@ -196,7 +196,7 @@ class CallOperationController extends Controller
         // 1. Input Validation
         $validated = $request->validate([
             'insuranceno' => 'required|string',
-        ]);
+        ]);        
 
         // 2. Query view using Eloquent
         $logs = VwCallLogsRb::where('Insurance_No', $validated['insuranceno'])

@@ -752,7 +752,7 @@ class RenewalBusinessController extends Controller
                     return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
                 }
 
-                return '<span class="label label-success" style="font-size:15px">' . $days . ' day(s)</span>';
+                return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
             })
             ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
             ->make(true);
