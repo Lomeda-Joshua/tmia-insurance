@@ -1566,7 +1566,7 @@
                                   <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Mortgage</th>
                                         <td>
                                         <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary" data-error="Mortgage is required." disabled>
-                                  </td>
+                                  </td> 
                               </tr>
                             
                             </table>
@@ -2064,7 +2064,7 @@
             <input id="insurance_no_input" hidden readonly disabled />
             <div class="insurer-info">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-4">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
@@ -2076,7 +2076,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-4">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
@@ -2088,7 +2088,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-4">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">

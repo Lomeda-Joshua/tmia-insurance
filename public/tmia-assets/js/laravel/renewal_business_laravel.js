@@ -433,7 +433,7 @@ $(document).ready( function () {
     icon: 'fa-solid fa-money-bill-transfer',
     iconColor: '#000',
     zindex: 9999,
-    width: 350,
+    width: 950,
     padding: 20,
     radius: 10,
     focusInput: true,

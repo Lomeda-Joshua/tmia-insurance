@@ -10,6 +10,9 @@ use Yajra\DataTables\Facades\DataTables;
 
 use App\Models\RenewalBusinessTransaction;
 
+use App\Models\CallStatus;
+
+
 use Illuminate\Support\Facades\Auth;
 use Exception;
 
@@ -52,6 +55,12 @@ class HomeDashboardController extends Controller
 
                     'vw_call_attempts_rb.Call_Attempts'
             ])->get();
+
+
+        // dd(CallStatus::all());
+
+
+        
 
         return view('livewire.main.home');
     }
