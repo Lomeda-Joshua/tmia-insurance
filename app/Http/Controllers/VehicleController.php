@@ -21,28 +21,26 @@ class VehicleController extends Controller
 
     public function getVehicles(VehicleDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();        
-        $query = VehicleInformation::query()
-            ->with(['customer' => function ($q) {
-                // Select specific columns from CustomerInformation
-                $q->select('Customer_No', 'Full_Name', 'Contact_No');
-            }])
-            ->select([
-                'VIN',
-                'Model',
-                'Model_Year',
-                'Variant',
-                'Color',
-                'Engine_No',
-                'CS_No',
-                'Plate_No',
-                'VSI_Date',
-                'SRP',
-                'Customer_No', // 👈 Required foreign key to map relation
-                'Owner_Name',
-            ]);
+        $filters = $request->validated();
 
-            
+            $query = VehicleInformation::query()
+            ->leftJoin('customer_information', 'vehicle_information.Customer_No', '=', 'customer_information.Customer_No')
+            ->select([
+                'vehicle_information.VIN',
+                'vehicle_information.Model',
+                'vehicle_information.Model_Year',
+                'vehicle_information.Variant',
+                'vehicle_information.Color',
+                'vehicle_information.Engine_No',
+                'vehicle_information.CS_No',
+                'vehicle_information.Plate_No',
+                'vehicle_information.VSI_Date',
+                'vehicle_information.SRP',
+                'vehicle_information.Customer_No',
+                'vehicle_information.Owner_Name',
+                'customer_information.Full_Name',
+                'customer_information.Contact_No',
+            ]);
 
         // Search Filter
         if (! empty($filters['searchval'])) {

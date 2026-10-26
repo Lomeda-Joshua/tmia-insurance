@@ -30,6 +30,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu" id="mymenuchild0">
+                    @php echo Auth::user()->User_Level_ID;   @endphp
                     @if(Auth::user()->User_Level_ID == 1)
                     <li class="{{ request()->routeIs('new_business.index*') ? 'active' : '' }}" >
                         <a href="{{ route('new_business.index') }}"><i class="fa-solid fa-car"></i> New Business Insurance</a>

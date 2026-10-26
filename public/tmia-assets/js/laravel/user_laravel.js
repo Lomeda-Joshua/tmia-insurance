@@ -429,6 +429,9 @@ var xuname;
       return;
     }
 
+
+    console.log('app method', $("#appmethod").val());
+
     var appmethod = $("#appmethod").val();
     var uid = $("#txtid").val();
     var lname = $("#txtlname").val().trim();
@@ -537,7 +540,7 @@ var xuname;
     }
 
     function SaveData(value) {
-      showLoading("Saving user record..."); // Show spinner before sending request
+      // showLoading("Saving user record..."); // Show spinner before sending request
       $.ajax({
         url : window.SaveRoute.saveNewUserData,
         type: "POST",
@@ -552,7 +555,7 @@ var xuname;
 
           if(data.result == 1){
             /*$.notify('Successfull save data');*/
-            hideLoading();
+            // hideLoading();
             swal({
                 title: "Saved!",
                 text: "Updated successfully.",

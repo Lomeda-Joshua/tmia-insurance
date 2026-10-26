@@ -568,38 +568,79 @@
 
 @push('scripts')
   <script>
-    window.userAccount = {
-        ulevel: @json("{{ Auth::user()?->User_Level_ID }}")
-    };
+    window.dataRoutes = {
+      userAccountSession : @json(route('getSession.variables'))
+    }
 
     window.LaravelRoutes = {
         csrfToken: "{{ csrf_token() }}",
-        saveAssignedVehicle: @json(route('vehicle.assign-customer'))
+        nbpendingcounts: @json(route('new_business.counts')),
+        loadSelectedCustomer : @json(route('customer.get-by-no')),
+        loadVehicle: @json(route('vehicle.search')),
+        loadModifyRenewalPage : @json(route('renewal_business_modify.index'))
+    }
+
+    window.calllogs = {
+        renewalCallLogs: @json(route("getTransactionRB.data"))
     }
 
     window.tableRoutes = {
+        renewalBusinessData: @json(route('renewal_business.data')),
         customerData: @json(route('customers.data')),
+        uploadCustomers: @json(route('uploaded.customer')),
+        uploadEDAFcustomers: @json(route('customer.getCheck-data')),
+        getPaymentData: @json(route('renewalpayments.get-data')),
+        getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
+        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get')),
+        getExpiringPolicies: @json(route('renewal-business.expiring-transactions'))
     }
-
+    
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
-      getInsuranceNo : @json(route('transactions.get-by-insurance-no')),
-      customerData: @json(route('customers.data')),
-      vehicleInfo: @json(route('customercvehicleinfo.data')),
-      getCustomerSpecificData : @json(route('getSpecificView.data'))
+      callLogsData : @json(route('fetch.call.logs.rb')),
+      callReasonData : @json(route('fetch.call.reason.rb')),
     }
 
     window.getData = {
-        vehicleSpecific: @json(route('vehicle.search')),
+      customerInfo : @json(route('customerinfo.data')),
+      vehicleInfo: @json(route('vehicletable.data')),
+      vehicleSpecific: @json(route('vehicle.search')),
+      edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+      getRenewalInsuranceno: @json(route('renewal_business_insurance_no')),
+      customer_vehicle_vin_exist: @json(route('customer_vehicle_vin_exist')),
+      renewal_business_expiring_transactions : @json(route('renewal-business.expiring-transactions')),
+      renewal_business_renewal_update_status : @json(route('renewal.update-status')),
+      get_latest_call_logs : @json(route('get.latest.call-logs'))
     }
 
-    window.tableRoute = {
-        vehicleData : @json(route('vehicletable.data'))
+    window.saveData = {
+      saveNbCustomerData : @json(route('newbusiness.save')),
+      saveRenewalBusinessData : @json(route('renewalbusiness.save')),
+      saveUpdatedNetRem : @json(route('renew-business-update.netrem')),
+      callLogsStore : @json(route("call-logs.store")),
+      saveRenewalPayments: @json(route('renewal-business.save-payments'))
+    }
+
+    window.deletefunction = {
+      deleteData : @json(route("delete.renewal_transaction")),
+    }
+
+    window.loadData = {
+        loadPaymentData : @json(route('getTransactionRB.data')),
+        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
+        loadTransactionByInsurance: @json(route('transactions-renewal.get-by-insurance-no')),
+        sessionSetTransaction : @json(route('session.set-transaction-data')),
+        getTransactionStatus : @json(route('gettransaction-status.data')),
+        getPolicyExpiration : @json(route('loadpolicy.expiration')),
+        getInsurance: @json(route('transaction.by_insurance_no')),
+        getRBCount : @json(route('getTransactions.count')),
+        getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
+        getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no'))
     }
 
     window.formRoutes = {
-        insuranceStaffData: @json(route('insurance_staff.data')),
         customerTypeData: @json(route('customers_type.data')),
+        insuranceStaffData: @json(route('insurance_staff.data')),
 
         // Location
         regionData: @json(route('region.data')),
@@ -632,7 +673,6 @@
         // Call status
         callStatusData: @json(route('callstatus.data')),
     }
-  
   </script>
 
   <script src="{{ asset('tmia-assets/js/laravel/vehicle_laravel.js') }}"></script>

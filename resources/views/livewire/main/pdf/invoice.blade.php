@@ -1,165 +1,399 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Renewal Business | Policy Summary - {{ $data['Insurance_No'] ?? '' }}</title>
-    <style>
+    
+        <style>
+        /* A4 Page setup for printing/PDF engines */
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
         body {
             font-family: Arial, sans-serif;
-            color: #222222;
-            font-size: 8px;
-            line-height: 1.1;
+            color: #333;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
         }
+        .quotation-container {
+            width: 100%;
+            max-width: 100%; /* Stretches fully across the A4 width */
+            margin: 0 auto;
+            background: #fff;
+            box-sizing: border-box;
+            padding: 10px 20px;
+        }
+        /* Header */
         .header-table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .header-table td {
+            vertical-align: top;
+        }
+        .quotation-title {
+            font-size: 13px;
+            color: #666;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .meta-box {
+            text-align: right;
+        }
+        .quotation-no {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111;
+        }
+        .meta-text {
+            font-size: 11px;
+            color: #666;
+        }
+        .badge {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 3px;
+            margin-top: 5px;
+            border: 1px solid #ffeeba;
+        }
+        
+        /* Intro Section */
+        .proposal-heading {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 5px;
+        }
+        .proposal-sub {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .greeting {
+            font-size: 13px;
+            font-weight: bold;
             margin-bottom: 8px;
         }
-        .section-title {
-            background-color: #040505;
-            color: #ffffff;
-            padding: 3px 6px;
-            font-weight: bold;
-            font-size: 8.5px;
-            margin-top: 8px;
-            margin-bottom: 4px;
+        .proposal-desc {
+            font-size: 12px;
+            color: #441;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            width: 65%;
+            float: left;
         }
-        .section-title-sub {
-            color: #040505;
-            padding: 3px 6px;
-            font-weight: bold;
-            font-size: 8.5px;
-            margin-top: 8px;
-            margin-bottom: 4px;
+        .inception-right {
+            float: right;
+            text-align: right;
+            font-size: 11px;
+            color: #555;
         }
-        .data-table {
+
+        /* Info Grid Boxes */
+        .info-grid {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        .info-grid td {
+            width: 50%;
+            background: #f4f6f8;
+            padding: 12px 18px;
+            vertical-align: top;
+            border: 6px solid #fff; /* creates visual padding/spacing between grid items */
+        }
+        .info-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
-        .data-table th {
-            background-color: #f2f2f2;
-            border: 0.5px solid #cccccc;
-            padding: 3px 5px;
-            text-align: left;
-            font-size: 8px;
+        .info-value {
+            font-size: 13px;
+            font-weight: bold;
+            color: #222;
         }
-        .data-table td {
-            border: 0.5px solid #cccccc;
-            padding: 3px 5px;
-            font-size: 8px;
+        .info-subvalue {
+            font-size: 11px;
+            color: #555;
+            margin-top: 2px;
         }
-        .data-table th.col-25 { width: 25%; }
-        .data-table td.col-25 { width: 25%; }
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-    </style>
-</head>
-<body>
 
-    <!-- Scaled Header Logos -->
+        /* Section Title */
+        .section-heading {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* Summary Table */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .summary-table th {
+            background-color: #1a253a;
+            color: #fff;
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 9px 12px;
+            text-align: left;
+            letter-spacing: 0.5px;
+        }
+        .summary-table th:nth-child(2),
+        .summary-table th:nth-child(3) {
+            text-align: right;
+        }
+        .summary-table td {
+            padding: 9px 12px;
+            font-size: 12px;
+            border-bottom: 1px solid #e5e5e5;
+            color: #333;
+        }
+        .summary-table td:nth-child(2),
+        .summary-table td:nth-child(3) {
+            text-align: right;
+        }
+        
+        /* Totals section */
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .totals-table td {
+            padding: 5px 12px;
+            font-size: 12px;
+        }
+        .totals-table td:first-child {
+            text-align: right;
+            color: #555;
+        }
+        .totals-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            width: 180px;
+            color: #222;
+        }
+        .grand-total-row td {
+            border-top: 2px solid #ccc;
+            border-bottom: 2px solid #ccc;
+            padding: 9px 12px !important;
+            font-size: 13px !important;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Footer Notes */
+        .deductible-box {
+            background-color: #f4f6f8;
+            padding: 10px 14px;
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 25px;
+            border-left: 3px solid #1a253a;
+        }
+        .footer-grid {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .footer-grid td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0 15px;
+        }
+        .footer-grid td:first-child {
+            padding-left: 0;
+        }
+        .footer-grid td:last-child {
+            padding-right: 0;
+        }
+        .footer-box-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .footer-box-content {
+            font-size: 10px;
+            color: #666;
+            line-height: 1.4;
+        }
+        .footer-box-content ul {
+            margin: 0;
+            padding-left: 15px;
+        }
+    </style>
+
+    <div class="quotation-container">
+    
+    <!-- Top Header -->
     <table class="header-table">
         <tr>
-            <td style="text-align: left; width: 60%;">
-                <img src="{{ public_path('tmia-assets/images/logo.png') }}" style="width: 120px;">
+            <td style="width: 60%;">
+                <div style="font-size: 20px; font-weight: bold; color: #111;">Toyota Makati</div>
+                <div class="quotation-title" style="margin-top: 4px;">Motor Vehicle Insurance Quotation</div>
             </td>
-            <td style="text-align: right; width: 40%;">
-                <img src="{{ public_path('tmia-assets/images/toyota logo.png') }}" style="width: 50px;">
+            <td class="meta-box" style="width: 40%;">
+                <div class="quotation-no">TCAQ-2026-0001</div>
+                <div class="meta-text">Prepared by Leo Sikat</div>
+                <div class="meta-text">Prepared on August 28, 2026</div>
+                <div><span class="badge">Renewal</span></div>
             </td>
         </tr>
     </table>
 
-    <div style="text-align: center; margin-bottom: 8px;">
-        <h3 style="margin: 0; padding: 0; font-size: 11px;">RENEWAL BUSINESS</h3>
-        <h3 style="margin: 0; padding: 0; font-size: 11px;">INSURANCE POLICY & PAYMENT SUMMARY</h3>
-        <span style="font-size: 7.5px; color: #555555;">Transaction Reference: {{ $data['Insurance_No'] ?? 'N/A' }}</span>
+    <!-- Proposal Intro -->
+    <div class="proposal-heading">Your Motor Vehicle Insurance Proposal</div>
+    <div class="proposal-sub">Clear coverage and premium details for your review.</div>
+    
+    <div>
+        <div class="proposal-desc">
+            <div class="greeting" style="margin-bottom: 6px;">Dear Leo Sikat,</div>
+            Thank you for considering Toyota Makati City. We are pleased to provide this renewal proposal for your motor vehicle insurance needs. The quotation below summarizes the selected coverage and estimated annual premium.
+        </div>
+        <div class="inception-right">
+            Inception date:<br>
+            <strong>August 28, 2026</strong><br>
+            <span style="font-size: 10px; color: #777;">Valid until September 27, 2026</span>
+        </div>
     </div>
 
-    <!-- Customer Information -->
-    <div class="section-title">CUSTOMER INFORMATION</div>
-    <table class="data-table">
-            <tr>
-                <th class="col-25">Customer No:</th>
-                <td class="col-25">{{ $transaction->Customer_No ?? 'N/A' }}</td>
-                <th class="col-25">Full Name:</th>
-                <td class="col-25">{{ $transaction->Full_Name ?? 'N/A' }}</td>
-            </tr>
-            <tr>
-                <th class="col-25">Contact No:</th>
-                <td class="col-25">{{ $transaction->Contact_No ?? 'N/A' }}</td>
-                <th class="col-25">Transaction Date:</th>
-                <td class="col-25">{{ $transaction->Trans_Date ?? 'N/A' }}</td>
-            </tr>
-    </table>
+    <div style="clear: both; margin-bottom: 15px;"></div>
 
-    <!-- Vehicle Details -->
-    <div class="section-title">VEHICLE DETAILS</div>
-    <table class="data-table">
+    <!-- Info Grid Block -->
+    <table class="info-grid">
         <tr>
-            <th class="col-25">VIN:</th>
-            <td class="col-25">{{ $transaction->VIN ?? 'N/A' }}</td>
-            <th class="col-25">CS No:</th>
-            <td class="col-25">{{ $transaction->CS_No ?? 'N/A' }}</td>
+            <td>
+                <div class="info-label">Insured Customer</div>
+                <div class="info-value">Leo Sikat</div>
+                <div class="info-subvalue">09228732822</div>
+            </td>
+            <td>
+                <div class="info-label">Vehicle</div>
+                <div class="info-value">2015 Fortuner G Diesel AT</div>
+                <div class="info-subvalue">Commercial Vehicle · Plate No. APA9778</div>
+            </td>
         </tr>
         <tr>
-            <th class="col-25">Plate No:</th>
-            <td class="col-25">{{ $transaction->Plate_No ?? 'N/A' }}</td>
-            <th class="col-25">Model / Variant:</th>
-            <td class="col-25">{{ trim(($transaction->Model ?? '') . ' ' . ($transaction->Variant ?? '')) ?: 'N/A' }}</td>
+            <td>
+                <div class="info-label">Insurance Partner</div>
+                <div class="info-value">AXA</div>
+                <div class="info-subvalue">Motor Vehicle Insurance</div>
+            </td>
+            <td>
+                <div class="info-label">Sum Insured</div>
+                <div class="info-value">₱500,000.00</div>
+                <div class="info-subvalue">Subject to insurer review and acceptance</div>
+            </td>
         </tr>
     </table>
 
-    <!-- Policy & Staff Details -->
-    <div class="section-title">POLICY DETAILS</div>
-    <table class="data-table">
-        <tr>
-            <th class="col-25">Insurance Company:</th>
-            <td class="col-25">{{ $transaction->Insurance_Company ?? 'N/A' }}</td>
-            <th class="col-25">Status:</th>
-            <td class="col-25">{{ $transaction->Trans_Status ?? 'N/A' }}</td>
-        </tr>
-        <tr>
-            <th class="col-25">Expiration Date:</th>
-            <td class="col-25">{{ $transaction->Policy_Expiration ?? 'N/A' }}</td>
-            <th class="col-25">Staff (ISE):</th>
-            <td class="col-25">{{ $transaction->ISE_Name ?? 'N/A' }}</td>
-        </tr>
-    </table>
-
-    <!-- Payment History -->
-    <div class="section-title-sub">PAYMENT HISTORY</div>
-
-    <h3>Total amount:<span style='font-weight:900;'><span>
-        {{ $transaction->Gross_Premium }}
-    </span></h3>
-
-    <table class="data-table"> 
+    <!-- Coverage and Premium Summary -->
+    <div class="section-heading">Coverage and Premium Summary</div>
+    
+    <table class="summary-table">
         <thead>
             <tr>
-                <th style="width: 25%; text-align: center;">Payment Date</th>
-                <th style="width: 25%; text-align: center;">Payment Mode</th>
-                <th style="width: 25%; text-align: right;">Amount</th>
+                <th style="width: 50%;">Coverage</th>
+                <th style="width: 25%;">Sum Insured / Limit</th>
+                <th style="width: 25%;">Customer Premium</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($transaction->rbPaymentInfo as $payment)
-                <tr>
-                    <td class="text-center">{{ $payment->Payment_Date ?? $payment['Payment_Date'] ?? 'N/A' }}</td>
-                    <td class="text-center">{{ $payment->Payment_Type ?? $payment['Payment_Type'] ?? $payment->Payment_Mode ?? 'N/A' }}</td>
-                    <td class="text-right">{{ number_format($payment->Payment_Amount ?? $payment['Payment_Amount'] ?? $payment->Amount ?? 0, 2) }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center" style="color: #777777;">No payment records found.</td>
-                </tr>
-            @endforelse
-            
+            <tr>
+                <td>Own Damage / Theft</td>
+                <td>₱500,000.00</td>
+                <td>₱8,008.45</td>
+            </tr>
+            <tr>
+                <td>Acts of Nature</td>
+                <td>₱500,000.00</td>
+                <td>₱2,355.43</td>
+            </tr>
+            <tr>
+                <td>VTPL – Bodily Injury</td>
+                <td>As per policy</td>
+                <td>₱420.00</td>
+            </tr>
+            <tr>
+                <td>VTPL – Property Damage</td>
+                <td>As per policy</td>
+                <td>₱1,245.00</td>
+            </tr>
+            <tr>
+                <td>Auto Personal Accident</td>
+                <td>As per policy</td>
+                <td>₱0.00</td>
+            </tr>
         </tbody>
     </table>
-    <br>
-    <p style="font-size: 11px; font-weight: 800; text-align: center; margin-top: 10px; margin-bottom: 10px;">
-    - - - - - Nothing follows - - - - -
-    </p>
 
-</body>
+    <!-- Totals Table -->
+    <table class="totals-table">
+        <tr>
+            <td>Gross premium</td>
+            <td>₱12,028.87</td>
+        </tr>
+        <tr>
+            <td>VAT</td>
+            <td>₱1,443.46</td>
+        </tr>
+        <tr>
+            <td>Documentary stamp tax</td>
+            <td>₱1,503.61</td>
+        </tr>
+        <tr>
+            <td>Local tax</td>
+            <td>₱24.06</td>
+        </tr>
+        <tr class="grand-total-row">
+            <td>Total customer payable</td>
+            <td>₱15,000.00</td>
+        </tr>
+    </table>
+
+    <!-- Deductible Note -->
+    <div class="deductible-box">
+        <strong>Deductible / participation:</strong> ₱3,000.00 per accident or panel, subject to the final policy terms.
+    </div>
+
+    <!-- Footer Options & Reminders -->
+    <table class="footer-grid">
+        <tr>
+            <td>
+                <div class="footer-box-title">Payment options</div>
+                <div class="footer-box-content">
+                    <ul>
+                        <li>Deposit to authorized Toyota Makati accounts.</li>
+                        <li>Deferred payment options may be available, subject to bank or card provider approval.</li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div class="footer-box-title">Important reminders</div>
+                <div class="footer-box-content">
+                    <ul>
+                        <li>This is an indicative quotation and is subject to underwriting approval.</li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    </body>
 </html>

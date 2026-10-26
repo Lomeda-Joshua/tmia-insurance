@@ -482,6 +482,44 @@ class CustomerController extends Controller
     }
 
 
+    /**
+     * Customer name and number look up
+     */
+    public function customerNameExist(Request $request)
+    {
+        // Validate incoming request
+        $request->validate([
+            'custno' => ['required','string'],
+        ]);
+
+        try {
+            $custno = trim($request->input('custno'));
+
+            // Query using Laravel DB facade (or Customer model if you have one)
+            $fullname = DB::table('customer_information')
+                ->where('Customer_No', $custno)
+                ->value('Full_Name');
+
+            if ($fullname) {
+                return response()->json([
+                    'result' => 1,
+                    'fullname' => $fullname
+                ]);
+            }
+
+            return response()->json([
+                'result' => 0,
+                'fullname' => null
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'result' => 0,
+                'error' => 'Database error'
+            ], 500);
+        }
+    }
+
     
     
 

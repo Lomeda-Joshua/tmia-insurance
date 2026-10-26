@@ -4655,7 +4655,7 @@ $(document).on( "click", "#btnadd", function () {
   editinfo = true;
   FormClear();
   FormDisable(false);
-  if ( ulevel == 'INSURANCE STAFF') { 
+  if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
     
     $('#modal-add').iziModal('open');
@@ -5719,7 +5719,7 @@ $(document).on("click", "#btnsubmit", function () {
       $("#modalsaving").iziModal('close');
 
       if (result.result == 1) {
-        showLoading("Saving user record..."); // Show spinner before sending request
+        // showLoading("Saving user record..."); // Show spinner before sending request
         
         swal({
           title: "Saved!",
@@ -5728,7 +5728,7 @@ $(document).on("click", "#btnsubmit", function () {
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
         }, function () {
-          hideLoading();
+          // hideLoading();
           $("#modal-add").iziModal("close");
           if ($.fn.dataTable.isDataTable("#table_trans")) {
             $('#table_trans').DataTable().ajax.reload(null, false);

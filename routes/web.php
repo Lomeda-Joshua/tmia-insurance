@@ -45,6 +45,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
 
+
+    Route::get('/insurance-promises', [NotificationController::class, 'getInsurancePromisesNotification'])->name('get-insurance-notification.data');
+
     // Notification backend data
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->name('notifications.data');
 
@@ -97,9 +100,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');        
         Route::post('/new-business/vin-lookup', [VehicleLookupController::class, 'lookupByVin'])->name('vehicle.lookup');
         Route::post('/new-business/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('new-business.payments.get-data');
+
         
-
-
         // Customers Lists        
         Route::get('/customers', [CustomerController::class, 'index'])->name('customer.list');
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
@@ -115,13 +117,13 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/vehicle/search', [CustomerController::class, 'searchVehicle'])->name('vehicle.search');
         Route::post('/vehicle/edaf-search', [CustomerController::class, 'getEdafCustomerVehicle'])->name('edaf.vehicle.search');
         
-        Route::post('/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
-        Route::post('/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
-        Route::post('/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
-        Route::post('/renewal-business/get-by-insurance-no', [CustomerController::class, 'getRenewalBusinessTransactionsByInsuranceNo'])->name('transactions-renewal.get-by-insurance-no');
-        Route::post('/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
+        Route::post('/customer/getcustomer/data', [CustomerController::class, 'getCustomerDetails'])->name('getcustomers.data');
+        Route::post('/customer/transactions/get-by-insurance-no', [CustomerController::class, 'getTransactionsByInsuranceNo'])->name('transactions.get-by-insurance-no');
+        Route::post('/customer/renewal-business/get-by-insurance-no', [CustomerController::class, 'getRenewalBusinessTransactionsByInsuranceNo'])->name('transactions-renewal.get-by-insurance-no');
+        Route::post('/customer/payments/get-data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('payments.get-data');
+        Route::post('/customer/getNewBusinessPayment/data', [NewBusinessController::class, 'getNewBusinessPayment'])->name('getNewBusinessPayment.data');
 
-        // Route::post('/renewal-business/')->name('');
+        Route::post('/customer/if_customerexists/data', [CustomerController::class, 'customerNameExist' ])->name('if_customerdata_exists.data');
 
         
 

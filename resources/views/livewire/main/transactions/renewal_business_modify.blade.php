@@ -154,7 +154,7 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href=""><i class="fa fa-tasks"></i> Transactions</a></li>
+      <li><a href="#"><i class="fa fa-tasks"></i> Transactions</a></li>
       <li><a href="{{ route('renewal_business') }}"><i class="fa-solid fa-car-side"></i> Renewal Business Insurance</a></li>
       <li class="active"><i class="fa fa-list-alt"></i> Modify Info.</li>
     </ol>
@@ -170,512 +170,436 @@
       </div>
       <div class="box-body" style="max-width:100%;">
         <div class="nvi-modify">
-          <!-- CUSTOMER INFO -->
-          <div class="box customer-info">
-            <div class="header">
-              <h2 class="title" id="cust-title" tabindex="0">
-                <i class="fa-regular fa-circle-user fa-xl"></i>
-                Customer Information
-              </h2>
-              <a id="btneditcust" class="edit-btn" aria-label="Edit Customer Information" style="display:none;">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
-                </svg>
-                Edit
-              </a>
-            </div>
 
-            <div class="fields">
-              <div class="field">
-                <div class="label">Name</div>
-                <div class="value" id="custfullname">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Birth Date</div>
-                <div class="value" id="custbirthdate">-</div>
-              </div>
-              <div class="field">
-                <div class="label">TIN</div>
-                <div class="value" id="custtin">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Contact No.</div>
-                <div class="value" id="custcontactno">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Email Address</div>
-                <div class="value" id="custemailadd">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Customer No.</div>
-                <div class="value" id="custno">-</div>
-              </div>
-              <div class="field wide-field">
-                <div class="label">Main Address</div>
-                <div class="value" id="custaddress">-</div>
-              </div>
+      <!-- CUSTOMER INFO -->
+      <div class="box customer-info">
+        <div class="header">
+          <h2 class="title" id="cust-title" tabindex="0">
+            <i class="fa-regular fa-circle-user fa-xl"></i>
+            Customer Information
+          </h2>
+          <a id="btneditcust" class="edit-btn" aria-label="Edit Customer Information" style="display:none;">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
+            </svg>
+            Edit
+          </a>
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <div class="label">Name</div>
+            <div class="value" id="custfullname">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Birth Date</div>
+            <div class="value" id="custbirthdate">-</div>
+          </div>
+          <div class="field">
+            <div class="label">TIN</div>
+            <div class="value" id="custtin">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Contact No.</div>
+            <div class="value" id="custcontactno">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Email Address</div>
+            <div class="value" id="custemailadd">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Customer No.</div>
+            <div class="value" id="custno">-</div>
+          </div>
+          <div class="field wide-field">
+            <div class="label">Main Address</div>
+            <div class="value" id="custaddress">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VEHICLE INFO -->
+      <div class="box vehicle-info">
+        <div class="header">
+          <h2 class="title" id="veh-title" tabindex="0">
+            <i class="fa-solid fa-car fa-xl"></i>
+            Vehicle Information
+          </h2>
+          <a id="btneditveh" class="edit-btn" aria-label="Edit Vehicle Information" style="display:none;">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
+            </svg>
+            Edit
+          </a>
+        </div>
+
+        <div class="fields">
+          <div class="field">
+            <div class="label">VIN</div>
+            <div class="value" id="vehvin">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Make</div>
+            <div class="value" id="vehmake">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Model</div>
+            <div class="value" id="vehmodel">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Model Year</div>
+            <div class="value" id="vehmodelyear">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Color</div>
+            <div class="value" id="vehcolor">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Engine No.</div>
+            <div class="value" id="vehengineno">-</div>
+          </div>
+          <div class="field">
+            <div class="label">CS No</div>
+            <div class="value" id="vehcsno">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Plate No</div>
+            <div class="value" id="vehplateno">-</div>
+          </div>
+          <!-- <div class="field">
+            <div class="label">Oder No.</div>
+            <div class="value" id="vehorderno">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Oder Status</div>
+            <div class="value" id="vehorderstatus">-</div>
+          </div> -->
+          <div class="field">
+            <div class="label">Paid Price</div>
+            <div class="value" id="vehsrp">-</div>
+          </div>
+          <div class="field">
+            <div class="label">VSI Date</div>
+            <div class="value" id="vehvsidate">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Released Date</div>
+            <div class="value" id="vehreldate">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Technical Date</div>
+            <div class="value" id="vehtechdate">-</div>
+          </div>
+          <!-- <div class="field">
+            <div class="label">Model Sales Code</div>
+            <div class="value" id="vehmsalescode">-</div>
+          </div> -->
+          <div class="field">
+            <div class="label">Variant</div>
+            <div class="value" id="vehvariant">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Body Type</div>
+            <div class="value" id="vehbodytype">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Power Transmission</div>
+            <div class="value" id="vehtransmission">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Fuel Type</div>
+            <div class="value" id="vehfueltype">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Seats</div>
+            <div class="value" id="vehseats">-</div>
+          </div>
+          <!-- <div class="field">
+            <div class="label">Unloaded Weight</div>
+            <div class="value" id="vehunloadweight">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Maximum Weight</div>
+            <div class="value" id="vehmaxweight">-</div>
+          </div> -->
+          <div class="field">
+            <div class="label">Product Classification</div>
+            <div class="value" id="vehprodclass">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Owner Type</div>
+            <div class="value" id="vehownertype">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Owner First Name</div>
+            <div class="value" id="vehownername">-</div>
+          </div>
+          <div class="field">
+            <div class="label">Marketing Professional</div>
+            <div class="value" id="vehmpname">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSURANCE CALCULATION -->
+      <div class="box insurance-calc">
+        <div class="header">
+          <h2 class="title" id="veh-title" tabindex="0">
+            <i class="fa fa-calculator fa-xl"></i>
+            Insurance Calculations
+          </h2>
+          <a id="btneditinscalc" class="edit-btn" aria-label="Edit Insurance Calculations" style="display:none;">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
+            </svg>
+            Edit
+          </a>
+        </div>
+
+        <div class="calc-row">
+          <div class="calc-col">
+            <div class="form-group">
+              <label for="rowgrosspremium">Gross Premium</label>
+              <input type="text" id="rowgrosspremium" value="0.00" disabled>
+              <div class="help-block with-errors"></div>
             </div>
           </div>
-
-          <!-- VEHICLE INFO -->
-          <div class="box vehicle-info">
-            <div class="header">
-              <h2 class="title" id="veh-title" tabindex="0">
-                <i class="fa-solid fa-car fa-xl"></i>
-                Vehicle Information
-              </h2>
-              <a id="btneditveh" class="edit-btn" aria-label="Edit Vehicle Information" style="display:none;">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
-                </svg>
-                Edit
-              </a>
-            </div>
-
-            <div class="fields">
-              <div class="field">
-                <div class="label">VIN</div>
-                <div class="value" id="vehvin">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Make</div>
-                <div class="value" id="vehmake">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Model</div>
-                <div class="value" id="vehmodel">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Model Year</div>
-                <div class="value" id="vehmodelyear">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Color</div>
-                <div class="value" id="vehcolor">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Engine No.</div>
-                <div class="value" id="vehengineno">-</div>
-              </div>
-              <div class="field">
-                <div class="label">CS No</div>
-                <div class="value" id="vehcsno">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Plate No</div>
-                <div class="value" id="vehplateno">-</div>
-              </div>
-              <!-- <div class="field">
-                <div class="label">Oder No.</div>
-                <div class="value" id="vehorderno">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Oder Status</div>
-                <div class="value" id="vehorderstatus">-</div>
-              </div> -->
-              <div class="field">
-                <div class="label">Paid Price</div>
-                <div class="value" id="vehsrp">-</div>
-              </div>
-              <div class="field">
-                <div class="label">VSI Date</div>
-                <div class="value" id="vehvsidate">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Released Date</div>
-                <div class="value" id="vehreldate">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Technical Date</div>
-                <div class="value" id="vehtechdate">-</div>
-              </div>
-              <!-- <div class="field">
-                <div class="label">Model Sales Code</div>
-                <div class="value" id="vehmsalescode">-</div>
-              </div> -->
-              <div class="field">
-                <div class="label">Variant</div>
-                <div class="value" id="vehvariant">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Body Type</div>
-                <div class="value" id="vehbodytype">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Power Transmission</div>
-                <div class="value" id="vehtransmission">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Fuel Type</div>
-                <div class="value" id="vehfueltype">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Seats</div>
-                <div class="value" id="vehseats">-</div>
-              </div>
-              <!-- <div class="field">
-                <div class="label">Unloaded Weight</div>
-                <div class="value" id="vehunloadweight">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Maximum Weight</div>
-                <div class="value" id="vehmaxweight">-</div>
-              </div> -->
-              <div class="field">
-                <div class="label">Product Classification</div>
-                <div class="value" id="vehprodclass">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Owner Type</div>
-                <div class="value" id="vehownertype">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Owner First Name</div>
-                <div class="value" id="vehownername">-</div>
-              </div>
-              <div class="field">
-                <div class="label">Marketing Professional</div>
-                <div class="value" id="vehmpname">-</div>
-              </div>
+          <div class="calc-col">
+            <div class="form-group">
+              <label for="rownetremittance">Net Remittance</label>
+              <input type="text" id="rownetremittance" value="0.00" disabled>
+              <div class="help-block with-errors"></div>
             </div>
           </div>
-
-
-          <!-- VEHICLE INFO -->
-          <div class="box vehicle-info">
-
-                <!-- Receipt Embedded Container -->
-                <div class="receipt-card-window">
-                    <!-- Header -->
-                    <div class="receipt-card-header">
-                        <h5 class="m-0"><i class="fa fa-car fa-xl"></i> VEHICLE PROTECTION NOTICE</h5>
-                    </div>
-
-                    <!-- Printable Receipt Content Area -->
-                    <div class="receipt-container" id="printableReceipt">
-                        <!-- Header Logos & Info -->
-                        <table class="receipt-header-table">
-                            <tr>
-                                <td style="text-align: left; width: 60%;">
-                                    <strong style="font-size: 16px; color: #333;"><i>"Solutions for you and your car"</i></strong><br>
-                                    <span style="font-size: 10px; color: #666;">Official Transaction Receipt</span>
-                                </td>
-                                <td style="text-align: right; width: 40%;">
-                                    <span style="font-size: 11px; font-weight: bold; color: #222;">OR #: 2026-00891</span><br>
-                                    <span style="font-size: 10px; color: #666;">Date: Oct 09, 2026</span>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <hr class="divider">
-
-                        <!-- Customer & Transaction Information -->
-                        <div class="receipt-section-title" style="font-size: 15px; font-weight: bold; color: #222;">CUSTOMER INFORMATION</div>
-                            <table class="receipt-details-table">
-                                <tr>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">COMPRE:</th>
-                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                                    required="required" readonly></td>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">AOG:</th>
-                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                                    required="required" readonly></td>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">INCOME:</th>
-                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                                    required="required" readonly></td>
-                                </tr>
-                            </table>
-                            <table class="receipt-details-table">
-                                <tr>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Customer Name:</th>
-                                    <td><input type="text" id="txtcustname" class="form-control input-sm txtcustname"
-                                  required="required" readonly></td>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Contact No:</th>
-                                    <td><input type="text" id="txtcontactno" class="form-control input-sm" required="required"
-                                            data-error="Contact No. is required." disabled></td>
-                                </tr>
-                                <tr>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Birthdate:</th>
-                                    <td><input id="dpbirthdate" type="text" class="form-control input-sm pull-right"
-                                    required="required" data-error="Birth Date  is required." disabled></td>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">E-Mail Address *</th>
-                                    <td><input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
-                                    required="required" data-error="Email is required." readonly disable></td>
-                                </tr>
-                            </table>
-
-                            <table class="receipt-details-table">
-                                <tr>
-                                    <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">TIN: </th>
-                                    <td><input type="text" id="txttin" class="form-control input-sm txttin" required="required"
-                                  data-error="TIN is required." disabled></td>
-                                  <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Address:</th>
-                                    <td><textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Address here!"
-                                      rows="3" required="required" data-error="Address is required." disabled></textarea></td>
-                                </tr>
-                            </table>
-                            
-
-                    </div>
-
-                 
-                  </div>
+          <div class="calc-col">
+            <div class="form-group">
+              <label for="rowcommission">Commission</label>
+              <input type="text" id="rowcommission" value="0.00" style="font-weight: bold;" disabled>
+              <div class="help-block with-errors"></div>
+            </div>
           </div>
-
-
-
-          <!-- INSURANCE CALCULATION -->
-          <div class="box insurance-calc">
-            <div class="header">
-              <h2 class="title" id="veh-title" tabindex="0">
-                <i class="fa fa-calculator fa-xl"></i>
-                Insurance Calculations
-              </h2>
-              <a id="btneditinscalc" class="edit-btn" aria-label="Edit Insurance Calculations" style="display:none;">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
-                </svg>
-                Edit
-              </a>
-            </div>
-
-            <div class="calc-row">
-              <div class="calc-col">
-                <div class="form-group">
-                  <label for="rowgrosspremium">Gross Premium</label>
-                  <input type="text" id="rowgrosspremium" value="0.00" disabled>
-                  <div class="help-block with-errors"></div>
-                </div>
+        </div>
+        <!-- <hr> -->
+        <!-- OPTIONS -->
+        <div class="option-type" hidden>
+          <div class="calc-row calc-options">
+            <div class="calc-col">
+              <label>Option Type</label>
+              <div class="radio-group">
+                <label class="custom-radio">
+                  <input type="radio" name="rowoptiontype" value="FREE" disabled>
+                  <span class="checkmark"></span>
+                  FREE
+                </label>
+                <label class="custom-radio">
+                  <input type="radio" name="rowoptiontype" value="PAID" checked disabled>
+                  <span class="checkmark"></span>
+                  PAID
+                </label>
               </div>
-              <div class="calc-col">
-                <div class="form-group">
-                  <label for="rownetremittance">Net Remittance</label>
-                  <input type="text" id="rownetremittance" value="0.00" disabled>
-                  <div class="help-block with-errors"></div>
-                </div>
-              </div>
-              <div class="calc-col">
-                <div class="form-group">
-                  <label for="rowcommission">Commission</label>
-                  <input type="text" id="rowcommission" value="0.00" style="font-weight: bold;" disabled>
-                  <div class="help-block with-errors"></div>
-                </div>
-              </div>
-            </div>
-            <!-- <hr> -->
-            <!-- OPTIONS -->
-            <div class="option-type" hidden>
-              <div class="calc-row calc-options">
-                <div class="calc-col">
-                  <label>Option Type</label>
-                  <div class="radio-group">
-                    <label class="custom-radio">
-                      <input type="radio" name="rowoptiontype" value="FREE" disabled>
-                      <span class="checkmark"></span>
-                      FREE
-                    </label>
-                    <label class="custom-radio">
-                      <input type="radio" name="rowoptiontype" value="PAID" checked disabled>
-                      <span class="checkmark"></span>
-                      PAID
-                    </label>
-                  </div>
-                </div> 
-              </div>
-            </div>
-            <div class="calc-paid-section">
-              <div class="calc-row calc-options">
-                <div class="calc-col calc-payment">
-                  <label class="custom-checkbox">
-                    <input type="checkbox" id="rowpayment" disabled />
-                    <span class="checkbox-icon"></span>
-                    <span class="checkbox-label">Installment Payment</span>
-                  </label>
-                </div>
-                <div class="calc-col calc-terms">
-                  <div class="form-group">
-                    <label for="rowterms">Terms (months)</label>
-                    <input type="text" id="rowterms" disabled/>
-                    <div class="help-block with-errors"></div>
-                  </div>
-                </div>
-                <div class="calc-col calc-monthpay">
-                  <div class="form-group">
-                    <label for="rowmonthpay">Monthly Payment(₱/month)</label>
-                    <input type="text" id="rowmonthpay" style="font-weight: bold;" disabled>
-                    <div class="help-block with-errors"></div>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="calc-row calc-options">
-                <div class="calc-col calc-nonvat">
-                  <label class="custom-checkbox">
-                    <input type="checkbox" id="rownonvat" disabled />
-                    <span class="checkbox-icon"></span>
-                    <span class="checkbox-label">Non-VAT</span>
-                  </label>
-                </div>
-              </div>   -->
             </div> 
           </div>
-          <!-- PAYMENT INFORMATION -->
-          <div class="box payment-info">
+        </div>
+        <div class="calc-paid-section">
+          <div class="calc-row calc-options">
+            <div class="calc-col calc-payment">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="rowpayment" disabled />
+                <span class="checkbox-icon"></span>
+                <span class="checkbox-label">Installment Payment</span>
+              </label>
+            </div>
+            <div class="calc-col calc-terms">
+              <div class="form-group">
+                <label for="rowterms">Terms (months)</label>
+                <input type="text" id="rowterms" disabled/>
+                <div class="help-block with-errors"></div>
+              </div>
+            </div>
+            <div class="calc-col calc-monthpay">
+              <div class="form-group">
+                <label for="rowmonthpay">Monthly Payment(₱/month)</label>
+                <input type="text" id="rowmonthpay" style="font-weight: bold;" disabled>
+                <div class="help-block with-errors"></div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="calc-row calc-options">
+            <div class="calc-col calc-nonvat">
+              <label class="custom-checkbox">
+                <input type="checkbox" id="rownonvat" disabled />
+                <span class="checkbox-icon"></span>
+                <span class="checkbox-label">Non-VAT</span>
+              </label>
+            </div>
+          </div>   -->
+        </div> 
+      </div>
+
+            
+      <!-- PAYMENT INFORMATION -->
+      <div class="box payment-info">
+        <div class="header">
+          <h2 class="title" id="cust-title" tabindex="0">
+            <i class="fa-solid fa-peso-sign fa-xl"></i>
+            Payment Information
+          </h2>
+          <a id="btneditpayment" class="edit-btn" aria-label="Edit Payment Information" style="display:none;">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
+            </svg>
+            Edit
+          </a>
+        </div>
+        <div class="table-responsive">
+          <table id="table_paymentdisplay" class="table m-0">
+            <thead>
+            <tr>
+              <th>No.</th>
+              <th>Payment ID</th>
+              <th>Mode of Payment</th>
+              <th>E-wallet Type</th>
+              <th>Terms</th>
+              <th>Amount</th>
+              <th>Date</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <table class="table m-0">
+            <thead>
+              <tr>
+                <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
+                <th id="tfoot_tpremiumd" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
+                <th id="tfoot_totald" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+                <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
+                <th id="tfoot_balanced" style="text-align:right; background-color: #f4f4f4;">0.00</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+
+
+
+      <!-- VEHICLE INFO -->
+      <div class="row">
+        <div class="col-md-6">
+          <!-- INSURER INFO -->
+          <div class="box insurer-info">
             <div class="header">
               <h2 class="title" id="cust-title" tabindex="0">
-                <i class="fa-solid fa-peso-sign fa-xl"></i>
-                Payment Information
+                <i class="fa fa-building-shield fa-xl"></i>
+                Insurer Information
               </h2>
-              <a id="btneditpayment" class="edit-btn" aria-label="Edit Payment Information" style="display:none;">
+              <a id="btneditinsurer" class="edit-btn" aria-label="Edit Insurer Information" style="display:none;">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
                 </svg>
                 Edit
               </a>
             </div>
-            <div class="table-responsive">
-              <table id="table_paymentdisplay" class="table m-0">
-                <thead>
-                <tr>
-                  <th>No.</th>
-                  <th>Payment ID</th>
-                  <th>Mode of Payment</th>
-                  <th>E-wallet Type</th>
-                  <th>Terms</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-              <table class="table m-0">
-                <thead>
-                  <tr>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Premium:</th>
-                    <th id="tfoot_tpremiumd" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Amount:</th>
-                    <th id="tfoot_totald" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                    <th style="text-align:right; background-color: #f4f4f4;">Total Balance:</th>
-                    <th id="tfoot_balanced" style="text-align:right; background-color: #f4f4f4;">0.00</th>
-                  </tr>
-                </thead>
-              </table>
+
+            <div class="fields">
+              <div class="field">
+                <div class="label">Insurance Type</div>
+                <div class="value" id="insurertype">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Insurance Company </div>
+                <div class="value" id="insurercompany">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Start / Inception Date</div>
+                <div class="value" id="insurersdate">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Policy No.</div>
+                <div class="value" id="insurerpolicyno">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Issue Date</div>
+                <div class="value" id="insurerissuedate">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Policy Expiration Date</div>
+                <div class="value" id="insurerpexpiredate">-</div>
+              </div>
+              <div class="field">
+                <div class="label">Mortgage</div>
+                <div class="value" id="insurermortgage">-</div>
+              </div>
+              <!-- <div class="field">
+                <div class="label">Mortgage Address</div>
+                <div class="value" id="insurermortgageaddress">-</div>
+              </div> -->
+              <!-- <div class="field">
+                <div class="label">
+                  <label>Insurance Promo Availment</label>
+                </div>
+                <div class="value">
+                  <div class="radio-group">
+                    <label class="custom-radio">
+                      <input type="radio" name="insurerpromo" value="NO" checked disabled>
+                      <span class="checkmark"></span>
+                      No
+                    </label>
+                    <label class="custom-radio">
+                      <input type="radio" name="insurerpromo" value="YES" disabled>
+                      <span class="checkmark"></span>
+                      Yes
+                    </label>
+                  </div>
+                </div>  
+              </div> -->
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <!-- INSURER INFO -->
-              <div class="box insurer-info">
-                <div class="header">
-                  <h2 class="title" id="cust-title" tabindex="0">
-                    <i class="fa fa-building-shield fa-xl"></i>
-                    Insurer Information
-                  </h2>
-                  <a id="btneditinsurer" class="edit-btn" aria-label="Edit Insurer Information" style="display:none;">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M3 17.25V21h3.75l11.065-11.065-3.75-3.75L3 17.25zM21.414 6.586a2 2 0 0 0 0-2.828l-1.172-1.172a2 2 0 0 0-2.828 0l-1.415 1.414 3.75 3.75 1.665-1.664z"/>
-                    </svg>
-                    Edit
-                  </a>
-                </div>
-
-                <div class="fields">
-                  <div class="field">
-                    <div class="label">Insurance Type</div>
-                    <div class="value" id="insurertype">-</div>
+        </div>
+        <div class="col-md-6">
+          <!-- FILE UPLOADS -->
+          <div class="box file-upload">
+            <div class="header">
+              <h2 class="title" id="cust-title" tabindex="0">
+                <i class="fa-solid fa-upload fa-xl"></i>
+                File Attachment Upload
+              </h2>
+            </div>
+            
+            <p style="font-size: 12px; font-style: italic; border: 1px; background: #FFFFCC; padding: 10px;">
+            <b>Note:</b> There are some restrictions or limitations on the files that are allowed to be uploaded.
+                    Allowed File Extensions <b>(jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, ppt, pptx)</b>.
+                    Maximum file size limit per file for upload must be at least <b>5 MB</b>.
+                    Maximum number of files being uploaded is only <b>5 files</b>.
+            </p>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="file">Select File</label>
+                    <input id="file" name="file[]" type="file" accept=".jpg, .jpeg, .png, .webp, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx" multiple class="file-loading">
                   </div>
-                  <div class="field">
-                    <div class="label">Insurance Company </div>
-                    <div class="value" id="insurercompany">-</div>
-                  </div>
-                  <div class="field">
-                    <div class="label">Start / Inception Date</div>
-                    <div class="value" id="insurersdate">-</div>
-                  </div>
-                  <div class="field">
-                    <div class="label">Policy No.</div>
-                    <div class="value" id="insurerpolicyno">-</div>
-                  </div>
-                  <div class="field">
-                    <div class="label">Issue Date</div>
-                    <div class="value" id="insurerissuedate">-</div>
-                  </div>
-                  <div class="field">
-                    <div class="label">Policy Expiration Date</div>
-                    <div class="value" id="insurerpexpiredate">-</div>
-                  </div>
-                  <div class="field">
-                    <div class="label">Mortgage</div>
-                    <div class="value" id="insurermortgage">-</div>
-                  </div>
-                  <!-- <div class="field">
-                    <div class="label">Mortgage Address</div>
-                    <div class="value" id="insurermortgageaddress">-</div>
-                  </div> -->
-                  <!-- <div class="field">
-                    <div class="label">
-                      <label>Insurance Promo Availment</label>
-                    </div>
-                    <div class="value">
-                      <div class="radio-group">
-                        <label class="custom-radio">
-                          <input type="radio" name="insurerpromo" value="NO" checked disabled>
-                          <span class="checkmark"></span>
-                          No
-                        </label>
-                        <label class="custom-radio">
-                          <input type="radio" name="insurerpromo" value="YES" disabled>
-                          <span class="checkmark"></span>
-                          Yes
-                        </label>
-                      </div>
-                    </div>  
-                  </div> -->
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <!-- FILE UPLOADS -->
-              <div class="box file-upload">
-                <div class="header">
-                  <h2 class="title" id="cust-title" tabindex="0">
-                    <i class="fa-solid fa-upload fa-xl"></i>
-                    File Attachment Upload
-                  </h2>
+            <br>
+            <div class="row btnall" hidden>
+              <div class="col-md-12">
+                <div class="col-md-12">
+                  <button type="button" id="btndownloadall" data-toggle="tooltip" data-placement="top" title="Download All" class="btn btn-success btn-sm"><i class="fa fa-download"></i> Download All</button>
+                  <button type="button" id="btndeleteall" data-toggle="tooltip" data-placement="top" title="Delete All" class="btn btn-success btn-sm"><i class="fa fa-remove"></i> Delete All</button>
                 </div>
-                
-                <p style="font-size: 12px; font-style: italic; border: 1px; background: #FFFFCC; padding: 10px;">
-                <b>Note:</b> There are some restrictions or limitations on the files that are allowed to be uploaded.
-                        Allowed File Extensions <b>(jpg, jpeg, png, webp, pdf, doc, docx, xls, xlsx, ppt, pptx)</b>.
-                        Maximum file size limit per file for upload must be at least <b>5 MB</b>.
-                        Maximum number of files being uploaded is only <b>5 files</b>.
-                </p>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="file">Select File</label>
-                        <input id="file" name="file[]" type="file" accept=".jpg, .jpeg, .png, .webp, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx" multiple class="file-loading">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <br>
-                <div class="row btnall" hidden>
-                  <div class="col-md-12">
-                    <div class="col-md-12">
-                      <button type="button" id="btndownloadall" data-toggle="tooltip" data-placement="top" title="Download All" class="btn btn-success btn-sm"><i class="fa fa-download"></i> Download All</button>
-                      <button type="button" id="btndeleteall" data-toggle="tooltip" data-placement="top" title="Delete All" class="btn btn-success btn-sm"><i class="fa fa-remove"></i> Delete All</button>
-                    </div>
-                  </div>  
-                </div>
-              </div> 
+              </div>  
             </div>
-          </div>
-
+          </div> 
         </div>
       </div>
       <!-- / box-body -->
+
     </div>
     <!-- /box -->
+
+
     <!-- MODAL MODIFY CUSTOMER INFO -->
     <div id="modal-modify-cust" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
@@ -871,6 +795,8 @@
       </div>
     </div>
     <!-- END MODAL MODIFY CUSTOMER INFO -->
+
+
     <!-- MODAL CUSTOMER LIST -->
     <div id="modal-customerlist" aria-hidden="false" aria-labelledby="modal-upload" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box">
@@ -918,7 +844,6 @@
       </div>
     </div>
     <!-- END MODAL CUSTOMER LIST -->
-
 
 
     <!-- MODAL MODIFY VEHICLE INFO -->
@@ -1176,6 +1101,7 @@
     </div>
     <!-- END MODAL MODIFY VEHICLE INFO -->
 
+
     <!-- MODAL VEHICLE LIST -->
     <div id="modal-vehiclelist" aria-hidden="false" aria-labelledby="modal-upload" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box">
@@ -1211,7 +1137,6 @@
     <!-- END MODAL VEHICLE LIST -->
 
 
-
     <!-- MODAL MODIFY INSURANCE CALCULATION -->
     <div id="modal-modify-calc" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
@@ -1241,7 +1166,7 @@
                   </div>
                 </div>
               </div>
-              <hr>
+              
               <div class="row" hidden>
                 <div class="col-md-12">
                   <label>Option Type</label>
@@ -1307,6 +1232,8 @@
       </div>
     </div>
     <!-- END MODAL MODIFY INSURANCE CALCULATION -->
+
+
     <!-- MODAL MODIFY INSURER INFO -->
     <div id="modal-modify-ins" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
@@ -1428,6 +1355,8 @@
       </div>
     </div>
     <!-- END MODAL MODIFY INSURER INFO -->
+
+
     <!-- MODAL MODIFY PAYMENT INFO -->
     <div id="modal-modify-pay" aria-hidden="false" aria-labelledby="modal-modify" role="dialog" class="iziModal isAttached hasScroll">
       <div class="box box-solid">
@@ -1653,6 +1582,8 @@
       </div>
     </div>
     <!-- END MODAL MODIFY PAYMENT INFO -->
+
+
     <!-- MODAL SAVING -->
     <div id="modalsaving" aria-hidden="false" aria-labelledby="modal-upload" role="dialog" class="iziModal isAttached hasScroll">
       <h4 class="modal-title" style="text-align:center;">Saving data!</h4>
@@ -1664,10 +1595,11 @@
         </div> -->
       </div>
 
-      <hr>
       <p style="text-align:center;">Please wait while saving data...</p>
     </div>
     <!-- END MODAL SAVING -->
+
+
     <!-- MODAL TIME OUT -->
     <div id="timeout" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-warning modal-sm">
@@ -1696,6 +1628,8 @@
         <!-- /modal-dialog -->
     </div>
     <!-- END MODAL TIME OUT -->
+
+
   </section>
 </div>
 <!-- /.content-wrapper -->

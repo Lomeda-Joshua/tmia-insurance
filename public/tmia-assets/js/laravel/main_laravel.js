@@ -393,7 +393,7 @@ function getPaymentConfig(item) {
 //============= FETCH BOTH QUEUES & MERGE ============//
 let allNotificationsQueue = [];
 
-fetchNotifications("fetch_promised_pay_date.php", "notify_payment_", getPaymentConfig, function(paymentQueue) {
+fetchNotifications(window.nofiticationdata.insurancePromise_data, "notify_payment_", getPaymentConfig, function(paymentQueue) {
     allNotificationsQueue = paymentQueue;
 
     fetchNotifications("fetch_insurance_expiry.php", "notify_policy_expiry_", getPolicyExpiryConfig, function(expirationQueue) {

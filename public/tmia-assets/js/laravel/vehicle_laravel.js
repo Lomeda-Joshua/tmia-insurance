@@ -15,11 +15,17 @@ var rowindex;
 var editinfo = false;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+      }
+  });
 
 //================== GET USER LOG IN INFORMATION =================//
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
+    type:"POST",
     cache: false,
     success: function(data) {
       userid = data.userid;
@@ -28,14 +34,13 @@ $(document).ready( function () {
       regdate = data.regdate;
       dealercode = data.dealercode;
       signin = data.signin;
+
+      const level = Number(ulevel);
+
+      const isAuthorized = [1, 6].includes(level);
     }
   });
 
-  $.ajaxSetup({
-    headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-      }
-  });
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -520,7 +525,7 @@ function LoadMasterData() {
       responsive: true,
       autoWidth: false,
       ajax: {
-        url: window.tableRoute.vehicleData,
+        url: window.getData.vehicleInfo,
         type: "POST",
         data: function (d) {
           d.searchval = $("#txtsearch").val().trim();
@@ -967,7 +972,7 @@ $(document).on("click", "#btncustselect", function () {
         },
         success: function (result) {
           if (result.result === 1) {
-            showLoading("Saving user record..."); // Show spinner before sending request
+            // showLoading("Saving user record..."); // Show spinner before sending request
             swal({
               title: "Success!",
               text: "Vehicle with VIN " + xvin + " has been assigned successfully.",
@@ -975,7 +980,7 @@ $(document).on("click", "#btncustselect", function () {
               confirmButtonColor: "#00a65a",
               confirmButtonText: "OK"
             }, function () {
-              hideLoading();
+              // hideLoading();
               $("#modal-customerlist").iziModal("close");
               LoadMasterData();
             });
@@ -1762,7 +1767,6 @@ function FormDisable(val) {
   // 1. Role-based view toggles
   if (ulevel == 1 || ulevel == 6) {
       if (val === true) {
-          console.log("true");
           $("#viewaction").show().removeAttr("hidden");
           $("#viewaction1").hide().attr("hidden", true);
       } else {

@@ -395,7 +395,7 @@ var xuname;
     }
 
     function SaveData(formData) {
-      showLoading("Saving user record..."); // Show spinner before sending request
+      // showLoading("Saving user record..."); // Show spinner before sending request
 
       $.ajax({
         url : window.dataRoutes.userAccountUpdate,
@@ -440,7 +440,7 @@ var xuname;
                 confirmButtonText: "OK"
             }, function(isConfirm) {
                 if (isConfirm) {
-                    hideLoading();
+                    // hideLoading();
                     $('#modal-user').iziModal('close');
                     FormDisable(true);
                     LoadAccounts();

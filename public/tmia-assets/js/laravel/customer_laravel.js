@@ -25,19 +25,19 @@ $(document).ready( function () {
     cache: false,
     headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-    success: function(data) {
-      userid = data.userid;
-      logname = data.logname;
-      ulevel = data.ulevel;
-      regdate = data.regdate;
-      signin = data.signin;
+    },
+          success: function(data) {
+          userid = data.userid;
+          logname = data.logname;
+          ulevel = data.ulevel;
+          regdate = data.regdate;
+          signin = data.signin;
 
-      if (ulevel == 1 || ulevel == 6) {
-          $(".btnactionud").removeAttr("hidden").show();
-      } else {
-          $(".btnactionud").hide();
-      }
+          if (ulevel == 1 || ulevel == 6) {
+              $(".btnactionud").show();
+          } else {
+              $(".btnactionud").hide();
+          }
 
     }
   });
@@ -945,6 +945,9 @@ function LoadCustomerInfo(custno) {
         xcustno = value.Customer_No;
         $("#txtcustno").val(value.Customer_No);
         setSelectOption("#cbogroup", value.Group, value.Group);
+
+        console.log("here");
+
         if (value.Group === "INDIVIDUAL") {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
@@ -1113,7 +1116,8 @@ $(document).on('focus', '.select2.select2-container', function (e) {
 
 $(document).on( "change", "#cbogroup", function () {
   var group = $(this).val();
-  if (group === "INDIVIDUAL") {
+  console.log(group);
+  if (group == 1) {
     $(".customer-fleet-corp").fadeOut();
     $(".customer-individual").fadeIn();
   } else {
@@ -1247,28 +1251,31 @@ $(document).on("change", "#txtcustno", function () {
   if (custno === "") return; // do nothing if empty
 
   $.ajax({
-    url: "customer_list_custno_exist.php",
+    url: window.getData.getCustomerInformation_recepit,
     type: "POST",
     data: { custno: custno },
+    headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
     success: function (response) {
-      var data = jQuery.parseJSON(response);
-      if (data.result == 1) {
+      
+      if (response.result == 1) {
 
-        inputField.focus();
-        
-        // Remove last character or digit
-        var newVal = custno.slice(0, -1);
-        inputField.val(newVal);
+            inputField.focus();
+            
+            // Remove last character or digit
+            var newVal = custno.slice(0, -1);
+            inputField.val(newVal);
 
-        swal({
-          title: "Record Exists!",
-          text: "Customer Number " + custno + " is already assigned to " + data.fullname + ".",
-          type: "warning",
-          confirmButtonColor: "#00a65a",
-          confirmButtonText: "OK"
-        }, function () {
-          $(".box-body").validator('reset');
-        });
+            swal({
+              title: "Record Exists!",
+              text: "Customer Number " + custno + " is already assigned to " + data.fullname + ".",
+              type: "warning",
+              confirmButtonColor: "#00a65a",
+              confirmButtonText: "OK"
+            }, function () {
+              $(".box-body").validator('reset');
+            });
       }
     },
     error: function (jqXHR, textStatus) {
@@ -2587,7 +2594,7 @@ $(document).on( "click", "#btncloseveh", function () {
 
 /////////////////// ENABLED OR DISABLED /////////////////////
 function FormDisable(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 6 ) {
     if (val == true){
       $("#viewaction").show();
       $("#viewaction1").hide();

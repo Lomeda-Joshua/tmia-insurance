@@ -245,6 +245,22 @@
         window.hideLoading = function() {
             document.getElementById("loading-overlay").style.display = "none";
         }
+    </script>
+    @endpush
+
+    @stack('scripts')
+    
+    @push('scripts')
+    <script>
+        //================== lOADING SPINNER =================//
+        window.showLoading = function(message = "Saving data, please wait...") {
+            document.getElementById("loading-text").innerText = message;
+            document.getElementById("loading-overlay").style.display = "flex";
+        }
+
+        window.hideLoading = function() {
+            document.getElementById("loading-overlay").style.display = "none";
+        }
 
         //================== FUNTION LOGIN NOTIFICATION =================//
         @if(session('signin'))
@@ -308,21 +324,22 @@
 
     </script>
    
-   
     <script>
-        // window.nofiticationdata = {
-        //     notifications_data : @json(route('notifications.data')),
-        // }
+        window.nofiticationdata = {
+            notifications_data : @json(route('notifications.data')),
+            insurancePromise_data : @json(route('get-insurance-notification.data')),
+        }
     
-        // window.dataRoutes = {
-        //     sessionVariable : @json(route('getSession.dataVariable')),
-        // }
-    </script>
-    {{-- <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script> --}}
+        window.dataRoutes = {
+            sessionVariable : @json(route('getSession.dataVariable')),
+        }
 
+    </script>
+    <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
     @endpush
 
-    @stack('scripts')
+    
+    
 </body>
 
 </html>

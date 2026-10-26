@@ -22,14 +22,13 @@
       <div class="box-body">
         <div class="box-body" style="max-width:100%;">
 
-          @if (Auth::user()->User_Level_ID == 1 ||Auth::user()->User_Level_ID == 7)
-            <div class="row btnactionud">
-                <div class="col-md-12">
-                  <button type="submit" class="btn btn-success pull-left" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
-                  <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: block;"><i class="fa fa-upload"></i> Import Excel File</button>
-                </div>
-            </div>
-          @endif
+          
+          <div class="row btnactionud" style="display: none;">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-left" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
+                <button type="submit" class="btn btn-success pull-right" id="btnupload" style="display: block;"><i class="fa fa-upload"></i> Import Excel File</button>
+              </div>
+          </div>
 
           <div class="box center">
             <div class="box-body">
@@ -841,7 +840,12 @@
       customerInfo : @json(route('customerinfo.data')),
       vehicleInfo: @json(route('customercvehicleinfo.data')),
       vehicleSpecific: @json(route('vehicle.search')),
+      getCustomerInformation_recepit : @json(route('if_customerdata_exists.data'))
     }
+
+    console.log(window.getData.getCustomerInformation_recepit);
+
+
 
     window.loadData = {
         loadPaymentData : @json(route('getTransactionNB.data'))

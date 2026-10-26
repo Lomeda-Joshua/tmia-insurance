@@ -1612,23 +1612,23 @@ function LoadTransactionData(ulevel_declartion) {
           
     ];
 
-    if( ulevel_declartion === 1 ){
-        tableColumns.push({
-            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" 
-        }
-    );}
+    // if( ulevel_declartion === 1 ){
+    //     tableColumns.push({
+    //         data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+    //         name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+    //         defaultContent: "- - -" 
+    //     }
+    // );}
 
-    if( ulevel_declartion === 1 ){
-        tableColumns.push({
-            data: "button",            
-            name: "button",
-            orderable: false,
-            searchable: false,
-            defaultContent: "- - -" 
-        });
-    }
+    // if( ulevel_declartion === 1 ){
+    //     tableColumns.push({
+    //         data: "button",            
+    //         name: "button",
+    //         orderable: false,
+    //         searchable: false,
+    //         defaultContent: "- - -" 
+    //     });
+    // }
 
     table = $('#table_trans').DataTable({
       language: {
@@ -1827,9 +1827,41 @@ function initExpiringTable() {
 
 }
 
+
+let renewal_flag = 0;
+  
+// ✅ Bind row click for selection AFTER table initialization
 $(document).ready(function(){
+    let expiring_ = 1;
     $('#modal-show-expiring-policies').on('opened', initExpiringTable);
+
+    // ✅ Bind row click for selection AFTER table initialization
+    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {
+
+        let table = $('#table_expiring_list').DataTable();
+        // Remove selection from any previously selected row
+        table.$('tr.selected').removeClass('selected');
+
+        // Highlight clicked row
+        $(this).addClass('selected');
+
+        // Optional: get Customer_No
+        xnbno = table.cell(this, 1).data();
+        xcustno = table.cell(this, 4).data();
+        xvin = table.cell(this, 7).data();
+
+    });
+
+    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () { 
+        $('#btnnbselect').trigger("click");
+        $('#modal-show-expiring-policies').iziModal('close');
+
+    });
+
 });
+
+
+
 /////////// End Filter on Renewal of business ///////////
 
 
@@ -2215,35 +2247,15 @@ function LoadNBData() {
       ]
   });
 
-  // ✅ Bind row click for selection AFTER table initialization
-  $('#table_nblist tbody').off('click', 'tr').on('click', 'tr', function () {
-    // Remove selection from any previously selected row
-    table.$('tr.selected').removeClass('selected');
 
-    // Highlight clicked row
-    $(this).addClass('selected');
-
-    // Optional: get Customer_No
-    
-    xnbno = table.cell(this, 1).data();
-    xcustno = table.cell(this, 4).data();;
-    xvin = table.cell(this, 7).data();
-    console.log('Selected VIN:', xvin);
-  });
-
-  // ✅ Bind row click for selection AFTER table initialization
-  $('#table_nblist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btnnbselect').trigger("click");
-  });
 }
 
 function LoadInsuranceInfo(insuranceno) {
   $.ajax({
     type:"POST",
-    url:"fetch_transactions_nb.php",
+    url:window.loadData.loadTransactionByInsurance,
     data:{insuranceno:insuranceno},
     success: function(data){
-      var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
         $("#txtgrosspremium").val(NumberFormat(value.Gross_Premium));
         $("#txtnetremittance").val(NumberFormat(value.Net_Rem));
@@ -3069,12 +3081,12 @@ function LoadPreviousInsuranceCo(data){
       // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
     if (latestItem) {
         // Set dropdown values & trigger Select2 updates
-        $("#cboinstype").val(latestItem.Insurance_Type).trigger('change.select2');
-        $("#cboinsco, #cboprevinsco").val(latestItem.Insurance_Company).trigger('change.select2');
-        $("#cbomortgage").val(latestItem.Mortgage).trigger('change.select2');
+        $("#cboinstype, #cboinstype_summary").val(latestItem.Insurance_Type).trigger('change.select2');
+        $("#cboinsco, #cboprevinsco, #cboinsco_summary" ).val(latestItem.Insurance_Company).trigger('change.select2');
+        $("#cbomortgage, #cbomortgage_summary").val(latestItem.Mortgage).trigger('change.select2');
 
         // Set text inputs & date fields from the latest record
-        $("#txtpolicyno").val(latestItem.Policy_No || "");
+        $("#txtpolicyno, #txtpolicyno_summary").val(latestItem.Policy_No || "");
 
         // Set datepicker fields cleanly
         if (latestItem.Start_Date) {
@@ -4405,6 +4417,7 @@ $(document).on( "click", "#viewpending", function () {
 
 $(document).on( "click", "#viewexpiring", function () {
   viewexpiring = true;
+  console.log("view expiring ");
   LoadTransactionData();
 });
 
@@ -5087,23 +5100,29 @@ $(document).on( "click", "#btnnblist", function () {
 
 $(document).on( "click", "#btnnbselect", function () {
   newdata = true;
+  renewal_flag = 1;
   transid = '';
   editinfo = true;
   FormClear();
   FormDisable(false);
+
   $('#modal-nblist').iziModal('close');
+  
   LoadCustomerInfo();
   LoadVehicleInfo();
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
+
   if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
-
     $('#modal-add').iziModal('open');
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
 });
+
+
 
 $(document).on( "click", "#btnadd", function () {
   newdata = true;
