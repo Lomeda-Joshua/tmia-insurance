@@ -13,4 +13,10 @@ class GeneralReportingController extends Controller
     public function show(){
         
     }
+
+    public function insuranceQuotation(){
+        return view('livewire.main.pdf.insurance_proposal');
+    }
+
+
 }

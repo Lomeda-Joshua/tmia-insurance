@@ -156,6 +156,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/save-new-payments', [RenewalBusinessController::class, 'savePayments'])->name('renewal-business.save-payments');
         
         Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
+        Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
 
         Route::post('/delete-renewal-transaction', [RenewalBusinessController::class, 'deleteTransaction'])->name('delete.renewal_transaction');
         Route::post('/renewal-business/save', [RenewalBusinessController::class, 'saveRenewalBusiness'])->name('renewalbusiness.save');
@@ -204,7 +205,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
         // General Settings
         Route::get('/general-settings', [GeneralSettingsController::class, 'index'])->name('general_settings.index');
-
     });
 
 

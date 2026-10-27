@@ -7,11 +7,11 @@ $.ajax({
         ulevel = data.ulevel;
 
         switch (ulevel) {
-        case "PRESIDENT":
-        case "EXECUTIVE VICE PRESIDENT":
-        case "GENERAL MANAGER":
-        case "SERVICE MANAGER":
-        case "MAINTENANCE REMINDER STAFF":
+        case 2: // "PRESIDENT"
+        case 3: // "EXECUTIVE VICE PRESIDENT"
+        case 4: // "GENERAL MANAGER"
+        case 5: // SERVICE MANAGER
+        case 6 : // MAINTENANCE REMINDER STAFF
             //SHOW CHILD
             document.getElementById("mymenu").children[2].style.display="block";
             document.getElementById("mymenu").children[3].style.display="block";
@@ -28,7 +28,7 @@ $.ajax({
             /*=== Reports == */
             document.getElementById("mymenuchild2").children[0].style.display="block";
             break;
-        case "ADMINISTRATOR":
+        case 1:
             //SHOW CHILD
             document.getElementById("mymenu").children[2].style.display="block";
             document.getElementById("mymenu").children[3].style.display="block";

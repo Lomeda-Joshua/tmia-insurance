@@ -1548,12 +1548,6 @@ function LoadCustomerData() {
           { data: "CS_No", name: "CS_No", defaultContent: "" },
           { data: "Plate_No", name: "Plate_No", defaultContent: "" },
           { data: "Variant", name: "Variant", defaultContent: "" },
-          {
-            data: 'button',
-            name: 'button',
-            orderable: false,
-            searchable: false
-          }
     ],
     columnDefs: [
       {
@@ -1573,7 +1567,8 @@ function LoadCustomerData() {
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('click', 'tr').on('click', 'tr', function () {
     // Remove selection from any previously selected row
-    table.$('tr.selected').removeClass('selected');
+    $('#table_customerlist tbody tr.selected').removeClass('selected');
+
 
     // Highlight clicked row
     $(this).addClass('selected');
@@ -1874,7 +1869,7 @@ function LoadCustomerInfo() {
         xcustnoupload = value.Upload_Cust_No;
         $("#txtcustnoupload").val(value.Upload_Cust_No);
         setSelectOption("#cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
@@ -1957,7 +1952,7 @@ function LoadCustomerEDAFSAPInfo() {
         }
 
         setSelectOption("#cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
@@ -2574,7 +2569,7 @@ function LoadSummaryCustomerInfo(){
           $("#txtcustnoupload").val(value.Upload_Cust_No);
           setSelectOption("#cbogroup", value.Group, value.Group);
 
-          if (value.Group === "INDIVIDUAL") {
+          if (value.Group == 1) {
             $(".customer-fleet-corp").fadeOut();
             $(".customer-individual").fadeIn();
             $(".birth-date").fadeIn();
@@ -2729,7 +2724,7 @@ $(document).on('focus', '.select2.select2-container', function (e) {
 
 $(document).on("change", "#cbogroup", function () {
   var group = $(this).val();
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     $(".customer-fleet-corp").fadeOut();
     $(".customer-individual").fadeIn();
     $(".birth-date").fadeIn();
@@ -5483,7 +5478,7 @@ $(document).on("click", "#btnsubmit", function () {
   let custname = getUpper("#txtcustname");
 
   // Build full name for INDIVIDUAL
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     custname = [custfname, custmname, custlname, custsname]
       .filter((x) => x && x !== "")
       .join(" ");

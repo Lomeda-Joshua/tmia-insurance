@@ -1885,7 +1885,7 @@ function LoadCustomerData() {
       processing: "Loading Customer List..."
     },
     processing: true,
-    serverSide: false,
+    serverSide: true,
     pageLength: 10,
     responsive: true,
     autoWidth: false,
@@ -1897,7 +1897,7 @@ function LoadCustomerData() {
     columns: [
       { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
       { data: "Customer_No" },
-      { data: "Group" },
+      { data: "Group"},
       { data: "Full_Name" },
       { data: "Birth_Date" },
       { data: "Contact_No" },
@@ -1984,7 +1984,7 @@ function LoadCustomerDataEDAFSAP() {
       data: value
     },
     columns: [
-      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
         { data: "Customer_No", name: "Customer_No" },
         { data: "Group", name: "Group", defaultContent: "" },
         { data: "Full_Name", name: "Full_Name", defaultContent: "" },
@@ -2003,7 +2003,6 @@ function LoadCustomerDataEDAFSAP() {
         { data: "CS_No", name: "CS_No", defaultContent: "" },
         { data: "Plate_No", name: "Plate_No", defaultContent: "" },
         { data: "Variant", name: "Variant", defaultContent: "" },
-        { data: "button", name: "button", orderable: false, searchable: false, defaultContent: "" }
     ],
     columnDefs: [
       {
@@ -2348,6 +2347,7 @@ function fetchView(){
 }
 ///////////////////////// END FETCH VIEW OF DEVICE SCREEN ////////////////////////////////////
 
+
 /////////////////////// START LOAD DATA FUNCTION ///////////////////////
 //===== LOAD DATA TO MODIFY =====
 function LoadCustomerInfo() {
@@ -2373,7 +2373,8 @@ function LoadCustomerInfo() {
         xcustnoupload = value.Upload_Cust_No;
         $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
         setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
@@ -2440,6 +2441,7 @@ function LoadCustomerInfo() {
     }
   });
   
+  console.log("loading here");
   LoadVehicleInfo();
 
   $(".box-body").validator('reset');
@@ -2473,7 +2475,7 @@ function LoadCustomerEDAFSAPInfo() {
         }
 
         setSelectOption("#cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
@@ -2529,12 +2531,15 @@ function LoadCustomerEDAFSAPInfo() {
   $(".box-body").validator('reset');
 }
 
+console.log("xvin xcsno", xvin, xcsno, xplateno);
+
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){      
+    success: function(data){     
+
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -3210,7 +3215,7 @@ $(document).on('focus', '.select2.select2-container', function (e) {
 
 $(document).on("change", "#cbogroup", function () {
   var group = $(this).val();
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     $(".customer-fleet-corp").fadeOut();
     $(".customer-individual").fadeIn();
     $(".birth-date").fadeIn();

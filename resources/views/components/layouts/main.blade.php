@@ -235,6 +235,7 @@
     @include('partials.footer')
 
     @push('scripts')
+
     <script>
         //================== lOADING SPINNER =================//
         window.showLoading = function(message = "Saving data, please wait...") {
@@ -246,11 +247,8 @@
             document.getElementById("loading-overlay").style.display = "none";
         }
     </script>
-    @endpush
 
-    @stack('scripts')
     
-    @push('scripts')
     <script>
         //================== lOADING SPINNER =================//
         window.showLoading = function(message = "Saving data, please wait...") {
@@ -335,11 +333,13 @@
         }
 
     </script>
+    
+    <script src="{{ asset('tmia-assets/js/laravel/dashboard_laravel.js') }}"></script>
     <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
     @endpush
 
-    
-    
+    @stack('scripts')
+
 </body>
 
 </html>

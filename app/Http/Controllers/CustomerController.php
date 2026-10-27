@@ -76,6 +76,19 @@ class CustomerController extends Controller
         ->addIndexColumn() // Auto-generates dynamic "DT_RowIndex"
         ->setRowId('Customer_No')
 
+        // ---> ADD THIS EDIT COLUMN FOR GROUP <---
+        ->editColumn('Group', function ($row) {
+            $groupMap = [
+                1 => "INDIVIDUAL",
+                2 => "GOVERNMENT",
+                3 => "CORPORATE",
+                4 => "FLEET"
+            ];
+            
+            // Checks if the key exists, otherwise returns the raw value
+            return $groupMap[$row->Group] ?? $row->Group;
+        })
+
         ->addColumn('VIN', fn($row) => $row->vehicles->first()?->VIN ?? '')
         ->addColumn('CS_No', fn($row) => $row->vehicles->first()?->CS_No ?? '')
         ->addColumn('Plate_No', fn($row) => $row->vehicles->first()?->Plate_No ?? '')
@@ -86,18 +99,7 @@ class CustomerController extends Controller
                 ? \Carbon\Carbon::parse($row->Birth_Date)->format('d-M-Y') 
                 : '';
         })
-        ->editColumn('Active_Status', function ($row) {
-            return ($row->Active_Status == '1' || strtoupper($row->Active_Status) === 'ACTIVE') 
-                ? 'ACTIVE' 
-                : 'INACTIVE';
-        })
-        ->addColumn('button', function ($row) {
-            $custNoEscaped = e($row->Customer_No);
-            $buttons  = '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnvehicle" data-toggle="tooltip" title="View Vehicle"><i class="fa fa-car"></i></label> ';
-            $buttons .= '<label custno="' . $custNoEscaped . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label>';
-
-            return $buttons;
-        })
+      
         ->rawColumns(['button'])
         ->make(true);
     }
