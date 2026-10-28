@@ -11,7 +11,7 @@ var signin;
 $(document).ready( function () {
   //================== GET USER LOG IN INFORMATION =================//
   $.ajax({
-      url: "fetch_variable.php",
+      url: window.dataRoutes.userAccountSession,
       dataType: 'json',
       cache: false,
       success: function(data) {

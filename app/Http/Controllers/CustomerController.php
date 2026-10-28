@@ -99,10 +99,95 @@ class CustomerController extends Controller
                 ? \Carbon\Carbon::parse($row->Birth_Date)->format('d-M-Y') 
                 : '';
         })
+
+        ->rawColumns(['button'])
+        ->make(true);
+    }
+
+
+
+
+
+        /**
+     * Fetch customer data for DataTables AJAX.
+    */
+    public function getCustomersWithActions(Request $request)
+    {
+        // 1. Return an Eloquent Query Builder (do NOT call ->get())
+        $query = CustomerInformation::with('vehicles');
+    
+        // 2. Handle Alphabetical / Special Character Filter
+        // Accepts 'btnselect' or 'letter' from JS payload
+        $filter = $request->input('btnselect', $request->input('letter'));
+
+        if (!empty($filter) && $filter !== 'ALL') {
+                if ($filter === '[0-9]') {
+                    $query->whereRaw("Full_Name REGEXP '^[0-9]'");
+                } elseif ($filter === '[SPECIAL CHAR]') {
+                    $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
+                } else {
+                    $query->where('Full_Name', 'like', "{$filter}%");
+                }
+            }
+
+
+        // Determine and extract the search string safely
+        $searchValue = null;
+        
+        if ($request->filled('searchval')) {
+            $searchValue = $request->input('searchval');
+        } elseif ($request->has('search') && is_array($request->input('search'))) {
+            $searchValue = $request->input('search.value');
+        } elseif ($request->filled('search') && is_string($request->input('search'))) {
+            $searchValue = $request->input('search');
+        }
+
+        // Handle global search filter safely using a string value
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('Full_Name', 'like', "%{$searchValue}%")
+                ->orWhere('Customer_No', 'like', "%{$searchValue}%")
+                ->orWhere('Contact_No', 'like', "%{$searchValue}%")
+                ->orWhere('Email_Address', 'like', "%{$searchValue}%");
+            });
+        }
+
+       return DataTables::of($query)
+        ->addIndexColumn() // Auto-generates dynamic "DT_RowIndex"
+        ->setRowId('Customer_No')
+
+        // ---> ADD THIS EDIT COLUMN FOR GROUP <---
+        ->editColumn('Group', function ($row) {
+            $groupMap = [
+                1 => "INDIVIDUAL",
+                2 => "GOVERNMENT",
+                3 => "CORPORATE",
+                4 => "FLEET"
+            ];
+            
+            // Checks if the key exists, otherwise returns the raw value
+            return $groupMap[$row->Group] ?? $row->Group;
+        })
+
+        ->addColumn('VIN', fn($row) => $row->vehicles->first()?->VIN ?? '')
+        ->addColumn('CS_No', fn($row) => $row->vehicles->first()?->CS_No ?? '')
+        ->addColumn('Plate_No', fn($row) => $row->vehicles->first()?->Plate_No ?? '')
+        ->addColumn('Variant', fn($row) => $row->vehicles->first()?->Variant ?? '')
+
+        ->editColumn('Birth_Date', function ($row) {
+            return !empty($row->Birth_Date) 
+                ? \Carbon\Carbon::parse($row->Birth_Date)->format('d-M-Y') 
+                : '';
+        })
       
         ->rawColumns(['button'])
         ->make(true);
     }
+
+
+
+
+
 
 
     /**

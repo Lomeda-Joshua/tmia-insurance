@@ -232,11 +232,30 @@
     </div>
 
 
+    
     @include('partials.footer')
 
+    @stack('scripts')
     @push('scripts')
 
     <script>
+        window.dataRoutes = {
+            userAccountSession : @json(route('getSession.variables'))
+        }
+        
+        window.nofiticationdata = {
+            notifications_data : @json(route('notifications.data')),
+            insurancePromise_data : @json(route('get-insurance-notification.data')),
+        }
+    
+        window.dataRoutes = {
+            sessionVariable : @json(route('getSession.dataVariable')),
+        }
+
+    </script>
+
+    <script>
+        
         //================== lOADING SPINNER =================//
         window.showLoading = function(message = "Saving data, please wait...") {
             document.getElementById("loading-text").innerText = message;
@@ -250,6 +269,7 @@
 
     
     <script>
+
         //================== lOADING SPINNER =================//
         window.showLoading = function(message = "Saving data, please wait...") {
             document.getElementById("loading-text").innerText = message;
@@ -322,23 +342,12 @@
 
     </script>
    
-    <script>
-        window.nofiticationdata = {
-            notifications_data : @json(route('notifications.data')),
-            insurancePromise_data : @json(route('get-insurance-notification.data')),
-        }
-    
-        window.dataRoutes = {
-            sessionVariable : @json(route('getSession.dataVariable')),
-        }
 
-    </script>
-    
     <script src="{{ asset('tmia-assets/js/laravel/dashboard_laravel.js') }}"></script>
     <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
     @endpush
 
-    @stack('scripts')
+    
 
 </body>
 

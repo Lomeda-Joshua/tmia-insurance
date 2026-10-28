@@ -239,68 +239,68 @@ function formatDaysText(daysLeft) {
 }
 
 //============= GENERIC FETCH & QUEUE FUNCTION ============//
-function fetchNotifications(endpointUrl, storageKeyPrefix, getItemConfigCallback, callback) {
-    $.ajax({
-        url: endpointUrl,
-        method: "POST",
-        dataType: "json",
-        success: function(data) {
-            const itemsKey = Object.keys(data)[0];
-            const now = new Date();
-            const queue = [];
+// function fetchNotifications(endpointUrl, storageKeyPrefix, getItemConfigCallback, callback) {
+//     $.ajax({
+//         url: endpointUrl,
+//         method: "POST",
+//         dataType: "json",
+//         success: function(data) {
+//             const itemsKey = Object.keys(data)[0];
+//             const now = new Date();
+//             const queue = [];
 
-            if (!data[itemsKey]?.length) {
-                callback(queue);
-                return;
-            }
+//             if (!data[itemsKey]?.length) {
+//                 callback(queue);
+//                 return;
+//             }
 
-            data[itemsKey].forEach(item => {
-                const dateField = item.Policy_Expiration || item.Promised_Pay_Date;
-                if (!dateField) return;
+//             data[itemsKey].forEach(item => {
+//                 const dateField = item.Policy_Expiration || item.Promised_Pay_Date;
+//                 if (!dateField) return;
 
-                const itemDate = new Date(dateField);
-                itemDate.setHours(0, 0, 0, 0); // ignore time
+//                 const itemDate = new Date(dateField);
+//                 itemDate.setHours(0, 0, 0, 0); // ignore time
 
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
+//                 const today = new Date();
+//                 today.setHours(0, 0, 0, 0);
 
-                const rawDays = Math.ceil((itemDate - today) / ONE_DAY_MS);
-                const daysLeft = Math.max(0, rawDays);
+//                 const rawDays = Math.ceil((itemDate - today) / ONE_DAY_MS);
+//                 const daysLeft = Math.max(0, rawDays);
 
-                if (rawDays < 0) return;
+//                 if (rawDays < 0) return;
 
-                const uniqueId = item.Insurance_No || item.id;
-                const storageKey = `${storageKeyPrefix}${uniqueId}`;
-                const lastShownRaw = localStorage.getItem(storageKey);
-                const lastShownDate = lastShownRaw ? new Date(lastShownRaw) : null;
+//                 const uniqueId = item.Insurance_No || item.id;
+//                 const storageKey = `${storageKeyPrefix}${uniqueId}`;
+//                 const lastShownRaw = localStorage.getItem(storageKey);
+//                 const lastShownDate = lastShownRaw ? new Date(lastShownRaw) : null;
 
-                const canShow = !lastShownDate || !isSameDay(now, lastShownDate);
+//                 const canShow = !lastShownDate || !isSameDay(now, lastShownDate);
 
-                if (canShow) {
-                    queue.push({
-                        id: uniqueId,
-                        Full_Name: item.Full_Name,
-                        Insurance_No: item.Insurance_No,
-                        daysLeft,
-                        daysText: formatDaysText(daysLeft),
-                        storageKey,
-                        config: getItemConfigCallback({ ...item, daysLeft })
-                    });
-                }
-            });
+//                 if (canShow) {
+//                     queue.push({
+//                         id: uniqueId,
+//                         Full_Name: item.Full_Name,
+//                         Insurance_No: item.Insurance_No,
+//                         daysLeft,
+//                         daysText: formatDaysText(daysLeft),
+//                         storageKey,
+//                         config: getItemConfigCallback({ ...item, daysLeft })
+//                     });
+//                 }
+//             });
 
-            callback(queue);
-        },
-        error: function(xhr, status, error) {
-            console.error(`Fetch failed: ${endpointUrl}`, {
-                status,
-                error,
-                response: xhr.responseText
-            });
-            callback([]);
-        }
-    });
-}
+//             callback(queue);
+//         },
+//         error: function(xhr, status, error) {
+//             console.error(`Fetch failed: ${endpointUrl}`, {
+//                 status,
+//                 error,
+//                 response: xhr.responseText
+//             });
+//             callback([]);
+//         }
+//     });
+// }
 
 //============= SHOW QUEUE SEQUENTIALLY ============//
 function showSequentialNotifications(queue, index = 0) {
@@ -393,18 +393,18 @@ function getPaymentConfig(item) {
 //============= FETCH BOTH QUEUES & MERGE ============//
 let allNotificationsQueue = [];
 
-fetchNotifications(window.nofiticationdata.insurancePromise_data, "notify_payment_", getPaymentConfig, function(paymentQueue) {
-    allNotificationsQueue = paymentQueue;
+// fetchNotifications(window.nofiticationdata.insurancePromise_data, "notify_payment_", getPaymentConfig, function(paymentQueue) {
+//     allNotificationsQueue = paymentQueue;
 
-    fetchNotifications("fetch_insurance_expiry.php", "notify_policy_expiry_", getPolicyExpiryConfig, function(expirationQueue) {
-        allNotificationsQueue = allNotificationsQueue.concat(expirationQueue);
+//     fetchNotifications("fetch_insurance_expiry.php", "notify_policy_expiry_", getPolicyExpiryConfig, function(expirationQueue) {
+//         allNotificationsQueue = allNotificationsQueue.concat(expirationQueue);
 
-        // Sort by urgency (most critical first)
-        // allNotificationsQueue.sort((a, b) => a.daysLeft - b.daysLeft);
+//         // Sort by urgency (most critical first)
+//         // allNotificationsQueue.sort((a, b) => a.daysLeft - b.daysLeft);
 
-        showSequentialNotifications(allNotificationsQueue);
-    });
-});
+//         showSequentialNotifications(allNotificationsQueue);
+//     });
+// });
 //============= END EXPIRATION NOTIFICATIONS & PROMISED PAYMENT DATE NOTIFICATIONS ============//
 
 //============== SIGN OUT BUTTON ============//

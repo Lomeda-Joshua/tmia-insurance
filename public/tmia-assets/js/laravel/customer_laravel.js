@@ -25,21 +25,21 @@ $(document).ready( function () {
     cache: false,
     headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-          success: function(data) {
-          userid = data.userid;
-          logname = data.logname;
-          ulevel = data.ulevel;
-          regdate = data.regdate;
-          signin = data.signin;
+      },
+        success: function(data) {
+        userid = data.userid;
+        logname = data.logname;
+        ulevel = data.ulevel;
+        regdate = data.regdate;
+        signin = data.signin;
 
           if (ulevel == 1 || ulevel == 6) {
               $(".btnactionud").show();
           } else {
               $(".btnactionud").hide();
           }
-
-    }
+          
+        }
   });
   //=============== END GET USER LOG IN INFORMATION  =================//
 

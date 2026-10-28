@@ -80,21 +80,31 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/customerinfo/data', [OverallDataController::class, 'getCustomerInfoData'])->name('customerinfo.data');
     Route::post('/customervehicleinfo/data', [OverallDataController::class, 'getVehicleInfoData'])->name('customercvehicleinfo.data');
 
+    
     // Transactions Group
     Route::prefix('transactions')->group(function () {
         // New Business Insurance
-        Route::get('/new-business', [NewBusinessController::class, 'index'])->name('new_business.index');
-        Route::post('/new-business/data', [NewBusinessController::class, 'getNewBusinessTableData'])->name('newbusiness.data');
-        Route::post('/new-business/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
-        Route::get('/new-business/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
-        Route::post('/new-business/save', [NewBusinessController::class, 'saveNewBusinessData'])->name('newbusiness.save');
-        Route::post('/new-business/gettransactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
-        Route::get('/new-business/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
-        Route::post('/new-business/specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');
-        Route::post('/new-business/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
-        Route::post('/new-business/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
-        Route::post('/new-business/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
-        Route::post('/new-business/update-net-rem', [TransactionController::class, 'updateNetRemittance'])->name('update.netrem');
+        Route::prefix('new-business')->group(function () {
+            Route::get('/', [NewBusinessController::class, 'index'])->name('new_business.index');
+            Route::post('/data', [NewBusinessController::class, 'getNewBusinessTableData'])->name('newbusiness.data');
+            Route::post('/pending-counts', [NewBusinessController::class, 'nbPendingCounts'])->name('new_business.counts');
+            Route::get('/modify', [NewBusinessController::class, 'newBusinessModify'])->name('new_business_modify');
+            Route::post('/save', [NewBusinessController::class, 'saveNewBusinessData'])->name('newbusiness.save');
+            Route::post('/get-transactions', [NewBusinessController::class, 'getTransactionsNB'])->name('getTransactionNB.data');
+            Route::get('/get-modify-view', [NewBusinessController::class, 'getModifyView'])->name('getModifyView.data');
+            Route::post('specific-customer-data', [CustomerController::class, 'getCustomerSpecificData'])->name('getSpecificView.data');
+            Route::post('/remove-by-insurance-no' , [NewBusinessController::class, 'removeByInsuranceNo'])->name('remove-by-insurance-no.data');
+            Route::post('/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
+            Route::post('/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
+            Route::post('/update-net-rem', [TransactionController::class, 'updateNetRemittance'])->name('update.netrem');
+            
+        });
+
+        Route::post('session-variables', [UserController::class, 'getSessionVariables'])->name('nb.getSession.variables');
+
+        
+
+        
         Route::post('/session/set-transaction-data', [NewBusinessController::class, 'setTransactionSession'])->name('session.set-transaction-data');
         Route::post('/vehicle/get-by-customer', [NewBusinessController::class, 'getVehiclesByCustomer'])->name('vehicle.get-by-customer');
         Route::post('/uploaded-customers/get', [NewBusinessController::class, 'getUploadedCustomersEdaf'])->name('uploaded-customers-edaf.get');        

@@ -30,40 +30,44 @@ var activeVehTab;
 
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
+  
     //================== GET USER LOG IN INFORMATION =================//
-    $.ajax({
-      url: window.dataRoutes.userAccountSession,
-      dataType: 'json',
-      type: "POST",
-      cache: false,
-      headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-      success: function(data) {
-        userid = data.userid;
-        logname = data.logname;
-        ulevel = data.ulevel;
-        userLevel = data.ulevel;
-        regdate = data.regdate;
-        signin = data.signin;
-
-        if (ulevel == 1 || ulevel == 6) {
-            $(".btnactionud").removeAttr("hidden").show();
-        } else {
-            $(".btnactionud").hide();
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
         }
+    });
 
-      }
+    console.log('user account session', window.dataRoutes.userAccountSession);
+
+
+    $.ajax({
+        url: window.dataRoutes.userAccountSession,
+        type: "POST",
+        dataType: 'json',
+        success: function(data) {
+            
+            console.log(data);
+
+            userid = data.userid;
+            logname = data.logname;
+            ulevel = data.ulevel;
+            userLevel = data.ulevel;
+            regdate = data.regdate;
+            signin = data.signin;
+
+            if (ulevel == 1 || ulevel == 6) {
+                $(".btnactionud").removeAttr("hidden").show();
+            } else {
+                $(".btnactionud").hide();
+            }
+
+        }
     });
     //=============== END GET USER LOG IN INFORMATION  =================//
 
 
-  $.ajaxSetup({
-      headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-      }
-  });
+
   
 
   //============= TOOLTIPS ============//
@@ -1865,10 +1869,10 @@ function LoadCustomerInfo() {
           }
         }
 
-        $("#txtcustno").val(value.Customer_No);
+        $("#txtcustno, .txtcustno").val(value.Customer_No);
         xcustnoupload = value.Upload_Cust_No;
-        $("#txtcustnoupload").val(value.Upload_Cust_No);
-        setSelectOption("#cbogroup", value.Group, value.Group);
+        $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
+        setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
         if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
@@ -1878,44 +1882,45 @@ function LoadCustomerInfo() {
           $(".customer-individual").fadeOut();
           $(".birth-date").fadeOut();
         }
-        $("#txtcustname").val(value.Full_Name);
-        $("#txtcustfname").val(value.First_Name);
-        $("#txtcustmname").val(value.Middle_Name);
-        $("#txtcustlname").val(value.Last_Name);
-        $("#txtcustsname").val(value.Suffix_Name);
+        $("#txtcustname, .txtcustname").val(value.Full_Name);
+        $("#txtcustfname, .txtcustfname").val(value.First_Name);
+        $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
+        $("#txtcustlname, .txtcustlname").val(value.Last_Name);
+        $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
 
         // Safe date handling
         if (value.Birth_Date) {
           const safeDate = new Date(value.Birth_Date);
           if (!isNaN(safeDate)) {
-            $("#dpbirthdate").datepicker("setDate", safeDate);
+            $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
           }
         }
-        $("#txttin").val(value.TIN);
-        $("#txtcontactno").val(value.Contact_No);
-        $("#txtemailadd").val(value.Email_Address);
-        $("#txtaddress").val(value.Address);
+        $("#txttin, .txttin").val(value.TIN);
+        $("#txtcontactno, .txtcontactno").val(value.Contact_No);
+        $("#txtemailadd, .txtemailadd").val(value.Email_Address);
+        $("#txtaddress, .txtaddress").val(value.Address);
         
         // Location: Region
         if (value.RegCode) {
-          setSelectOption("#cboregion", value.Region, value.RegCode);
+          setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
           FetchProv(value.RegCode, value.ProvCode);
         }
 
         // Province
         if (value.ProvCode) {
-          setSelectOption("#cboprovince", value.Province, value.ProvCode);
+          setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
           FetchCM(value.ProvCode, value.CMCode);
         }
 
         // City/Municipality
         if (value.CMCode) {
-          setSelectOption("#cbocity", value.CityMunicipal, value.CMCode);
+          setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
           FetchBrgy(value.CMCode, value.BrgyCode);
         }
 
-        $("#txtzipcode").val(value.Zip_Code);
+        $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
         setSelectOption("#cbocountry", value.Country, value.Country);
+
       });
     }
   });
@@ -4409,13 +4414,14 @@ $(document).on("changeDate", "#dpreldate", function () {
 
 $(document).on("changeDate", "#dpstartdate", function () {
   const startdate = parseSafeDate($(this).val());
-
   if (startdate) {
-    const expireDate = new Date(startdate);
-    expireDate.setFullYear(expireDate.getFullYear() + 1);
+      const expireDate = new Date(startdate);
+      expireDate.setFullYear(expireDate.getFullYear() + 1);
 
-    $("#dppexpiredate").datepicker("setDate", expireDate);
+      $("#dppexpiredate").datepicker("setDate", expireDate);
+      $("#dpissuedate").datepicker("setDate", startdate);
   }
+
 });
 
 /////////// CHECKED BOX EVENT //////////////
@@ -5334,6 +5340,8 @@ $(document).on("click", "#btnupdatecall", function () {
     }
   });
 });
+
+
 
 
 // ======================================================

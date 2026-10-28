@@ -22,7 +22,7 @@
       <div class="box-body">
         <div class="box-body" style="max-width:100%;">
 
-          @if(Auth::user()->User_Level_ID = 1 || Auth::user()->User_Level_ID = 6)
+          @if(Auth::user()->User_Level_ID == 1 || Auth::user()->User_Level_ID == 6)
             <div class="row btnactionud">
               <div class="col-md-12">
                 <button type="submit" class="btn btn-success" id="btnadd" style="display: block;"><i class="fa fa-plus"></i> Add Data</button>
