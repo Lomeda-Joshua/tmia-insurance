@@ -62,6 +62,9 @@ class PdfController extends Controller
             ->header('Content-Type', 'application/pdf');
     }
 
+
+    
+
     public function insuranceQuotation($insurance_no){
             // 1. Fetch transaction record along with payment history
             $transaction = TransactionRb::where('Insurance_No', $insurance_no)->firstOrFail();

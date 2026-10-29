@@ -240,18 +240,24 @@
     </style>
 
     <div class="quotation-container">
+
     
     <!-- Top Header -->
     <table class="header-table">
         <tr>
             <td style="width: 60%;">
-                <div style="font-size: 20px; font-weight: bold; color: #111;">Toyota Makati</div>
+                <div style="font-size: 15px; font-weight: bold; text-transform:uppercase; color: #111;">Toyota Makati Inc. Agency</div>
                 <div class="quotation-title" style="margin-top: 4px;">Motor Vehicle Insurance Quotation</div>
             </td>
             <td class="meta-box" style="width: 40%;">
-                <div class="quotation-no">TCAQ-2026-0001</div>
-                <div class="meta-text">Prepared by Leo Sikat</div>
-                <div class="meta-text">Prepared on August 28, 2026</div>
+                <div class="quotation-no">{{ $transaction['Insurance_No'] ?? '' }}</div>
+                <div class="meta-text">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
+
+                @php
+                    $dateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
+                @endphp
+
+                <div class="meta-text">Prepared on {{ $dateTime->format('M d, Y'); }}</div>
                 <div><span class="badge">Renewal</span></div>
             </td>
         </tr>
@@ -263,13 +269,15 @@
     
     <div>
         <div class="proposal-desc">
-            <div class="greeting" style="margin-bottom: 6px;">Dear Leo Sikat,</div>
-            Thank you for considering Toyota Makati City. We are pleased to provide this renewal proposal for your motor vehicle insurance needs. The quotation below summarizes the selected coverage and estimated annual premium.
+            <div class="greeting" style="margin-bottom: 6px;">Dear {{ $transaction['Full_Name'] ?? '' }},</div>
+            Thank you for considering Toyota Insurance Inc. Agency (TMIA). We are pleased to provide this renewal proposal for your motor vehicle insurance needs. The quotation below summarizes the selected coverage and estimated annual premium.
         </div>
         <div class="inception-right">
             Inception date:<br>
-            <strong>August 28, 2026</strong><br>
-            <span style="font-size: 10px; color: #777;">Valid until September 27, 2026</span>
+            <strong><?php $inception_date = new DateTime($transaction['Start_Date'], new DateTimeZone('Asia/Manila')) 
+                                    echo $inception_date->format('M d, Y') ?? '';
+                    ?></strong><br>
+            <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span>
         </div>
     </div>
 
@@ -280,24 +288,24 @@
         <tr>
             <td>
                 <div class="info-label">Insured Customer</div>
-                <div class="info-value">Leo Sikat</div>
-                <div class="info-subvalue">09228732822</div>
+                <div class="info-value">{{ $transaction['Full_Name'] ?? '' }}</div>
+                <div class="info-subvalue">{{ $transaction['Contact_No'] ?? '' }}</div>
             </td>
             <td>
                 <div class="info-label">Vehicle</div>
-                <div class="info-value">2015 Fortuner G Diesel AT</div>
-                <div class="info-subvalue">Commercial Vehicle · Plate No. APA9778</div>
+                <div class="info-value">{{ $transaction['Variant'] ?? '' }}</div>
+                <div class="info-subvalue">{{ $transaction['Prod_Classify'] ?? '' }} · Plate No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
             </td>
         </tr>
         <tr>
             <td>
                 <div class="info-label">Insurance Partner</div>
-                <div class="info-value">AXA</div>
+                <div class="info-value">{{ $transaction['Insurance_Company'] ?? '' }}</div>
                 <div class="info-subvalue">Motor Vehicle Insurance</div>
             </td>
             <td>
                 <div class="info-label">Sum Insured</div>
-                <div class="info-value">₱500,000.00</div>
+                <div class="info-value">{{ $transaction['Gross_Premium'] ?? '' }}</div>
                 <div class="info-subvalue">Subject to insurer review and acceptance</div>
             </td>
         </tr>

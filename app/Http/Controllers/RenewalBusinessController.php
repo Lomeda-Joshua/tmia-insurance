@@ -1040,5 +1040,6 @@ class RenewalBusinessController extends Controller
         // Alternatively, use download() to force immediate file download:
         // return $pdf->download("Invoice_{$insurance_no}.pdf");
     }
+    
 
 }

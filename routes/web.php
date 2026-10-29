@@ -97,6 +97,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
             Route::post('/transactions/update-status', [NewBusinessController::class, 'updateStatus'])->name('transactions.update-status');
             Route::post('/payments/sync', [NewBusinessController::class, 'syncPayments'])->name('payments.sync');
             Route::post('/update-net-rem', [TransactionController::class, 'updateNetRemittance'])->name('update.netrem');
+            Route::get('/insurance-quotation/pdf/{insurance_no}', [NewBusinessController::class, 'newBusinessQuotationPdf'])->name('newbusiness.pdf.generate');
             
         });
 
@@ -165,7 +166,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         
         Route::post('/renewal-business/save-new-payments', [RenewalBusinessController::class, 'savePayments'])->name('renewal-business.save-payments');
         
-        Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
+        
         Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
 
         Route::post('/delete-renewal-transaction', [RenewalBusinessController::class, 'deleteTransaction'])->name('delete.renewal_transaction');

@@ -22,6 +22,8 @@ use App\Models\UploadedEdafCustomer;
 use App\Models\ApprovalNbStatus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Models\VwTransactionsNb;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -121,6 +123,11 @@ class NewBusinessController extends Controller
                     if ($row->Option_Type === 'PAID') {
                         $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnpay" data-toggle="tooltip" title="Payment"><i class="fa-solid fa-peso-sign"></i></label> ';
                     }
+
+                    // Added Quotation PDF Button
+                    $buttons .= '<a href="' . route('newbusiness.pdf.generate', ['insurance_no' => $insuranceNo]) . '" target="_blank" '
+                        . 'class="btn btn-sm btn-primary btn-action btnprintpdf me-1" title="Print PDF">'
+                        . '<i class="fa-solid fa-file-pdf"></i></a>';
 
                     $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnnetrem" data-toggle="tooltip" title="Gross Premium / Net Rem"><i class="fa-solid fa-money-bill-transfer"></i></label> ';
                     $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnstatus" data-toggle="tooltip" title="Change Status"><i class="fa-solid fa-chart-bar"></i></label> ';
@@ -783,6 +790,32 @@ class NewBusinessController extends Controller
         }
 
         return false;
+    }
+
+
+
+
+    public function newBusinessQuotationPdf($insurance_no)
+    {
+       // 1. Fetch parent record with child payments relationship
+        $nbTransaction = VwTransactionsNb::with('nbPaymentInfo')
+            ->where('Insurance_No', $insurance_no)
+            ->firstOrFail(); // Ensures a 404 response if record does not exist
+
+        // 2. Load the Blade view and pass variables
+        $pdf = Pdf::loadView('livewire.main.pdf.insurance_proposal', [
+            'transaction' => $nbTransaction,
+        ]);
+
+
+        // 3. Configure paper size and orientation (optional)
+        $pdf->setPaper('A4', 'portrait');
+
+        // 4. Stream directly to browser tab ('inline')
+        return $pdf->stream("Invoice_{$insurance_no}.pdf");
+        
+        // Alternatively, use download() to force immediate file download:
+        // return $pdf->download("Invoice_{$insurance_no}.pdf");
     }
 
 
