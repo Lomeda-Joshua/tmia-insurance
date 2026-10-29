@@ -15,7 +15,7 @@ use App\Models\NewBusiness;
 use App\Models\CustomerInformation;
 use App\Models\VehicleInformation;
 use App\Models\TransactionsNb;
-use App\Models\TransactionNbPayment;
+use App\Models\TransactionNBpayment;
 use App\Models\Notification;
 use App\Models\FileNbUpload;
 use App\Models\UploadedEdafCustomer;
@@ -323,7 +323,7 @@ class NewBusinessController extends Controller
                         ? date('Y-m-d', strtotime($p['PDC_Date'])) 
                         : null;
 
-                    TransactionNbPayment::create([
+                    TransactionNBpayment::create([
                         'Insurance_No'      => $insuranceno,
                         'User_ID'           => $userid,
                         'Payment_Type'      => $p['Payment_Type'] ?? null,
