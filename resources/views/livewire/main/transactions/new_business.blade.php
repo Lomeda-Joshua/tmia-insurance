@@ -612,7 +612,7 @@
                               <div class="form-group">
                                 <label for="txtvin">VIN *</label>
                                 <div class="input-group input-group-sm">
-                                  <input type="text" id="txtvin" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtvin" class="form-control input-sm txtvin" required="required"
                                     data-error="VIN is required." disabled>
                                   <span class="input-group-btn">
                                     <button type="button" id="btnfindvehicle" data-toggle="tooltip" data-placement="top"
@@ -626,7 +626,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmake">Make *</label>
-                                <input type="text" id="txtmake" class="form-control input-sm" required="required"
+                                <input type="text" id="txtmake" class="form-control input-sm txtmake" required="required"
                                   data-error="Make is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -636,15 +636,15 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmodel">Model *</label>
-                                <input type="text" id="txtmodel" class="form-control input-sm" required="required"
+                                <input type="text" id="txtmodel" class="form-control input-sm txtmodel" required="required"
                                   data-error="Model is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
-                                <label for="txtmodelyear">Mode Year *</label>
-                                <input type="text" id="txtmodelyear" class="form-control input-sm" required="required"
+                                <label for="txtmodelyear">Model Year *</label>
+                                <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear" required="required"
                                   data-error="Model Year is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -654,7 +654,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtcolor">Color *</label>
-                                <input type="text" id="txtcolor" class="form-control input-sm" required="required"
+                                <input type="text" id="txtcolor" class="form-control input-sm txtcolor" required="required"
                                   data-error="Color is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -662,7 +662,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtengineno">Engine No. *</label>
-                                <input type="text" id="txtengineno" class="form-control input-sm" required="required"
+                                <input type="text" id="txtengineno" class="form-control input-sm txtengineno" required="required"
                                   data-error="Engine No. is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -1231,7 +1231,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboinstype">Insurance Type *</label>
-                                <select id="cboinstype" class="form-control input-sm" required="required"
+                                <select id="cboinstype" class="form-control input-sm cboinstype" required="required"
                                   data-error="Insurance Type is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>
@@ -1241,7 +1241,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="cboinsco">Insurance Company *</label>
-                                <select id="cboinsco" class="form-control input-sm" required="required"
+                                <select id="cboinsco" class="form-control input-sm cboinsco" required="required"
                                   data-error="Insurance Company is required." disabled>
                                   <option Value="">PLEASE SELECT</option>
                                 </select>

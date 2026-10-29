@@ -68,7 +68,7 @@ var xuname;
     /////////////////////// START IZIMODAL ///////////////////////
     /* MODAL MODIFY */
     $("#modal-modify").iziModal({
-      title: 'User Account Information Maintenancen',
+      title: 'User Account Information Maintenance',
       subtitle: 'Fill Out All Details Required of User Account.',
       headerColor: 'linear-gradient(0deg, #505050, #bbb, #505050)',
       icon: 'fa fa-list-alt',

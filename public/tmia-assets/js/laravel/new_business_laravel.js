@@ -2032,12 +2032,12 @@ function LoadVehicleInfo() {
           }
         }
 
-        $("#txtvin").val(value.VIN);
-        $("#txtmake").val(value.Make);
-        $("#txtmodel").val(value.Model);
-        $("#txtmodelyear").val(value.Model_Year);
-        $("#txtcolor").val(value.Color);
-        $("#txtengineno").val(value.Engine_No);
+        $("#txtvin, .txtvin").val(value.VIN);
+        $("#txtmake, .txtmake").val(value.Make);
+        $("#txtmodel, .txtmodel").val(value.Model);
+        $("#txtmodelyear, .txtmodelyear").val(value.Model_Year);
+        $("#txtcolor, .txtcolor").val(value.Color);
+        $("#txtengineno, .txtengineno").val(value.Engine_No);
         $("#txtcsno").val(value.CS_No);
         $("#txtplateno").val(value.Plate_No);
         // $("#txtorderno").val(value.Order_No);
@@ -5342,14 +5342,42 @@ $(document).on("click", "#btnupdatecall", function () {
 });
 
 
+$(document).on("change", "#cboinstype", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
+
+$(document).on("change", "#cboinsco", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
+
+$(document).on("change", "#dpstartdate", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
+
+$(document).on("change", "#txtpolicyno", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
+
+$(document).on("change", "#dpissuedate", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
+
+
+$(document).on("change", "#cbomortgage", function () {
+      let insuranceType = $(this).val();      
+      $("#cboinstype_summary").val(insuranceType);
+});
 
 
 // ======================================================
 // Start begin Review Utility
 // ======================================================
 function showReviewModal(onConfirmCallback) {
-
-
   // 1. Gather current form values
   const insurerFields = {
     "Insurance Type": getVal("#cboinstype"),
@@ -5707,8 +5735,7 @@ $(document).on("click", "#btnsubmit", function () {
     Object.entries(group).forEach(([key, val]) => formdata.append(key, val));
   });
 
-  console.log(formdata);
-
+  
   // ======================================================
   // AJAX SUBMISSION
   // ======================================================
