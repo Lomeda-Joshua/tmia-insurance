@@ -24,13 +24,12 @@
             margin: 0 auto;
             background: #fff;
             box-sizing: border-box;
-            padding: 10px 20px;
         }
         /* Header */
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
         .header-table td {
             vertical-align: top;
@@ -200,7 +199,7 @@
 
         /* Footer Notes */
         .deductible-box {
-            background-color: #f4f6f8;
+            background-color: #d9ff00;
             padding: 10px 14px;
             font-size: 11px;
             color: #555;
@@ -236,6 +235,7 @@
         .footer-box-content ul {
             margin: 0;
             padding-left: 15px;
+            list-style-type:none;
         }
     </style>
 
@@ -264,19 +264,17 @@
     </table>
 
     <!-- Proposal Intro -->
-    <div class="proposal-heading">Your Motor Vehicle Insurance Proposal</div>
-    <div class="proposal-sub">Clear coverage and premium details for your review.</div>
+    <div class="proposal-heading">Your vehicle protection notice</div>
+    <div class="proposal-sub">"Solutions for you and your car"</div>
     
     <div>
         <div class="proposal-desc">
             <div class="greeting" style="margin-bottom: 6px;">Dear {{ $transaction['Full_Name'] ?? '' }},</div>
-            Thank you for considering Toyota Insurance Inc. Agency (TMIA). We are pleased to provide this renewal proposal for your motor vehicle insurance needs. The quotation below summarizes the selected coverage and estimated annual premium.
+            Thank you for considering Toyota Makati Inc. Agency, We are pleased to present this renewal proposal for your upcoming insurance policy. The details below summarize your selected coverage options and annual premium to ensure optimal protection for your requirements.
         </div>
         <div class="inception-right">
             Inception date:<br>
-            <strong><?php $inception_date = new DateTime($transaction['Start_Date'], new DateTimeZone('Asia/Manila')) 
-                                    echo $inception_date->format('M d, Y') ?? '';
-                    ?></strong><br>
+            <strong></strong><br>
             <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span>
         </div>
     </div>
@@ -294,7 +292,14 @@
             <td>
                 <div class="info-label">Vehicle</div>
                 <div class="info-value">{{ $transaction['Variant'] ?? '' }}</div>
-                <div class="info-subvalue">{{ $transaction['Prod_Classify'] ?? '' }} · Plate No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
+                <div class="info-subvalue">
+                    {{ match((int) ($transaction['Prod_Classify'] ?? 0)) {
+                                1 => 'Individual',
+                                2 => 'Government',
+                                3 => 'Fleet',
+                                4 => 'Corporate',
+                                default => '',
+                            } }} | Plate No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
             </td>
         </tr>
         <tr>
@@ -305,7 +310,7 @@
             </td>
             <td>
                 <div class="info-label">Sum Insured</div>
-                <div class="info-value">{{ $transaction['Gross_Premium'] ?? '' }}</div>
+                <div class="info-value">Php {{ $transaction['Gross_Premium'] ?? '' }}</div>
                 <div class="info-subvalue">Subject to insurer review and acceptance</div>
             </td>
         </tr>
@@ -325,28 +330,28 @@
         <tbody>
             <tr>
                 <td>Own Damage / Theft</td>
-                <td>₱500,000.00</td>
-                <td>₱8,008.45</td>
+                <td>Php 500,000.00</td>
+                <td>Php 8,008.45</td>
             </tr>
             <tr>
                 <td>Acts of Nature</td>
-                <td>₱500,000.00</td>
-                <td>₱2,355.43</td>
+                <td>Php 500,000.00</td>
+                <td>Php 2,355.43</td>
             </tr>
             <tr>
                 <td>VTPL – Bodily Injury</td>
                 <td>As per policy</td>
-                <td>₱420.00</td>
+                <td>Php 420.00</td>
             </tr>
             <tr>
                 <td>VTPL – Property Damage</td>
                 <td>As per policy</td>
-                <td>₱1,245.00</td>
+                <td>Php 1,245.00</td>
             </tr>
             <tr>
                 <td>Auto Personal Accident</td>
                 <td>As per policy</td>
-                <td>₱0.00</td>
+                <td>Php 0.00</td>
             </tr>
         </tbody>
     </table>
@@ -355,48 +360,50 @@
     <table class="totals-table">
         <tr>
             <td>Gross premium</td>
-            <td>₱12,028.87</td>
+            <td>Php 12,028.87</td>
         </tr>
         <tr>
             <td>VAT</td>
-            <td>₱1,443.46</td>
+            <td>Php 1,443.46</td>
         </tr>
         <tr>
             <td>Documentary stamp tax</td>
-            <td>₱1,503.61</td>
+            <td>1,503.61</td>
         </tr>
         <tr>
             <td>Local tax</td>
-            <td>₱24.06</td>
+            <td>Php 24.06</td>
         </tr>
         <tr class="grand-total-row">
-            <td>Total customer payable</td>
-            <td>₱15,000.00</td>
+            <td>Total Premium (inclusive of taxes)</td>
+            <td>Php 15,000.00</td>
         </tr>
     </table>
 
     <!-- Deductible Note -->
     <div class="deductible-box">
-        <strong>Deductible / participation:</strong> ₱3,000.00 per accident or panel, subject to the final policy terms.
+        <strong>Deductible / participation:</strong>Php 2,000 per accident/panel.
     </div>
 
     <!-- Footer Options & Reminders -->
     <table class="footer-grid">
         <tr>
             <td>
-                <div class="footer-box-title">Payment options</div>
+                <div class="footer-box-title">You may avail of the following payment options:</div>
                 <div class="footer-box-content">
                     <ul>
-                        <li>Deposit to authorized Toyota Makati accounts.</li>
-                        <li>Deferred payment options may be available, subject to bank or card provider approval.</li>
+                        <li>1. Deposit to the following accounts:</li>
+                        <li>METROBANK SA#066-3-06666727-9 /  BPI CA#4831-0014-75/ BDO SA#005330027420</li>
+                        <li>2. 0% Deferred Payments (applicable to METROBANK, BPI OR BDO CREDIT CARD HOLDERS)</li>
                     </ul>
                 </div>
             </td>
             <td>
-                <div class="footer-box-title">Important reminders</div>
+                <div class="footer-box-title">For further inquiries, feel free to call our Insurance Sales Executive at the following numbers:</div>
                 <div class="footer-box-content">
                     <ul>
-                        <li>This is an indicative quotation and is subject to underwriting approval.</li>
+                        <li>Trunkline: 8897-3333 Local 230 (Ferl) 229 (Kim) 235 (Angie)</li>
+                        <li>CEL #: 0995-1564945/0917-5401743 (Ferl) 0916-2298017 (Kim) 0967-0499665 (Angie) ALL VIBER READY</li>
                     </ul>
                 </div>
             </td>

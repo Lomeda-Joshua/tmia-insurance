@@ -126,9 +126,8 @@ class NewBusinessController extends Controller
 
                     // Added Quotation PDF Button
                     $buttons .= '<a href="' . route('newbusiness.pdf.generate', ['insurance_no' => $insuranceNo]) . '" target="_blank" '
-                        . 'class="btn btn-sm btn-primary btn-action btnprintpdf me-1" title="Print PDF">'
+                        . 'class="btn btn-sm btn-primary btn-action btnprintpdf me-1" title="Insurance quote">'
                         . '<i class="fa-solid fa-file-pdf"></i></a>';
-
                     $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnnetrem" data-toggle="tooltip" title="Gross Premium / Net Rem"><i class="fa-solid fa-money-bill-transfer"></i></label> ';
                     $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnstatus" data-toggle="tooltip" title="Change Status"><i class="fa-solid fa-chart-bar"></i></label> ';
                     $buttons .= '<label insuranceno="' . $insuranceNo . '" class="btn btn-success btn-action btnedit" data-toggle="tooltip" title="View & Modify"><i class="fa fa-edit"></i></label> ';
