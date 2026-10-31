@@ -889,6 +889,31 @@
                   <div class="box-body" style="max-width:100%;">
                     <div class="insurance-calc">
                       <form>
+
+                        <div class="row">
+                          {{-- Added vehicle price --}}
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="txtVehiclePrice">Vehicle Price</label>
+                                <input type="number" id="txtVehiclePrice" style="font-weight: bold; background: #a18787; color:white;" class="form-control input-sm"
+                                   readonly>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="depreciationValue">Depreciation value</label>
+                                <input type="number" id="depreciationValue" style="font-weight: bold; background: #a18787; color:white;" class="form-control input-sm"
+                                   readonly>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                          </div>
+                           
+                        </div>
+
+                        <hr>
+
                         <div class="row">
                           <div class="col-md-4">
                             <div class="form-group">
@@ -2090,7 +2115,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label for="txtinsgpremium">Gross Premium *</label>
-                        <input type="text" id="txtinsgpremium" class="form-control input-sm" required="required"
+                        <input type="text" id="txtinsgpremium" class="form-control input-sm" min="0" max="4000000" required="required"
                           data-error="Gross Premium is required." disabled>
                         <div class="help-block with-errors"></div>
                       </div>
@@ -2102,7 +2127,7 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label for="txtnetrem">Net Rem *</label>
-                        <input type="text" id="txtnetrem" class="form-control input-sm" required="required"
+                        <input type="text" id="txtnetrem" class="form-control input-sm" min="0" max="4000000" required="required"
                           data-error="Net Rem is required." disabled>
                         <div class="help-block with-errors"></div>
                       </div>

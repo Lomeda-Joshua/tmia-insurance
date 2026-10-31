@@ -261,11 +261,11 @@
                 <div><span class="badge">Renewal</span></div>
             </td>
         </tr>
-    </table>
+    </table>                                                        
 
     <!-- Proposal Intro -->
     <div class="proposal-heading">Your vehicle protection notice</div>
-    <div class="proposal-sub">"Solutions for you and your car"</div>
+    <div class="proposal-sub"><i>"Solutions for you and your car"</i></div>
     
     <div>
         <div class="proposal-desc">

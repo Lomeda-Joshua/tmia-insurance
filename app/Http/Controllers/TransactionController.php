@@ -46,9 +46,9 @@ class TransactionController extends Controller
             'insgpremium'   => 'nullable|numeric',
             'netrem'        => 'nullable|numeric',
             'inscommission' => 'nullable|numeric',
-        ]);        
-
-        dd($validatedData);
+            'type_business_flag' => 'nullable|numeric',
+        ]);     
+        
 
         try {
             // 2. Wrap operations inside Eloquent/DB Transaction
@@ -58,8 +58,10 @@ class TransactionController extends Controller
                 $request_netrem = $request->input('netrem');
                 $request_inscommission = $request->input('inscommission');
 
+                $model = $validatedData['type_business_flag'] == 1 ? TransactionsNb::class : TransactionRb::class;
+
                 // 3. Perform Eloquent update directly by condition
-                $affectedRows = TransactionRb::where('Insurance_No', $request_insuranceNo)
+                $affectedRows = $model::where('Insurance_No', $request_insuranceNo)
                     ->update([
                         'Gross_Premium' => $request_insgpremium ?? null,
                         'Net_Rem'       => $request_netrem ?? null,
@@ -67,6 +69,8 @@ class TransactionController extends Controller
                         'Commission'    => $request_inscommission ?? null,
                         'User_ID'       => Auth::id(),
                     ]);
+
+
 
                 // Optional check if the record actually existed
                 if ($affectedRows === 0) {

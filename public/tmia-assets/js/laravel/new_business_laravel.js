@@ -1407,6 +1407,7 @@ function LoadTransactionData() {
     return;
   }  
 
+
   table = $('#table_trans').DataTable({
     language: {
       processing: "Loading Transaction List..."
@@ -1421,8 +1422,8 @@ function LoadTransactionData() {
       url: window.tableRoutes.newBusinessData,
       type: "POST",
       data: function (d) {
-            d.viewpending  = window.viewpending === true;
-            d.viewexpiring = window.viewexpiring === true;
+            d.viewpending  = window.viewpending;
+            d.viewexpiring = window.viewexpiring;
             d.searchval    = $('#txtsearch').val().trim();
             d.datefrom     = $('#dpdatefrom').val();
             d.dateto       = $('#dpdateto').val();
@@ -2013,13 +2014,14 @@ function LoadCustomerEDAFSAPInfo() {
   $(".box-body").validator('reset');
 }
 
+
+
 function LoadVehicleInfo() {
   $.ajax({
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){
-      
+    success: function(data){      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2042,7 +2044,7 @@ function LoadVehicleInfo() {
         $("#txtplateno").val(value.Plate_No);
         // $("#txtorderno").val(value.Order_No);
         // $("#txtorderstatus").val(value.Order_Status);
-        $("#txtsrp").val(NumberFormat(value.SRP));
+        $("#txtsrp, #txtVehiclePrice").val(NumberFormat(value.SRP));        
         
         // Safe date handling
         if (value.VSI_Date) {
@@ -2397,6 +2399,30 @@ function LoadStatusData() {
   }
   $(".box-body").validator('reset');
 }
+
+
+$('#txtinsgpremium').on('input', function () {
+    // 1. Remove anything that isn't a number or decimal point
+    console.log("typed");
+    let val = this.value.replace(/[^0-9.]/g, '');
+
+    // 2. Prevent multiple decimal points
+    let parts = val.split('.');
+    if (parts.length > 2) {
+        val = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    // 3. If the number exceeds 4,000,000, instantly cap it
+    let num = parseFloat(val);
+    if (!isNaN(num) && num > 4000000) {
+        val = '4000000';
+    }
+
+    // Apply the cleaned and capped value back to the input
+    this.value = val;
+});
+
+
 
 function LoadCallData() {
   $.ajax({
@@ -3642,7 +3668,8 @@ $(document).on("click", "#btnupdatenetrem", function () {
     insuranceno,
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
-    inscommission: getNum("#txtinscommission")
+    inscommission: getNum("#txtinscommission"),
+    type_business_flag: 1 // 1 for New Business
   };
 
   if (!runValidation([
@@ -4526,6 +4553,7 @@ $(document).ready( function () {
     const val = $(this).val();
     if (val === 'FREE') {
       $(".installment-section, .payment-new").fadeOut();
+      $("#txtgrosspremium").prop('disabled', true);
     } else {
       $(".installment-section, .payment-new")
                 .prop("hidden", false)
@@ -5343,35 +5371,41 @@ $(document).on("click", "#btnupdatecall", function () {
 
 
 $(document).on("change", "#cboinstype", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#cboinstype_summary").val(value_input);
 });
 
 $(document).on("change", "#cboinsco", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#cboinsco_summary").val(value_input);
 });
 
 $(document).on("change", "#dpstartdate", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#dpstartdate_summary").val(value_input);
 });
 
 $(document).on("change", "#txtpolicyno", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#txtpolicyno_summary").val(value_input);
 });
 
 $(document).on("change", "#dpissuedate", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#dpissuedate_summary").val(value_input);
 });
 
 
 $(document).on("change", "#cbomortgage", function () {
-      let insuranceType = $(this).val();      
-      $("#cboinstype_summary").val(insuranceType);
+      let value_input = $(this).val();      
+      $("#cbomortgage_summary").val(value_input);
 });
+
+$(document).on("change", "#dppexpiredate", function () {
+      let value_input = $(this).val();      
+      $("#dppexpiredate_summary").val(value_input);
+});
+
 
 
 // ======================================================
