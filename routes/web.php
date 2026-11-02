@@ -12,13 +12,15 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OverallDataController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\EnsureLockscreenIsUnlocked;
-use App\Http\Controllers\LockscreenController;
+
 use App\Http\Controllers\GeneralReportingController;
 use App\Http\Controllers\VehicleLookupController;
 use App\Http\Controllers\PolicyExpirationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CallOperationController;
 use App\Http\Controllers\GeneralSettingsController;
+
+use App\Http\Controllers\LockScreenController;
 
 use App\Http\Controllers\PdfController;
 
@@ -27,14 +29,16 @@ use App\Http\Controllers\PdfController;
  * Lockscreen middleware and group
  * 
  * */ 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
-    Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
-    Route::post('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
-});
+
+Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
+Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
+Route::get('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
+
 
 
 Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
+
+
 
     // CSRF Token for Javascript AJAX transactions
     Route::get('/csrf-token', function () {

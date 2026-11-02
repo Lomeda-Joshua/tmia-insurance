@@ -28,6 +28,10 @@ var editcall = false;
 var editstatus = false;
 var activeCustTab;
 var activeVehTab;
+
+// Set Renewal flag for setting up modal call for expiring list
+let renewal_flag;
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
 
@@ -1828,27 +1832,32 @@ function initExpiringTable() {
 }
 
 
-let renewal_flag = 0;
+
   
-// ✅ Bind row click for selection AFTER table initialization
+// Bind row click for selection AFTER table initialization
 $(document).ready(function(){
-    let expiring_ = 1;
+
     $('#modal-show-expiring-policies').on('opened', initExpiringTable);
 
-    // ✅ Bind row click for selection AFTER table initialization
+    // Bind row click for selection AFTER table initialization
     $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {
 
         let table = $('#table_expiring_list').DataTable();
+
         // Remove selection from any previously selected row
         table.$('tr.selected').removeClass('selected');
 
         // Highlight clicked row
         $(this).addClass('selected');
 
+        renewal_flag = 1;
+
         // Optional: get Customer_No
-        xnbno = table.cell(this, 1).data();
-        xcustno = table.cell(this, 4).data();
-        xvin = table.cell(this, 7).data();
+        xnbno = table.cell(this, 0).data();
+        xcustno = table.cell(this, 6).data();
+        xvin = table.cell(this, 9).data();
+
+        LoadCustomerData();
 
     });
 
@@ -2441,7 +2450,7 @@ function LoadCustomerInfo() {
     }
   });
   
-  console.log("loading here");
+
   LoadVehicleInfo();
 
   $(".box-body").validator('reset');
@@ -3113,10 +3122,6 @@ function LoadPreviousInsuranceCo(data){
 $(document).on("change", "#cboinsco", function () {
   const value = $(this).val();                          // selected option's value
   const text  = $(this).find("option:selected").text(); // selected option's visible text
-
-  // use value here, e.g. put it in a field, filter a table, etc.
-  $("#cboprevinsco").val(text);
-
 });
 
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
@@ -5058,7 +5063,14 @@ $(document).on( "click", "#btnfindcustomer", function () {
   if (activeCustTab === '#uploadtab') {
     LoadCustomerDataEDAFSAP();
   }
-  $('#modal-customerlist').iziModal('open');
+  
+
+  // Select customer will only show if it is not clicked on expirigin
+  if(renewal_flag != 1){
+    $('#modal-customerlist').iziModal('open');
+  }
+  
+  
 });
 
 $(document).on( "click", "#btncustselect", function () {
@@ -5121,7 +5133,7 @@ $(document).on( "click", "#btnnbselect", function () {
   if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
-  } else {
+  } else {    
     $('#modal-modify-ise').iziModal('open');
   }
 
@@ -5136,7 +5148,10 @@ $(document).on( "click", "#btnadd", function () {
   xnbno = '';
   FormClear();
   FormDisable(false);
-  if ( ulevel == 'INSURANCE STAFF') { 
+  renewal_flag = 0;
+
+
+  if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
 
     $('#modal-add').iziModal('open');

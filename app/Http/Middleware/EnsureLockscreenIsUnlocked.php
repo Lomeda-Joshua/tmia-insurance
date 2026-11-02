@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureLockscreenIsUnlocked
@@ -20,12 +19,15 @@ class EnsureLockscreenIsUnlocked
             'logout',
         ];
 
-        if (! Auth::check() || $request->routeIs($exemptRoutes)) {
+
+        if (! Auth::check() || $request->routeIs($exemptRoutes)) {          
             return $next($request);
         }
 
+        
         // 2. Initialize lockscreen state if not set
         if (! $request->session()->has('lockscreen')) {
+            
             $request->session()->put('lockscreen', false);
         }
 

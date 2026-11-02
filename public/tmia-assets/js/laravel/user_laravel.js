@@ -376,6 +376,7 @@ var xuname;
       });
       return;
     }
+
     
     if ($("#appmethod").val() == 'N' || $("#txtpass").val() != '' || $("#txtrpass").val() != '') {
       if($("#txtpass").val() == '' || $("#txtpass").val() == null){
@@ -428,9 +429,6 @@ var xuname;
       });
       return;
     }
-
-
-    console.log('app method', $("#appmethod").val());
 
     var appmethod = $("#appmethod").val();
     var uid = $("#txtid").val();
@@ -496,6 +494,8 @@ var xuname;
     if (appmethod == "N")  {
       CheckUserName();
     } else if (appmethod == "U" && xuname != uname)  {
+      console.log('uname', uname);
+
       CheckUserName();
     } else {
       SaveData(value);

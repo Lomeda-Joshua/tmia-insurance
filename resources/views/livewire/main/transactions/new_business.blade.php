@@ -892,19 +892,19 @@
 
                         <div class="row">
                           {{-- Added vehicle price --}}
-                          <div class="col-md-4">
+                          <div class="col-md-3">
                             <div class="form-group">
                               <label for="txtVehiclePrice">Vehicle Price</label>
-                                <input type="number" id="txtVehiclePrice" style="font-weight: bold; background: #a18787; color:white;" class="form-control input-sm"
+                                <input type="text" class="form-control input-sm" id="txtVehiclePrice" style="font-weight: bold; background: #dfd3d3;" 
                                    readonly>
                                 <div class="help-block with-errors"></div>
                             </div>
                           </div>
 
-                          <div class="col-md-4">
+                          <div class="col-md-2">
                             <div class="form-group">
                               <label for="depreciationValue">Depreciation value</label>
-                                <input type="number" id="depreciationValue" style="font-weight: bold; background: #a18787; color:white;" class="form-control input-sm"
+                                <input type="number" id="depreciationValue" style="font-weight: bold; background: #dfd3d3;" class="form-control input-sm"
                                    readonly>
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -1533,9 +1533,7 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Paid Price:</th>
                                 <td colspan="3">
-                                  <input type="text" id="txtsrp" class="form-control input-sm txtsrp"
-                                    style="width: 100%;" required="required" data-error="Paid Price is required."
-                                    disabled>
+                                  <input type="text" id="txtsrp" class="form-control input-sm txtsrp" style="width: 100%;" required="required" data-error="Paid Price is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
                               </tr>

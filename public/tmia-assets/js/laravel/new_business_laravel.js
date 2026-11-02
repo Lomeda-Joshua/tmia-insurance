@@ -1664,7 +1664,7 @@ function LoadCustomerDataEDAFSAP() {
     ]
   });
 
-  // ✅ Bind row click for selection AFTER table initialization
+  // Bind row click for selection AFTER table initialization
   $('#table_customerlistupload tbody').off('click', 'tr').on('click', 'tr', function () {
     // Remove selection from any previously selected row
     table.$('tr.selected').removeClass('selected');
@@ -1682,7 +1682,7 @@ function LoadCustomerDataEDAFSAP() {
     xplateno = table.cell(this, 10).data();
   });
 
-  // ✅ Bind row click for selection AFTER table initialization
+  // Bind row click for selection AFTER table initialization
   $('#table_customerlistupload tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
      $('#btncustselect').trigger("click");
   });
@@ -2044,7 +2044,10 @@ function LoadVehicleInfo() {
         $("#txtplateno").val(value.Plate_No);
         // $("#txtorderno").val(value.Order_No);
         // $("#txtorderstatus").val(value.Order_Status);
-        $("#txtsrp, #txtVehiclePrice").val(NumberFormat(value.SRP));        
+
+        $("#txtsrp, #txtVehiclePrice, .txtVehiclePrice").val( "Php " + NumberFormat(value.SRP));   
+        
+        console.log("text value price", $("#txtsrp").val());
         
         // Safe date handling
         if (value.VSI_Date) {
@@ -4554,6 +4557,7 @@ $(document).ready( function () {
     if (val === 'FREE') {
       $(".installment-section, .payment-new").fadeOut();
       $("#txtgrosspremium").prop('disabled', true);
+    
     } else {
       $(".installment-section, .payment-new")
                 .prop("hidden", false)

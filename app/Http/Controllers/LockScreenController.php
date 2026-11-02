@@ -10,6 +10,7 @@ class LockScreenController extends Controller
 {
     public function show(Request $request)
     {
+        
         // If not locked, return to dashboard
         if (! $request->session()->get('lockscreen', false)) {
             return redirect()->route('dashboard');
@@ -21,8 +22,8 @@ class LockScreenController extends Controller
     public function lock(Request $request)
     {
         $request->session()->put('lockscreen', true);
-        return response()->json(['status' => 'locked']);
-        
+        return redirect()->route('lockscreen');
+        // return response()->json(['status' => 'locked']);
     }
 
     public function unlock(Request $request)

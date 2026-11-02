@@ -246,24 +246,30 @@
     <table class="header-table">
         <tr>
             <td style="width: 60%;">
-                <div style="font-size: 15px; font-weight: bold; text-transform:uppercase; color: #111;">Toyota Makati Inc. Agency</div>
-                <div class="quotation-title" style="margin-top: 4px;">Motor Vehicle Insurance Quotation</div>
+                <img src="../public/tmia-assets/images/logo.png" style="width:200px;"/>
             </td>
+            <td style="width: 100%; display: flex; flex-direction: column; align-items: flex-end; text-align: right;">
+                <img src="../public/tmia-assets/images/toyota logo.png" style="width:70px;"/>
+            </td>
+        </tr>
+    </table>   
+
+    <table class="header-table">
             <td class="meta-box" style="width: 40%;">
                 <div class="quotation-no">{{ $transaction['Insurance_No'] ?? '' }}</div>
-                <div class="meta-text">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
-
+                <div class="meta-text" style="font-size:14px;">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
                 @php
                     $dateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
                 @endphp
-
-                <div class="meta-text">Prepared on {{ $dateTime->format('M d, Y'); }}</div>
+                <div class="meta-text" style="font-size:14px;">Prepared on {{ $dateTime->format('M d, Y'); }}</div>
                 <div><span class="badge">Renewal</span></div>
             </td>
-        </tr>
-    </table>                                                        
+    </table>
+    
+    
 
     <!-- Proposal Intro -->
+    <div class="quotation-title" style="margin-top: 4px; text-align:center;">Motor Vehicle Insurance Quotation</div>
     <div class="proposal-heading">Your vehicle protection notice</div>
     <div class="proposal-sub"><i>"Solutions for you and your car"</i></div>
     
