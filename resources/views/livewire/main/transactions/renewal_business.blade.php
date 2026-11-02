@@ -1267,7 +1267,22 @@
                       <div class="insurer-info">
                         <div class="row">
                           <div class="col-md-12">
+
                             <div class="row">
+                              <div class="col-md-4">
+                                    <div class="form-group">
+                                      <label for="cboprevinsco">Previous Insurance Company *</label>
+                                      <input type="text" id="cboprevinsco" class="form-control input-sm clearable-s"
+                                        placeholder="Previous insurance company" autocomplete="off" readonly>
+                                      <div class="help-block with-errors"></div>
+                                  </div>
+                              </div>
+                            </div>
+
+                            <br>
+                          
+                            <div class="row">
+
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cboinstype">Insurance Type *</label>
@@ -1278,6 +1293,7 @@
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
+
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cboinsco">Insurance Company *</label>
@@ -1289,6 +1305,7 @@
                                 </div>
                               </div>
                             </div>
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -1312,6 +1329,7 @@
                                 </div>
                               </div>
                             </div>
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -1340,6 +1358,7 @@
                                 </div>
                               </div>
                             </div>
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -1366,14 +1385,10 @@
                                   </label>
                                 </div>
 
-                                <div class="form-group">
-                                  <label for="cboprevinsco">Previous Insurance Company *</label>
-                                  <input type="text" id="cboprevinsco" class="form-control input-sm clearable-s"
-                                    placeholder="Previous insurance company" autocomplete="off" readonly>
-                                  <div class="help-block with-errors"></div>
-                                </div>
+                                
                               </div>
                             </div>
+
                           </div>
                         </div>
                       </div>

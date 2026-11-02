@@ -5130,7 +5130,9 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
 
-  if ( ulevel == 6) { 
+
+  if ( ulevel == 7) { 
+    console.log("here");
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
   } else {    

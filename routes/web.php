@@ -29,21 +29,21 @@ use App\Http\Controllers\PdfController;
  * Lockscreen middleware and group
  * 
  * */ 
-
 Route::get('/lockscreen', [LockscreenController::class, 'show'])->name('lockscreen');
 Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name('lockscreen.unlock');
 Route::get('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
 
 
 
+
+
 Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
-
-
-
     // CSRF Token for Javascript AJAX transactions
     Route::get('/csrf-token', function () {
         return response()->json(['token' => csrf_token()]);
     });
+
+
 
 
     // Home dashboard

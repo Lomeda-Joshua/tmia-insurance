@@ -235,39 +235,7 @@
     
     @include('partials.footer')
 
-    @stack('scripts')
     @push('scripts')
-
-    <script>
-        window.dataRoutes = {
-            userAccountSession : @json(route('getSession.variables'))
-        }
-        
-        window.nofiticationdata = {
-            notifications_data : @json(route('notifications.data')),
-            insurancePromise_data : @json(route('get-insurance-notification.data')),
-        }
-    
-        window.dataRoutes = {
-            sessionVariable : @json(route('getSession.dataVariable')),
-        }
-
-    </script>
-
-    <script>
-        
-        //================== lOADING SPINNER =================//
-        window.showLoading = function(message = "Saving data, please wait...") {
-            document.getElementById("loading-text").innerText = message;
-            document.getElementById("loading-overlay").style.display = "flex";
-        }
-
-        window.hideLoading = function() {
-            document.getElementById("loading-overlay").style.display = "none";
-        }
-    </script>
-
-    
     <script>
 
         //================== lOADING SPINNER =================//
@@ -292,60 +260,91 @@
                 }
             });
         @endif
-
-        function LogNotify() {
-            if (typeof window.signin !== 'undefined' && window.signin === true){
-            $.notify({
-                title: "<strong>Success!</strong>",
-                message: "<br>Login successfully.",
-                icon: 'glyphicon glyphicon-ok-sign'
-            },{
-                type: "success",
-                onShow: function() {
-                this.css({'width':'auto','height':'auto'});
-                }
-            });
-            }
-        }
         
-        //================== LOGIN IDLE SCRIPT =================//
-        (function () {
-                const IDLE_TIMEOUT = 120 * 1000; // 10 seconds (testing threshold)
+        $(document).ready(function(){
+
+               
+                window.reRoutes = {
+                    lockscreenRoute :  @json(route('lockscreen.lock'))
+                }
+
+                window.dataRoutes = {
+                    userAccountSession : @json(route('getSession.variables')),   
+                }
+                
+                window.nofiticationdata = {
+                    notifications_data : @json(route('notifications.data')),
+                    insurancePromise_data : @json(route('get-insurance-notification.data')),
+                }
+            
+                window.dataRoutes = {
+                    sessionVariable : @json(route('getSession.dataVariable')),
+                }
+
+                function LogNotify() {
+                    if (typeof window.signin !== 'undefined' && window.signin === true){
+                    $.notify({
+                        title: "<strong>Success!</strong>",
+                        message: "<br>Login successfully.",
+                        icon: 'glyphicon glyphicon-ok-sign'
+                    },{
+                        type: "success",
+                        onShow: function() {
+                        this.css({'width':'auto','height':'auto'});
+                        }
+                    });
+                    }
+                }
+                
+                //================== LOGIN IDLE SCRIPT =================//
+        
+
+                const IDLE_TIMEOUT = 10000; // 10 seconds (testing threshold)
                 let idleTimer = null;
 
                 function sendLockSignal() {
-                    fetch("{{ route('lockscreen.lock') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        }
-                    }).then(() => {
-                        window.location.href = "{{ route('lockscreen') }}";
-                    });
+                    // window.location.replace(window.reRoutes.lockscreenRoute);
+                
+                    
+                    // fetch("{{ route('lockscreen.lock') }}", {
+                    //     method: "POST",
+                    //     headers: {
+
+                    //         "Content-Type": "application/json",
+                    //         "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    //     }
+                    // }).then(() => {
+                    //     window.location.href = "{{ route('lockscreen') }}";
+                    // });
                 }
+
+                
 
                 function resetTimer() {
                     clearTimeout(idleTimer);
-                    idleTimer = setTimeout(sendLockSignal, IDLE_TIMEOUT);
+                    idleTimer = setTimeout(sendLockSignal, IDLE_TIMEOUT);                    
                 }
 
+                
                 // DOM Events indicating activity
                 const activityEvents = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
                 activityEvents.forEach(event => {
                     window.addEventListener(event, resetTimer, false);
                 });
 
+
                 // Initialize timer on layout load
                 resetTimer();
-        })();
 
+        });
     </script>
    
 
     <script src="{{ asset('tmia-assets/js/laravel/dashboard_laravel.js') }}"></script>
     <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
     @endpush
+
+    @stack('scripts')
 
     
 
