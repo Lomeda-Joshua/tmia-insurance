@@ -136,7 +136,6 @@ class RenewalBusinessController extends Controller
             ]);
         }
 
-
         return DataTables::eloquent($query)
             ->addIndexColumn() // Provides DT_RowIndex / urutan
             ->editColumn('Trans_Status', function($transaction): string{
@@ -188,10 +187,11 @@ class RenewalBusinessController extends Controller
                     . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
                     . '<i class="fa fa-edit"></i></button>';
 
+                if(Auth::user()->User_Level_ID == 1){
                 $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
                     . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
                     . '<i class="fa-regular fa-trash-can"></i></button>';
-
+                }
                 return $buttons;
             })
             ->rawColumns(['button', 'Trans_Status'])

@@ -1268,7 +1268,24 @@
                         <div class="row">
                           <div class="col-md-12">
 
-                            <div class="row">
+                           
+                            {{-- Policy action group --}}
+                            <div class="row" id="policy_actions" style="display:none;">
+                              <div class="col-md-6">
+                                <label>Policy Action</label>
+                                <div class="radio-group">
+                                  <label class="custom-radio">
+                                    <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
+                                    <span class="checkmark"></span>RETAIN
+                                  </label>
+                                  <label class="custom-radio">
+                                    <input type="radio" name="rdpolicyaction" value="TRANSFER">
+                                    <span class="checkmark"></span>
+                                    TRANSFER
+                                  </label>
+                                </div>
+                              </div>
+
                               <div class="col-md-4">
                                     <div class="form-group">
                                       <label for="cboprevinsco">Previous Insurance Company *</label>
@@ -1369,23 +1386,6 @@
                                   </select>
                                   <div class="help-block with-errors"></div>
                                 </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label>Policy Action</label>
-                                <div class="radio-group">
-                                  <label class="custom-radio">
-                                    <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
-                                    <span class="checkmark"></span>
-                                    RETAIN
-                                  </label>
-                                  <label class="custom-radio">
-                                    <input type="radio" name="rdpolicyaction" value="TRANSFER">
-                                    <span class="checkmark"></span>
-                                    TRANSFER
-                                  </label>
-                                </div>
-
-                                
                               </div>
                             </div>
 

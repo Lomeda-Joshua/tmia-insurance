@@ -1481,6 +1481,7 @@ $(document).ready( function () {
   });
 
 
+
   // Listen for changes on the radio action group
   $(document).on("change", "input[name='rdpolicyaction']", function () {
       let actionVal = $("input[name='rdpolicyaction']:checked").val();
@@ -1491,12 +1492,14 @@ $(document).ready( function () {
           $("#cboinsco").prop("disabled", false).trigger("change.select2");
           $("#cbomortgage").prop("disabled", false).trigger("change.select2");
           $("#cboprevinsco").prop("disabled", false);
+
       } else {
           // --- TO DISABLE THE 4 INPUTS ---
           $("#cboinstype").prop("disabled", true).trigger("change.select2");
           $("#cboinsco").prop("disabled", true).trigger("change.select2");
           $("#cbomortgage").prop("disabled", true).trigger("change.select2");
           $("#cboprevinsco").prop("disabled", true).trigger("change.select2");
+          
       }
   });
 
@@ -1832,11 +1835,51 @@ function initExpiringTable() {
 }
 
 
+/**
+ *  
+ *  Dynamic change on summary input  
+ **/ 
+$(document).on("change", "#cboinstype", function () {
+      let value_input = $(this).val();      
+      $("#cboinstype_summary").val(value_input);
+});
+
+$(document).on("change", "#cboinsco", function () {
+      let value_input = $(this).val();      
+      $("#cboinsco_summary").val(value_input);
+});
+
+$(document).on("change", "#dpstartdate", function () {
+      let value_input = $(this).val();      
+      $("#dpstartdate_summary").val(value_input);
+});
+
+$(document).on("change", "#txtpolicyno", function () {
+      let value_input = $(this).val();      
+      $("#txtpolicyno_summary").val(value_input);
+});
+
+$(document).on("change", "#dpissuedate", function () {
+      let value_input = $(this).val();      
+      $("#dpissuedate_summary").val(value_input);
+});
+
+
+$(document).on("change", "#cbomortgage", function () {
+      let value_input = $(this).val();      
+      $("#cbomortgage_summary").val(value_input);
+});
+
+$(document).on("change", "#dppexpiredate", function () {
+      let value_input = $(this).val();      
+      $("#dppexpiredate_summary").val(value_input);
+});
+
+
 
   
 // Bind row click for selection AFTER table initialization
 $(document).ready(function(){
-
     $('#modal-show-expiring-policies').on('opened', initExpiringTable);
 
     // Bind row click for selection AFTER table initialization
@@ -1850,7 +1893,10 @@ $(document).ready(function(){
         // Highlight clicked row
         $(this).addClass('selected');
 
+        // renewal flag for determining the policy action existence
         renewal_flag = 1;
+
+        $("#policy_actions").show();
 
         // Optional: get Customer_No
         xnbno = table.cell(this, 0).data();
@@ -1866,6 +1912,7 @@ $(document).ready(function(){
         $('#modal-show-expiring-policies').iziModal('close');
 
     });
+
 
 });
 
@@ -2540,7 +2587,6 @@ function LoadCustomerEDAFSAPInfo() {
   $(".box-body").validator('reset');
 }
 
-console.log("xvin xcsno", xvin, xcsno, xplateno);
 
 function LoadVehicleInfo() {
   $.ajax({
@@ -5117,11 +5163,12 @@ $(document).on( "click", "#btnnblist", function () {
 
 $(document).on( "click", "#btnnbselect", function () {
   newdata = true;
-  renewal_flag = 1;
   transid = '';
   editinfo = true;
   FormClear();
   FormDisable(false);
+
+  renewal_flag = 1;
 
   $('#modal-nblist').iziModal('close');
   
@@ -5150,13 +5197,14 @@ $(document).on( "click", "#btnadd", function () {
   xnbno = '';
   FormClear();
   FormDisable(false);
-  renewal_flag = 0;
 
+  // renewal flag for determining the policy action and other elements existence
+  renewal_flag = 0;
 
   if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
-
     $('#modal-add').iziModal('open');
+
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
