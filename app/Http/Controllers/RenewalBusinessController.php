@@ -1026,7 +1026,7 @@ class RenewalBusinessController extends Controller
             ->firstOrFail(); // Ensures a 404 response if record does not exist
 
         // 2. Load the Blade view and pass variables
-        $pdf = Pdf::loadView('livewire.main.pdf.invoice', [
+        $pdf = Pdf::loadView('livewire.main.pdf.insurance_proposal', [
             'transaction' => $rbTransaction,
         ]);
 

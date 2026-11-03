@@ -5631,7 +5631,7 @@ $(document).on( "click", ".btnedit", function () {
   });
 });
 
-$(document).on( "clic;k", ".btndelete", function () {
+$(document).on( "click", ".btndelete", function () {
   insuranceno = $(this).data('insurance-no');
   swal({
     title: "Are you sure?",
