@@ -18,6 +18,7 @@ use App\Models\TransactionRb;
 use App\Models\TransactionsNb;
 use App\Models\ApprovalRbStatus;
 use App\Models\VwTransactionsRb;
+use Illuminate\Database\Query\Builder;
 
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -31,7 +32,9 @@ class RenewalBusinessController extends Controller
 
     public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();     
+        $filters = $request->validated();
+        
+        $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Base Query with Joins
         $query = RenewalBusinessTransaction::query()
@@ -69,7 +72,10 @@ class RenewalBusinessController extends Controller
                 'vehicle_information.Variant',
 
                 'vw_call_attempts_rb.Call_Attempts'
-        ]);
+        ])
+        ->when($user_id_info, function($query, $user_id_info){
+            $user_id_info == 1 ? ' ' : $query->where('transactions_rb.ISE_No', $user_id_info) ;
+        });
 
         
         // 2. Pending Filter
@@ -122,6 +128,7 @@ class RenewalBusinessController extends Controller
                 ->orWhere('vehicle_information.Plate_No', 'like', $search);
             });
         }
+
 
         // 5. Date Range Filter (Only applies when chkall is false AND searchval is empty)
         if (
@@ -599,16 +606,14 @@ class RenewalBusinessController extends Controller
         // 1. Input Validation
         $validated = $request->validate([
             'insuranceNo' => 'nullable|string',
+            'insuranceno' => 'nullable|string',
         ]);
-
-    
+        $validated_data_not_null = empty($validated['insuranceNo']) ? $validated['insuranceno'] : $validated['insuranceno'];
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
-        if (!empty($validated['insuranceNo'])) {
-            $data = TransactionRb::where('Insurance_No', $validated['insuranceNo'])->get();
-        }
-
+        $data = TransactionRb::where('Insurance_No', $validated_data_not_null)->get();
+        
         // 3. Return JSON Response
         return response()->json($data);
     }

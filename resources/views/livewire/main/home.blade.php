@@ -80,8 +80,8 @@
                         <div class="row">
                           <div class="col-sm-3 col-xs-6" style="border-right: 1px solid #ddd;">
                             <div class="description-block border-right">
-                              <span class="description-percentage text-yellow" style="font-weight: bold;" id="tpendingp" > 0%</span>
-                              <h5 class="description-header" style="font-weight: bold;" id="tpending">0</h5>
+                              <span class="description-percentage text-yellow" style="font-weight: bold;" id="tpendingp" >{{ round($pendingOVerallCounts, 2) . "%" }}</span>
+                              <h5 class="description-header" style="font-weight: bold;" id="tpending">{{ $pendingCounts }}</h5>
                               <span class="description-text" style="font-weight: bold;">TOTAL PENDING</span>
                             </div>
                           </div>

@@ -594,17 +594,17 @@ $(document).ready( function () {
     type:"POST",
     url:window.formRoutes.fuelTypeData,
     success: function(data) {
-            let options = '<option value="">PLEASE SELECT</option>';
-            // Iterate over JSON objects and build <option> elements
-            $.each(data, function(index, item) {
-            options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
-            });
+        let options = '<option value="">PLEASE SELECT</option>';
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function(index, item) {
+        options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+        });
 
-            // Inject populated options into dropdown
-            $("#cbofueltype").html(options);
+        // Inject populated options into dropdown
+        $("#cbofueltype").html(options);
 
-            // Force Select2 to refresh its display
-            $("#cbofueltype").trigger('change.select2');
+        // Force Select2 to refresh its display
+        $("#cbofueltype").trigger('change.select2');
     }
   });
 
@@ -1154,7 +1154,6 @@ function LoadCustomerInfoDisplay(custno) {
     type:"POST",
     data:{custno:custno},
     success: function(data){
-      console.log(data);
       $.each(data, function(i, value) {
         xcustno = value.Customer_No;
         $("#custfullname").text(value.Full_Name);
@@ -1176,6 +1175,9 @@ function LoadVehicleInfoDisplay(vin) {
     data:{vin:vin},
     success: function(data){
       $.each(data, function(i, value) {
+
+        console.log("hello world", data.body_type_value);
+
         xvin = value.VIN;
         $("#vehvin").text(value.VIN);
         $("#vehmake").text(value.Make);
@@ -1364,15 +1366,17 @@ function LoadCustomerInfo(custno) {
   $(".box-body").validator('reset');
 }
 
+
 function LoadVehicleInfo(vin) {
   $.ajax({
     type:"POST",
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){
+
+      console.log("load vehicle info",data);
       
       $.each(data, function(i, value) {
-
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -1419,10 +1423,16 @@ function LoadVehicleInfo(vin) {
         }
         
         // $("#txtmsalecode").val(value.Model_Sales_Code);
+        console.log("vehicle data", data);
+
         $("#txtvariant").val(value.Variant);
+
         setSelectOption("#cbobodytype", value.Body_Type, value.Body_Type);
+
         $("#txttransmission").val(value.Transmission);
+
         setSelectOption("#cbofueltype", value.Fuel_Type, value.Fuel_Type);
+
         $("#txtseats").val(value.Seats);
         // $("#txtunloadweight").val(value.Unloaded_Weight);
         // $("#txtmaxweight").val(value.Max_Weight);

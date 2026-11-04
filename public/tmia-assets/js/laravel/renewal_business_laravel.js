@@ -31,6 +31,7 @@ var activeVehTab;
 
 // Set Renewal flag for setting up modal call for expiring list
 let renewal_flag;
+let loadingflag 
 
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
@@ -1470,6 +1471,7 @@ $(document).ready( function () {
   // Automated populating of fields on summary
   // Active listener: Listens for any change/typing on source inputs that have a corresponding _summary field
   $(document).ready(function () {
+
       // Actively listens for user input on any element with data-summary
       $(document).on("input change", "[data-summary]", function () {
           const summaryTargetId = $(this).attr("data-summary");
@@ -1480,36 +1482,9 @@ $(document).ready( function () {
       });
   });
 
-
-
-  // Listen for changes on the radio action group
-  $(document).on("change", "input[name='rdpolicyaction']", function () {
-      let actionVal = $("input[name='rdpolicyaction']:checked").val();
-
-      if (actionVal === "TRANSFER") {
-          // --- TO ENABLE THE 4 INPUTS ---
-          $("#cboinstype").prop("disabled", false).trigger("change.select2");
-          $("#cboinsco").prop("disabled", false).trigger("change.select2");
-          $("#cbomortgage").prop("disabled", false).trigger("change.select2");
-          $("#cboprevinsco").prop("disabled", false);
-
-      } else {
-          // --- TO DISABLE THE 4 INPUTS ---
-          $("#cboinstype").prop("disabled", true).trigger("change.select2");
-          $("#cboinsco").prop("disabled", true).trigger("change.select2");
-          $("#cbomortgage").prop("disabled", true).trigger("change.select2");
-          $("#cboprevinsco").prop("disabled", true).trigger("change.select2");
-          
-      }
-  });
-
-  
+  console.log(insuranceno);
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
-
-
-
-
 
 
 //======= Function Load Master Data ============//
@@ -1902,6 +1877,7 @@ $(document).ready(function(){
         xnbno = table.cell(this, 0).data();
         xcustno = table.cell(this, 6).data();
         xvin = table.cell(this, 9).data();
+        insuranceno = table.cell(this,0).data();
 
         LoadCustomerData();
 
@@ -2301,9 +2277,8 @@ function LoadNBData() {
         }
       ]
   });
-
-
 }
+
 
 function LoadInsuranceInfo(insuranceno) {
   $.ajax({
@@ -2324,13 +2299,15 @@ function LoadInsuranceInfo(insuranceno) {
   });
 }
 
-function LoadInsurerInfo(insuranceno) {
+function LoadInsurerInfo(insuranceno, loadingflag) {
   $.ajax({
     type:"POST",
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-      
+
+      console.log(data);
+
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2385,12 +2362,46 @@ function LoadInsurerInfo(insuranceno) {
           }
         }
         
-        setSelectOption("#cbomortgage", value.Mortgage, value.Mortgage);
+        setSelectOption("#cbomortgage", value.mortgage, value.mortgage);
       });
     }
   });
 }
+
+
+
+
+
+// Listen for changes on the radio action group
+$(document).on("change", "input[name='rdpolicyaction']", function () {
+    let actionVal = $("input[name='rdpolicyaction']:checked").val();
+
+    if (actionVal === "TRANSFER") {
+        // --- TO ENABLE THE 4 INPUTS ---
+        $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
+        $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
+        $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
+        $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
+        $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
+
+        // $("#cbomortgage").prop("disabled", false).val('').trigger("change.select2");
+
+    } else {
+
+        LoadInsurerInfo(insuranceno, true); 
+        window.showLoading("Loading insurer details...");
+
+        
+        // --- TO DISABLE THE 4 INPUTS ---
+        $("#cboinstype").prop("disabled", true).trigger("change.select2");
+        $("#cboinsco").prop("disabled", true).trigger("change.select2");
+        $("#cbomortgage").prop("disabled", true).trigger("change.select2");        
+
+    }
+});
 ///////////////////////// FETCH VIEW OF DEVICE SCREEN ////////////////////////////////////
+
+
 function fetchView(){
   var fetchview = '';
   if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
@@ -3143,7 +3154,7 @@ function LoadPreviousInsuranceCo(data){
         // Set dropdown values & trigger Select2 updates
         $("#cboinstype, #cboinstype_summary").val(latestItem.Insurance_Type).trigger('change.select2');
         $("#cboinsco, #cboprevinsco, #cboinsco_summary" ).val(latestItem.Insurance_Company).trigger('change.select2');
-        $("#cbomortgage, #cbomortgage_summary").val(latestItem.Mortgage).trigger('change.select2');
+        $("#cbomortgage, #cbomortgage_summary, .cbomortgage").val(latestItem.Mortgage).trigger('change.select2');
 
         // Set text inputs & date fields from the latest record
         $("#txtpolicyno, #txtpolicyno_summary").val(latestItem.Policy_No || "");
@@ -3164,6 +3175,8 @@ function LoadPreviousInsuranceCo(data){
         }
     }
 }
+
+
 
 $(document).on("change", "#cboinsco", function () {
   const value = $(this).val();                          // selected option's value
@@ -5204,10 +5217,10 @@ $(document).on( "click", "#btnadd", function () {
   if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
-
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
 });
 
 

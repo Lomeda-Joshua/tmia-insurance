@@ -636,7 +636,7 @@
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="txtmodel">Model *</label>
-                                <input type="text" id="txtmodel" class="form-control input-sm txtmodel" required="required"
+                                <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
                                   data-error="Model is required." disabled>
                                 <div class="help-block with-errors"></div>
                               </div>
@@ -890,8 +890,8 @@
                     <div class="insurance-calc">
                       <form>
 
-                        <div class="row">
-                          {{-- Added vehicle price --}}
+                        {{-- <div class="row">
+                          
                           <div class="col-md-3">
                             <div class="form-group">
                               <label for="txtVehiclePrice">Vehicle Price</label>
@@ -910,7 +910,7 @@
                             </div>
                           </div>
                            
-                        </div>
+                        </div> --}}
 
                         <hr>
 

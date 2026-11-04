@@ -262,8 +262,6 @@
         @endif
         
         $(document).ready(function(){
-
-               
                 window.reRoutes = {
                     lockscreenRoute :  @json(route('lockscreen.lock'))
                 }

@@ -354,17 +354,17 @@ class OverallDataController extends Controller
 
         // Priority 1: Check by VIN
         if (!empty($vin)) {
-            $data = VehicleInformation::where('VIN', $vin)->get();
+            $data = VehicleInformation::with(["customer","bodyTypeValue","fuelType"])->where('VIN', $vin)->get();
         }
 
         // Priority 2: Check by CS_No if VIN has no results
         if ($data->isEmpty() && !empty($csno)) {
-            $data = VehicleInformation::where('CS_No', $csno)->get();
+            $data = VehicleInformation::with(["customer","bodyTypeValue","fuelType"])->where('CS_No', $csno)->get();
         }
 
         // Priority 3: Check by Plate_No if VIN & CS_No have no results
         if ($data->isEmpty() && !empty($plateno)) {
-            $data = VehicleInformation::where('Plate_No', $plateno)->get();
+            $data = VehicleInformation::with(["customer","bodyTypeValue","fuelType"])->where('Plate_No', $plateno)->get();
         }
 
         // 2. Return JSON response

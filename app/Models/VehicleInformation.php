@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Types\BodyType;
+use App\Models\Types\FuelType;
 
 class VehicleInformation extends Model
 {
@@ -31,5 +34,16 @@ class VehicleInformation extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(CustomerInformation::class, 'Customer_No', 'Customer_No');
+    }
+
+    public function bodyTypeValue(): HasMany
+    {
+        return $this->hasMany(BodyType::class, 'Body_TID', 'Body_Type');
+    }
+
+
+    public function fuelType(): BelongsTo
+    {
+        return $this->belongsTo(FuelType::class, 'Fuel_TID', 'Fuel_Type');
     }
 }

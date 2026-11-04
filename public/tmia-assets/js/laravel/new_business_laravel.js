@@ -1571,26 +1571,25 @@ function LoadCustomerData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('click', 'tr').on('click', 'tr', function () {
-    // Remove selection from any previously selected row
-    $('#table_customerlist tbody tr.selected').removeClass('selected');
+        // Remove selection from any previously selected row
+        $('#table_customerlist tbody tr.selected').removeClass('selected');
 
+        // Highlight clicked row
+        $(this).addClass('selected');
 
-    // Highlight clicked row
-    $(this).addClass('selected');
+        // Optional: get Customer_No
+        xcustno = table.cell(this, 1).data();
+        // console.log('Selected Customer No:', xcustno);
 
-    // Optional: get Customer_No
-    xcustno = table.cell(this, 1).data();
-    // console.log('Selected Customer No:', xcustno);
-
-    xcustnoupload = table.cell(this, 8).data();
-    xvin = table.cell(this, 9).data();
-    xcsno = table.cell(this, 10).data();
-    xplateno = table.cell(this, 11).data();
+        xcustnoupload = table.cell(this, 8).data();
+        xvin = table.cell(this, 9).data();
+        xcsno = table.cell(this, 10).data();
+        xplateno = table.cell(this, 11).data();
   });
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btncustselect').trigger("click");
+        $('#btncustselect').trigger("click");
   });
 }
 
