@@ -33,8 +33,12 @@
           
           <div class="box center">
             <div class="box-body">
+
               <div class="row">
-                <div class="col-md-12 cellcenter">
+                <div class="col-md-12">
+                  
+                 
+
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="txtsearch">Search </label>
@@ -47,6 +51,9 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+
+                  
+
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="dpdatefrom">Date From</label>
@@ -59,6 +66,7 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+
                   <div class="col-md-3">
                     <div class="form-group">
                       <label for="dpdateto">Date To</label>
@@ -71,16 +79,31 @@
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
+
+
                   <div class="col-md-2" hidden>
                     <div class="form-group">
                       <input type="checkbox" id="chkall"/>
                       <label for="chkall">All Data</label>
                     </div>
                   </div>
+
+
                 </div>
               </div>
+
+              <br>
+
+               <div class="row">
+                  <div class="col-md-12">
+                    <div class="alphabet-buttons" id="alphabet-container"></div>  
+                  </div>
+              </div>
+
             </div>
           </div>
+
+
           <br>
           <table id="table_trans" class="table table-striped table-bordered table-hover">
             <thead>

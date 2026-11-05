@@ -672,15 +672,15 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtmodel">Model *</label>
-                                  <input type="text" id="txtmodel" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtmodel" class="form-control input-sm"
                                     data-error="Model is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="txtmodelyear">Mode Year *</label>
-                                  <input type="text" id="txtmodelyear" class="form-control input-sm" required="required"
+                                  <label for="txtmodelyear">Model Year *</label>
+                                  <input type="text" id="txtmodelyear" class="form-control input-sm"
                                     data-error="Model Year is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -690,7 +690,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcolor">Color *</label>
-                                  <input type="text" id="txtcolor" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtcolor" class="form-control input-sm"
                                     data-error="Color is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -698,7 +698,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtengineno">Engine No. *</label>
-                                  <input type="text" id="txtengineno" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtengineno" class="form-control input-sm"
                                     data-error="Engine No. is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -716,7 +716,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtplateno">Plate No. *</label>
-                                  <input type="text" id="txtplateno" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtplateno" class="form-control input-sm"
                                     data-error="Plate No. is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -742,7 +742,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtsrp">Paid Price *</label>
-                                  <input type="text" id="txtsrp" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtsrp" class="form-control input-sm"
                                     data-error="Paid Price is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -754,8 +754,7 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input id="dpvsidate" type="text" class="form-control input-sm pull-right"
-                                      required="required" data-error="VSI Date is required." disabled>
+                                    <input id="dpvsidate" type="text" class="form-control input-sm pull-right" data-error="VSI Date is required." disabled>
                                   </div>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -776,8 +775,7 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input id="dpreldate" type="text" class="form-control input-sm pull-right"
-                                      required="required" data-error="Released Date is required." disabled>
+                                    <input id="dpreldate" type="text" class="form-control input-sm pull-right" data-error="Released Date is required." disabled>
                                   </div>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -798,7 +796,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtvariant">Variant *</label>
-                                  <textarea id="txtvariant" class="form-control input-sm" rows="2" required="required"
+                                  <textarea id="txtvariant" class="form-control input-sm" rows="2"
                                     data-error="Variant is required." disabled></textarea>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -808,7 +806,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cbobodytype">Body Type *</label>
-                                  <select id="cbobodytype" class="form-control input-sm" required="required"
+                                  <select id="cbobodytype" class="form-control input-sm" 
                                     data-error="Body Type is required." disabled>
                                     <option Value="">PLEASE SELECT</option>
                                   </select>
@@ -818,8 +816,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txttransmission">Power Transmission *</label>
-                                  <input type="text" id="txttransmission" class="form-control input-sm"
-                                    required="required" data-error="Power Transmission is required." disabled>
+                                  <input type="text" id="txttransmission" class="form-control input-sm" data-error="Power Transmission is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
@@ -828,7 +825,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cbofueltype">Fuel Type *</label>
-                                  <select id="cbofueltype" class="form-control input-sm" required="required"
+                                  <select id="cbofueltype" class="form-control input-sm"
                                     data-error="Fuel Type is required." disabled>
                                     <option Value="">PLEASE SELECT</option>
                                   </select>
@@ -838,7 +835,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtseats">Seats *</label>
-                                  <input type="text" id="txtseats" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtseats" class="form-control input-sm"
                                     data-error="Seats is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -874,7 +871,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cboowntype">Owner Type *</label>
-                                  <select id="cboowntype" class="form-control input-sm" required="required"
+                                  <select id="cboowntype" class="form-control input-sm"
                                     data-error="Owner Type is required." disabled>
                                     <option Value="">PLEASE SELECT</option>
                                   </select>
@@ -886,7 +883,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtvoname">Vehicle Owner Name *</label>
-                                  <input type="text" id="txtvoname" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtvoname" class="form-control input-sm"
                                     data-error="Vehicle Owner Name is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -894,7 +891,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtmpname">Marketing Professional *</label>
-                                  <input type="text" id="txtmpname" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtmpname" class="form-control input-sm"
                                     data-error="Marketing Professional is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -1380,7 +1377,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="cbomortgage">Mortgage *</label>
-                                  <select id="cbomortgage" class="form-control input-sm" required="required"
+                                  <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
                                     data-error="Mortgage is required." disabled>
                                     <option Value="">PLEASE SELECT</option>
                                   </select>

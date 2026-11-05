@@ -390,14 +390,21 @@ $(document).ready( function () {
   });
 
   // Calculate date 30 days ago safely
-  var d = new Date();
-  d.setDate(d.getDate() - 30);
+  // var d = new Date();
+  // d.setDate(d.getDate() - 30);
+
+  var today = new Date();
+  var d = new Date(new Date().setDate(today.getDate() - 30));
+  //d.setMonth(d.getMonth() - 3);
+  var dd = d.getDate();
+  var yyyy = d.getFullYear();
+  var mm = d.getMonth();
 
   $("#dpdatefrom").datepicker({
     autoclose: true,
     format: 'dd-mm-yyyy',
     todayHighlight: true
-  }).datepicker("setDate", d); // Pass Date object directly
+  }).datepicker("setDate", dd, mm, yyyy); // Pass Date object directly
 
   $("#dpdateto").datepicker({
     autoclose: true,

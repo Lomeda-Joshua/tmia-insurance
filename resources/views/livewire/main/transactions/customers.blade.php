@@ -32,6 +32,7 @@
 
           <div class="box center">
             <div class="box-body">
+
               <div class="row">
                 <div class="col-md-6" style="padding: 0; margin-bottom: 5px;">
                   <div class="form-group">
@@ -49,11 +50,12 @@
               <div class="alphabet-buttons" id="alphabet-container"></div>  
             </div>
           </div>
+
+          
           <br>
           <table id="table_trans" class="table table-striped table-bordered table-hover">
             <thead>
               <tr class="tableheader">
-                <th>No.</th>
                 <th>Customer No.</th>
                 <th>Group</th>
                 <th>Customer Name</th>

@@ -249,14 +249,14 @@ $(document).ready( function () {
   var d = new Date(new Date().setDate(today.getDate() - 30));
   //d.setMonth(d.getMonth() - 3);
   var dd = d.getDate();
-  var yy = d.getFullYear();
+  var yyyy = d.getFullYear();
   var mm = d.getMonth();
 
   $("#dpdatefrom").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
+    format:'dd/MM/yyyy',
     todayHighlight : true
-  }).datepicker("setDate", new Date(yy,mm,dd));
+  }).datepicker("setDate", new Date(dd,mm,yyyy));
 
   $("#dpdateto").datepicker({
     autoclose: true,
@@ -753,17 +753,16 @@ function LoadCustomerData() {
       },  
     },
     columns: [
-        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
         { data: "Customer_No", name: "Customer_No" },
-        { data: "Group", name: "Group", defaultContent: "" },
+        { data: "Group", name: "Group", defaultContent: "- - -" },
         { data: "Full_Name", name: "Full_Name" },
-        { data: "Birth_Date", name: "Birth_Date", defaultContent: "" },
-        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
-        { data: "Email_Address", name: "Email_Address", defaultContent: "" },
-        { data: "Address", name: "Address", defaultContent: "" },
-        { data: "Remarks", name: "Remarks", defaultContent: "" },
+        { data: "Birth_Date", name: "Birth_Date", defaultContent: "- - -" },
+        { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+        { data: "Email_Address", name: "Email_Address", defaultContent: "- - -" },
+        { data: "Address", name: "Address", defaultContent: "- - -" },
+        { data: "Remarks", name: "Remarks", defaultContent: "- - -" },
         { data: "Active_Status", name: "Active_Status" },
-        { data: "Inactive_Date", name: "Inactive_Date", defaultContent: "" },
+        { data: "Inactive_Date", name: "Inactive_Date", defaultContent: "- - -" },
         { data: "button", name: "button", orderable: false, searchable: false }
     ],
     columnDefs: [

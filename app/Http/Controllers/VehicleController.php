@@ -7,7 +7,7 @@ use App\Http\Requests\VehicleDatatableRequest;
 use App\Http\Requests\VehicleSaveRequest;
 use App\Models\VehicleInformation;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +67,7 @@ class VehicleController extends Controller
         }
 
         // Determine current user level (from Auth model or Session)
-        $user = auth()->user();
+        $user = Auth::user()->User_Level_ID;
         $ulevel = $user->User_Level_ID ?? session('User_Level_ID');
 
         return DataTables::eloquent($query)

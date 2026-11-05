@@ -358,9 +358,6 @@ var xuname;
           url : window.dataRoutes.checkUserName,
           type: "POST",
           data : { uname:uname,uid:uid  },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
           success: function(data)
           {
             // var data = jQuery.parseJSON(data);

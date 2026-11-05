@@ -99,7 +99,7 @@ class RenewalBusinessController extends Controller
             ])->orderBy('transactions_rb.Issue_Date', 'desc');
         }
 
-        // 2. Policy  date Filter
+        // 2. Policy date Filter
         if ($filters['dpFilter'] === "Policy_Expiration") {
             $query->whereBetween('transactions_rb.Policy_Expiration', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
@@ -244,11 +244,12 @@ class RenewalBusinessController extends Controller
      */
     public function getTransactionMetrics(): JsonResponse
     {
+        $current_user = Auth::user()->User_ID;
         $metrics = DB::table('transactions_rb')
             ->selectRaw("
                 COUNT(CASE WHEN Trans_Status = 'PENDING' THEN 1 END) AS Pending_Counts,
                 COUNT(CASE WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY) THEN 1 END) AS Expiring_Counts
-            ")
+            ")->where('transactions_rb.ISE_No', $current_user)
             ->first();
 
         return response()->json($metrics);
@@ -694,7 +695,7 @@ class RenewalBusinessController extends Controller
     {
         $today = now()->format('Y-m-d');
         $ninetyDaysLater = now()->addDays(90)->format('Y-m-d');
-
+        $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
         $query = TransactionRb::query()
@@ -720,6 +721,11 @@ class RenewalBusinessController extends Controller
                 'i.ISE_Name',
                 DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
             ])
+
+            ->when($user_id_info, function($query, $user_id_info){
+            $user_id_info == 1 ? ' ' : $query->where('t.ISE_No', $user_id_info) ;
+            })
+
             ->where(function ($q) use ($today, $ninetyDaysLater) {
                 $q->whereBetween('t.Policy_Expiration', [$today, $ninetyDaysLater])
                   ->orWhere('t.Policy_Expiration', '<=', $today);

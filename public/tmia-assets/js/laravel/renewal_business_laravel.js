@@ -1185,11 +1185,7 @@ $(document).ready( function () {
   $.ajax({
       type:"POST",
       url:window.formRoutes.bankData,
-      headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-      },
       success: function(data) {
-
           let options = '<option value="">PLEASE SELECT</option>';
 
           // Iterate over JSON objects and build <option> elements
@@ -2306,8 +2302,8 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
     data:{insuranceno:insuranceno},
     success: function(data){
 
-      console.log(data);
-
+      
+      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2362,7 +2358,9 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
           }
         }
         
-        setSelectOption("#cbomortgage", value.mortgage, value.mortgage);
+        setSelectOption("#cbomortgage", value.Mortgage, value.Mortgage);
+
+        window.hideLoading("Loading data...")
       });
     }
   });
@@ -2372,22 +2370,33 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 
 
 
+
 // Listen for changes on the radio action group
 $(document).on("change", "input[name='rdpolicyaction']", function () {
     let actionVal = $("input[name='rdpolicyaction']:checked").val();
 
-    if (actionVal === "TRANSFER") {
+    if (actionVal === "TRANSFER"){
+        window.showLoading("loading data...") 
+
         // --- TO ENABLE THE 4 INPUTS ---
         $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
         $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
         $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
         $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
         $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
+        $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
+
+        
+        setTimeout(function(){
+          window.hideLoading("Loading data...")
+        },320);
+
 
         // $("#cbomortgage").prop("disabled", false).val('').trigger("change.select2");
 
     } else {
-
+      
+        window.showLoading("loading data...")
         LoadInsurerInfo(insuranceno, true);   
         
         // --- TO DISABLE THE 4 INPUTS ---
@@ -3146,6 +3155,8 @@ function LoadPreviousInsuranceCo(data){
       // 2. Get the latest/most recent entry from the array (Index 0 or last index)
       // Assuming data[0] is the latest entry based on your array log
       const latestItem = data[0]; 
+
+      console.log(latestItem);
 
       // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
     if (latestItem) {
@@ -5230,7 +5241,7 @@ $(document).on("input change", fields.join(", "), function () {
   const currentValue = $(this).val();
   const targetId = `#${this.id}_summary`;
 
-  console.log(`Updated ${this.id}:`, currentValue);
+  // console.log(`Updated ${this.id}:`, currentValue);
   $(targetId).val(currentValue);
 });
 
