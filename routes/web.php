@@ -34,16 +34,11 @@ Route::post('/lockscreen/unlock', [LockscreenController::class, 'unlock'])->name
 Route::get('/lockscreen/lock', [LockscreenController::class, 'lock'])->name('lockscreen.lock');
 
 
-
-
-
 Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function () {
     // CSRF Token for Javascript AJAX transactions
     Route::get('/csrf-token', function () {
         return response()->json(['token' => csrf_token()]);
     });
-
-
 
 
     // Home dashboard

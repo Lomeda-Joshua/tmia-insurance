@@ -1512,7 +1512,7 @@ $('#txtsearch').on('keyup search', function (e) {
 
 
 //============== Transaction List ============//
-function LoadTransactionData(ulevel_declartion) {
+function LoadTransactionData() {
     if ($.fn.dataTable.isDataTable('#table_trans')) {
         $('#table_trans').DataTable().ajax.reload(null, false);
         return;
@@ -1626,8 +1626,8 @@ function LoadTransactionData(ulevel_declartion) {
         url: window.tableRoutes.renewalBusinessData,
         type: "POST",
         data: function (d) {
-          d.viewpending  = window.viewpending === true;
-          d.viewexpiring = window.viewexpiring === true;
+          d.viewpending  = window.viewpending;
+          d.viewexpiring = window.viewexpiring;
           d.searchval    = $('#txtsearch').val().trim();
           d.datefrom     = $('#dpdatefrom').val();
           d.dateto       = $('#dpdateto').val();
@@ -2388,9 +2388,7 @@ $(document).on("change", "input[name='rdpolicyaction']", function () {
 
     } else {
 
-        LoadInsurerInfo(insuranceno, true); 
-        window.showLoading("Loading insurer details...");
-
+        LoadInsurerInfo(insuranceno, true);   
         
         // --- TO DISABLE THE 4 INPUTS ---
         $("#cboinstype").prop("disabled", true).trigger("change.select2");
@@ -4481,12 +4479,13 @@ $(document).on("blur", "#txtvin", function () {
 //Button View 
 $(document).on( "click", "#viewpending", function () {
   viewpending = true;
+  viewexpiring = false;
   LoadTransactionData();
 });
 
 $(document).on( "click", "#viewexpiring", function () {
   viewexpiring = true;
-  console.log("view expiring ");
+  viewpending = false;
   LoadTransactionData();
 });
 

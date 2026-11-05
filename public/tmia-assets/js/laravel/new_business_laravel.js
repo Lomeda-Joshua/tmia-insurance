@@ -1391,14 +1391,14 @@ function LoadTransactionData() {
   const datefrom = formatDate(datefromRaw);
   const dateto = formatDate(datetoRaw);
 
-  const value = {
-    viewpending: viewpending,
-    viewexpiring: viewexpiring,
-    searchval: searchval,
-    datefrom: datefrom,
-    dateto: dateto,
-    chkall: chkall
-  };
+  // const value = {
+  //   viewpending: viewpending,
+  //   viewexpiring: viewexpiring,
+  //   searchval: searchval,
+  //   datefrom: datefrom,
+  //   dateto: dateto,
+  //   chkall: chkall
+  // };
 
   if ($.fn.DataTable.isDataTable('#table_trans')) {
   // Dynamically reload existing table instance without destroying DOM
@@ -4000,11 +4000,13 @@ $(document).on("blur", "#txtvin", function () {
 //Button View 
 $(document).on( "click", "#viewpending", function () {
   viewpending = true;
+  viewexpiring = false;
   LoadTransactionData();
 });
 
 $(document).on( "click", "#viewexpiring", function () {
   viewexpiring = true;
+  viewpending = false;
   LoadTransactionData();
 });
 
