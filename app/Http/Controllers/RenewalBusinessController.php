@@ -32,7 +32,7 @@ class RenewalBusinessController extends Controller
 
     public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();
+        $filters = $request->validated();        
         
         $user_id_info = Auth::user()->User_ID;
 
@@ -76,10 +76,9 @@ class RenewalBusinessController extends Controller
         ->when($user_id_info, function($query, $user_id_info){
             $user_id_info == 1 ? ' ' : $query->where('transactions_rb.ISE_No', $user_id_info) ;
         });
-
         
         // 2. Pending Filter
-        if (! empty($filters['viewpending'])) {
+        if ($filters['viewpending']) {
             $query->where('transactions_rb.Trans_Status', 'PENDING');
         }    
 
@@ -100,7 +99,7 @@ class RenewalBusinessController extends Controller
         }
 
         // 2. Policy date Filter
-        if ($filters['dpFilter'] === "Policy_Expiration") {
+        if ($filters['viewexpiring'] === "Policy_Expiration") {
             $query->whereBetween('transactions_rb.Policy_Expiration', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
                 Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
@@ -245,12 +244,18 @@ class RenewalBusinessController extends Controller
     public function getTransactionMetrics(): JsonResponse
     {
         $current_user = Auth::user()->User_ID;
-        $metrics = DB::table('transactions_rb')
+        $query = DB::table('transactions_rb')
             ->selectRaw("
                 COUNT(CASE WHEN Trans_Status = 'PENDING' THEN 1 END) AS Pending_Counts,
                 COUNT(CASE WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY) THEN 1 END) AS Expiring_Counts
-            ")->where('transactions_rb.ISE_No', $current_user)
-            ->first();
+            ");
+
+                // User 1 sees everything; everyone else only sees their own records
+        if ($current_user != 1) {
+            $query->where('transactions_rb.ISE_No', $current_user);
+        }
+
+        $metrics = $query->first();
 
         return response()->json($metrics);
     }

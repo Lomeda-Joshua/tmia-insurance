@@ -1267,7 +1267,7 @@
 
                            
                             {{-- Policy action group --}}
-                            <div class="row" id="policy_actions" style="display:none;">
+                            <div class="row" >
                               <div class="col-md-6">
                                 <label>Policy Action</label>
                                 <div class="radio-group">
@@ -1376,7 +1376,7 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="cbomortgage">Mortgage *</label>
+                                  <label for="cbomortgage">Mortgagee *</label>
                                   <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
                                     data-error="Mortgage is required." disabled>
                                     <option Value="">PLEASE SELECT</option>
@@ -1437,7 +1437,7 @@
                             <table class="receipt-header-table">
                               <tr>
                                 <td style="text-align: left; width: 60%;">
-                                  <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
+                                  <strong style="font-size: 16px; color: #333;">TMI INSURANCE AGENCY</strong><br>
                                   <span style="font-size: 10px; color: #666;">Summary before submit</span>
                                 </td>
                                 <td style="text-align: right; width: 40%;">
@@ -1521,7 +1521,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">VIN:
                                 </th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtvin" class="form-control input-sm" style="width: 100%;"
+                                  <input type="text" id="txtvin" class="form-control input-sm txtvin" style="width: 100%;"
                                     data-error="VIN is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
@@ -1581,7 +1581,7 @@
 
                               <!-- Row 5: Paid Price (Spanned across the layout) -->
                               <tr>
-                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Paid Price:</th>
+                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">SRP / FMV :</th>
                                 <td colspan="3">
                                   <input type="text" id="txtsrp" class="form-control input-sm txtsrp"
                                     style="width: 100%;" required="required" data-error="Paid Price is required."
@@ -2304,7 +2304,7 @@
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="cbocallreason">Call Reason *</label>
+                          <label for="cbocallreason">Voice of customer *</label>
                           <select id="cbocallreason" class="form-control input-sm" required="required"
                             data-error="Call Reason is required." disabled>
                             <option Value="">PLEASE SELECT</option>

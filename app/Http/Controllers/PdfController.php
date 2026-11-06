@@ -76,6 +76,7 @@ class PdfController extends Controller
                 'Full_Name'         => $transaction->Full_Name,
                 'Contact_No'        => $transaction->Contact_No,
                 'Trans_Date'        => $transaction->Trans_Date,
+                'start_Date'        => $transaction->Start_Date,
                 'VIN'               => $transaction->VIN,
                 'CS_No'             => $transaction->CS_No,
                 'Plate_No'          => $transaction->Plate_No,

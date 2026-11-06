@@ -159,7 +159,7 @@ $(document).ready( function () {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
         document.activeElement.blur();
-    }
+    } 
   });
 
   $(document).on('closed', '#modal-modify-ise', function (e) {
@@ -725,26 +725,26 @@ $(document).ready( function () {
     }
   });
 
-  $(document).on('fullscreen', '#modal-modify-status', function (e, modal) {
+  $(document).on('fullscreen', '#modal-show-expiring-policies', function (e, modal) {
     // console.log('Fullscreen: '+modal.isFullscreen);
   });
 
-  $(document).on('opening', '#modal-modify-status', function (e) {
+  $(document).on('opening', '#modal-show-expiring-policies', function (e) {
     //console.dir(e);=
   });
 
-  $(document).on('opened', '#modal-modify-status', function (e) {
+  $(document).on('opened', '#modal-show-expiring-policies', function (e) {
     $(".iziModal-wrap").scrollTop(0); 
   });
 
-  $(document).on('closing', '#modal-modify-status', function (e) {
+  $(document).on('closing', '#modal-show-expiring-policies', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
         document.activeElement.blur();
-    }
+    } 
   });
 
-  $(document).on('closed', '#modal-modify-status', function (e) {
+  $(document).on('closed', '#modal-show-expiring-policies', function (e) {
     //console.dir(e);
   });
 
@@ -1478,7 +1478,6 @@ $(document).ready( function () {
       });
   });
 
-  console.log(insuranceno);
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
@@ -1491,6 +1490,7 @@ function LoadStatusCounts() {
     url:window.loadData.getRBCount,
     dataType: "json",
     success: function(data) {
+      console.log(data);
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
       $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
     }
@@ -1867,8 +1867,7 @@ $(document).ready(function(){
         // renewal flag for determining the policy action existence
         renewal_flag = 1;
 
-        $("#policy_actions").show();
-
+        
         // Optional: get Customer_No
         xnbno = table.cell(this, 0).data();
         xcustno = table.cell(this, 6).data();
@@ -1884,7 +1883,6 @@ $(document).ready(function(){
         $('#modal-show-expiring-policies').iziModal('close');
 
     });
-
 
 });
 
@@ -2301,9 +2299,6 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
     url:window.loadData.loadPaymentData,
     data:{insuranceno:insuranceno},
     success: function(data){
-
-      
-      
       $.each(data, function(i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2316,10 +2311,15 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
           }
         }
 
-        
-
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco, .cboinsco", value.Insurance_Company, value.Insurance_Company);
+
+        $("#cboinstype_summary").val(value.Insurance_Type);
+        $("#cboinsco_summary").val(value.Insurance_Company);
+        $("#txtpolicyno_summary").val(value.Policy_No);
+        $("#dpissuedate_summary").val(value.Issue_Date);
+        $("#cbomortgage_summary").val(value.Mortgage);
+
 
         // Safe date handling with default to today
         if (value && value.Start_Date) {
@@ -2385,6 +2385,14 @@ $(document).on("change", "input[name='rdpolicyaction']", function () {
         $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
         $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
         $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
+
+        $("#cboinstype_summary").val('');
+        $("#cboinsco_summary").val('');
+        $("#dpstartdate_summary").val('');
+        $("#txtpolicyno_summary").val('');
+        $("#dpissuedate_summary").val('');
+        $("#cbomortgage_summary").val('');
+        $("#dppexpiredate_summary").val('');
 
         
         setTimeout(function(){
@@ -2612,6 +2620,8 @@ function LoadVehicleInfo() {
     url:window.getData.vehicleSpecific,
     data:{vin:xvin, csno:xcsno, plateno:xplateno},
     success: function(data){     
+
+      console.log(data);
 
       $.each(data, function(i, value) {
 
@@ -3155,8 +3165,6 @@ function LoadPreviousInsuranceCo(data){
       // 2. Get the latest/most recent entry from the array (Index 0 or last index)
       // Assuming data[0] is the latest entry based on your array log
       const latestItem = data[0]; 
-
-      console.log(latestItem);
 
       // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
     if (latestItem) {
@@ -4492,12 +4500,14 @@ $(document).on( "click", "#viewpending", function () {
   viewpending = true;
   viewexpiring = false;
   LoadTransactionData();
+  LoadStatusCounts();
 });
 
 $(document).on( "click", "#viewexpiring", function () {
   viewexpiring = true;
   viewpending = false;
   LoadTransactionData();
+  LoadStatusCounts();
 });
 
 //Button View 
@@ -5222,7 +5232,10 @@ $(document).on( "click", "#btnadd", function () {
   FormDisable(false);
 
   // renewal flag for determining the policy action and other elements existence
-  renewal_flag = 0;
+  renewal_flag = 0;  
+
+  $("#policy_actions").hide();
+
 
   if ( ulevel == 6) { 
     $("#cboise").val(userid).trigger("change.select2");
@@ -5966,6 +5979,7 @@ $(document).on("click", "#btnsubmit", function () {
 
   // Customer fields
   const customerFields = {
+    renewalFlagSave: renewal_flag, 
     custno: getVal("#txtcustno"),
     custnoupload: getVal("#txtcustnoupload"),
     group,
@@ -6682,6 +6696,46 @@ function FormClearPay() {
   $("#txtpdcno, #txtpdcholdername, #txtpdcbankname, #dppdccheckdate").val("");
 
   $(".box-body").validator('reset');
+}
+
+function formClearSummary(){
+  $(".txtcustno_summary").val("");
+  $(".txtcustnoupload_summary").val("");
+  $(".cbogroup_summary").val("");
+  $(".txtcustname_summary").val("");
+  $(".txtcustfname_summary").val("");
+  $(".txtcustmname_summary").val("");
+  $(".txtcustlname_summary").val("");
+  $(".txtcustsname_summary").val("");
+  $(".dpbirthdate_summary").val("");
+  $(".txttin_summary").val("");
+  $(".txtcontactno_summary").val("");
+  $(".txtemailadd_summary").val("");
+  $(".txtaddress_summary").val("");
+  $(".cboregion_summary").val("");
+  $(".cboprovince_summary").val("");
+  $(".cbocity_summary").val("");
+  $(".cbobrgy_summary").val("");
+  $(".txtzipcode_summary").val("");
+  $(".cbocountry_summary").val("");
+
+  $("#txtvin").val("");
+  $("#txtmake").val("");
+  $("#txtmodel").val("");
+  $("#txtcolor").val("");
+  $("#txtmodelyear").val("");
+  $("#txtengineno").val("");
+  $("#txtcsno").val("");
+  $("#txtplateno").val("");
+  $("#txtsrp").val("");
+
+  $("#cboinstype_summary").val("");
+  $("#cboinsco_summary").val("");
+  $("#txtpolicyno_summary").val("");
+  $("#dpissuedate_summary").val("");
+  $("#dpstartdate_summary").val("");
+  $("#dppexpiredate_summary").val("");
+  $("#cbomortgage_summary").val("");
 }
 
 function FormClearNetRem() {

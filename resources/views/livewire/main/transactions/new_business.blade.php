@@ -1283,7 +1283,7 @@
                                     <i class="fa fa-calendar"></i>
                                   </div>
                                   <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
-                                    required="required" data-error="Inception Date is required.">
+                                     data-error="Inception Date is required.">
                                 </div>
                                 <div class="help-block with-errors"></div>
                               </div>

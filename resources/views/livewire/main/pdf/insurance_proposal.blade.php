@@ -255,33 +255,37 @@
     </table>   
 
     <table class="header-table">
+        {{-- Prepared on  --}}
             <td class="meta-box" style="width: 40%;">
                 <div class="quotation-no">{{ $transaction['Insurance_No'] ?? '' }}</div>
                 <div class="meta-text" style="font-size:14px;">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
                 @php
                     $dateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
                 @endphp
-                <div class="meta-text" style="font-size:14px;">Prepared on {{ $dateTime->format('M d, Y'); }}</div>
-                <div><span class="badge">Renewal</span></div>
+                <div class="meta-text" style="font-size:14px;">{{ $dateTime->format('M d, Y'); }}</div>
+                
             </td>
     </table>
     
     
 
     <!-- Proposal Intro -->
-    <div class="quotation-title" style="margin-top: 4px; text-align:center;">Motor Vehicle Insurance Quotation</div>
+    <div class="quotation-title" style="margin-top: 4px; text-align:center;"><b>Motor Vehicle Insurance Quotation</b></div>
+    <br>
     <div class="proposal-heading">Your vehicle protection notice</div>
-    <div class="proposal-sub"><i>"Solutions for you and your car"</i></div>
+
     
     <div>
         <div class="proposal-desc">
             <div class="greeting" style="margin-bottom: 6px;">Dear {{ $transaction['Full_Name'] ?? '' }},</div>
-            Thank you for considering Toyota Makati Inc. Agency, We are pleased to present this renewal proposal for your upcoming insurance policy. The details below summarize your selected coverage options and annual premium to ensure optimal protection for your requirements.
+            Thank you for considering Toyota Makati Agency Inc., <br>
+            We are pleased to present this renewal proposal for your upcoming insurance policy. The details below summarize your selected coverage options and annual premium to ensure optimal protection for your requirements.
         </div>
         <div class="inception-right">
             Inception date:<br>
-            <strong></strong><br>
-            <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span>
+            {{-- <strong>{{ $transaction['Trans_Date'] ?? '' }}</strong><br> --}}
+            <strong>{{ date('F j, Y', strtotime($transaction['Trans_Date'])) }}</strong><br>
+            {{-- <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span> --}}
         </div>
     </div>
 
@@ -291,7 +295,7 @@
     <table class="info-grid">
         <tr>
             <td>
-                <div class="info-label">Insured Customer</div>
+                <div class="info-label">Assured Name:</div>
                 <div class="info-value">{{ $transaction['Full_Name'] ?? '' }}</div>
                 <div class="info-subvalue">{{ $transaction['Contact_No'] ?? '' }}</div>
             </td>
@@ -305,18 +309,18 @@
                                 3 => 'Fleet',
                                 4 => 'Corporate',
                                 default => '',
-                            } }} | Plate No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
+                            } }} | Plate / CS No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
             </td>
         </tr>
         <tr>
             <td>
                 <div class="info-label">Insurance Partner</div>
                 <div class="info-value">{{ $transaction['Insurance_Company'] ?? '' }}</div>
-                <div class="info-subvalue">Motor Vehicle Insurance</div>
+                {{-- <div class="info-subvalue">Motor Vehicle Insurance</div> --}}
             </td>
             <td>
-                <div class="info-label">Sum Insured</div>
-                <div class="info-value">Php {{ $transaction['Gross_Premium'] ?? '' }}</div>
+                <div class="info-label">Gross Premium</div>
+                <div class="info-value">Php {{ number_format($transaction['Gross_Premium'], 2) }}</div>
                 <div class="info-subvalue">Subject to insurer review and acceptance</div>
             </td>
         </tr>
@@ -330,34 +334,34 @@
             <tr>
                 <th style="width: 50%;">Coverage</th>
                 <th style="width: 25%;">Sum Insured / Limit</th>
-                <th style="width: 25%;">Customer Premium</th>
+                <th style="width: 25%;">Premium (Php)</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>Own Damage / Theft</td>
-                <td>Php 500,000.00</td>
-                <td>Php 8,008.45</td>
+                <td> 500,000.00</td>
+                <td> 8,008.45</td>
             </tr>
             <tr>
                 <td>Acts of Nature</td>
-                <td>Php 500,000.00</td>
-                <td>Php 2,355.43</td>
+                <td> 500,000.00</td>
+                <td> 2,355.43</td>
             </tr>
             <tr>
                 <td>VTPL – Bodily Injury</td>
                 <td>As per policy</td>
-                <td>Php 420.00</td>
+                <td> 420.00</td>
             </tr>
             <tr>
                 <td>VTPL – Property Damage</td>
                 <td>As per policy</td>
-                <td>Php 1,245.00</td>
+                <td> 1,245.00</td>
             </tr>
             <tr>
                 <td>Auto Personal Accident</td>
                 <td>As per policy</td>
-                <td>Php 0.00</td>
+                <td> 0.00</td>
             </tr>
         </tbody>
     </table>
@@ -366,11 +370,11 @@
     <table class="totals-table">
         <tr>
             <td>Gross premium</td>
-            <td>Php 12,028.87</td>
+            <td> 12,028.87</td>
         </tr>
         <tr>
             <td>VAT</td>
-            <td>Php 1,443.46</td>
+            <td> 1,443.46</td>
         </tr>
         <tr>
             <td>Documentary stamp tax</td>
@@ -378,23 +382,20 @@
         </tr>
         <tr>
             <td>Local tax</td>
-            <td>Php 24.06</td>
+            <td> 24.06</td>
         </tr>
         <tr class="grand-total-row">
             <td>Total Premium (inclusive of taxes)</td>
-            <td>Php 15,000.00</td>
+            <td> {{ number_format($transaction['Gross_Premium'], 2) }}</td>
         </tr>
     </table>
 
     <!-- Deductible Note -->
-    <div class="deductible-box">
-        <strong>Deductible / participation:</strong>Php 2,000 per accident/panel.
-    </div>
 
     <!-- Footer Options & Reminders -->
     <table class="footer-grid">
         <tr>
-            <td>
+            {{-- <td>
                 <div class="footer-box-title">You may avail of the following payment options:</div>
                 <div class="footer-box-content">
                     <ul>
@@ -403,11 +404,14 @@
                         <li>2. 0% Deferred Payments (applicable to METROBANK, BPI OR BDO CREDIT CARD HOLDERS)</li>
                     </ul>
                 </div>
-            </td>
+            </td> --}}
             <td>
                 <div class="footer-box-title">For further inquiries, feel free to call our Insurance Sales Executive at the following numbers:</div>
                 <div class="footer-box-content">
                     <ul>
+                        {{-- <li>Trunkline: 8897-3333 Local 230 (Ferl) 229 (Kim) 235 (Angie)</li>
+                        <li>CEL #: 0995-1564945/0917-5401743 (Ferl) 0916-2298017 (Kim) 0967-0499665 (Angie) ALL VIBER READY</li> --}}
+                        <li>{{ Auth::user()->Full_name }}</li>
                         <li>Trunkline: 8897-3333 Local 230 (Ferl) 229 (Kim) 235 (Angie)</li>
                         <li>CEL #: 0995-1564945/0917-5401743 (Ferl) 0916-2298017 (Kim) 0967-0499665 (Angie) ALL VIBER READY</li>
                     </ul>

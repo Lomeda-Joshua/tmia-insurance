@@ -1296,6 +1296,8 @@ function LoadCustomerInfo(custno) {
     url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:custno},
     success: function(data){
+
+
       
       $.each(data, function(i, value) {
         // Helper: set select option safely
@@ -1309,9 +1311,10 @@ function LoadCustomerInfo(custno) {
           }
         }
 
+        console.log(value);
         $("#txtcustno").val(value.Customer_No);
         setSelectOption("#cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
