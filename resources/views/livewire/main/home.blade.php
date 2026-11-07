@@ -298,5 +298,15 @@
 
 </div>
 
+@push('scripts')
+  <script>
+        window.nofiticationdata = {
+          checkExpiry :  @json(route('checkExpiry.data'))
+        }
+        
+  </script>
+    
+@endpush
+
 <!-- /.content-wrapper -->
 </x-layouts.main>

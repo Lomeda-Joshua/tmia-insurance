@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class OverallDataController extends Controller
 {
@@ -404,7 +405,7 @@ class OverallDataController extends Controller
             ->make(true);
     } 
 
-/**
+    /**
      * Retrieve user-related session variables as JSON.
      */
     public function getSessionVariables(): JsonResponse
@@ -421,6 +422,20 @@ class OverallDataController extends Controller
             'signin'     => session('signin', false),
             'signout'    => session('signout', false),
         ]);
+    }
+
+
+    public function checkExpiry(Request $request): JsonResponse
+    {
+        $userId = $request->session()->get('userid');
+
+        $expired = DB::table('user')
+            ->where('User_ID', $userId)
+            ->whereDate('ExpireDate', '<=', now()->toDateString())
+            ->exists();
+
+        return response()->json($expired ? 1 : 0);
+        
     }
 
 

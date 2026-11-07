@@ -42,11 +42,11 @@ $(document).ready( function () {
 
   //================== PASSWORD EXPIRED ===================//
   $.ajax({
-    url : "home_pwdcheck.php",
+    url : window.nofiticationdata.checkExpiry,
     type: "POST",
     success: function(data)
     {
-      var data = jQuery.parseJSON(data);
+      // var data = jQuery.parseJSON(data);
       if(data == 1){
         $("#modalpwdexpired").modal({
           backdrop: "static",

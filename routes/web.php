@@ -79,6 +79,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/customerinfo/data', [OverallDataController::class, 'getCustomerInfoData'])->name('customerinfo.data');
     Route::post('/customervehicleinfo/data', [OverallDataController::class, 'getVehicleInfoData'])->name('customercvehicleinfo.data');
 
+    Route::get('/check-expiry', [OverallDataController::class, 'checkExpiry'])->name('checkExpiry.data');
     
     // Transactions Group
     Route::prefix('transactions')->group(function () {
@@ -164,7 +165,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
         
         Route::post('/renewal-business/save-new-payments', [RenewalBusinessController::class, 'savePayments'])->name('renewal-business.save-payments');
-        
         
         Route::get('/insurance/pdf/{insurance_no}', [RenewalBusinessController::class, 'printPdf'])->name('renewal.pdf.generate');
 

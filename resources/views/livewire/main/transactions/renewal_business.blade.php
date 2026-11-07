@@ -287,7 +287,6 @@
             </div>
             <div class="row">
               <div class="btnactionud pull-right" style="display: none;">
-
                 <button type="button" id="btnnblist" class="btn btn-box-tool"
                   style="font-size: 15px !important; background-color:red; color:white;" data-toggle="tooltip"
                   title="Insurance Policies expiring & Expiring Soon (90Days)"><i class="fa fa-list"></i>
@@ -1374,16 +1373,31 @@
                             </div>
 
                             <div class="row">
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <label for="cbomortgage">Mortgagee *</label>
-                                  <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
-                                    data-error="Mortgage is required." disabled>
-                                    <option Value="">PLEASE SELECT</option>
-                                  </select>
-                                  <div class="help-block with-errors"></div>
+                                <div class="col-md-6">
+                                  <div class="form-group">
+                                    <label for="cbomortgage">Mortgagee *</label>
+                                    <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
+                                      data-error="Mortgage is required." disabled>
+                                      <option Value="">PLEASE SELECT</option>
+                                    </select>
+                                    <div class="help-block with-errors"></div>
+                                  </div>
                                 </div>
-                              </div>
+
+                                <div class="col-md-6">
+                                  <label>Mortgagee change:</label>
+                                  <div class="radio-group">
+                                    <label class="custom-radio">
+                                      <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
+                                      <span class="checkmark"></span>RETAIN
+                                    </label>
+                                    <label class="custom-radio">
+                                      <input type="radio" name="rdpolicyaction" value="TRANSFER">
+                                      <span class="checkmark"></span>
+                                      TRANSFER
+                                    </label>
+                                  </div>
+                                </div>
                             </div>
 
                           </div>

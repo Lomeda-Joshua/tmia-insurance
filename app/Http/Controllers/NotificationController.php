@@ -18,12 +18,11 @@ class NotificationController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-
         $ulevel = $user->ulevel ?? session('ulevel');
         $userid = $user->User_ID ?? $user->id ?? session('userid');
 
         // Query Builder for 'INSURANCE STAFF'
-        if ($ulevel === 'INSURANCE STAFF') {
+        if ($ulevel === 7) {
 
             // Subquery 1: Transactions New Business
             $tb = DB::table('transactions_nb')

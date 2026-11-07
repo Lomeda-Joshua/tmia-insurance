@@ -238,6 +238,19 @@
     @push('scripts')
     <script>
 
+        window.reRoutes = {
+            lockscreenRoute :  @json(route('lockscreen.lock'))
+        }
+
+        window.dataRoutes = {
+            userAccountSession : @json(route('getSession.variables')),   
+        }
+        
+        window.nofiticationdata = {
+            notifications_data : @json(route('notifications.data')),
+            insurancePromise_data : @json(route('get-insurance-notification.data')),
+        }
+
         //================== lOADING SPINNER =================//
         window.showLoading = function(message = "Saving data, please wait...") {
             document.getElementById("loading-text").innerText = message;
@@ -260,20 +273,10 @@
                 }
             });
         @endif
-        
-        $(document).ready(function(){
-                window.reRoutes = {
-                    lockscreenRoute :  @json(route('lockscreen.lock'))
-                }
 
-                window.dataRoutes = {
-                    userAccountSession : @json(route('getSession.variables')),   
-                }
-                
-                window.nofiticationdata = {
-                    notifications_data : @json(route('notifications.data')),
-                    insurancePromise_data : @json(route('get-insurance-notification.data')),
-                }
+        $(document).ready(function(){
+
+                console.log("notification", window.nofiticationdata.notifications_data);
             
                 window.dataRoutes = {
                     sessionVariable : @json(route('getSession.dataVariable')),

@@ -32,7 +32,6 @@ class LockScreenController extends Controller
             'txtpword' => ['required', 'string'],
         ]);
 
-    
         if (! Hash::check($request->txtpword, $request->user()->Encrypt_Password)) {
             return back()->withErrors(['password' => 'Invalid password.']);
         }

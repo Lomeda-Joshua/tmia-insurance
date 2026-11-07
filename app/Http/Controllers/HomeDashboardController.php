@@ -23,12 +23,14 @@ class HomeDashboardController extends Controller
     public function index(){
 
         $newBusinessCount = NewBusiness::all()->count();
-        
         $pendingCount = NewBusiness::where('Trans_Status', 'PENDING')->count();
-        $pendingOVerallCount = $pendingCount / $newBusinessCount * 100;
 
+        if( $newBusinessCount || $pendingCount != 0 ){
+            $pendingOVerallCount = $pendingCount / $newBusinessCount * 100;
+        }else {
+            $pendingOVerallCount = 0;
+        }
 
-        
         return view('livewire.main.home', [
             "pendingCounts" => $pendingCount, 
             "pendingOVerallCount" => $pendingOVerallCount, 

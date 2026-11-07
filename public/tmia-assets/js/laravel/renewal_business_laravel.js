@@ -63,7 +63,7 @@ $(document).ready( function () {
       const level = Number(ulevel);
 
       // Declarative state assessment: returns true if level is 1 or 6
-      const isAuthorized = [1, 6].includes(level);
+      const isAuthorized = [1, 7].includes(level);
 
       // Set visibility based on predicate evaluation
       $(".btnactionud").toggle(isAuthorized);

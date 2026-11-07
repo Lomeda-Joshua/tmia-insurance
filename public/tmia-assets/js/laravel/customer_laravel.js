@@ -713,8 +713,6 @@ $(document).ready( function () {
   /////////////////////// END IZIMODAL ///////////////////////
 
   
-
-
 //======= Function Load Master Data ============//
 //============== Customer List ============//
 function LoadCustomerData() {
@@ -776,11 +774,68 @@ function LoadCustomerData() {
           }
           return data;
         }
+      },
+      {
+        targets: [0, 2, 4, 5], className: 'copy-cell'
       }
     ]
   });
+
 }
 //======================================//
+
+// $('#table_trans tbody').on('click', 'td', function () {
+//     console.log('1. td clicked');                       // handler is bound
+//     console.log('2. classes:', this.className);         // should include copy-cell
+//     console.log('3. value:', table.cell(this).data());  // should be text, not [object Object]
+//     console.log('4. secure context:', window.isSecureContext, 'clipboard API:', !!navigator.clipboard);
+
+
+// });
+
+
+// Event delegation: works after paging, sorting, searching, and AJAX redraws
+$('#table_trans tbody').on('click', 'td.copy-cell', function () {
+    var value = table.cell(this).data();   // raw data, not the HTML
+    copyToClipboard(value, this);
+});
+
+
+//============== COPY CELL delegation and function ============//
+function copyToClipboard(text, cellElement) {
+    text = String(text).trim();
+
+    function done() {
+        var $cell = $(cellElement);
+
+        // avoid stacking multiple badges on rapid clicks
+        if ($cell.find('.copied-text').length) return;
+
+        // visual feedback
+        $cell.addClass('copied');
+
+        var $msg = $('<span class="copied-text">Copied!</span>');
+        $cell.append($msg);
+
+        setTimeout(function () {
+            $msg.fadeOut(200, function () { $(this).remove(); });
+            $cell.removeClass('copied');
+        }, 1000);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done);
+    } else {
+        // Fallback for plain http:// (common on internal systems)
+        var $temp = $('<textarea>').val(text).appendTo('body').select();
+        document.execCommand('copy');
+        $temp.remove();
+        done();
+    }
+}
+
+
+
 
 //============== Vehicle List ============//
 function LoadVehicleData(custno) {

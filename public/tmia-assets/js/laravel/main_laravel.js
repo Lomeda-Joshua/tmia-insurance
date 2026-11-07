@@ -105,13 +105,15 @@ function pulseBadge() {
 
 // Load notifications
 function loadNotifications() {
+  console.log("hello world");
+
   if (isLoading) return;
   isLoading = true;
 
   $.ajax({
-    url: window.nofiticationdata.notifications_data ,
-    method: 'GET',
-    dataType: 'json',
+    method:'GET',
+    dataType:'JSON',
+    url:window.nofiticationdata.notifications_data,
     success: function(data) {
       const menu = $('#notification-menu');
       menu.empty();
