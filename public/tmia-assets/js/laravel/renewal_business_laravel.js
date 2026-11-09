@@ -1699,6 +1699,12 @@ function initExpiringTable() {
   }
 
 
+
+  /**
+   *  
+   *  Expiring list  
+   * 
+  **/ 
   $('#table_expiring_list').DataTable({
       language: {
         processing: "Loading Transaction List..."
@@ -1801,7 +1807,24 @@ function initExpiringTable() {
           }
         }
       ]
-    }); 
+  }); 
+
+
+  /**
+   *  
+   *  Expired list  
+   * 
+  **/ 
+
+  /**
+   *  
+   *  Renewed  
+   * 
+  **/ 
+
+
+
+
 
 }
 
