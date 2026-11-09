@@ -693,7 +693,7 @@ $(document).ready( function () {
   /* MODAL SHOWING EXPIRING POLICIES */
   $("#modal-show-expiring-policies").iziModal({
     title: 'Expiring policies',
-    subtitle: 'List of expiring policies within 90 days.',
+    subtitle: 'List of expiring policies.',
     headerColor: '#dc3545', 
     icon: 'fa-solid fa-chart-bar',
     iconColor: '#fcfbfb',

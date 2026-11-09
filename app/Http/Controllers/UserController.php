@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\SaveUserRequest;
 use App\Http\Requests\UserDataRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Models\UserLevel;
 
 class UserController extends Controller
 {
@@ -116,9 +117,7 @@ class UserController extends Controller
     public function account(): View
     {
         $user = Auth::user();
-
-        $userLevel = \App\Models\UserLevel::query()
-            ->find($user->User_Level_ID);                
+        $userLevel = UserLevel::query()->find($user->User_Level_ID);                
 
         return view('livewire.main.settings.account', [
             'user' => $user,

@@ -67,7 +67,7 @@ var xuname;
     
     $.ajax({
       url: window.dataRoutes.userAccountData,
-      type: "POST",
+      type: "GET",
       dataType: "json",
       beforeSend: function () {
         // Optional: show loader or disable form

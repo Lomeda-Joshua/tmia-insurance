@@ -540,6 +540,7 @@ var xuname;
     }
 
     function SaveData(value) {
+      console.log("hello");
       // showLoading("Saving user record..."); // Show spinner before sending request
       $.ajax({
         url : window.SaveRoute.saveNewUserData,

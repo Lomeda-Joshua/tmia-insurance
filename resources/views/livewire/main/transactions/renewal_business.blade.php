@@ -2456,38 +2456,144 @@
         <!-- MODAL SHOW EXPIRING POLICIES -->
         <div id="modal-show-expiring-policies" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
           <div class="box">
-            <!-- <div class="box-header with-border">
-                <h2 class="box-title">Vehicle List</h2>
-          </div> -->
             <div class="box-body">
-              <div class="table-responsive">
-                <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
-                  <thead>
-                    <tr class="tableheader">
-                      <th>Insurance No.</th>
-                      <th>Trans. Date & Time</th>
-                      <th>Days before expiration</th>
-                      <th>Policy Expiration</th>
-                      <th>Issue Date</th>
-                      <th>Status</th>
-                      <th>Customer No.</th>
-                      <th>Customer Name</th>
-                      <th>Contact No.</th>
-                      <th>VIN</th>
-                      <th>CS No.</th>
-                      <th>Plate No.</th>
-                      <th>Model</th>
-                      <th>Variant</th>
-                      <th>Insurance Partner</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-                <p style="font-size:12px;font-style: italic;">
-                  <b>Note:</b> The entries included within this list are expiring within 90 days.
-                </p>
+
+              <ul class="nav nav-tabs approvaltab">
+                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">30 days before expiration</a></li>
+                <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
+                <li class=""><a href="#renewed" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
+              </ul>
+
+              <div class="tab-content">
+                  <div class="tab-pane active" id="before_expiration">
+                    <div class="box">
+                        <div class="box-body">
+                          <div class="box-header with-border">
+                              <h3 class="box-title"></h3>
+                          </div>
+                          <div class="box-body">
+                              <div class="table-responsive">
+                                    <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                      <thead>
+                                        <tr class="tableheader">
+                                          <th>Insurance No.</th>
+                                          <th>Trans. Date & Time</th>
+                                          <th>Days before expiration</th>
+                                          <th>Policy Expiration</th>
+                                          <th>Issue Date</th>
+                                          <th>Status</th>
+                                          <th>Customer No.</th>
+                                          <th>Customer Name</th>
+                                          <th>Contact No.</th>
+                                          <th>VIN</th>
+                                          <th>CS No.</th>
+                                          <th>Plate No.</th>
+                                          <th>Model</th>
+                                          <th>Variant</th>
+                                          <th>Insurance Partner</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      </tbody>
+                                    </table>
+
+                                    <p style="font-size:12px;font-style: italic;">
+                                      <b>Note:</b> The entries included within this list are expiring within 90 days.
+                                    </p>
+                              </div>
+                          </div>
+                          
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane" id="expired">
+                    <div class="box">
+                        <div class="box-body">
+                          <div class="box-header with-border">
+                              <h3 class="box-title">Cleared Application Request</h3>
+                          </div>
+                          <div class="box-body">
+                              <div class="table-responsive">
+                                    <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                      <thead>
+                                        <tr class="tableheader">
+                                          <th>Insurance No.</th>
+                                          <th>Trans. Date & Time</th>
+                                          <th>Days before expiration</th>
+                                          <th>Policy Expiration</th>
+                                          <th>Issue Date</th>
+                                          <th>Status</th>
+                                          <th>Customer No.</th>
+                                          <th>Customer Name</th>
+                                          <th>Contact No.</th>
+                                          <th>VIN</th>
+                                          <th>CS No.</th>
+                                          <th>Plate No.</th>
+                                          <th>Model</th>
+                                          <th>Variant</th>
+                                          <th>Insurance Partner</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      </tbody>
+                                    </table>
+
+                                    <p style="font-size:12px;font-style: italic;">
+                                      <b>Note:</b> The entries included within this list are expiring within 90 days.
+                                    </p>
+                              </div>
+                          </div>
+                          
+                        </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane" id="renewed">
+                        <div class="box">
+                            <div class="box-body">
+                              <div class="box-header with-border">
+                                  <h3 class="box-title">Cleared Application Request</h3>
+                              </div>
+                              <div class="box-body">
+                                  <div class="table-responsive">
+                                        <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                          <thead>
+                                            <tr class="tableheader">
+                                              <th>Insurance No.</th>
+                                              <th>Trans. Date & Time</th>
+                                              <th>Days before expiration</th>
+                                              <th>Policy Expiration</th>
+                                              <th>Issue Date</th>
+                                              <th>Status</th>
+                                              <th>Customer No.</th>
+                                              <th>Customer Name</th>
+                                              <th>Contact No.</th>
+                                              <th>VIN</th>
+                                              <th>CS No.</th>
+                                              <th>Plate No.</th>
+                                              <th>Model</th>
+                                              <th>Variant</th>
+                                              <th>Insurance Partner</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                          </tbody>
+                                        </table>
+
+                                        <p style="font-size:12px;font-style: italic;">
+                                          <b>Note:</b> The entries included within this list are expiring within 90 days.
+                                        </p>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                        </div>
+                  </div>
               </div>
+
+              
+              
             </div>
           </div>
         </div>

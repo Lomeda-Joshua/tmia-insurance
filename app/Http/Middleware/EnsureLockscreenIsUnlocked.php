@@ -20,7 +20,8 @@ class EnsureLockscreenIsUnlocked
         ];
 
 
-        if (! Auth::check() || $request->routeIs($exemptRoutes)) {          
+        if (! Auth::check() || $request->routeIs($exemptRoutes)) {   
+            dd();       
             return $next($request);
         }
 

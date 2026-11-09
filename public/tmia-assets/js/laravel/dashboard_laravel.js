@@ -43,7 +43,7 @@ $(document).ready( function () {
   //================== PASSWORD EXPIRED ===================//
   $.ajax({
     url : window.nofiticationdata.checkExpiry,
-    type: "POST",
+    type: "GET",
     success: function(data)
     {
       // var data = jQuery.parseJSON(data);

@@ -303,7 +303,6 @@
         window.nofiticationdata = {
           checkExpiry :  @json(route('checkExpiry.data'))
         }
-        
   </script>
     
 @endpush
