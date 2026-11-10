@@ -118,7 +118,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/customers/data', [CustomerController::class, 'getCustomers'])->name('customers.data');
         Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-        Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.s how');
+        Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
         Route::post('/customer/save-from-list', [CustomerController::class, 'saveCustomerFromList'])->name('customer.save');
@@ -160,7 +160,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/data', [RenewalBusinessController::class, 'getRenewalTableData'])->name('renewal_business.data');
         Route::post('/renewal-business/get-transaction-by-insuranceno', [RenewalBusinessController::class, 'getTransactionsRb'])->name('renewal_business_insurance_no');
         Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
-        Route::post('/renewal-business/policy-expiration-check', [PolicyExpirationController::class, 'loadPolicyExpiration'])->name('loadpolicy.expiration');
         Route::post('/renewal-business/update-net-rem', [TransactionController::class, 'updateNetRenewalRemittance'])->name('renew-business-update.netrem');
         Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
         
@@ -199,21 +198,24 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('user/get-user-data', [UserController::class,  'getUserData'])->name('user.getdata');
 
         // Account settings
-        Route::get('/user-account', [UserController::class, 'account'])->name('user_account');
-        
-        Route::post('/user-account/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
-        Route::get('/user-account/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile_data');
-        Route::post('/user-account/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
-        Route::post('/user-account/update', [UserController::class, 'updateUser'])->name('user_account.update');
-        Route::post('/user-account/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
-        Route::post('/user-account/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
-        Route::post('/user-account/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
+        Route::prefix('/user-account')->group(function () {
+                    Route::get('/', [UserController::class, 'account'])->name('user_account');
+                    Route::post('/profile-data', [UserController::class, 'getUserProfile'])->name('get_user_profile.data');
+                    Route::post('/session-variables', [UserController::class, 'getSessionVariables'])->name('getSession.variables');
+                    Route::post('/check-username', [UserController::class, 'checkUsername'])->name('user.check_username');
+                    Route::post('/update', [UserController::class, 'updateUser'])->name('user_account.update');
+                    Route::post('/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
+                    Route::post('/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
+                    Route::post('/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
+        });
+            
 
         // Report generation
         Route::get('/report/new-business-renewal-report', [GeneralReportingController::class, 'index'])->name('general_report.index');
 
         // General Settings
         Route::get('/general-settings', [GeneralSettingsController::class, 'index'])->name('general_settings.index');
+
     });
 
 

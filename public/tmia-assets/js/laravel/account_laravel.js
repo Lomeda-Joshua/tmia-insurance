@@ -7,29 +7,31 @@ var signin;
 var xuname;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
   $(document).ready( function () {
+
+    //================== USER LOGIN SESSION DETAILS =================//
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': window.csrfRoute.csrfToken
+        }
+    });
+
+      
     //================== GET USER LOG IN INFORMATION =================//
     $.ajax({
-      url: window.dataRoutes.userAccountSession,
+      url: window.localdataRoutes.userAccountSession,
       dataType: 'json',
       type: "POST",
       cache: false,
-      headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
       success: function(data) {
-        userid = data.userid;
-        logname = data.logname;
-        ulevel = data.ulevel;
-        regdate = data.regdate;
-        signin = data.signin;
+          userid = data.userid;
+          logname = data.logname;
+          ulevel = data.ulevel;
+          regdate = data.regdate;
+          signin = data.signin;
       }
     });
 
-      $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
-          }
-      });
+     
       
     //=============== END GET USER LOG IN INFORMATION  =================//
 
@@ -64,17 +66,16 @@ var xuname;
 
 //========= LOAD ACCOUNTS =========
   function LoadAccounts() {
-    
     $.ajax({
-      url: window.dataRoutes.userAccountData,
-      type: "GET",
+      url: window.localdataRoutes.userAccountData,
+      type: "POST",
       dataType: "json",
       beforeSend: function () {
         // Optional: show loader or disable form
         $("#loader").show();
       },
       success: function (user) {
-        console.log(user)
+        console.log(user);
         if (user.error) {
           swal("Error!", user.error, "error");
           return;
@@ -355,7 +356,7 @@ var xuname;
     function CheckUserName() {
       $.ajax(
         {
-          url : window.dataRoutes.checkUserName,
+          url : window.localdataRoutes.checkUserName,
           type: "POST",
           data : { uname:uname,uid:uid  },
           success: function(data)
@@ -395,12 +396,9 @@ var xuname;
       // showLoading("Saving user record..."); // Show spinner before sending request
 
       $.ajax({
-        url : window.dataRoutes.userAccountUpdate,
+        url : window.localdataRoutes.userAccountUpdate,
         type: "POST",
         data : value,
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
         success: function(data)
         {
           // var data = jQuery.parseJSON(data);

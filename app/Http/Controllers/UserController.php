@@ -141,8 +141,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function getUserProfile(): JsonResponse
-    {
+    public function getUserProfile(Request $request): JsonResponse
+    {        
         try {
             $uid = Auth::id();
 

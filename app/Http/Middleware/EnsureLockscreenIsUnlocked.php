@@ -28,7 +28,7 @@ class EnsureLockscreenIsUnlocked
         
         // 2. Initialize lockscreen state if not set
         if (! $request->session()->has('lockscreen')) {
-            
+            dd();
             $request->session()->put('lockscreen', false);
         }
 

@@ -105,8 +105,6 @@ function pulseBadge() {
 
 // Load notifications
 function loadNotifications() {
-  console.log("hello world");
-
   if (isLoading) return;
   isLoading = true;
 

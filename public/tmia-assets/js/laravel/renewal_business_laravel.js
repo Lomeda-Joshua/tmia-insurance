@@ -39,7 +39,7 @@ $(document).ready( function () {
   //=============== CSRF token javascript one-time setup  =================//
   $.ajaxSetup({
       headers: {
-          'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+          'X-CSRF-TOKEN': window.csrfRoute.csrfToken
       }
   });
   //=============== End CSRF token javascript one-time setup  =================//

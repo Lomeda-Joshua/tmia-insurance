@@ -347,19 +347,11 @@
 
 @push('scripts')
 <script>
-
-    window.LaravelRoutes = {
-        csrfToken: "{{ csrf_token() }}",
-    }
-
-
-  window.dataRoutes = {
-    userAccountSession : @json(route('getSession.variables')),
-    userAccountData : @json(route('get_user_profile_data')),
-    // checkUserName: @json(route('user.check_username')),
+  window.localdataRoutes = {
+    userAccountData : @json(route('get_user_profile.data')),
+    checkUserName: @json(route('user.check_username')),
     userAccountUpdate: @json(route('user_account.update')),
   }
-
 </script>
 
 <script src ="{{ asset('tmia-assets/js/laravel/account_laravel.js') }}"></script>

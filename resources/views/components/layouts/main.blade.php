@@ -237,6 +237,10 @@
 
     @push('scripts')
     <script>
+        //================== WINDOWS API ROUTE =================//
+        window.csrfRoute = {
+            csrfToken: "{{ csrf_token() }}",
+        }
 
         window.reRoutes = {
             lockscreenRoute :  @json(route('lockscreen.lock'))
@@ -275,9 +279,6 @@
         @endif
 
         $(document).ready(function(){
-
-                console.log("notification", window.nofiticationdata.notifications_data);
-            
                 window.dataRoutes = {
                     sessionVariable : @json(route('getSession.dataVariable')),
                 }

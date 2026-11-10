@@ -256,7 +256,7 @@
                   <div class="help-block with-errors"></div>
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-2 p-3">
                 <div style="padding: 10px 0; width: 85px;">
                   <label id="btnrefresh" class="btn btn-box-tool" style="font-size: 15px !important; display: block;"><i
                       class="fa-solid fa-rotate"></i> Refresh</label>
@@ -1508,7 +1508,7 @@
                                 </th>
                                 <td>
                                   <input type="text" id="txtengineno" class="form-control input-sm txtengineno"
-                                    style="width: 100%;" placeholder="Optional" disabled>
+                                    style="width: 100%;" read-only disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
                               </tr>
@@ -1524,7 +1524,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Plate No:</th>
                                 <td>
                                   <input type="text" id="txtplateno" class="form-control input-sm txtplateno"
-                                    style="width: 100%;" placeholder="Optional" disabled>
+                                    style="width: 100%;" placeholder="" disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
                               </tr>

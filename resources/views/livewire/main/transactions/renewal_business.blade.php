@@ -2631,13 +2631,8 @@ function printReceipt(divId) {
 </script>
 
 
-  <script>
-    window.dataRoutes = {
-      userAccountSession : @json(route('getSession.variables'))
-    }
-
+<script>
     window.LaravelRoutes = {
-        csrfToken: "{{ csrf_token() }}",
         nbpendingcounts: @json(route('new_business.counts')),
         loadSelectedCustomer : @json(route('customer.get-by-no')),
         loadVehicle: @json(route('vehicle.search')),

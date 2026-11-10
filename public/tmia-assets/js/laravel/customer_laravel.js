@@ -16,7 +16,6 @@ var editinfo = false;
 var btnselect;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-
   //================== GET USER LOG IN INFORMATION =================//
   $.ajax({
     url: window.dataRoutes.userAccountSession,
