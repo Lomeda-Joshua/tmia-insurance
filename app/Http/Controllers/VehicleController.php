@@ -23,24 +23,24 @@ class VehicleController extends Controller
     {
         $filters = $request->validated();
 
-            $query = VehicleInformation::query()
-            ->leftJoin('customer_information', 'vehicle_information.Customer_No', '=', 'customer_information.Customer_No')
-            ->select([
-                'vehicle_information.VIN',
-                'vehicle_information.Model',
-                'vehicle_information.Model_Year',
-                'vehicle_information.Variant',
-                'vehicle_information.Color',
-                'vehicle_information.Engine_No',
-                'vehicle_information.CS_No',
-                'vehicle_information.Plate_No',
-                'vehicle_information.VSI_Date',
-                'vehicle_information.SRP',
-                'vehicle_information.Customer_No',
-                'vehicle_information.Owner_Name',
-                'customer_information.Full_Name',
-                'customer_information.Contact_No',
-            ]);
+        $query = VehicleInformation::query()
+        ->leftJoin('customer_information', 'vehicle_information.Customer_No', '=', 'customer_information.Customer_No')
+        ->select([
+            'vehicle_information.VIN',
+            'vehicle_information.Model',
+            'vehicle_information.Model_Year',
+            'vehicle_information.Variant',
+            'vehicle_information.Color',
+            'vehicle_information.Engine_No',
+            'vehicle_information.CS_No',
+            'vehicle_information.Plate_No',
+            'vehicle_information.VSI_Date',
+            'vehicle_information.SRP',
+            'vehicle_information.Customer_No',
+            'vehicle_information.Owner_Name',
+            'customer_information.Full_Name',
+            'customer_information.Contact_No',
+        ]);
 
         // Search Filter
         if (! empty($filters['searchval'])) {
@@ -103,9 +103,9 @@ class VehicleController extends Controller
 
                 return $buttons;
             })
-            ->rawColumns(['action'])
-            ->setRowId('VIN')
-            ->make(true);
+                ->rawColumns(['action'])
+                ->setRowId('VIN')
+                ->make(true);
     }
 
     public function show(string $vin): JsonResponse
