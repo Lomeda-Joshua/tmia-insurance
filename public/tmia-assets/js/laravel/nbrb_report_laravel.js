@@ -10,18 +10,19 @@ var table;
   
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': window.LaravelRoutes.csrfToken
+            'X-CSRF-TOKEN': window.csrfRoute.csrfToken
         }
     });
     
     
     //================== GET USER LOG IN INFORMATION =================//
     $.ajax({
-      url: window.LaravelRoutes.ulevel,
+      url: window.dataRoutes.userAccountSession,
       dataType: 'json',
+      type: 'POST',
       cache: false,
       success: function(data) {
-        console.log(data);_
+        console.log(data);
         userid = data.userid;
         logname = data.logname;
         ulevel = data.ulevel;
@@ -68,8 +69,8 @@ var table;
 
     //======= Month Name =====//
     $.ajax({
-      type:"POST",
-      url:"fetch_month.php",
+      url:window.loadData.monthOptions,
+      type:"GET",
       success: function(data) {
         $("#cbomonth").html(data);
       }
@@ -85,8 +86,8 @@ var table;
 
     //======= Year =====//
     $.ajax({
-      type:"POST",
-      url:"fetch_year.php",
+      url:window.loadData.yearOptions,
+      type:"GET",
       success: function(data) {
         $("#cboyear").html(data);
       }
@@ -104,13 +105,13 @@ var table;
     //================== Date picker ===================//
     $("#dpdatefrom").datepicker({
       autoclose: true,
-      format:'dd-MM-yyyy',
+      format:'dd-mm-yyyy',
       todayHighlight : true
     }).datepicker("setDate", new Date());
 
     $("#dpdateto").datepicker({
       autoclose: true,
-      format:'dd-MM-yyyy',
+      format:'dd-mm-yyyy',
       todayHighlight : true
     }).datepicker("setDate", new Date());
     //==================================================//
@@ -266,7 +267,7 @@ function LoadDetailedReport(){
   }
 
   $.ajax({
-      url: "nbrb_report_detailed.php",
+      url: window.loadData.nbrbReport,
       type: "POST",
       data: {
           category: $("#cbocategory").val(),

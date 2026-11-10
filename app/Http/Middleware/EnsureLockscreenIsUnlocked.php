@@ -21,14 +21,12 @@ class EnsureLockscreenIsUnlocked
 
 
         if (! Auth::check() || $request->routeIs($exemptRoutes)) {   
-            dd();       
             return $next($request);
         }
 
         
         // 2. Initialize lockscreen state if not set
-        if (! $request->session()->has('lockscreen')) {
-            dd();
+        if (! $request->session()->has('lockscreen')) {   
             $request->session()->put('lockscreen', false);
         }
 

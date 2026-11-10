@@ -297,10 +297,8 @@ class UserController extends Controller
         return response()->json([$user]);
     }
 
-    public function saveNewUserData(SaveUserRequest $request): JsonResponse
-    {
+    public function saveNewUserData(SaveUserRequest $request){
         $validated = $request->validated();
-
         $appMethod = $validated['appmethod'];
         $userId    = $validated['uid'] ?? null;
         $password  = $validated['pword'] ?? null;

@@ -228,7 +228,10 @@
   }
  
   window.loadData = {
-      getTransactionStatus : @json(route('gettransaction-status.data'))
+      getTransactionStatus : @json(route('gettransaction-status.data')),
+      monthOptions: @json(route('month.options')),
+      yearOptions: @json(route('year.options')),
+      nbrbReport: @json(route('nbrb.report'))
   }
 
 </script>

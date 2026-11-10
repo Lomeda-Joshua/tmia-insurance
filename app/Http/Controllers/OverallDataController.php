@@ -439,5 +439,105 @@ class OverallDataController extends Controller
     }
 
 
+    public function monthOptions(Request $request)
+    {
+        // Same guard as the original: redirect if not signed in
+        // dd($request->session());
+        // if (!$request->session()->has('signin')) {
+        //     return redirect('401-error');
+        // }
+        $currentMonth = now()->month; // 1-12
+        $html = '<option value="" disabled>PLEASE SELECT</option>';
+
+        for ($m = 1; $m <= 12; $m++) {
+            $value     = str_pad($m, 2, '0', STR_PAD_LEFT);
+            $monthName = strtoupper(Carbon::create(2000, $m, 1)->format('F'));
+            $selected  = ($m === $currentMonth) ? ' selected' : '';
+
+            $html .= "<option value=\"{$value}\"{$selected}>{$monthName}</option>";
+        }
+
+        return response($html);
+    }
+
+
+    public function yearOptions(Request $request)
+    {
+        // Same guard as the original: redirect if not signed in
+        // if (!$request->session()->has('signin')) {
+        //     return redirect('401-error');
+        // }
+
+        $startYear   = 2000;
+        $currentYear = now()->year;
+
+        $html = '<option value="" disabled>PLEASE SELECT</option>';
+
+        for ($year = $currentYear; $year >= $startYear; $year--) {
+            $selected = ($year === $currentYear) ? ' selected' : '';
+            $html .= "<option value=\"{$year}\"{$selected}>{$year}</option>";
+        }
+
+        return response($html);
+    }
+
+
+
+
+    private const COLUMNS = [
+        'Insurance_No', 'Trans_Date', 'Trans_Status', 'Customer_No',
+        'Full_Name', 'Contact_No', 'VIN', 'CS_No', 'Plate_No', 'Model',
+        'Variant', 'Insurance_Company', 'ISE_Name', 'User_Full_Name',
+    ];
+
+
+    public function nbrbReport(Request $request)
+    {
+        $validated = $request->validate([
+            'bustype'    => 'nullable|string',
+            'transtatus' => 'nullable|string',
+            'datefrom'   => 'nullable|date_format:d-m-Y',
+            'dateto'     => 'nullable|date_format:d-m-Y',
+        ]);
+
+        $busType    = strtoupper($validated['bustype'] ?? '');
+        $tranStatus = $validated['transtatus'] ?? '';
+
+        $dateFrom = $dateTo = null;
+        if (!empty($validated['datefrom']) && !empty($validated['dateto'])) {
+            $dateFrom = Carbon::createFromFormat('d-m-Y', $validated['datefrom'])->startOfDay();
+            $dateTo   = Carbon::createFromFormat('d-m-Y', $validated['dateto'])->addDay()->startOfDay(); // exclusive
+        }
+
+        // One reusable filter builder instead of four copy-pasted blocks
+        $build = fn (string $view) => DB::table($view)
+            ->select(self::COLUMNS)
+            ->when($tranStatus !== '' && strtoupper($tranStatus) !== 'ALL',
+                fn ($q) => $q->where('Trans_Status', $tranStatus))
+            ->when($dateFrom && $dateTo,
+                fn ($q) => $q->where('Trans_Date', '>=', $dateFrom)
+                             ->where('Trans_Date', '<', $dateTo));
+
+        $query = match ($busType) {
+            'RENEWAL BUSINESS' => $build('vw_transactions_rb'),
+            'ALL'              => $build('vw_transactions_nb')->unionAll($build('vw_transactions_rb')),
+            default            => $build('vw_transactions_nb'), // NEW BUSINESS and fallback
+        };
+
+        $data = $query->get()
+            ->values()
+            ->map(function ($row, $i) {
+                $row = (array) $row;
+                $row['urutan'] = $i + 1;
+                return $row;
+            });
+
+        return response()->json($data);
+    }
+
+
+
+
+
 
 }

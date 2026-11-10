@@ -64,11 +64,8 @@ $(document).ready( function () {
 
         }
     });
-    //=============== END GET USER LOG IN INFORMATION  =================//
+  //=============== END GET USER LOG IN INFORMATION  =================//
 
-
-
-  
 
   //============= TOOLTIPS ============//
   // Enable tooltips globally
@@ -1204,31 +1201,23 @@ $(document).ready( function () {
   //============== END COMBO BOX INITIALIZED ===========//
 
   //================== DATE & TIME PICKER ===================//
-  /*--------------------- CUSTOMER INFO --------------------*/
-  $("#dpbirthdate").datepicker({
+
+
+  /*--------------------- DATE PICKER CONFIG --------------------*/
+  const datePickerConfig = {
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
+  };
+
+  /*--------------------- CUSTOMER INFO --------------------*/
+  $("#dpbirthdate").datepicker(datePickerConfig);
 
   /*--------------------- VEHICLE INFO --------------------*/
-  $("#dpvsidate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
+  $("#dpvsidate").datepicker(datePickerConfig);
+  $("#dpreldate").datepicker(datePickerConfig);
+  $("#dptechdate").datepicker(datePickerConfig);
 
-  $("#dpreldate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
-
-  $("#dptechdate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
 
   /*--------------------- PAYMENT INFO --------------------*/
   $('#txtccexpirydate, #txtccexpirydate-n').inputmask('99/99');
@@ -1240,24 +1229,9 @@ $(document).ready( function () {
   });
 
   /*--------------------- INSURER INFO --------------------*/
-  $("#dpstartdate").datepicker({
-    autoclose: true,
-    // format:'dd-mm-yyyy',
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  }).datepicker('setDate', new Date());
-
-  $("#dpissuedate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  }).datepicker('setDate', new Date());
-
-  $("#dppexpiredate").datepicker({
-    autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
-  });
+  $("#dpstartdate").datepicker(datePickerConfig).datepicker('setDate', new Date());
+  $("#dpissuedate").datepicker(datePickerConfig);
+  $("#dppexpiredate").datepicker(datePickerConfig);
 
   /*--------------------- CALL STATUS --------------------*/
   $("#dpppdate").datepicker({
@@ -4436,13 +4410,14 @@ const parseSafeDate = (value) => {
   return isNaN(date.getTime()) ? null : date;
 };
 
-// $(document).on("changeDate", "#dpreldate", function () {
-//   const reldate = parseSafeDate($(this).val());
+$(document).on("changeDate", "#dpreldate", function () {
+  const reldate = parseSafeDate($(this).val());
 
-//   if (reldate) {
-//     $("#dpstartdate").datepicker("setDate", reldate);
-//   }
-// });
+  if (reldate) {
+    $("#dpstartdate").datepicker("setDate", reldate);
+  }
+});
+
 
 $(document).on("changeDate", "#dpstartdate", function () {
   const startdate = parseSafeDate($(this).val());

@@ -495,9 +495,9 @@ var xuname;
       CheckUserName();
     } else if (appmethod == "U" && xuname != uname)  {
       console.log('uname', uname);
-
       CheckUserName();
     } else {
+      console.log("here to find app method");
       SaveData(value);
     }
 
@@ -522,6 +522,7 @@ var xuname;
               });
               return;
             } else {
+              console.log("checking user name");
               SaveData();
             }
           },
@@ -540,7 +541,7 @@ var xuname;
     }
 
     function SaveData(value) {
-      console.log("hello");
+      console.log("form value", value);
       // showLoading("Saving user record..."); // Show spinner before sending request
       $.ajax({
         url : window.SaveRoute.saveNewUserData,

@@ -44,7 +44,6 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     // Home dashboard
     Route::get('/dashboard', [HomeDashboardController::class, 'index'])->name('dashboard');
 
-
     Route::get('/insurance-promises', [NotificationController::class, 'getInsurancePromisesNotification'])->name('get-insurance-notification.data');
 
     // Notification backend data
@@ -80,6 +79,14 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
     Route::post('/customervehicleinfo/data', [OverallDataController::class, 'getVehicleInfoData'])->name('customercvehicleinfo.data');
 
     Route::get('/check-expiry', [OverallDataController::class, 'checkExpiry'])->name('checkExpiry.data');
+
+    Route::get('/month-options', [OverallDataController::class, 'monthOptions'])->name('month.options');
+
+    Route::get('/year-options', [OverallDataController::class, 'yearOptions'])->name('year.options');
+
+    Route::post('/nbrb-report', [OverallDataController::class, 'nbrbReport'])->name('nbrb.report');
+
+
     
     // Transactions Group
     Route::prefix('transactions')->group(function () {
@@ -194,6 +201,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/users', [UserController::class, 'index'])->name('user');
         Route::post('/users/data', [UserController::class, 'userData'])->name('users.data');
         Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+        Route::post('/save-new-user', [UserController::class, 'saveNewUserData'])->name('user.save');
         Route::post('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
         Route::post('user/get-user-data', [UserController::class,  'getUserData'])->name('user.getdata');
 
@@ -206,7 +214,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
                     Route::post('/update', [UserController::class, 'updateUser'])->name('user_account.update');
                     Route::post('/levels', [UserController::class, 'userlevels'])->name('users.levels.data');
                     Route::post('/get-user-data', [UserController::class, 'getUserData'])->name('users.get.data');
-                    Route::post('/save-new-data', [UserController::class, 'saveNewUserData'])->name('user.save');
+                    
         });
             
 
