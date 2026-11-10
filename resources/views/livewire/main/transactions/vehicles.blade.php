@@ -102,13 +102,11 @@
 
             </div>
           </div>
-
-
           <br>
+
           <table id="table_trans" class="table table-striped table-bordered table-hover">
             <thead>
               <tr class="tableheader">
-                <th>No.</th>
                 <th>VIN</th>
                 <th>Model</th>
                 <th>Model Year</th>
@@ -127,6 +125,7 @@
             <tbody>
             </tbody>
           </table>
+
         </div>
       </div>
       <!-- / box-body -->

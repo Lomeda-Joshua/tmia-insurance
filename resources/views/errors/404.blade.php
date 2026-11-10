@@ -123,21 +123,15 @@
 
 
         <div class="lockscreen-item">
-
-         
-
             <h1>404 PAGE NOT FOUND</h1>
-
-
-
         </div>
+
+        <br>
+        Go back to login screen <a href="{{ route('login') }}">Login</a>
 
     
 
-        <div
-            class="lockscreen-footer text-center"
-            style="margin-top:15px;"
-        >
+        <div class="lockscreen-footer text-center" style="margin-top:15px;">
             <strong>
                 Copyright &copy; {{ date('Y') }}
 

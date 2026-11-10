@@ -7,7 +7,6 @@ var signin;
 var table;
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
   $(document).ready( function () {
-
   
     $.ajaxSetup({
         headers: {

@@ -342,7 +342,6 @@
     </script>
    
 
-    <script src="{{ asset('tmia-assets/js/laravel/dashboard_laravel.js') }}"></script>
     <script src="{{ asset('tmia-assets/js/laravel/main_laravel.js') }}"></script>
     @endpush
 

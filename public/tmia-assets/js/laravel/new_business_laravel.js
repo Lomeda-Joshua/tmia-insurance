@@ -1242,15 +1242,16 @@ $(document).ready( function () {
   /*--------------------- INSURER INFO --------------------*/
   $("#dpstartdate").datepicker({
     autoclose: true,
+    // format:'dd-mm-yyyy',
     format:'dd-MM-yyyy',
     todayHighlight : true
-  });
+  }).datepicker('setDate', new Date());
 
   $("#dpissuedate").datepicker({
     autoclose: true,
     format:'dd-MM-yyyy',
     todayHighlight : true
-  });
+  }).datepicker('setDate', new Date());
 
   $("#dppexpiredate").datepicker({
     autoclose: true,
@@ -4435,13 +4436,13 @@ const parseSafeDate = (value) => {
   return isNaN(date.getTime()) ? null : date;
 };
 
-$(document).on("changeDate", "#dpreldate", function () {
-  const reldate = parseSafeDate($(this).val());
+// $(document).on("changeDate", "#dpreldate", function () {
+//   const reldate = parseSafeDate($(this).val());
 
-  if (reldate) {
-    $("#dpstartdate").datepicker("setDate", reldate);
-  }
-});
+//   if (reldate) {
+//     $("#dpstartdate").datepicker("setDate", reldate);
+//   }
+// });
 
 $(document).on("changeDate", "#dpstartdate", function () {
   const startdate = parseSafeDate($(this).val());
@@ -4450,9 +4451,8 @@ $(document).on("changeDate", "#dpstartdate", function () {
       expireDate.setFullYear(expireDate.getFullYear() + 1);
 
       $("#dppexpiredate").datepicker("setDate", expireDate);
-      $("#dpissuedate").datepicker("setDate", startdate);
+      // $("#dpissuedate").datepicker("setDate", startdate);
   }
-
 });
 
 /////////// CHECKED BOX EVENT //////////////
@@ -6130,7 +6130,7 @@ function FormDisableStatus(val) {
 }
 
 function FormDisableCall(val) {
-  if (ulevel == 'ADMINISTRATOR' || ulevel == 'INSURANCE STAFF') {
+  if (ulevel == 1 || ulevel == 7) {
     if (val == true) {
       $("#btneditcall").show();
       $("#btnclosecall").show();
@@ -6242,13 +6242,14 @@ function FormClear() {
   // $("#chknonvat").prop("checked", false);
 
   /*============= INSURER INFO ============*/
-  $("#cboinstype").val("").trigger('change.select2');
-  $("#cboinsco").val("").trigger('change.select2');
-  $("#dpstartdate").val("");
-  $("#txtpolicyno").val("");
-  $("#dpissuedate").val("");
-  $("#dppexpiredate").val("");
-  $("#cbomortgage").val("").trigger('change.select2');
+  // $("#cboinstype").val("").trigger('change.select2');
+  // $("#cboinsco").val("").trigger('change.select2');
+  // $("#dpstartdate").val("");
+  // $("#dpissuedate").val("");
+  // $("#txtpolicyno").val("");
+  // $("#dppexpiredate").val("");
+  // $("#cbomortgage").val("").trigger('change.select2');
+
   // $("#txtmortaddress").val("");
   // $("input[name='rdinspromo'][value='NO']").prop("checked", true);
 

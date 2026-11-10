@@ -400,18 +400,6 @@ $(document).ready( function () {
   var yyyy = d.getFullYear();
   var mm = d.getMonth();
 
-  $("#dpdatefrom").datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy',
-    todayHighlight: true
-  }).datepicker("setDate", dd, mm, yyyy); // Pass Date object directly
-
-  $("#dpdateto").datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy',
-    todayHighlight: true
-  }).datepicker("setDate", new Date());
-
   //================== Date From & Date To Picker ===================//
   var today = new Date();
   var d = new Date(new Date().setDate(today.getDate() - 30));
@@ -422,13 +410,13 @@ $(document).ready( function () {
 
   $("#dpdatefrom").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
+    format:'dd-mm-yyyy',
     todayHighlight : true
   }).datepicker("setDate", new Date(yy,mm,dd));
 
   $("#dpdateto").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
+    format:'dd-mm-yyyy',
     todayHighlight : true
   }).datepicker("setDate", new Date());
   //==================================================//
@@ -496,6 +484,7 @@ $(document).ready( function () {
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
+6
 //======= Function Load Master Data ============//
 function LoadMasterData() {
   const searchval = $("#txtsearch").val().trim();
@@ -535,9 +524,12 @@ function LoadMasterData() {
         url: window.getData.vehicleInfo,
         type: "POST",
         data: function (d) {
-          d.searchval = $("#txtsearch").val().trim();
-          d.datefrom  = formatDate($("#dpdatefrom").val());
-          d.dateto    = formatDate($("#dpdateto").val());
+          d.searchval = value['searchval'];
+          // d.datefrom  = formatDate($("#dpdatefrom").val());
+          // d.dateto    = formatDate($("#dpdateto").val());
+          // d.chkall    = $("#chkall").is(":checked") ? 1 : 0;
+          d.datefrom  = value['datefrom'];
+          d.dateto    = value['dateto'];
           d.chkall    = $("#chkall").is(":checked") ? 1 : 0;
         },
       },
@@ -545,13 +537,6 @@ function LoadMasterData() {
         console.error("DataTables AJAX Error: ", xhr.responseText);
       },
       columns: [
-          {
-              data: "DT_RowIndex",
-              name: "DT_RowIndex",
-              orderable: false,
-              searchable: false
-          },
-
           {
               data: "VIN",
               name: "VIN",
