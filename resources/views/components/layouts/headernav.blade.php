@@ -39,9 +39,8 @@
             <ul class="dropdown-menu">
                 <li class="header" id="notification-header">You have 0 notifications</li>
                 <li>
-                <ul class="menu" id="notification-menu">
+                    <ul class="menu" id="notification-menu"></ul>
                     <!-- Notifications will be dynamically inserted here -->
-                </ul>
                 </li>
                 <!-- <li class="footer"><a href="#">View all</a></li> -->
             </ul>

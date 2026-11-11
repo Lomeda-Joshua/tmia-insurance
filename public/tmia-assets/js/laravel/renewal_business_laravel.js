@@ -2535,9 +2535,12 @@ function LoadCustomerInfo() {
         // Loading of previoous insurance details on the creation of Renewal business insurance
         LoadPreviousInsuranceCo(value.renew_business_data);
 
-        $("#cboinstype").prop('disabled', true).trigger('change.select2');
-        $("#cboinsco").prop('disabled', true).trigger('change.select2');
-        $("#cbomortgage").prop('disabled', true).trigger('change.select2');
+        if( !newdata ){
+            $("#cboinstype").prop('disabled', true).trigger('change.select2');
+            $("#cboinsco").prop('disabled', true).trigger('change.select2');
+            $("#cbomortgage").prop('disabled', true).trigger('change.select2');
+        }
+        
 
         // Condition: Disable the entire dropdown if no data or custom rule met
         // if (data.length > 0) {
@@ -5258,12 +5261,15 @@ $(document).on( "click", "#btnadd", function () {
   FormClear();
   FormDisable(false);
 
+  $("#cboinstype").attr("disabled",false);
+
   // renewal flag for determining the policy action and other elements existence
   renewal_flag = 0;  
 
+
   $("#policy_actions").hide();
   $("#policyAction").hide();
-  $("#mortgageeAction").hide();
+
 
 
   if ( ulevel == 7) { 
@@ -6268,6 +6274,7 @@ $(document).on("click", "#btnsubmit", function () {
   });
 });
 
+
 $(document).on( "click", "#btndelete", function () {
   swal({
     title: "Are you sure?",
@@ -6363,6 +6370,8 @@ $(document).on("click", "#prevBtn", function () {
 
 /////////////////// ENABLED OR DISABLED /////////////////////
 function FormDisable(val) { 
+  console.log("Form disable", val);
+
   $("#cboise").attr("disabled",val);
 
   /*============== CUSTOMER INFO ===========*/

@@ -1387,8 +1387,8 @@
                             <table class="receipt-header-table">
                               <tr>
                                 <td style="text-align: left; width: 60%;">
-                                  <strong style="font-size: 16px; color: #333;">TMIA INSURANCE SERVICES</strong><br>
-                                  <span style="font-size: 10px; color: #666;">Summary before submit</span>
+                                  <strong style="font-size: 16px; color: #333;">TOYOTA MAKATI INSURANCE AGENCY</strong><br>
+                                  <span style="font-size: 13px; color: #666;">Summary before submit</span>
                                 </td>
                                 <td style="text-align: right; width: 40%;">
                                   {{-- <span style="font-size: 11px; font-weight: bold; color: #222;">OR #:

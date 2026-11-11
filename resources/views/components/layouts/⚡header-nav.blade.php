@@ -71,7 +71,7 @@ new class extends Component
                     <li>
                         <ul class="menu" id="notification-menu">
                         @foreach($notification_data as $notifiation_info)
-                            <li>{{ $notifiation_info->Title}}</li>
+                            <li><a href="">{{ $notifiation_info->Title }}</a></li>
                         @endforeach
                         </ul>
                     </li>

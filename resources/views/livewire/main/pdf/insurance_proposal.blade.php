@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Renewal Business | Policy Summary - {{ $data['Insurance_No'] ?? '' }}</title>
     
-        <style>
+    <style>
         /* A4 Page setup for printing/PDF engines */
         @page {
             size: A4;
@@ -35,21 +35,26 @@
             vertical-align: top;
         }
         .quotation-title {
-            font-size: 13px;
+            font-size: 15px;
             color: #666;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
         .meta-box {
+            background-color: rgb(23 33 52);
             text-align: right;
         }
         .quotation-no {
             font-size: 16px;
+            text-align:left;
             font-weight: bold;
-            color: #111;
+            /* color: #111; */
+            color: white;
+
         }
         .meta-text {
             font-size: 11px;
+            text-align: left;
             color: #666;
         }
         .badge {
@@ -90,7 +95,7 @@
             float: left;
         }
         .inception-right {
-            float: right;
+            /* float: right; */
             text-align: right;
             font-size: 11px;
             color: #555;
@@ -237,6 +242,13 @@
             padding-left: 15px;
             list-style-type:none;
         }
+
+        /* Added css for table information November 11, 2026 */
+        .vehicleInfoRowTitle {
+            text-transform:uppercase;
+            text-align: right;
+            font-weight:bold;
+        }
     </style>
 
     <div class="quotation-container">
@@ -254,92 +266,79 @@
         </tr>
     </table>   
 
-    <table class="header-table">
-        {{-- Prepared on  --}}
-            <td class="meta-box" style="width: 40%;">
-                <div class="quotation-no">{{ $transaction['Insurance_No'] ?? '' }}</div>
-                <div class="meta-text" style="font-size:14px;">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
-                @php
-                    $dateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
-                @endphp
-                <div class="meta-text" style="font-size:14px;">{{ $dateTime->format('M d, Y'); }}</div>
-                
-            </td>
-    </table>
-    
-    
 
     <!-- Proposal Intro -->
-    <div class="quotation-title" style="margin-top: 4px; text-align:center;"><b>Motor Vehicle Insurance Quotation</b></div>
     <br>
-    <div class="proposal-heading">Your vehicle protection notice</div>
+    <div class="quotation-title" style="margin-top: 4px; text-align:center; font-weight:980;"><b>Insurance Renewal Quotation</b></div>
+    <br>
+    {{-- <div class="proposal-heading">Your vehicle protection notice</div> --}}
 
     
-    <div>
-        <div class="proposal-desc">
-            <div class="greeting" style="margin-bottom: 6px;">Dear {{ $transaction['Full_Name'] ?? '' }},</div>
-            Thank you for considering Toyota Makati Agency Inc., <br>
-            We are pleased to present this renewal proposal for your upcoming insurance policy. The details below summarize your selected coverage options and annual premium to ensure optimal protection for your requirements.
-        </div>
-        <div class="inception-right">
-            Inception date:<br>
-            {{-- <strong>{{ $transaction['Trans_Date'] ?? '' }}</strong><br> --}}
-            <strong>{{ date('F j, Y', strtotime($transaction['Trans_Date'])) }}</strong><br>
-            {{-- <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span> --}}
-        </div>
+    
+    <div class="proposal-desc">
+        <div class="greeting" style="margin-bottom: 6px;">Dear {{ $transaction['Full_Name'] ?? '' }},</div> We are pleased to submit our motor car insurance renewal quotation for your unit detailed below:
     </div>
 
     <div style="clear: both; margin-bottom: 15px;"></div>
 
-    <!-- Info Grid Block -->
-    <table class="info-grid">
-        <tr>
-            <td>
-                <div class="info-label">Assured Name:</div>
-                <div class="info-value">{{ $transaction['Full_Name'] ?? '' }}</div>
-                <div class="info-subvalue">{{ $transaction['Contact_No'] ?? '' }}</div>
-            </td>
-            <td>
-                <div class="info-label">Vehicle</div>
-                <div class="info-value">{{ $transaction['Variant'] ?? '' }}</div>
-                <div class="info-subvalue">
-                    {{ match((int) ($transaction['Prod_Classify'] ?? 0)) {
-                                1 => 'Individual',
-                                2 => 'Government',
-                                3 => 'Fleet',
-                                4 => 'Corporate',
-                                default => '',
-                            } }} | Plate / CS No. {{ $transaction['Plate_No'] ?? 'To be acquired' }}</div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="info-label">Insurance Partner</div>
-                <div class="info-value">{{ $transaction['Insurance_Company'] ?? '' }}</div>
-                {{-- <div class="info-subvalue">Motor Vehicle Insurance</div> --}}
-            </td>
-            <td>
-                <div class="info-label">Gross Premium</div>
-                <div class="info-value">Php {{ number_format($transaction['Gross_Premium'], 2) }}</div>
-                <div class="info-subvalue">Subject to insurer review and acceptance</div>
-            </td>
-        </tr>
-    </table>
 
-    <!-- Coverage and Premium Summary -->
-    <div class="section-heading">Coverage and Premium Summary</div>
+    
+    <table class="header-table">
+        {{-- Prepared on  --}}
+            <td class="meta-box" style="width: 40%;">
+                <div class="quotation-no">{{ $transaction['Insurance_No'] ?? '' }}</div>
+                @php
+                    $dateTime = new DateTime('now', new DateTimeZone('Asia/Manila'));
+                @endphp
+                {{-- <div class="meta-text" style="font-size:14px;">{{ $dateTime->format('M d, Y'); }}</div> --}}
+                
+            </td>
+            <td class="inception-box">
+                <div class="inception-right">Inception date:<br>
+                    {{-- <strong>{{ $transaction['Trans_Date'] ?? '' }}</strong><br> --}}
+                    <strong>{{ date('F j, Y', strtotime($transaction['Trans_Date'])) }}</strong><br>
+                    {{-- <span style="font-size: 10px; color: #777;">Valid until {{ $transaction['Policy_Expiration'] ?? ''  }}</span> --}}
+                </div>
+            </td>
+    </table>
     
     <table class="summary-table">
         <thead>
             <tr>
+                <th colspan="3" style="width: 50%; text-align:center">vehicle information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="vehicleInfoRowTitle">insured property</td>
+                <td colspan="2">{{ $transaction['Variant'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td class="vehicleInfoRowTitle">CS No. / Plate number</td>
+                <td>{{ $transaction['Plate_No'] ?? 'To be acquired' }}</td>
+            </tr>
+            <tr>
+                <td class="vehicleInfoRowTitle">mortgagee</td>
+                <td>As per policy</td>
+            </tr>
+            <tr>
+                <td class="vehicleInfoRowTitle">insurance company</td>
+                <td>{{ $transaction['Insurance_Company'] ?? '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="summary-table">
+        <thead>
+            <tr>
                 <th style="width: 50%;">Coverage</th>
-                <th style="width: 25%;">Sum Insured / Limit</th>
+                <th style="width: 25%;">Sum Insured</th>
                 <th style="width: 25%;">Premium (Php)</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Own Damage / Theft</td>
+                <td>insured property</td>
                 <td> 500,000.00</td>
                 <td> 8,008.45</td>
             </tr>
@@ -389,6 +388,8 @@
             <td> {{ number_format($transaction['Gross_Premium'], 2) }}</td>
         </tr>
     </table>
+
+    <div class="meta-text" style="font-size:14px;">Prepared by <span >{{ $transaction['ISE_Name'] ?? '' }}</span></div>
 
     <!-- Deductible Note -->
 

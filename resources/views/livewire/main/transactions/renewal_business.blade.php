@@ -1322,13 +1322,13 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="dpstartdate">Start / Inception Date *</label>
+                                  <label for="dpstartdate">Inception Date *</label>
                                   <div class="input-group date">
                                     <div class="input-group-addon">
                                       <i class="fa fa-calendar"></i>
                                     </div>
                                     <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
-                                      required="required" data-error="Start / Inception Date is required.">
+                                      required="required" data-error="Inception Date is required.">
                                   </div>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -1372,7 +1372,7 @@
                               </div>
                             </div>
 
-                            <div class="row" id="mortgageeAction" style="display:none;">
+                            <div class="row" id="mortgageeAction">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label for="cbomortgage">Mortgagee *</label>
