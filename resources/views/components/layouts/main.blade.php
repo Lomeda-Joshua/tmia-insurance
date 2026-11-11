@@ -231,10 +231,7 @@
         </div>
     </div>
 
-
-    
     @include('partials.footer')
-
     @push('scripts')
     <script>
         //================== WINDOWS API ROUTE =================//

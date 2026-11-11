@@ -2390,6 +2390,10 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 }
 
 
+$(document).ready(function(){
+ 
+  
+});
 
 
 
@@ -5258,9 +5262,11 @@ $(document).on( "click", "#btnadd", function () {
   renewal_flag = 0;  
 
   $("#policy_actions").hide();
+  $("#policyAction").hide();
+  $("#mortgageeAction").hide();
 
 
-  if ( ulevel == 6) { 
+  if ( ulevel == 7) { 
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
   } else {

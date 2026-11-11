@@ -1266,7 +1266,7 @@
 
                            
                             {{-- Policy action group --}}
-                            <div class="row" >
+                            <div class="row" id="policyAction">
                               <div class="col-md-6">
                                 <label>Policy Action</label>
                                 <div class="radio-group">
@@ -1372,7 +1372,7 @@
                               </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" id="mortgageeAction" style="display:none;">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label for="cbomortgage">Mortgagee *</label>

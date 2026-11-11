@@ -86,6 +86,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
     Route::post('/nbrb-report', [OverallDataController::class, 'nbrbReport'])->name('nbrb.report');
 
+    Route::get('/reports/detailed-excel', [GeneralReportingController::class, 'detailedExcel'])->name('reports.detailed-excel');
 
     
     // Transactions Group

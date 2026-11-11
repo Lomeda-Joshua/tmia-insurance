@@ -212,7 +212,7 @@ var table;
 
     if(category === "DETAILED REPORT"){
 
-        var url = "nbrb_report_detailed_exportxls.php"
+        var url = window.loadData.nbrbGenerateReport
             + "?category="   + encodeURIComponent(category)
             + "&bustype="    + encodeURIComponent(bustype)
             + "&transtatus=" + encodeURIComponent(transtatus)

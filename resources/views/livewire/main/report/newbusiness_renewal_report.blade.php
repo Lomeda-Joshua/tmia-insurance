@@ -231,7 +231,8 @@
       getTransactionStatus : @json(route('gettransaction-status.data')),
       monthOptions: @json(route('month.options')),
       yearOptions: @json(route('year.options')),
-      nbrbReport: @json(route('nbrb.report'))
+      nbrbReport: @json(route('nbrb.report')),
+      nbrbGenerateReport : @json(route('reports.detailed-excel'))
   }
 
 </script>
