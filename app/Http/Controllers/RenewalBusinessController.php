@@ -18,6 +18,7 @@ use App\Models\TransactionRb;
 use App\Models\TransactionsNb;
 use App\Models\ApprovalRbStatus;
 use App\Models\VwTransactionsRb;
+use App\Models\NewBusinessTransactionView;
 use Illuminate\Database\Query\Builder;
 
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,6 @@ class RenewalBusinessController extends Controller
     public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
         $filters = $request->validated();        
-        
         $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Base Query with Joins
@@ -614,11 +614,17 @@ class RenewalBusinessController extends Controller
             'insuranceNo' => 'nullable|string',
             'insuranceno' => 'nullable|string',
         ]);
+
         $validated_data_not_null = empty($validated['insuranceNo']) ? $validated['insuranceno'] : $validated['insuranceno'];
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
-        $data = TransactionRb::where('Insurance_No', $validated_data_not_null)->get();
+        // $data = TransactionRb::where('Insurance_No', $validated_data_not_null)->get();
+
+        $rb = DB::table('transactions_rb')->where('Insurance_No', $validated_data_not_null);
+        $nb = DB::table('transactions_nb')->where('Insurance_No', $validated_data_not_null);
+
+        $data = $rb->unionAll($nb)->get();
         
         // 3. Return JSON Response
         return response()->json($data);
@@ -703,38 +709,71 @@ class RenewalBusinessController extends Controller
         $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
-        $query = TransactionRb::query()
-            ->from('transactions_rb as t')
-            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
-            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
-            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
-            ->select([
-                't.Insurance_No',
-                't.Trans_Date',
-                't.Trans_Status',
-                't.Customer_No',
-                't.VIN',
-                't.Insurance_Company',
-                't.Option_Type',
-                't.Policy_Expiration',
-                'c.Full_Name',
-                'c.Contact_No',
-                'v.CS_No',
-                'v.Plate_No',
-                'v.Model',
-                'v.Variant',
-                'i.ISE_Name',
-                DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
-            ])
+// ---------- RB ----------
+$rb = TransactionRb::query()
+    ->from('transactions_rb as t')
+    ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+    ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+    ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+    ->select([
+        DB::raw("'RB' as Source"),
+        't.Insurance_No',
+        't.Start_Date',
+        't.Trans_Date',
+        't.Trans_Status',
+        't.Customer_No',
+        't.VIN',
+        't.Insurance_Company',
+        't.Option_Type',
+        't.Policy_Expiration',
+        't.ISE_No',
+        'c.Full_Name',
+        'c.Contact_No',
+        'v.CS_No',
+        'v.Plate_No',
+        'v.Model',
+        'v.Variant',
+        'i.ISE_Name',
+        DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+    ]);
 
-            ->when($user_id_info, function($query, $user_id_info){
-            $user_id_info == 1 ? ' ' : $query->where('t.ISE_No', $user_id_info) ;
-            })
+// ---------- NB ----------
+$nb = NewBusinessTransactionView::query()
+    ->from('transactions_nb as t')
+    ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+    ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+    ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+    ->select([
+        DB::raw("'NB' as Source"),
+        't.Insurance_No',
+        't.Start_Date',
+        't.Trans_Date',
+        't.Trans_Status',
+        't.Customer_No',
+        't.VIN',
+        't.Insurance_Company',
+        't.Option_Type',
+        't.Policy_Expiration',          // see note 1
+        't.ISE_No',
+        'c.Full_Name',
+        'c.Contact_No',
+        'v.CS_No',
+        'v.Plate_No',
+        'v.Model',
+        'v.Variant',
+        'i.ISE_Name',
+        DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+    ]);
 
-            ->where(function ($q) use ($today, $ninetyDaysLater) {
-                $q->whereBetween('t.Policy_Expiration', [$today, $ninetyDaysLater])
-                  ->orWhere('t.Policy_Expiration', '<=', $today);
-            });
+// ---------- UNION, wrapped so filters apply to the combined set ----------
+$query = DB::query()->fromSub($rb->unionAll($nb), 'u')
+    ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
+        $q->where('u.ISE_No', $user_id_info);
+    })
+    ->where(function ($q) use ($today, $ninetyDaysLater) {
+        $q->whereBetween('u.Policy_Expiration', [$today, $ninetyDaysLater])
+          ->orWhere('u.Policy_Expiration', '<=', $today);
+    });
 
         $statusColors = [
             'PENDING'            => 'label label-default',

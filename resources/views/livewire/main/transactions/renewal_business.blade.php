@@ -2459,7 +2459,7 @@
             <div class="box-body">
 
               <ul class="nav nav-tabs approvaltab">
-                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">30 days before expiration</a></li>
+                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration</a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
                 <li class=""><a href="#renewed" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
               </ul>
@@ -2477,8 +2477,9 @@
                                       <thead>
                                         <tr class="tableheader">
                                           <th>Insurance No.</th>
-                                          <th>Trans. Date & Time</th>
+                                          <th>Trans. Date & Time</th>  
                                           <th>Days before expiration</th>
+                                          <th>Start Date</th>
                                           <th>Policy Expiration</th>
                                           <th>Issue Date</th>
                                           <th>Status</th>
@@ -2511,7 +2512,6 @@
                     <div class="box">
                         <div class="box-body">
                           <div class="box-header with-border">
-                              <h3 class="box-title">Cleared Application Request</h3>
                           </div>
                           <div class="box-body">
                               <div class="table-responsive">
@@ -2553,7 +2553,6 @@
                         <div class="box">
                             <div class="box-body">
                               <div class="box-header with-border">
-                                  <h3 class="box-title">Cleared Application Request</h3>
                               </div>
                               <div class="box-body">
                                   <div class="table-responsive">

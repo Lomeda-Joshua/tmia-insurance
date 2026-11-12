@@ -1652,12 +1652,11 @@ function LoadTransactionData() {
     });  
 
 
-  viewpending = false;
-  viewexpiring = false;
+    viewpending = false;
+    viewexpiring = false;
 }
 //======================================//
 
-$("#modal-show-expiring-policies").iziModal('open');
 
 
 // * * * * * * New function added October 16, 2026 * * * * * * //
@@ -1678,8 +1677,11 @@ $(document).on("click", "#btnSearch", function () {
   }
 });
 
+$('#modal-show-expiring-policies').on('opened', initExpiringTable);
 
-function initExpiringTable() {
+
+function initExpiringTable(){
+
   // Already initialized: just refetch data and keep the current page
   if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
      $('#table_expiring_list').DataTable().ajax.reload(); 
@@ -1699,13 +1701,12 @@ function initExpiringTable() {
   }
 
 
-
   /**
    *  
    *  Expiring list  
    * 
   **/ 
-  $('#table_expiring_list').DataTable({
+  let tableExpiring = $('#table_expiring_list').DataTable({
       language: {
         processing: "Loading Transaction List..."
       },
@@ -1740,7 +1741,17 @@ function initExpiringTable() {
               }
           },
 
-          { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
+           { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
+
+            { 
+              data: "Start_Date", 
+              name: "Start_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
 
 
           { 
@@ -1807,7 +1818,41 @@ function initExpiringTable() {
           }
         }
       ]
-  }); 
+  });  
+  
+    // 2) SINGLE CLICK: select the row and load its data
+    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {          
+          const row = tableExpiring.row(this).data();
+          if (!row) return;                       // ignores responsive child rows
+
+          tableExpiring.$('tr.selected').removeClass('selected');
+          $(this).addClass('selected');
+
+          renewal_flag = 1; 
+
+          xcustno       = row.Customer_No;
+          xcustnoupload = row.Customer_No;
+          xvin          = row.VIN;
+          xcsno         = row.CS_No;
+          xplateno      = row.Plate_No;
+          insuranceno   = row.Insurance_No;
+
+    });
+  
+    // 3) DOUBLE CLICK: confirm selection and close the modal
+    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+          // $('#btncustselect').trigger('click');
+          $('#btnnbselect').trigger('click');
+          $('#policyAction').attr();
+          $('#modal-show-expiring-policies').iziModal('close');
+    });
+  
+  
+
+
+     
+
+  
 
 
   /**
@@ -1827,6 +1872,13 @@ function initExpiringTable() {
 
 
 }
+
+
+
+
+
+
+
 
 
 /**
@@ -1868,52 +1920,7 @@ $(document).on("change", "#dppexpiredate", function () {
       let value_input = $(this).val();      
       $("#dppexpiredate_summary").val(value_input);
 });
-
-
-
-  
-// Bind row click for selection AFTER table initialization
-$(document).ready(function(){
-    $('#modal-show-expiring-policies').on('opened', initExpiringTable);
-
-    // Bind row click for selection AFTER table initialization
-    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {
-
-        let table = $('#table_expiring_list').DataTable();
-
-        // Remove selection from any previously selected row
-        table.$('tr.selected').removeClass('selected');
-
-        // Highlight clicked row
-        $(this).addClass('selected');
-
-        // renewal flag for determining the policy action existence
-        renewal_flag = 1;
-
-        
-        // Optional: get Customer_No
-        xnbno = table.cell(this, 0).data();
-        xcustno = table.cell(this, 6).data();
-        xvin = table.cell(this, 9).data();
-        insuranceno = table.cell(this,0).data();
-
-        LoadCustomerData();
-
-    });
-
-    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () { 
-        $('#btnnbselect').trigger("click");
-        $('#modal-show-expiring-policies').iziModal('close');
-
-    });
-
-});
-
-
-
 /////////// End Filter on Renewal of business ///////////
-
-
 
 //============== Customer List ============//
 function LoadCustomerData() {
@@ -1999,8 +2006,8 @@ function LoadCustomerData() {
   });
 
   // ✅ Bind row click for selection AFTER table initialization
-  $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btncustselect').trigger("click");
+  $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {    
+    $('#btncustselect').trigger("click");
   });
 }
 
@@ -2390,14 +2397,6 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 }
 
 
-$(document).ready(function(){
- 
-  
-});
-
-
-
-
 // Listen for changes on the radio action group
 $(document).on("change", "input[name='rdpolicyaction']", function () {
     let actionVal = $("input[name='rdpolicyaction']:checked").val();
@@ -2464,9 +2463,9 @@ function LoadCustomerInfo() {
     type:"POST",
     url:window.LaravelRoutes.loadSelectedCustomer,
     data:{custno:xcustno},
-    success: function(data){
-
+    success: function(data){      
       $.each(data, function(i, value) {
+
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2541,7 +2540,6 @@ function LoadCustomerInfo() {
             $("#cbomortgage").prop('disabled', true).trigger('change.select2');
         }
         
-
         // Condition: Disable the entire dropdown if no data or custom rule met
         // if (data.length > 0) {
             
@@ -2553,7 +2551,6 @@ function LoadCustomerInfo() {
     }
   });
   
-
   LoadVehicleInfo();
 
   $(".box-body").validator('reset');
@@ -5174,22 +5171,22 @@ $(document).on( "click", "#btnfindcustomer", function () {
   }
   
 
-  // Select customer will only show if it is not clicked on expirigin
+  // Select customer will only show if it is not clicked on expiring
   if(renewal_flag != 1){
     $('#modal-customerlist').iziModal('open');
   }
-  
-  
+
 });
 
 $(document).on( "click", "#btncustselect", function () {
   if (activeCustTab === '#tmiatab') {
-    LoadCustomerInfo();
+        LoadCustomerInfo();
   }
 
-  if (activeCustTab === '#uploadtab') {
-    LoadCustomerEDAFSAPInfo();
+  if (activeCustTab === '#uploadtab') { 
+        LoadCustomerEDAFSAPInfo();
   }
+
   $('#modal-customerlist').iziModal('close');
 });
 
@@ -5230,7 +5227,7 @@ $(document).on( "click", "#btnnbselect", function () {
   editinfo = true;
   FormClear();
   FormDisable(false);
-
+  
   renewal_flag = 1;
 
   $('#modal-nblist').iziModal('close');
@@ -5240,14 +5237,13 @@ $(document).on( "click", "#btnnbselect", function () {
   LoadInsuranceInfo(xnbno);
   LoadInsurerInfo(xnbno);
 
-
-  if ( ulevel == 7) { 
-    console.log("here");
+  if (ulevel == 7){ 
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
   } else {    
     $('#modal-modify-ise').iziModal('open');
   }
+
 
 });
 
