@@ -1,7 +1,7 @@
     // Set timeout variables.
     var timoutWarning = 900000; // Display warning in 15 minutes (15 * 60 * 1000)
     var timoutNow = 30000;      // Log out 30 seconds after the warning
-    var logoutUrl = 'lockscreen'; // URL to logout page.
+    var logoutUrl = window.lockscreenUrl.activateLockscreen; // URL to logout page.
 
     var warningTimer;
     var timeoutTimer;

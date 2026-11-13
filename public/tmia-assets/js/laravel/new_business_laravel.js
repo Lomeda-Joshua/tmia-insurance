@@ -1057,6 +1057,9 @@ $(document).ready( function () {
       url: window.formRoutes.insuranceCoData,
       data: { insType: type },
       success: function (data) {
+
+        console.log(data);
+
         let options = '<option value="">PLEASE SELECT</option>';
 
         $.each(data, function (index, item) {
@@ -1070,6 +1073,13 @@ $(document).ready( function () {
   }
 
   loadInsuranceCompanies();
+
+  $(document).on("change", "#cboinstype", function () {
+        let instype = $(this).val();  
+
+        loadInsuranceCompanies(instype);   
+        $("#cboinstype_summary").val(instype);
+  });
 
 
   $("#cboinsco").select2({
@@ -2639,6 +2649,8 @@ function LoadSummaryCustomerInfo(){
     LoadVehicleInfo();
 
     $(".box-body").validator('reset');
+
+    
   
 }
 
@@ -5355,12 +5367,7 @@ $(document).on("click", "#btnupdatecall", function () {
 });
 
 
-$(document).on("change", "#cboinstype", function () {
-      let instype = $(this).val();  
 
-      loadInsuranceCompanies(instype);   
-      $("#cboinstype_summary").val(value_input);
-});
 
 $(document).on("change", "#cboinsco", function () {
       let value_input = $(this).val();      

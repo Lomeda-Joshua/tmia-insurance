@@ -263,12 +263,9 @@ class OverallDataController extends Controller
     public function getInsuranceCo(Request $request): JsonResponse
     {
         $insuranceCo = InsuranceCo::query()
-            ->where('Insurance_ID', $request->insType)
-            ->orderBy('Insurance_ID', 'asc')
-            ->get([
-                'Insurance_ID',
-                'Insurance_Desc',
-            ]);
+            ->where('insType', $request->insType)
+            ->orderBy('Insurance_Desc', 'asc')
+            ->get(['Insurance_ID', 'Insurance_Desc']);
 
         return response()->json($insuranceCo);
     }

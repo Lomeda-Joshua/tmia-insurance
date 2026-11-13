@@ -1,4 +1,9 @@
 <!--============<******* JAVA SCRIPT (JS) *******>============-->
+<script>
+window.lockscreenUrl = {
+    activateLockscreen: @json(route('lockscreen'))
+}
+</script>
 
 <!-- jQuery v3.7.1 -->
 <script type="text/javascript" src="{{ asset('tmia-assets/plugins/jquery/dist/jquery.min.js') }}"></script>
