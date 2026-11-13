@@ -34,6 +34,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Log;
+
 class OverallDataController extends Controller
 {
 
@@ -261,6 +263,7 @@ class OverallDataController extends Controller
     public function getInsuranceCo(Request $request): JsonResponse
     {
         $insuranceCo = InsuranceCo::query()
+            ->where('Insurance_ID', $request->insType)
             ->orderBy('Insurance_ID', 'asc')
             ->get([
                 'Insurance_ID',

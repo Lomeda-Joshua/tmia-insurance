@@ -28,9 +28,10 @@ var editstatus = false;
 var activeCustTab;
 var activeVehTab;
 
+let insType = "";
+
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
 $(document).ready( function () {
-  
     //================== GET USER LOG IN INFORMATION =================//
     $.ajaxSetup({
         headers: {
@@ -1028,7 +1029,7 @@ $(document).ready( function () {
 
         // Iterate over JSON objects and build <option> elements
         $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_Type}">${item.Insurance_Type}</option>`;
+          options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
         });
 
         // Inject populated options into dropdown
@@ -1047,25 +1048,29 @@ $(document).ready( function () {
     $(this).trigger("change.select2");
   });
 
+  console.log('insurance type',insType);
+
   //======= Insurance =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.insuranceCoData,
-    success: function(data) {
+  function loadInsuranceCompanies(type) {
+    $.ajax({
+      type: "POST",
+      url: window.formRoutes.insuranceCoData,
+      data: { insType: type },
+      success: function (data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
+        $.each(data, function (index, item) {
           options += `<option value="${item.Insurance_Desc}">${item.Insurance_Desc}</option>`;
         });
 
-        // Inject populated options into dropdown
         $("#cboinsco").html(options);
-
-        // Force Select2 to refresh its display
         $("#cboinsco").trigger('change.select2');
-    }
-  });
+      }
+    });
+  }
+
+  loadInsuranceCompanies();
+
 
   $("#cboinsco").select2({
     allowClear: true,
@@ -5351,7 +5356,9 @@ $(document).on("click", "#btnupdatecall", function () {
 
 
 $(document).on("change", "#cboinstype", function () {
-      let value_input = $(this).val();      
+      let instype = $(this).val();  
+
+      loadInsuranceCompanies(instype);   
       $("#cboinstype_summary").val(value_input);
 });
 
@@ -5573,7 +5580,7 @@ $(document).on("click", "#btnsubmit", function () {
     { key: "country", selector: "#cbocountry", message: "Please fill out Country." },
   ];
 
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     customerValidation.push(
       { key: "custfname", selector: "#txtcustfname", message: "Please fill out First Name." },
       { key: "custlname", selector: "#txtcustlname", message: "Please fill out Last Name." },
@@ -5585,11 +5592,11 @@ $(document).on("click", "#btnsubmit", function () {
     );
   }
 
-  if (!runValidation(customerValidation.map(v => ({
-    value: customerFields[v.key],
-    selector: v.selector,
-    message: v.message
-  })))) return;
+  // if (!runValidation(customerValidation.map(v => ({
+  //   value: customerFields[v.key],
+  //   selector: v.selector,
+  //   message: v.message
+  // })))) return;
 
   // Email format check
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerFields.emailadd)) {
@@ -5664,11 +5671,11 @@ $(document).on("click", "#btnsubmit", function () {
     { key: "mpname", selector: "#txtmpname", message: "Please fill out Marketing Professional." }
   ];
 
-  if (!runValidation(vehicleValidation.map(v => ({
-    value: vehicleFields[v.key],
-    selector: v.selector,
-    message: v.message
-  })))) return;
+  // if (!runValidation(vehicleValidation.map(v => ({
+  //   value: vehicleFields[v.key],
+  //   selector: v.selector,
+  //   message: v.message
+  // })))) return;
 
   // ======================================================
   // INSURANCE CALC

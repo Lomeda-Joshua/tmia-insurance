@@ -56,4 +56,8 @@ class TransactionRb extends Model
     public function transaction_Rb_payment(){
         return $this->hasMany(TransactionRBPayment::class,'Insurance_No','Insurance_No' );
     }
+
+    public function transactionStatus(){
+        return $this->hasMany(TransactionStatus::class,'Trans_Status', 'Trans_Status');
+    }
 }

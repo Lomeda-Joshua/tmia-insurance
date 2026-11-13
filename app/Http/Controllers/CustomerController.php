@@ -41,14 +41,14 @@ class CustomerController extends Controller
         $filter = $request->input('btnselect', $request->input('letter'));
 
         if (!empty($filter) && $filter !== 'ALL') {
-                if ($filter === '[0-9]') {
-                    $query->whereRaw("Full_Name REGEXP '^[0-9]'");
-                } elseif ($filter === '[SPECIAL CHAR]') {
-                    $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
-                } else {
-                    $query->where('Full_Name', 'like', "{$filter}%");
-                }
+            if ($filter === '[0-9]') {
+                $query->whereRaw("Full_Name REGEXP '^[0-9]'");
+            } elseif ($filter === '[SPECIAL CHAR]') {
+                $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
+            } else {
+                $query->where('Full_Name', 'like', "{$filter}%");
             }
+        }
 
 
         // Determine and extract the search string safely

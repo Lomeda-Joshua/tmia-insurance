@@ -1741,6 +1741,158 @@ function initExpiringTable(){
               }
           },
 
+          { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
+
+          { 
+              data: "Start_Date", 
+              name: "Start_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
+
+          { 
+              data: "Policy_Expiration", 
+              name: "Policy_Expiration", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
+
+          { data: "Issue_Date",  name: "Issue_Date", defaultContent: "- - -", },
+
+          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+          
+          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+          
+          // Flattened Columns (Matches leftJoin backend)
+          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+          
+          { data: "VIN", name: "VIN", defaultContent: "- - -" },
+          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+          // { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+          { data: "Model", name: "Model", defaultContent: "- - -" },
+          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+            
+          // Main Table Columns
+          { 
+            data: "Insurance_Company", 
+            name: "Insurance_Company", 
+            defaultContent: "- - -" 
+          },                  
+      ],
+      columnDefs: [
+        {
+          targets: [5, 11, 12, 13],
+          render: function (data, type, row, meta) {
+              // Use plain text for sorting, searching, and export
+              if (type !== 'display') {
+                return typeof data === 'string' ? stripHtml(data) : data;
+              }
+
+              const maxLength = 30;
+              if (typeof data !== 'string') return data;
+
+              // Cell contains HTML (e.g. status badges): return as-is, no truncation
+              if (/<[a-z][\s\S]*>/i.test(data)) {
+                return data;
+              }
+
+              if (data.length > maxLength) {
+                const truncated = data.substring(0, maxLength) + '...';
+                const safe = escapeAttr(data);
+                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+              }
+
+              return data;
+          }
+        }
+      ]
+  });  
+  
+    // 2) SINGLE CLICK: select the row and load its data
+    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {          
+          const row = tableExpiring.row(this).data();
+          if (!row) return;                       // ignores responsive child rows
+
+          tableExpiring.$('tr.selected').removeClass('selected');
+          $(this).addClass('selected');
+
+          $('.policyAction').show(); 
+          renewal_flag = 1; 
+          
+          xcustno       = row.Customer_No;
+          xcustnoupload = row.Customer_No;
+          xvin          = row.VIN;
+          xcsno         = row.CS_No;
+          xplateno      = row.Plate_No;
+          insuranceno   = row.Insurance_No;
+
+    });
+  
+    // 3) DOUBLE CLICK: confirm selection and close the modal
+    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+          $('#modal-show-expiring-policies').iziModal('close');
+          $('#btncustselect').trigger('click');
+          // $('#btnnbselect').trigger('click');
+    });
+
+    console.log('renewal flag', renewal_flag);
+  
+  
+
+
+     
+
+  
+
+
+  /**
+   *  
+   *  Expired list  
+   * 
+  **/ 
+  let tableExpired = $('#table_expired_list').DataTable({
+      language: {
+        processing: "Loading Transaction List..."
+      },
+      processing: true,
+      serverSide: true,
+      searching: false,
+      pageLength: 10,
+      responsive: true,
+      autoWidth: false,
+      ajax: {
+        url: window.tableRoutes.getExpiredPolicies,
+        type: "POST",
+        data: function (d) {
+          d.viewpending  = window.viewpending === true;
+          d.viewexpiring = window.viewexpiring === true;
+          d.searchval    = $('#txtsearch').val().trim();
+          d.datefrom     = $('#dpdatefrom').val();
+          d.dateto       = $('#dpdateto').val();
+          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
+          d.dpFilter     = $('#dpFilterSelect').val();
+        }
+      },                                   // <-- closes ajax
+      columns: [
+          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+          { 
+              data: "Trans_Date", 
+              name: "Trans_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+              }
+          },
+
            { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
 
             { 
@@ -1821,11 +1973,11 @@ function initExpiringTable(){
   });  
   
     // 2) SINGLE CLICK: select the row and load its data
-    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {          
-          const row = tableExpiring.row(this).data();
+    $('#table_expired_list tbody').off('click', 'tr').on('click', 'tr', function () {          
+          const row = tableExpired.row(this).data();
           if (!row) return;                       // ignores responsive child rows
 
-          tableExpiring.$('tr.selected').removeClass('selected');
+          tableExpired.$('tr.selected').removeClass('selected');
           $(this).addClass('selected');
 
           renewal_flag = 1; 
@@ -1840,37 +1992,131 @@ function initExpiringTable(){
     });
   
     // 3) DOUBLE CLICK: confirm selection and close the modal
-    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+    $('#table_expired_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
           // $('#btncustselect').trigger('click');
           $('#btnnbselect').trigger('click');
-          $('#policyAction').attr();
+
+          // $('#policyAction').attr();
           $('#modal-show-expiring-policies').iziModal('close');
     });
-  
-  
 
 
-     
-
-  
-
-
-  /**
-   *  
-   *  Expired list  
-   * 
-  **/ 
 
   /**
    *  
    *  Renewed  
    * 
   **/ 
+  $('#renewedTable').DataTable({
+      language: {
+        processing: "Loading Transaction List..."
+      },
+      processing: true,
+      serverSide: true,
+      searching: false,
+      pageLength: 10,
+      responsive: true,
+      autoWidth: false,
+      ajax: {
+        url: window.tableRoutes.getRenewedPolicies,
+        type: "POST",
+        data: function (d) {
+          d.viewpending  = window.viewpending === true;
+          d.viewexpiring = window.viewexpiring === true;
+          d.searchval    = $('#txtsearch').val().trim();
+          d.datefrom     = $('#dpdatefrom').val();
+          d.dateto       = $('#dpdateto').val();
+          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
+          d.dpFilter     = $('#dpFilterSelect').val();
+        }
+      },                                   // <-- closes ajax
+      columns: [
+          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+          { 
+              data: "Trans_Date", 
+              name: "Trans_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+              }
+          },
+
+          { 
+              data: "Start_Date", 
+              name: "Start_Date", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
 
 
+          { 
+              data: "Policy_Expiration", 
+              name: "Policy_Expiration", 
+              defaultContent: "- - -", 
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+          },
 
+          { 
+              data: "Trans_Status", 
+              name: "Trans_Status", 
+              defaultContent: "- - -", 
+          },
+          
+          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+          
+          // Flattened Columns (Matches leftJoin backend)
+          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+          
+          { data: "VIN", name: "VIN", defaultContent: "- - -" },
+          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+          { data: "Model", name: "Model", defaultContent: "- - -" },
+          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+            
+          // Main Table Columns
+          { 
+            data: "Insurance_Company", 
+            name: "Insurance_Company", 
+            defaultContent: "- - -" 
+          },                  
+      ],
+      columnDefs: [
+        {
+          targets: [5, 11, 12, 13],
+          render: function (data, type, row, meta) {
+              // Use plain text for sorting, searching, and export
+              if (type !== 'display') {
+                return typeof data === 'string' ? stripHtml(data) : data;
+              }
 
+              const maxLength = 30;
+              if (typeof data !== 'string') return data;
 
+              // Cell contains HTML (e.g. status badges): return as-is, no truncation
+              if (/<[a-z][\s\S]*>/i.test(data)) {
+                return data;
+              }
+
+              if (data.length > maxLength) {
+                const truncated = data.substring(0, maxLength) + '...';
+                const safe = escapeAttr(data);
+                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+              }
+
+              return data;
+          }
+        }
+      ]
+  });  
+  
 }
 
 
@@ -1962,14 +2208,14 @@ function LoadCustomerData() {
       { data: "Upload_Cust_No" },
       { data: "VIN" },
       { data: "CS_No" },
-      { data: "Plate_No" },
+      // { data: "Plate_No" },
       { data: "Variant" },
-      // {
-      //   data: "Active_Status",
-      //   render: function (data) {
-      //     return data == "1" ? "ACTIVE" : "INACTIVE";
-      //   }
-      // },
+      {
+        data: "Active_Status",
+          render: function (data) {
+            return data == "1" ? "ACTIVE" : "INACTIVE";
+          }
+      },
       // { data: "Inactive_Date" }
     ],
     columnDefs: [
@@ -5228,7 +5474,7 @@ $(document).on( "click", "#btnnbselect", function () {
   FormClear();
   FormDisable(false);
   
-  renewal_flag = 1;
+  renewal_flag = 0;
 
   $('#modal-nblist').iziModal('close');
   
@@ -5258,15 +5504,12 @@ $(document).on( "click", "#btnadd", function () {
   FormDisable(false);
 
   $("#cboinstype").attr("disabled",false);
-
+  
   // renewal flag for determining the policy action and other elements existence
   renewal_flag = 0;  
 
-
   $("#policy_actions").hide();
-  $("#policyAction").hide();
-
-
+  $('.policyAction').hide();
 
   if ( ulevel == 7) { 
     $("#cboise").val(userid).trigger("change.select2");
@@ -6002,7 +6245,7 @@ $(document).on("click", "#btnsubmit", function () {
   let custname = getUpper("#txtcustname");
 
   // Build full name for INDIVIDUAL
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     custname = [custfname, custmname, custlname, custsname]
       .filter((x) => x && x !== "")
       .join(" ");
@@ -6048,7 +6291,7 @@ $(document).on("click", "#btnsubmit", function () {
     { key: "country", selector: "#cbocountry", message: "Please fill out Country." },
   ];
 
-  if (group === "INDIVIDUAL") {
+  if (group == 1) {
     customerValidation.push(
       { key: "custfname", selector: "#txtcustfname", message: "Please fill out First Name." },
       { key: "custlname", selector: "#txtcustlname", message: "Please fill out Last Name." },
@@ -6060,11 +6303,11 @@ $(document).on("click", "#btnsubmit", function () {
     );
   }
 
-  if (!runValidation(customerValidation.map(v => ({
-    value: customerFields[v.key],
-    selector: v.selector,
-    message: v.message
-  })))) return;
+  // if (!runValidation(customerValidation.map(v => ({
+  //   value: customerFields[v.key],
+  //   selector: v.selector,
+  //   message: v.message
+  // })))) return;
 
   // Email format check
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerFields.emailadd)) {
@@ -6139,11 +6382,11 @@ $(document).on("click", "#btnsubmit", function () {
     { key: "mpname", selector: "#txtmpname", message: "Please fill out Marketing Professional." }
   ];
 
-  if (!runValidation(vehicleValidation.map(v => ({
-    value: vehicleFields[v.key],
-    selector: v.selector,
-    message: v.message
-  })))) return;
+  // if (!runValidation(vehicleValidation.map(v => ({
+  //   value: vehicleFields[v.key],
+  //   selector: v.selector,
+  //   message: v.message
+  // })))) return;
 
   // ======================================================
   // INSURANCE CALC

@@ -114,5 +114,10 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return $this->belongsTo(UserLevel::class, 'User_Level_ID', 'User_Level_ID');
     }
+
+
+    public function transactionRb(){
+        return $this->hasMany( TransactionRb::class, 'ISE_No' , 'User_ID' );
+    }
     
 }

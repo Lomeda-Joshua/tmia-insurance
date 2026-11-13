@@ -71,6 +71,36 @@
                   <div class="col-md-12">
                     <div class="box">
                       <div class="box-header with-border">
+                        <h3 class="box-title">Total Insurance account assigned</h3>
+                        <div class="box-tools pull-right">
+                          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                      </div>
+
+                      <div class="box-footer" style="background-color: #f4f4f4;">
+                        <div class="row">
+                          @foreach( $ise_staff as $ise_staffs )
+                              <div class="col-sm-3 col-xs-6" style="border-right: 1px solid #ddd;">
+                                <div class="description-block border-right">
+                                  <span class="description-percentage text-yellow" style="font-weight: bold;" id="tpendingp" >{{ $ise_staffs->Display_Name }}</span>
+                                  <h5 class="description-header" style="font-weight: bold;" id="tpending">{{ $ise_staffs->pending_count }}</h5>
+                                  <span class="description-text" style="font-weight: bold;">TOTAL PENDING</span>
+                                </div>
+                              </div>
+                          @endforeach
+                         
+
+                        </div>
+                      </div>
+                    <br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="box">
+                      <div class="box-header with-border">
                         <h3 class="box-title">Call Status Total Counts</h3>
                         <div class="box-tools pull-right">
                           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -204,8 +234,11 @@
                   </div>
                 </div>
               </div>
+              <br>
             </div>     
             <!--end::Row-->
+
+            <br>
 
             <div class="row">
 
@@ -226,22 +259,18 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td><span class="badge badge-muted">Mar 04</span></td>
-                          <td>
-                            <span class="client-name">Jonathan Wick</span>
-                            <span class="client-id">UID: 4402</span>
-                          </td>
-                          <td>45</td>
-                        </tr>
-                        <tr>
-                          <td><span class="badge badge-muted">Mar 12</span></td>
-                          <td>
-                            <span class="client-name">Elena Rodriguez</span>
-                            <span class="client-id">UID: 3912</span>
-                          </td>
-                          <td>32</td>
-                        </tr>
+                        
+                        @foreach($birthdaysThisMonth as $birthMonth)
+                            <tr>
+                              <td><span class="badge badge-muted">{{ \Carbon\Carbon::parse($birthMonth->Birth_Date)->format('F d') }}</span></td>
+                              <td>
+                                <span class="client-name">{{ $birthMonth->Full_Name }}</span>
+                                <span class="client-id">{{ $birthMonth->Customer_No }}</span>
+                              </td>
+                              <td>{{ \Carbon\Carbon::parse($birthMonth->Birth_Date)->age }}</td>
+                            </tr>
+                        @endforeach
+
                       </tbody>
                     </table>
                   </div>

@@ -19,28 +19,30 @@ use App\Models\TransactionsNb;
 use App\Models\ApprovalRbStatus;
 use App\Models\VwTransactionsRb;
 use App\Models\NewBusinessTransactionView;
+use App\Models\NewBusiness;
 use Illuminate\Database\Query\Builder;
 
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class RenewalBusinessController extends Controller 
+class RenewalBusinessController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('livewire.main.transactions.renewal_business');
     }
 
     public function getRenewalTableData(RenewalBusinessDatatableRequest $request): JsonResponse
     {
-        $filters = $request->validated();        
+        $filters = $request->validated();
         $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Base Query with Joins
         $query = RenewalBusinessTransaction::query()
             ->leftJoin('customer_information', 'transactions_rb.Customer_No', '=', 'customer_information.Customer_No')
             ->leftJoin('vehicle_information', 'transactions_rb.VIN', '=', 'vehicle_information.VIN') // Adjust join key if using CS_No\
-            ->leftJoin('user', 'transactions_rb.User_ID', '=', 'user.User_ID') 
+            ->leftJoin('user', 'transactions_rb.User_ID', '=', 'user.User_ID')
             ->leftJoin('user as ise_name', 'transactions_rb.ISE_No', '=', 'ise_name.User_ID')
             ->leftJoin('vw_call_attempts_rb', 'vw_call_attempts_rb.Insurance_No', '=', 'transactions_rb.Insurance_No')
             ->select([
@@ -72,15 +74,15 @@ class RenewalBusinessController extends Controller
                 'vehicle_information.Variant',
 
                 'vw_call_attempts_rb.Call_Attempts'
-        ])
-        ->when($user_id_info, function($query, $user_id_info){
-            $user_id_info == 1 ? ' ' : $query->where('transactions_rb.ISE_No', $user_id_info) ;
-        });
-        
+            ])
+            ->when($user_id_info, function ($query, $user_id_info) {
+                $user_id_info == 1 ? ' ' : $query->where('transactions_rb.ISE_No', $user_id_info);
+            });
+
         // 2. Pending Filter
         if ($filters['viewpending']) {
             $query->where('transactions_rb.Trans_Status', 'PENDING');
-        }    
+        }
 
         // 2. Transaction date Filter
         if ($filters['dpFilter'] === "trans_date") {
@@ -90,7 +92,7 @@ class RenewalBusinessController extends Controller
             ])->orderBy('transactions_rb.Trans_Date', 'asc');
         }
 
-         // 2. Transaction date Filter
+        // 2. Transaction date Filter
         if ($filters['dpFilter'] === "issue_date") {
             $query->whereBetween('transactions_rb.Issue_Date', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
@@ -114,17 +116,17 @@ class RenewalBusinessController extends Controller
         }
 
         // 4. Custom Search Filter (Runs regardless of Date Range)
-        if (! empty($filters['searchval'])) {
+        if (!empty($filters['searchval'])) {
             $search = '%' . trim($filters['searchval']) . '%';
 
             $query->where(function ($q) use ($search) {
                 $q->where('transactions_rb.Insurance_No', 'like', $search)
-                ->orWhere('transactions_rb.VIN', 'like', $search)
-                ->orWhere('transactions_rb.Customer_No', 'like', $search)
-                ->orWhere('customer_information.Full_Name', 'like', $search)
-                ->orWhere('customer_information.Contact_No', 'like', $search)
-                ->orWhere('vehicle_information.CS_No', 'like', $search)
-                ->orWhere('vehicle_information.Plate_No', 'like', $search);
+                    ->orWhere('transactions_rb.VIN', 'like', $search)
+                    ->orWhere('transactions_rb.Customer_No', 'like', $search)
+                    ->orWhere('customer_information.Full_Name', 'like', $search)
+                    ->orWhere('customer_information.Contact_No', 'like', $search)
+                    ->orWhere('vehicle_information.CS_No', 'like', $search)
+                    ->orWhere('vehicle_information.Plate_No', 'like', $search);
             });
         }
 
@@ -133,9 +135,9 @@ class RenewalBusinessController extends Controller
         if (
             empty($filters['chkall']) &&
             empty($filters['searchval']) &&
-            ! empty($filters['datefrom']) &&
-            ! empty($filters['dateto'])
-        ){
+            !empty($filters['datefrom']) &&
+            !empty($filters['dateto'])
+        ) {
             $query->whereBetween('transactions_rb.Trans_Date', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
                 Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
@@ -144,16 +146,16 @@ class RenewalBusinessController extends Controller
 
         return DataTables::eloquent($query)
             ->addIndexColumn() // Provides DT_RowIndex / urutan
-            ->editColumn('Trans_Status', function($transaction): string{
-                    $insuranceNo = e($transaction->Insurance_No);
-                    $statusRaw   = $transaction->Trans_Status ?? '';
-                    $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
+            ->editColumn('Trans_Status', function ($transaction): string {
+                $insuranceNo = e($transaction->Insurance_No);
+                $statusRaw = $transaction->Trans_Status ?? '';
+                $status = strtoupper(trim(preg_replace('/\s+/u', ' ', $statusRaw)));
 
-                    $statusColors = [
-                        'PENDING'   => '#5bc0de',
-                        'COMPLETED' => '#22bb33',
-                        'CANCELLED' => '#bb2124',
-                    ];
+                $statusColors = [
+                    'PENDING' => '#5bc0de',
+                    'COMPLETED' => '#22bb33',
+                    'CANCELLED' => '#bb2124',
+                ];
 
                 $labelClass = $statusColors[$status] ?? '#777777';
                 return '<span insuranceno="' . $insuranceNo . '" class="badge" style="background-color:' . $labelClass . ';">' . e($statusRaw) . '</span>';
@@ -193,10 +195,10 @@ class RenewalBusinessController extends Controller
                     . 'data-insurance-no="' . $insuranceNo . '" title="View and Modify">'
                     . '<i class="fa fa-edit"></i></button>';
 
-                if(Auth::user()->User_Level_ID == 1){
-                $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
-                    . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
-                    . '<i class="fa-regular fa-trash-can"></i></button>';
+                if (Auth::user()->User_Level_ID == 1) {
+                    $buttons .= '<button type="button" class="btn btn-sm btn-danger btn-action btndelete" '
+                        . 'data-insurance-no="' . $insuranceNo . '" title="Delete">'
+                        . '<i class="fa-regular fa-trash-can"></i></button>';
                 }
                 return $buttons;
             })
@@ -250,7 +252,7 @@ class RenewalBusinessController extends Controller
                 COUNT(CASE WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY) THEN 1 END) AS Expiring_Counts
             ");
 
-                // User 1 sees everything; everyone else only sees their own records
+        // User 1 sees everything; everyone else only sees their own records
         if ($current_user != 1) {
             $query->where('transactions_rb.ISE_No', $current_user);
         }
@@ -272,71 +274,71 @@ class RenewalBusinessController extends Controller
     {
         // 1. Input Validation
         $validated = $request->validate([
-            'custno'       => 'nullable|string',
+            'custno' => 'nullable|string',
             'custnoupload' => 'nullable|string',
-            'group'        => 'nullable|string',
-            'custname'     => 'required|string',
-            'custfname'    => 'nullable|string',
-            'custmname'    => 'nullable|string',
-            'custlname'    => 'nullable|string',
-            'custsname'    => 'nullable|string',
-            'birthdate'    => 'nullable|date',
-            'tin'          => 'nullable|string',
-            'contactno'    => 'nullable|string',
-            'emailadd'     => 'nullable|email',
-            'address'      => 'nullable|string',
-            'region'       => 'nullable|string',
-            'province'     => 'nullable|string',
-            'city'         => 'nullable|string',
-            'brgy'         => 'nullable|string',
-            'zipcode'      => 'nullable|string',
-            'country'      => 'nullable|string',
+            'group' => 'nullable|string',
+            'custname' => 'required|string',
+            'custfname' => 'nullable|string',
+            'custmname' => 'nullable|string',
+            'custlname' => 'nullable|string',
+            'custsname' => 'nullable|string',
+            'birthdate' => 'nullable|date',
+            'tin' => 'nullable|string',
+            'contactno' => 'nullable|string',
+            'emailadd' => 'nullable|email',
+            'address' => 'nullable|string',
+            'region' => 'nullable|string',
+            'province' => 'nullable|string',
+            'city' => 'nullable|string',
+            'brgy' => 'nullable|string',
+            'zipcode' => 'nullable|string',
+            'country' => 'nullable|string',
 
-            'vin'          => 'required|string',
-            'make'         => 'nullable|string',
-            'model'        => 'nullable|string',
-            'modelyear'    => 'nullable|string',
-            'color'        => 'nullable|string',
-            'engineno'     => 'nullable|string',
-            'csno'         => 'nullable|string',
-            'plateno'      => 'nullable|string',
-            'paidprice'    => 'nullable|numeric',
-            'vsidate'      => 'nullable|date',
-            'reldate'      => 'nullable|date',
-            'techdate'     => 'nullable|date',
-            'variant'      => 'nullable|string',
-            'bodytype'     => 'nullable|string',
+            'vin' => 'required|string',
+            'make' => 'nullable|string',
+            'model' => 'nullable|string',
+            'modelyear' => 'nullable|string',
+            'color' => 'nullable|string',
+            'engineno' => 'nullable|string',
+            'csno' => 'nullable|string',
+            'plateno' => 'nullable|string',
+            'paidprice' => 'nullable|numeric',
+            'vsidate' => 'nullable|date',
+            'reldate' => 'nullable|date',
+            'techdate' => 'nullable|date',
+            'variant' => 'nullable|string',
+            'bodytype' => 'nullable|string',
             'transmission' => 'nullable|string',
-            'fueltype'     => 'nullable|string',
-            'seats'        => 'nullable|string',
-            'prodclass'    => 'nullable|string',
-            'owntype'      => 'nullable|string',
-            'voname'       => 'nullable|string',
-            'mpname'       => 'nullable|string',
+            'fueltype' => 'nullable|string',
+            'seats' => 'nullable|string',
+            'prodclass' => 'nullable|string',
+            'owntype' => 'nullable|string',
+            'voname' => 'nullable|string',
+            'mpname' => 'nullable|string',
 
-            'grosspremium'  => 'nullable|numeric',
+            'grosspremium' => 'nullable|numeric',
             'netremittance' => 'nullable|numeric',
-            'commission'    => 'nullable|numeric',
-            'optiontype'    => 'nullable|string',
-            'chkpayment'    => 'nullable|integer',
-            'terms'         => 'nullable|string',
-            'monthpay'      => 'nullable|numeric',
-            'instype'       => 'nullable|string',
-            'insco'         => 'nullable|string',
-            'startdate'     => 'nullable|date',
-            'policyno'      => 'nullable|string',
-            'issuedate'     => 'nullable|date',
-            'pexpiredate'   => 'nullable|date',
-            'mortgage'      => 'nullable|string',
-            'iseno'         => 'nullable|string',
-            'payments'      => 'required|json',
+            'commission' => 'nullable|numeric',
+            'optiontype' => 'nullable|string',
+            'chkpayment' => 'nullable|integer',
+            'terms' => 'nullable|string',
+            'monthpay' => 'nullable|numeric',
+            'instype' => 'nullable|string',
+            'insco' => 'nullable|string',
+            'startdate' => 'nullable|date',
+            'policyno' => 'nullable|string',
+            'issuedate' => 'nullable|date',
+            'pexpiredate' => 'nullable|date',
+            'mortgage' => 'nullable|string',
+            'iseno' => 'nullable|string',
+            'payments' => 'required|json',
         ]);
 
         // Decode payments JSON string
         $payments = json_decode($request->input('payments'), true);
         if (!is_array($payments)) {
             return response()->json([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'Invalid JSON data for payments'
             ], 400);
         }
@@ -351,27 +353,27 @@ class RenewalBusinessController extends Controller
                 // ----------------------------
                 // A) CUSTOMER INSERT OR UPDATE
                 // ----------------------------
-                $custNo = $request->input('custno');                
+                $custNo = $request->input('custno');
                 $customer = CustomerInformation::find($custNo);
-                
-                $customerData = [ 
-                    'Group'          => $request->input('group', ''),
-                    'Full_Name'      => $request->input('custname', ''),
-                    'First_Name'     => $request->input('custfname', ''),
-                    'Middle_Name'    => $request->input('custmname', ''),
-                    'Last_Name'      => $request->input('custlname', ''),
-                    'Suffix_Name'    => $request->input('custsname', ''),
-                    'Birth_Date'     => $request->input('birthdate'),
-                    'TIN'            => $request->input('tin', ''),
-                    'Contact_No'     => $request->input('contactno', ''),
-                    'Email_Address'  => $request->input('emailadd', ''),
-                    'Address'        => $request->input('address', ''),
-                    'RegCode'        => $request->input('region', ''),
-                    'ProvCode'       => $request->input('province', ''),
-                    'CMCode'         => $request->input('city', ''),
-                    'BrgyCode'       => $request->input('brgy', ''),
-                    'Zip_Code'       => $request->input('zipcode', ''),
-                    'Country'        => $request->input('country', ''),
+
+                $customerData = [
+                    'Group' => $request->input('group', ''),
+                    'Full_Name' => $request->input('custname', ''),
+                    'First_Name' => $request->input('custfname', ''),
+                    'Middle_Name' => $request->input('custmname', ''),
+                    'Last_Name' => $request->input('custlname', ''),
+                    'Suffix_Name' => $request->input('custsname', ''),
+                    'Birth_Date' => $request->input('birthdate'),
+                    'TIN' => $request->input('tin', ''),
+                    'Contact_No' => $request->input('contactno', ''),
+                    'Email_Address' => $request->input('emailadd', ''),
+                    'Address' => $request->input('address', ''),
+                    'RegCode' => $request->input('region', ''),
+                    'ProvCode' => $request->input('province', ''),
+                    'CMCode' => $request->input('city', ''),
+                    'BrgyCode' => $request->input('brgy', ''),
+                    'Zip_Code' => $request->input('zipcode', ''),
+                    'Country' => $request->input('country', ''),
                     'Upload_Cust_No' => $request->input('custnoupload', ''),
                 ];
 
@@ -408,27 +410,27 @@ class RenewalBusinessController extends Controller
                 $vehicle = VehicleInformation::find($vin);
 
                 $vehicleData = [
-                    'Make'           => $request->input('make', ''),
-                    'Model'          => $request->input('model', ''),
-                    'Model_Year'     => $request->input('modelyear', ''),
-                    'Color'          => $request->input('color', ''),
-                    'Engine_No'      => $request->input('engineno', ''),
-                    'CS_No'          => $request->input('csno', ''),
-                    'Plate_No'       => $request->input('plateno', ''),
-                    'SRP'            => (float) $request->input('paidprice', 0),
-                    'VSI_Date'       => $request->input('vsidate'),
-                    'Released_Date'  => $request->input('reldate'),
+                    'Make' => $request->input('make', ''),
+                    'Model' => $request->input('model', ''),
+                    'Model_Year' => $request->input('modelyear', ''),
+                    'Color' => $request->input('color', ''),
+                    'Engine_No' => $request->input('engineno', ''),
+                    'CS_No' => $request->input('csno', ''),
+                    'Plate_No' => $request->input('plateno', ''),
+                    'SRP' => (float) $request->input('paidprice', 0),
+                    'VSI_Date' => $request->input('vsidate'),
+                    'Released_Date' => $request->input('reldate'),
                     'Technical_Date' => $request->input('techdate'),
-                    'Variant'        => $request->input('variant', ''),
-                    'Body_Type'      => $request->input('bodytype', ''),
-                    'Transmission'   => $request->input('transmission', ''),
-                    'Fuel_Type'      => $request->input('fueltype', ''),
-                    'Seats'          => $request->input('seats', ''),
-                    'Prod_Classify'  => $request->input('prodclass', ''),
-                    'Owner_Type'     => $request->input('owntype', ''),
-                    'Owner_Name'     => $request->input('voname', ''),
-                    'MP_Name'        => $request->input('mpname', ''),
-                    'Customer_No'    => $custNo,
+                    'Variant' => $request->input('variant', ''),
+                    'Body_Type' => $request->input('bodytype', ''),
+                    'Transmission' => $request->input('transmission', ''),
+                    'Fuel_Type' => $request->input('fueltype', ''),
+                    'Seats' => $request->input('seats', ''),
+                    'Prod_Classify' => $request->input('prodclass', ''),
+                    'Owner_Type' => $request->input('owntype', ''),
+                    'Owner_Name' => $request->input('voname', ''),
+                    'MP_Name' => $request->input('mpname', ''),
+                    'Customer_No' => $custNo,
                 ];
 
                 if ($vehicle) {
@@ -459,34 +461,34 @@ class RenewalBusinessController extends Controller
                 $insuranceNo = "RB-{$year}-{$seq}";
 
                 // Determine ISE No
-                $iseNo = ($userLevel === 'INSURANCE STAFF') 
-                    ? $userId 
+                $iseNo = ($userLevel === 'INSURANCE STAFF')
+                    ? $userId
                     : ($request->filled('iseno') ? $request->input('iseno') : null);
 
                 // ----------------------------
                 // D) INSERT INSURANCE RECORD
                 // ----------------------------
                 RenewalBusinessTransaction::create([
-                    'Insurance_No'      => $insuranceNo,
-                    'Gross_Premium'     => (float) $request->input('grosspremium', 0),
-                    'Net_Rem'           => (float) $request->input('netremittance', 0),
-                    'Commission'        => (float) $request->input('commission', 0),
-                    'Option_Type'       => $request->input('optiontype', 'PAID'),
-                    'Install_Pay'       => (int) $request->input('chkpayment', 0),
-                    'Month_Terms'       => $request->input('terms', ''),
-                    'Month_Pay'         => (float) $request->input('monthpay', 0),
-                    'Insurance_Type'    => $request->input('instype', ''),
+                    'Insurance_No' => $insuranceNo,
+                    'Gross_Premium' => (float) $request->input('grosspremium', 0),
+                    'Net_Rem' => (float) $request->input('netremittance', 0),
+                    'Commission' => (float) $request->input('commission', 0),
+                    'Option_Type' => $request->input('optiontype', 'PAID'),
+                    'Install_Pay' => (int) $request->input('chkpayment', 0),
+                    'Month_Terms' => $request->input('terms', ''),
+                    'Month_Pay' => (float) $request->input('monthpay', 0),
+                    'Insurance_Type' => $request->input('instype', ''),
                     'Insurance_Company' => $request->input('insco', ''),
-                    'Start_Date'        => $request->input('startdate'),
-                    'Policy_No'         => $request->input('policyno', ''),
-                    'Issue_Date'        => $request->input('issuedate'),
+                    'Start_Date' => $request->input('startdate'),
+                    'Policy_No' => $request->input('policyno', ''),
+                    'Issue_Date' => $request->input('issuedate'),
                     'Policy_Expiration' => $request->input('pexpiredate'),
-                    'Mortgage'          => $request->input('mortgage', ''),
-                    'Customer_No'       => $custNo,
-                    'VIN'               => $vin,
-                    'Trans_Date'        => now(),
-                    'ISE_No'            => $iseNo,
-                    'User_ID'           => $userId,
+                    'Mortgage' => $request->input('mortgage', ''),
+                    'Customer_No' => $custNo,
+                    'VIN' => $vin,
+                    'Trans_Date' => now(),
+                    'ISE_No' => $iseNo,
+                    'User_ID' => $userId,
                 ]);
 
                 // ----------------------------
@@ -498,17 +500,17 @@ class RenewalBusinessController extends Controller
                         : null;
 
                     TransactionRBPayment::create([
-                        'Insurance_No'     => $insuranceNo,
-                        'User_ID'          => $userId,
-                        'Payment_Type'     => $p['Payment_Type'] ?? null,
-                        'EWallet_Type'     => $p['EWallet_Type'] ?? null,
-                        'PDC_No'           => $p['PDC_No'] ?? null,
+                        'Insurance_No' => $insuranceNo,
+                        'User_ID' => $userId,
+                        'Payment_Type' => $p['Payment_Type'] ?? null,
+                        'EWallet_Type' => $p['EWallet_Type'] ?? null,
+                        'PDC_No' => $p['PDC_No'] ?? null,
                         'PDC_Account_Name' => $p['PDC_Account_Name'] ?? null,
-                        'PDC_Bank_Name'    => $p['PDC_Bank_Name'] ?? null,
-                        'PDC_Date'         => $pdcDate,
-                        'Payment_Terms'    => $p['Payment_Terms'] ?? null,
-                        'Payment_Amount'   => isset($p['Payment_Amount']) ? (float) $p['Payment_Amount'] : null,
-                        'Payment_Date'     => now(),
+                        'PDC_Bank_Name' => $p['PDC_Bank_Name'] ?? null,
+                        'PDC_Date' => $pdcDate,
+                        'Payment_Terms' => $p['Payment_Terms'] ?? null,
+                        'Payment_Amount' => isset($p['Payment_Amount']) ? (float) $p['Payment_Amount'] : null,
+                        'Payment_Date' => now(),
                     ]);
                 }
 
@@ -518,20 +520,20 @@ class RenewalBusinessController extends Controller
                 $custName = $request->input('custname');
 
                 Notification::create([
-                    'Insurance_No'     => $insuranceNo,
-                    'Business_Type'    => 'RENEWAL BUSINESS',
+                    'Insurance_No' => $insuranceNo,
+                    'Business_Type' => 'RENEWAL BUSINESS',
                     'Insurance_Status' => 'PENDING',
-                    'Title'            => "[Renewal Business Insurance - {$insuranceNo}]",
-                    'Message'          => "{$custName} created a new request",
-                    'Info_Type'        => 'info',
-                    'URL'              => 'renewal_business_modify',
-                    'Status'           => 'unread',
-                    'Created_Date'     => now(),
-                    'User_ID'          => $userId,
+                    'Title' => "[Renewal Business Insurance - {$insuranceNo}]",
+                    'Message' => "{$custName} created a new request",
+                    'Info_Type' => 'info',
+                    'URL' => 'renewal_business_modify',
+                    'Status' => 'unread',
+                    'Created_Date' => now(),
+                    'User_ID' => $userId,
                 ]);
 
                 return response()->json([
-                    'result'       => 1,
+                    'result' => 1,
                     'Insurance_No' => $insuranceNo,
                 ]);
             });
@@ -539,7 +541,7 @@ class RenewalBusinessController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'result' => 0,
-                'error'  => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -556,38 +558,38 @@ class RenewalBusinessController extends Controller
     {
         // 1. Input Validation
         $validated = $request->validate([
-            'insuranceno'   => 'required|string',
-            'insgpremium'   => 'nullable|numeric',
-            'netrem'        => 'nullable|numeric',
+            'insuranceno' => 'required|string',
+            'insgpremium' => 'nullable|numeric',
+            'netrem' => 'nullable|numeric',
             'inscommission' => 'nullable|numeric',
         ]);
 
         try {
             // 2. Database Transaction
             return DB::transaction(function () use ($validated) {
-                
+
                 $insuranceNo = $validated['insuranceno'];
 
                 // 3. Update existing transaction record using Eloquent
                 $updated = TransactionRb::where('Insurance_No', $insuranceNo)
                     ->update([
                         'Gross_Premium' => $validated['insgpremium'] ?? '',
-                        'Net_Rem'       => $validated['netrem'] ?? '',
-                        'Net_Rem_Date'  => now(),
-                        'Commission'    => $validated['inscommission'] ?? '',
-                        'User_ID'       => Auth::id(),
+                        'Net_Rem' => $validated['netrem'] ?? '',
+                        'Net_Rem_Date' => now(),
+                        'Commission' => $validated['inscommission'] ?? '',
+                        'User_ID' => Auth::id(),
                     ]);
 
                 if (!$updated) {
                     return response()->json([
-                        'result'  => 0,
+                        'result' => 0,
                         'message' => 'Transaction record not found.',
                     ], 404);
                 }
 
                 // 4. Return successful response
                 return response()->json([
-                    'result'       => 1,
+                    'result' => 1,
                     'Insurance_No' => $insuranceNo,
                 ]);
             });
@@ -595,7 +597,7 @@ class RenewalBusinessController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'result' => 0,
-                'error'  => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -625,7 +627,7 @@ class RenewalBusinessController extends Controller
         $nb = DB::table('transactions_nb')->where('Insurance_No', $validated_data_not_null);
 
         $data = $rb->unionAll($nb)->get();
-        
+
         // 3. Return JSON Response
         return response()->json($data);
     }
@@ -639,7 +641,7 @@ class RenewalBusinessController extends Controller
         }
 
         // Fetch matching records via Eloquent
-        $payments = TransactionRBPayment::where('Insurance_No', $insuranceNo)->orderBy('Payment_Terms','desc')->get();
+        $payments = TransactionRBPayment::where('Insurance_No', $insuranceNo)->orderBy('Payment_Terms', 'desc')->get();
 
         // Transform the collection to attach row index ('urutan') and action buttons
         $data = $payments->values()->map(function ($row, $index) {
@@ -649,8 +651,8 @@ class RenewalBusinessController extends Controller
             return array_merge($row->attributesToArray(), [
                 'urutan' => $index + 1,
                 'button' => '<label payid="' . $payId . '" class="btn btn-success btn-action btnremovepaysave" data-toggle="tooltip" data-placement="top" title="Remove">'
-                        . '<i class="fa-regular fa-trash-can"></i>'
-                        . '</label>',
+                    . '<i class="fa-regular fa-trash-can"></i>'
+                    . '</label>',
             ]);
         });
 
@@ -683,107 +685,108 @@ class RenewalBusinessController extends Controller
 
             return response()->json([
                 'result' => 0,
-                'error'  => 'No matching record found'
+                'error' => 'No matching record found'
             ], 404);
 
         } catch (Exception $e) {
             // Log error internally automatically managed by Laravel logging
             return response()->json([
                 'result' => 0,
-                'error'  => 'Database error occurred'
+                'error' => 'Database error occurred'
             ], 500);
         }
-    }       
-    
-    
-    /**
-     * Get expiring transaction data using Eloquent models and relationships.
-     */
+    }
+
+
     /**
      * Server-side handler for Expiring DataTables.
+    */
+
+    /**
+     * Get 90 days before expiring transaction data using Eloquent models and relationships.
      */
     public function getExpiringTransactions(Request $request): JsonResponse
     {
         $today = now()->format('Y-m-d');
+        $ninetyDaysAgo = now()->subDays(90)->format('Y-m-d');
         $ninetyDaysLater = now()->addDays(90)->format('Y-m-d');
         $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
-// ---------- RB ----------
-$rb = TransactionRb::query()
-    ->from('transactions_rb as t')
-    ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
-    ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
-    ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
-    ->select([
-        DB::raw("'RB' as Source"),
-        't.Insurance_No',
-        't.Start_Date',
-        't.Trans_Date',
-        't.Trans_Status',
-        't.Customer_No',
-        't.VIN',
-        't.Insurance_Company',
-        't.Option_Type',
-        't.Policy_Expiration',
-        't.ISE_No',
-        'c.Full_Name',
-        'c.Contact_No',
-        'v.CS_No',
-        'v.Plate_No',
-        'v.Model',
-        'v.Variant',
-        'i.ISE_Name',
-        DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
-    ]);
+        // ---------- RB ----------
+        $rb = TransactionRb::query()
+            ->from('transactions_rb as r')
+            ->leftJoin('customer_information as c', 'r.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 'r.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 'r.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'RB' as Source"),
+                'r.Insurance_No',
+                'r.Start_Date',
+                'r.Trans_Date',
+                'r.Trans_Status',
+                'r.Customer_No',
+                'r.VIN',
+                'r.Insurance_Company',
+                'r.Option_Type',
+                'r.Policy_Expiration',
+                'r.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+                DB::raw('DATEDIFF(r.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+            ])
+            ->where('r.Trans_Status', 'PENDING');   // whereNot inside the RB branch
 
-// ---------- NB ----------
-$nb = NewBusinessTransactionView::query()
-    ->from('transactions_nb as t')
-    ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
-    ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
-    ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
-    ->select([
-        DB::raw("'NB' as Source"),
-        't.Insurance_No',
-        't.Start_Date',
-        't.Trans_Date',
-        't.Trans_Status',
-        't.Customer_No',
-        't.VIN',
-        't.Insurance_Company',
-        't.Option_Type',
-        't.Policy_Expiration',          // see note 1
-        't.ISE_No',
-        'c.Full_Name',
-        'c.Contact_No',
-        'v.CS_No',
-        'v.Plate_No',
-        'v.Model',
-        'v.Variant',
-        'i.ISE_Name',
-        DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
-    ]);
+        // ---------- NB ----------
+        $nb = NewBusiness::query()
+            ->from('transactions_nb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'NB' as Source"),
+                't.Insurance_No',
+                't.Start_Date',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',
+                't.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+                DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+            ])
+            ->where('t.Trans_Status', 'PENDING');   // whereNot inside the NB branch
 
-// ---------- UNION, wrapped so filters apply to the combined set ----------
-$query = DB::query()->fromSub($rb->unionAll($nb), 'u')
-    ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
-        $q->where('u.ISE_No', $user_id_info);
-    })
-    ->where(function ($q) use ($today, $ninetyDaysLater) {
-        $q->whereBetween('u.Policy_Expiration', [$today, $ninetyDaysLater])
-          ->orWhere('u.Policy_Expiration', '<=', $today);
-    });
+        // ---------- UNION, wrapped so filters apply to the combined set ----------
+        $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
+            ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
+                $q->where('u.ISE_No', $user_id_info);
+            })
+            ->whereBetween('u.Policy_Expiration', [$ninetyDaysAgo, $ninetyDaysLater]);
 
         $statusColors = [
-            'PENDING'            => 'label label-default',
-            'IN PROCESS'         => 'label label-primary',
-            'COMPLETED'          => 'label label-success',
+            'PENDING' => 'label label-default',
+            'IN PROCESS' => 'label label-primary',
+            'COMPLETED' => 'label label-success',
             'PAYMENT PROCESSING' => 'label label-warning',
-            'PAYMENT CONFIRMED'  => 'label label-success',
-            'CANCELLED'          => 'label label-danger',
-            'PARTIALLY PAID'     => 'label bg-purple',
-            'FAILED TO ASSIGN'   => 'label bg-navy',
+            'PAYMENT CONFIRMED' => 'label label-success',
+            'CANCELLED' => 'label label-danger',
+            'PARTIALLY PAID' => 'label bg-purple',
+            'FAILED TO ASSIGN' => 'label bg-navy',
         ];
 
         // 2. Return Yajra Server-Side JSON Response
@@ -791,9 +794,121 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
             ->addIndexColumn() // Generates 'DT_RowIndex' (replaces urutan)
             ->editColumn('Trans_Status', function ($row) use ($statusColors) {
                 $insuranceNo = e($row->Insurance_No ?? '');
-                $statusRaw   = $row->Trans_Status ?? '';
-                $status      = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
-                $labelClass  = $statusColors[$status] ?? 'label label-default';
+                $statusRaw = $row->Trans_Status ?? '';
+                $status = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
+                $labelClass = $statusColors[$status] ?? 'label label-default';
+
+                return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+            })
+            ->editColumn('Days_To_Expiry', function ($row) {
+                $days = (int) $row->Days_To_Expiry;
+                if ($days < 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expired ' . abs($days) . ' day(s) ago</span>';
+                } elseif ($days === 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expires today</span>';
+                } elseif ($days <= 30) {
+                    return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+                }
+
+                return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+            })
+            ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
+            ->make(true);
+    }
+
+    /**
+     * Get Expired transaction data using Eloquent models and relationships.
+     */
+    public function getExpiredTransactions(Request $request): JsonResponse
+    {
+        $today = now()->format('Y-m-d');
+        $ninetyDaysAgo  = now()->subDays(90)->format('Y-m-d');
+        $user_id_info = Auth::user()->User_ID;
+
+        // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
+        // ---------- RB ----------
+        $rb = TransactionRb::query()
+            ->from('transactions_rb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'RB' as Source"),
+                't.Insurance_No',
+                't.Start_Date',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',
+                't.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+                DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+            ]);
+
+        // ---------- NB ----------
+        $nb = NewBusinessTransactionView::query()
+            ->from('transactions_nb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'NB' as Source"),
+                't.Insurance_No',
+                't.Start_Date',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',          // see note 1
+                't.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+                DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
+            ]);
+
+        // ---------- UNION, wrapped so filters apply to the combined set ----------
+        $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
+            ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
+                $q->where('u.ISE_No', $user_id_info);
+            })
+            // Expired and 90+ days have elapsed since expiration
+            ->where('u.Policy_Expiration', '<', $today);
+
+        $statusColors = [
+            'PENDING' => 'label label-default',
+            'IN PROCESS' => 'label label-primary',
+            'COMPLETED' => 'label label-success',
+            'PAYMENT PROCESSING' => 'label label-warning',
+            'PAYMENT CONFIRMED' => 'label label-success',
+            'CANCELLED' => 'label label-danger',
+            'PARTIALLY PAID' => 'label bg-purple',
+            'FAILED TO ASSIGN' => 'label bg-navy',
+        ];
+
+        // 2. Return Yajra Server-Side JSON Response
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' (replaces urutan)
+            ->editColumn('Trans_Status', function ($row) use ($statusColors) {
+                $insuranceNo = e($row->Insurance_No ?? '');
+                $statusRaw = $row->Trans_Status ?? '';
+                $status = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
+                $labelClass = $statusColors[$status] ?? 'label label-default';
 
                 return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
             })
@@ -814,9 +929,88 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
     }
 
 
+    /**
+     * Get Expired transaction data using Eloquent models and relationships.
+     */
+    public function getRenewedTransactions(Request $request): JsonResponse
+    {
+        $user_id_info = Auth::user()->User_ID;
+
+        // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
+        $query = TransactionRb::query()
+            ->from('transactions_rb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'RB' as Source"),
+                't.Insurance_No',
+                't.Start_Date',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',
+                't.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+            ])
+
+            ->where('t.Trans_Status', "Renewed")
+
+            ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
+                $q->where('u.ISE_No', $user_id_info);
+            });
+       
+
+        $statusColors = [
+            'PENDING' => 'label label-default',
+            'IN PROCESS' => 'label label-primary',
+            'COMPLETED' => 'label label-success',
+            'PAYMENT PROCESSING' => 'label label-warning',
+            'PAYMENT CONFIRMED' => 'label label-success',
+            'CANCELLED' => 'label label-danger',
+            'PARTIALLY PAID' => 'label bg-purple',
+            'FAILED TO ASSIGN' => 'label bg-navy',
+        ];
+
+        // 2. Return Yajra Server-Side JSON Response
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' (replaces urutan)
+            ->editColumn('Trans_Status', function ($row) use ($statusColors) {
+                $insuranceNo = e($row->Insurance_No ?? '');
+                $statusRaw = $row->Trans_Status ?? '';
+                $status = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
+                $labelClass = $statusColors[$status] ?? 'label label-default';
+
+                return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+            })
+            ->editColumn('Days_To_Expiry', function ($row) {
+                $days = (int) $row->Days_To_Expiry;
+                if ($days < 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expired ' . abs($days) . ' day(s) ago</span>';
+                } elseif ($days === 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expires today</span>';
+                } elseif ($days <= 30) {
+                    return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+                }
+
+                return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+            })
+            ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
+            ->make(true);
+    }
 
 
-    public function renewalBusinessModify(){
+    public function renewalBusinessModify()
+    {
         return view("livewire.main.transactions.renewal_business_modify");
     }
 
@@ -878,53 +1072,53 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
     {
         // 1. Input Validation
         $validated = $request->validate([
-            'insuranceno'    => 'required|string',
-            'transstatus'    => 'required|string',
+            'insuranceno' => 'required|string',
+            'transstatus' => 'required|string',
             'transsremarks' => 'nullable|string',
         ]);
 
         try {
             // 2. Perform operations inside an automated DB Transaction
             return DB::transaction(function () use ($validated) {
-                $userId      = Auth::id(); // Get authenticated user's ID
+                $userId = Auth::id(); // Get authenticated user's ID
                 $insuranceNo = $validated['insuranceno'];
                 $transStatus = $validated['transstatus'];
-                $remarks     = $validated['transsremarks'] ?? '';
+                $remarks = $validated['transsremarks'] ?? '';
 
                 // A. Update existing transaction status
                 TransactionRb::where('Insurance_No', $insuranceNo)->update([
-                    'Trans_Status'         => $transStatus,
+                    'Trans_Status' => $transStatus,
                     'Trans_Status_Remarks' => $remarks,
-                    'Trans_Status_Date'    => now(),
-                    'User_ID'              => $userId,
+                    'Trans_Status_Date' => now(),
+                    'User_ID' => $userId,
                 ]);
 
                 // B. Insert into approval status log
                 ApprovalRbStatus::create([
-                    'Insurance_No'         => $insuranceNo,
-                    'User_ID'              => $userId,
-                    'Trans_Status'         => $transStatus,
+                    'Insurance_No' => $insuranceNo,
+                    'User_ID' => $userId,
+                    'Trans_Status' => $transStatus,
                     'Trans_Status_Remarks' => $remarks,
-                    'Trans_Status_Date'    => now(),
+                    'Trans_Status_Date' => now(),
                 ]);
 
                 // C. Insert notification log
                 Notification::create([
-                    'Insurance_No'     => $insuranceNo,
-                    'Business_Type'    => 'RENEWAL BUSINESS',
+                    'Insurance_No' => $insuranceNo,
+                    'Business_Type' => 'RENEWAL BUSINESS',
                     'Insurance_Status' => $transStatus,
-                    'Title'            => '[' . $transStatus . ' - ' . $insuranceNo . ']',
-                    'Message'          => 'The status of the request has been updated.',
-                    'Info_Type'        => 'info',
-                    'URL'              => 'renewal_business_modify',
-                    'Status'           => 'unread',
-                    'Created_Date'     => now(),
-                    'User_ID'          => $userId,
+                    'Title' => '[' . $transStatus . ' - ' . $insuranceNo . ']',
+                    'Message' => 'The status of the request has been updated.',
+                    'Info_Type' => 'info',
+                    'URL' => 'renewal_business_modify',
+                    'Status' => 'unread',
+                    'Created_Date' => now(),
+                    'User_ID' => $userId,
                 ]);
 
                 // D. Return success response
                 return response()->json([
-                    'result'       => 1,
+                    'result' => 1,
                     'Insurance_No' => $insuranceNo,
                 ]);
             });
@@ -932,7 +1126,7 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
         } catch (Exception $e) {
             return response()->json([
                 'result' => 0,
-                'error'  => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -945,8 +1139,8 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
     {
         // 1. Validate inputs
         $validated = $request->validate([
-            'insuranceno'       => ['required', 'string'],
-            'payments'          => ['required', 'json'],
+            'insuranceno' => ['required', 'string'],
+            'payments' => ['required', 'json'],
         ]);
 
         $insuranceNo = $validated['insuranceno'];
@@ -960,7 +1154,7 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
 
         try {
             DB::transaction(function () use ($insuranceNo, $userId, $payments) {
-                
+
                 // 2a. Fetch existing payment IDs for this insurance number
                 $existingRows = TransactionRbPayment::where('Insurance_No', $insuranceNo)
                     ->pluck('Payment_ID')
@@ -973,16 +1167,16 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
                     $pdcDate = !empty($p['PDC_Date']) ? Carbon::parse($p['PDC_Date'])->format('Y-m-d') : null;
 
                     $paymentData = [
-                        'Insurance_No'      => $insuranceNo,
-                        'User_ID'           => $userId,
-                        'Payment_Type'      => $p['Payment_Type'] ?? null,
-                        'EWallet_Type'      => $p['EWallet_Type'] ?? null,
-                        'PDC_No'            => $p['PDC_No'] ?? null,
-                        'PDC_Account_Name'  => $p['PDC_Account_Name'] ?? null,
-                        'PDC_Bank_Name'     => $p['PDC_Bank_Name'] ?? null,
-                        'PDC_Date'          => $pdcDate,
-                        'Payment_Terms'     => $p['Payment_Terms'] ?? null,
-                        'Payment_Amount'    => isset($p['Payment_Amount']) ? floatval($p['Payment_Amount']) : null,
+                        'Insurance_No' => $insuranceNo,
+                        'User_ID' => $userId,
+                        'Payment_Type' => $p['Payment_Type'] ?? null,
+                        'EWallet_Type' => $p['EWallet_Type'] ?? null,
+                        'PDC_No' => $p['PDC_No'] ?? null,
+                        'PDC_Account_Name' => $p['PDC_Account_Name'] ?? null,
+                        'PDC_Bank_Name' => $p['PDC_Bank_Name'] ?? null,
+                        'PDC_Date' => $pdcDate,
+                        'Payment_Terms' => $p['Payment_Terms'] ?? null,
+                        'Payment_Amount' => isset($p['Payment_Amount']) ? floatval($p['Payment_Amount']) : null,
                     ];
 
                     if (!empty($p['Payment_ID'])) {
@@ -1075,7 +1269,7 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
 
     public function printPdf($insurance_no)
     {
-       // 1. Fetch parent record with child payments relationship
+        // 1. Fetch parent record with child payments relationship
         $rbTransaction = VwTransactionsRb::with('rbPaymentInfo')
             ->where('Insurance_No', $insurance_no)
             ->firstOrFail(); // Ensures a 404 response if record does not exist
@@ -1091,10 +1285,10 @@ $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
 
         // 4. Stream directly to browser tab ('inline')
         return $pdf->stream("Invoice_{$insurance_no}.pdf");
-        
+
         // Alternatively, use download() to force immediate file download:
         // return $pdf->download("Invoice_{$insurance_no}.pdf");
     }
-    
+
 
 }

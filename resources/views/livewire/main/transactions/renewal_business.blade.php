@@ -603,7 +603,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtzipcode">Zip Code / Postal Code *</label>
-                                  <input type="text" id="txtzipcode" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtzipcode" class="form-control input-sm"
                                     data-error="Zip Code / Postal Code is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -661,7 +661,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtmake">Make *</label>
-                                  <input type="text" id="txtmake" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtmake" class="form-control input-sm"
                                     data-error="Make is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -707,7 +707,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="txtcsno">CS No. *</label>
-                                  <input type="text" id="txtcsno" class="form-control input-sm" required="required"
+                                  <input type="text" id="txtcsno" class="form-control input-sm"
                                     data-error="CS No. is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -1266,7 +1266,7 @@
 
                            
                             {{-- Policy action group --}}
-                            <div class="row" id="policyAction">
+                            <div class="row policyAction">
                               <div class="col-md-6">
                                 <label>Policy Action</label>
                                 <div class="radio-group">
@@ -1372,33 +1372,33 @@
                               </div>
                             </div>
 
-                            <div class="row" id="mortgageeAction">
-                                <div class="col-md-6">
-                                  <div class="form-group">
-                                    <label for="cbomortgage">Mortgagee *</label>
-                                    <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
-                                      data-error="Mortgage is required." disabled>
-                                      <option Value="">PLEASE SELECT</option>
-                                    </select>
-                                    <div class="help-block with-errors"></div>
+                              <div class="row">
+                                  <div class="col-md-6">
+                                    <div class="form-group">
+                                      <label for="cbomortgage">Mortgagee *</label>
+                                      <select id="cbomortgage" class="form-control input-sm cbomortgage" required="required"
+                                        data-error="Mortgage is required." disabled>
+                                        <option Value="">PLEASE SELECT</option>
+                                      </select>
+                                      <div class="help-block with-errors"></div>
+                                    </div>
                                   </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                  <label>Mortgagee change:</label>
-                                  <div class="radio-group">
-                                    <label class="custom-radio">
-                                      <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
-                                      <span class="checkmark"></span>RETAIN
-                                    </label>
-                                    <label class="custom-radio">
-                                      <input type="radio" name="rdpolicyaction" value="TRANSFER">
-                                      <span class="checkmark"></span>
-                                      TRANSFER
-                                    </label>
+                                  <div class="col-md-6 policyAction">
+                                    <label>Mortgagee change:</label>
+                                    <div class="radio-group">
+                                      <label class="custom-radio">
+                                        <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
+                                        <span class="checkmark"></span>RETAIN
+                                      </label>
+                                      <label class="custom-radio">
+                                        <input type="radio" name="rdpolicyaction" value="TRANSFER">
+                                        <span class="checkmark"></span>
+                                        TRANSFER
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
-                            </div>
+                              </div>
 
                           </div>
                         </div>
@@ -1752,10 +1752,10 @@
                                 <th>Upload Cust. No</th>
                                 <th>VIN</th>
                                 <th>CS No.</th>
-                                <th>Plate No.</th>
+                                {{-- <th>Plate No.</th> --}}
                                 <th>Variant</th>
-                                <!-- <th>Status</th>
-                            <th>Inactive Date</th> -->
+                                <th>Status</th>
+                                {{-- <th>Inactive Date</th>  --}}
                               </tr>
                             </thead>
                           </table>
@@ -2461,10 +2461,10 @@
               <ul class="nav nav-tabs approvaltab">
                 <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration</a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
-                <li class=""><a href="#renewed" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
+                <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
               </ul>
 
-              <div class="tab-content">
+              <div class="tab-content" style="mt-1">
                   <div class="tab-pane active" id="before_expiration">
                     <div class="box">
                         <div class="box-body">
@@ -2487,8 +2487,8 @@
                                           <th>Customer Name</th>
                                           <th>Contact No.</th>
                                           <th>VIN</th>
-                                          <th>CS No.</th>
-                                          <th>Plate No.</th>
+                                          <th>CS No. / Plate No.</th>
+                                          {{-- <th>Plate No.</th> --}}
                                           <th>Model</th>
                                           <th>Variant</th>
                                           <th>Insurance Partner</th>
@@ -2515,7 +2515,7 @@
                           </div>
                           <div class="box-body">
                               <div class="table-responsive">
-                                    <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                    <table id="table_expired_list" class="table table-striped table-bordered table-hover">
                                       <thead>
                                         <tr class="tableheader">
                                           <th>Insurance No.</th>
@@ -2549,21 +2549,20 @@
                     </div>
                   </div>
 
-                  <div class="tab-pane" id="renewed">
-                        <div class="box">
+                  <div class="tab-pane" id="renewedTab">
+                      <div class="box">
                             <div class="box-body">
                               <div class="box-header with-border">
                               </div>
                               <div class="box-body">
                                   <div class="table-responsive">
-                                        <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                        <table id="renewedTable" class="table table-striped table-bordered table-hover">
                                           <thead>
                                             <tr class="tableheader">
                                               <th>Insurance No.</th>
                                               <th>Trans. Date & Time</th>
-                                              <th>Days before expiration</th>
-                                              <th>Policy Expiration</th>
                                               <th>Issue Date</th>
+                                              <th>Policy Expiration</th>
                                               <th>Status</th>
                                               <th>Customer No.</th>
                                               <th>Customer Name</th>
@@ -2585,9 +2584,8 @@
                                         </p>
                                   </div>
                               </div>
-                              
-                            </div>
-                        </div>
+                          </div>
+                      </div>
                   </div>
               </div>
 
@@ -2642,6 +2640,8 @@ function printReceipt(divId) {
         renewalCallLogs: @json(route("getTransactionRB.data"))
     }
 
+    
+
     window.tableRoutes = {
         renewalBusinessData: @json(route('renewal_business.data')),
         customerData: @json(route('customers.data')),
@@ -2650,8 +2650,13 @@ function printReceipt(divId) {
         getPaymentData: @json(route('renewalpayments.get-data')),
         getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
         getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get')),
-        getExpiringPolicies: @json(route('renewal-business.expiring-transactions'))
+
+        getExpiringPolicies: @json(route('renewal-business.expiring-transactions')),
+        getExpiredPolicies: @json(route('renewal-business.expired-transactions')),
+        getRenewedPolicies: @json(route('renewal-business.renewed-transactions')),
+        
     }
+
     
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
