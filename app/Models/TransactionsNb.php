@@ -43,4 +43,11 @@ class TransactionsNb extends Model
             set: fn ($value) => trim((string) $value),
         );
     }
+
+    public function insuranceCo(){
+        return $this->belongsTo(InsuranceCo::class, 'insType', 'Insurance_Company');
+    }
+
+
+
 }

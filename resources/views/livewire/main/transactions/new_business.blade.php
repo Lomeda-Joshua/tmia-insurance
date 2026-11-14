@@ -1275,30 +1275,8 @@
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="dpstartdate">Inception Date *</label>
-                                <div class="input-group date">
-                                  <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                  </div>
-                                  <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
-                                     data-error="Inception Date is required.">
-                                </div>
-                                <div class="help-block with-errors"></div>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="txtpolicyno">Policy No. *</label>
-                                <input type="text" id="txtpolicyno" class="form-control input-sm" required="required"
-                                  data-error="Policy No. is required.">
-                                <div class="help-block with-errors"></div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
+
+                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="dpissuedate">Issue Date *</label>
                                 <div class="input-group date">
@@ -1311,6 +1289,34 @@
                                 <div class="help-block with-errors"></div>
                               </div>
                             </div>
+                            
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="txtpolicyno">Policy No. *</label>
+                                <input type="text" id="txtpolicyno" class="form-control input-sm" required="required"
+                                  data-error="Policy No. is required.">
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                           
+
+<div class="col-md-6">
+                              <div class="form-group">
+                                <label for="dpstartdate">Inception Date *</label>
+                                <div class="input-group date">
+                                  <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                  </div>
+                                  <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
+                                     data-error="Inception Date is required.">
+                                </div>
+                                <div class="help-block with-errors"></div>
+                              </div>
+                            </div>
+
+
                             <div class="col-md-6">
                               <div class="form-group">
                                 <label for="dppexpiredate">Policy Expiration Date *</label>

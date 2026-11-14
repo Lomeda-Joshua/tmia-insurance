@@ -350,6 +350,11 @@ class RenewalBusinessController extends Controller
         try {
             return DB::transaction(function () use ($request, $payments, $userId, $userLevel) {
 
+                $nearExpiring = (int) $request->input('near_expiration_flag', 0);
+                $expired      = (int) $request->input('expired_flag', 0);
+                $policy_type  =  $request->input('policy_source');
+                $insurance_no = $request->input('insuranceno');
+
                 // ----------------------------
                 // A) CUSTOMER INSERT OR UPDATE
                 // ----------------------------
@@ -465,6 +470,19 @@ class RenewalBusinessController extends Controller
                     ? $userId
                     : ($request->filled('iseno') ? $request->input('iseno') : null);
 
+
+                // ----------------------------
+                // E) UPDATE TRANSCATION NB
+                // ---------------------------
+                if( $policy_type == 'NB'){
+                    TransactionsNb::where('Insurance_No', $insurance_no)->update([
+                        'Trans_Status' => 'COMPLETED'
+                    ]);
+                }
+
+
+
+
                 // ----------------------------
                 // D) INSERT INSURANCE RECORD
                 // ----------------------------
@@ -490,6 +508,7 @@ class RenewalBusinessController extends Controller
                     'ISE_No' => $iseNo,
                     'User_ID' => $userId,
                 ]);
+
 
                 // ----------------------------
                 // E) INSERT PAYMENTS
@@ -621,10 +640,37 @@ class RenewalBusinessController extends Controller
         $data = [];
 
         // 2. Query Record using Eloquent if parameter is supplied
-        // $data = TransactionRb::where('Insurance_No', $validated_data_not_null)->get();
+        $cols = [
+            "Insurance_No",
+            "Gross_Premium",
+            "Net_Rem",
+            "Net_Rem_Date",
+            "Commission",
+            "Option_Type",
+            "Install_Pay",
+            "Month_Terms",
+            "Month_Pay",
+            "Insurance_Type",
+            "Insurance_Company",
+            "Start_Date",
+            "Policy_No",
+            "Issue_Date",
+            "Policy_Expiration",
+            "Mortgage",
+            "Customer_No",
+            "VIN",
+            "Trans_Status",
+            "Trans_Status_Remarks",
+            "Trans_Status_Date",
+            "Trans_Date",
+            "ISE_No",
+            "User_ID",
+            "Insurance_Company as Insurance_Desc",
+        ];
 
-        $rb = DB::table('transactions_rb')->where('Insurance_No', $validated_data_not_null);
-        $nb = DB::table('transactions_nb')->where('Insurance_No', $validated_data_not_null);
+        
+        $rb = TransactionRb::query()->select($cols)->where('Insurance_No', $validated_data_not_null);
+        $nb = TransactionsNb::query()->select($cols)->where('Insurance_No', $validated_data_not_null);
 
         $data = $rb->unionAll($nb)->get();
 
@@ -776,7 +822,7 @@ class RenewalBusinessController extends Controller
             ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
                 $q->where('u.ISE_No', $user_id_info);
             })
-            ->whereBetween('u.Policy_Expiration', [$ninetyDaysAgo, $ninetyDaysLater]);
+            ->whereBetween('u.Policy_Expiration', [$today, $ninetyDaysLater]);;
 
         $statusColors = [
             'PENDING' => 'label label-default',
@@ -823,6 +869,7 @@ class RenewalBusinessController extends Controller
     {
         $today = now()->format('Y-m-d');
         $ninetyDaysAgo  = now()->subDays(90)->format('Y-m-d');
+        // $ninetyDaysLater = now()->addDays(90)->format('Y-m-d');
         $user_id_info = Auth::user()->User_ID;
 
         // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
@@ -852,7 +899,11 @@ class RenewalBusinessController extends Controller
                 'v.Variant',
                 'i.ISE_Name',
                 DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
-            ]);
+            ])
+            ->where(function ($q) {
+                $q->whereNull('t.Trans_Status')
+                    ->orWhereNotIn('t.Trans_Status', ['RENEWED', 'COMPLETED']);
+            });
 
         // ---------- NB ----------
         $nb = NewBusinessTransactionView::query()
@@ -880,7 +931,11 @@ class RenewalBusinessController extends Controller
                 'v.Variant',
                 'i.ISE_Name',
                 DB::raw('DATEDIFF(t.Policy_Expiration, CURDATE()) as Days_To_Expiry'),
-            ]);
+            ])
+            ->where(function ($q) {
+                $q->whereNull('t.Trans_Status')
+                ->orWhereNotIn('t.Trans_Status', ['RENEWED', 'COMPLETED']);
+            });
 
         // ---------- UNION, wrapped so filters apply to the combined set ----------
         $query = DB::query()->fromSub($rb->unionAll($nb), 'u')
@@ -888,7 +943,7 @@ class RenewalBusinessController extends Controller
                 $q->where('u.ISE_No', $user_id_info);
             })
             // Expired and 90+ days have elapsed since expiration
-            ->where('u.Policy_Expiration', '<', $today);
+            ->where('u.Policy_Expiration', '<=', $today);
 
         $statusColors = [
             'PENDING' => 'label label-default',

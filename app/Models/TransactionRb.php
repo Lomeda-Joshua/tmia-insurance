@@ -60,4 +60,11 @@ class TransactionRb extends Model
     public function transactionStatus(){
         return $this->hasMany(TransactionStatus::class,'Trans_Status', 'Trans_Status');
     }
+
+
+    public function instype(){
+        return $this->hasMany(TransactionStatus::class,'Trans_Status', 'Trans_Status');
+    }
+
+
 }

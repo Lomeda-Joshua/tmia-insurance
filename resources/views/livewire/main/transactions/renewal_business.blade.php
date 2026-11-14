@@ -1320,31 +1320,9 @@
                             </div>
 
                             <div class="row">
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <label for="dpstartdate">Inception Date *</label>
-                                  <div class="input-group date">
-                                    <div class="input-group-addon">
-                                      <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
-                                      required="required" data-error="Inception Date is required.">
-                                  </div>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <label for="txtpolicyno">Policy No. *</label>
-                                  <input type="text" id="txtpolicyno" class="form-control input-sm" required="required"
-                                    data-error="Policy No. is required.">
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                              </div>
-                            </div>
+                             
 
-                            <div class="row">
-                              <div class="col-md-6">
+                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="dpissuedate">Issue Date *</label>
                                   <div class="input-group date">
@@ -1357,6 +1335,35 @@
                                   <div class="help-block with-errors"></div>
                                 </div>
                               </div>
+
+
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="txtpolicyno">Policy No. *</label>
+                                  <input type="text" id="txtpolicyno" class="form-control input-sm" required="required"
+                                    data-error="Policy No. is required.">
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                             
+
+                               <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="dpstartdate">Inception Date *</label>
+                                  <div class="input-group date">
+                                    <div class="input-group-addon">
+                                      <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input id="dpstartdate" type="text" class="form-control input-sm pull-right"
+                                      required="required" data-error="Inception Date is required.">
+                                  </div>
+                                  <div class="help-block with-errors"></div>
+                                </div>
+                              </div>
+
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="dppexpiredate">Policy Expiration Date *</label>
@@ -1381,21 +1388,6 @@
                                         <option Value="">PLEASE SELECT</option>
                                       </select>
                                       <div class="help-block with-errors"></div>
-                                    </div>
-                                  </div>
-
-                                  <div class="col-md-6 policyAction">
-                                    <label>Mortgagee change:</label>
-                                    <div class="radio-group">
-                                      <label class="custom-radio">
-                                        <input type="radio" name="rdpolicyaction" value="RETAIN" checked>
-                                        <span class="checkmark"></span>RETAIN
-                                      </label>
-                                      <label class="custom-radio">
-                                        <input type="radio" name="rdpolicyaction" value="TRANSFER">
-                                        <span class="checkmark"></span>
-                                        TRANSFER
-                                      </label>
                                     </div>
                                   </div>
                               </div>
@@ -1662,7 +1654,7 @@
 
                               <!-- Row 4 (Mortgage spans across the remaining columns) -->
                               <tr>
-                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Mortgage:</th>
+                                <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Mortgagee:</th>
                                 <td colspan="3">
                                   <input id="cbomortgage_summary" class="form-control input-sm cbomortgage_summary"
                                     style="width: 100%;" data-error="Mortgage is required." disabled>
@@ -2521,8 +2513,8 @@
                                           <th>Insurance No.</th>
                                           <th>Trans. Date & Time</th>
                                           <th>Days before expiration</th>
+                                          <th>Start Date</th>
                                           <th>Policy Expiration</th>
-                                          <th>Issue Date</th>
                                           <th>Status</th>
                                           <th>Customer No.</th>
                                           <th>Customer Name</th>

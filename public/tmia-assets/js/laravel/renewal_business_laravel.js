@@ -31,15 +31,18 @@ var activeVehTab;
 
 // Set Renewal flag for setting up modal call for expiring list
 let renewal_flag;
-let loadingflag 
+let loadingflag;
+let near_expiration_flag = 0;
+let expired_flag = 0;
+let policy_source  = null;
+
 
 ///////////////////////// FIRST LOAD SCRIPT ////////////////////////////////////
-$(document).ready( function () {
-
+$(document).ready(function () {
   //=============== CSRF token javascript one-time setup  =================//
   $.ajaxSetup({
       headers: {
-          'X-CSRF-TOKEN': window.csrfRoute.csrfToken
+        'X-CSRF-TOKEN': window.csrfRoute.csrfToken
       }
   });
   //=============== End CSRF token javascript one-time setup  =================//
@@ -49,9 +52,9 @@ $(document).ready( function () {
   $.ajax({
     url: window.fetchData.variableData,
     dataType: 'json',
-    type:"POST",
+    type: "POST",
     cache: false,
-    success: function(data) {
+    success: function (data) {
       userid = data.userid;
       logname = data.logname;
       ulevel = data.ulevel;
@@ -134,10 +137,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -158,8 +161,8 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-modify-ise', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
-    } 
+      document.activeElement.blur();
+    }
   });
 
   $(document).on('closed', '#modal-modify-ise', function (e) {
@@ -193,10 +196,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -210,7 +213,7 @@ $(document).ready( function () {
   });
 
   $(document).on('opened', '#modal-add', function (e) {
-    $(".iziModal-wrap").scrollTop(0); 
+    $(".iziModal-wrap").scrollTop(0);
     // Triggers the click event
     $('#btnfindcustomer').trigger('click');
   });
@@ -218,7 +221,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-add', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -257,10 +260,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -268,7 +271,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-customerlist', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -299,10 +302,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -310,7 +313,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-vehiclelist', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -341,10 +344,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -358,13 +361,13 @@ $(document).ready( function () {
   });
 
   $(document).on('opened', '#modal-modify-pay', function (e) {
-    $(".iziModal-wrap").scrollTop(0); 
+    $(".iziModal-wrap").scrollTop(0);
   });
 
   $(document).on('closing', '#modal-modify-pay', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -399,10 +402,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -416,13 +419,13 @@ $(document).ready( function () {
   });
 
   $(document).on('opened', '#modal-modify-status', function (e) {
-    $(".iziModal-wrap").scrollTop(0); 
+    $(".iziModal-wrap").scrollTop(0);
   });
 
   $(document).on('closing', '#modal-modify-status', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -457,10 +460,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -474,13 +477,13 @@ $(document).ready( function () {
   });
 
   $(document).on('opened', '#modal-modify-netrem', function (e) {
-    $(".iziModal-wrap").scrollTop(0); 
+    $(".iziModal-wrap").scrollTop(0);
   });
 
   $(document).on('closing', '#modal-modify-netrem', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -495,7 +498,7 @@ $(document).ready( function () {
     headerColor: 'linear-gradient(0deg, #505050, #bbb, #505050)',
     icon: 'fa fa-list-alt',
     iconColor: '#000',
-    zindex: 9999, 
+    zindex: 9999,
     // width: 900,
     padding: 20,
     radius: 10,
@@ -515,10 +518,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -538,7 +541,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-call', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -556,7 +559,7 @@ $(document).ready( function () {
     headerColor: 'linear-gradient(0deg, #505050, #bbb, #505050)',
     icon: 'fa fa-list-alt',
     iconColor: '#000',
-    zindex: 9999, 
+    zindex: 9999,
     width: 1400,
     padding: 20,
     radius: 10,
@@ -576,10 +579,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -599,7 +602,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-logs', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -634,10 +637,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -645,7 +648,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-nblist', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -676,10 +679,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -694,7 +697,7 @@ $(document).ready( function () {
   $("#modal-show-expiring-policies").iziModal({
     title: 'Expiring policies',
     subtitle: 'List of expiring policies.',
-    headerColor: '#dc3545', 
+    headerColor: '#dc3545',
     icon: 'fa-solid fa-chart-bar',
     iconColor: '#fcfbfb',
     zindex: 9999,
@@ -717,10 +720,10 @@ $(document).ready( function () {
     transitionOut: 'bounceOutDown',
     transitionInOverlay: 'fadeIn',
     transitionOutOverlay: 'fadeOut',
-    onResize: function(modal){
+    onResize: function (modal) {
       // console.log(modal.modalHeight);
     },
-    afterRender: function(modal){
+    afterRender: function (modal) {
       // modal.open();
     }
   });
@@ -734,14 +737,14 @@ $(document).ready( function () {
   });
 
   $(document).on('opened', '#modal-show-expiring-policies', function (e) {
-    $(".iziModal-wrap").scrollTop(0); 
+    $(".iziModal-wrap").scrollTop(0);
   });
 
   $(document).on('closing', '#modal-show-expiring-policies', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
-    } 
+      document.activeElement.blur();
+    }
   });
 
   $(document).on('closed', '#modal-show-expiring-policies', function (e) {
@@ -760,11 +763,11 @@ $(document).ready( function () {
         "paging": false,
         "ordering": false,
         "fixedHeader": true,
-        "fixedColumns":   {
+        "fixedColumns": {
           "left": 1
         },
         "columnDefs": [{
-          "targets": [ 27 ],
+          "targets": [27],
           "visible": false,
         }]
       }).columns.adjust().draw();
@@ -778,7 +781,7 @@ $(document).ready( function () {
   $(document).on('closing', '#modal-upload', function (e) {
     // Fix accessibility warning: blur focused element before aria-hidden is set
     if (document.activeElement) {
-        document.activeElement.blur();
+      document.activeElement.blur();
     }
   });
 
@@ -816,7 +819,7 @@ $(document).ready( function () {
     // onOpening: function() { console.log('Loading modal opened'); }
   });
 
-   $("#modalsaving").iziModal({
+  $("#modalsaving").iziModal({
     title: 'Saving Data',
     subtitle: 'Please wait while saving data...',
     headerColor: 'linear-gradient(0deg, #505050, #bbb, #505050)',
@@ -843,20 +846,20 @@ $(document).ready( function () {
   //============== COMBO BOX INITIALIZED ===========//
   //======= Insurance  Staff =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.insuranceStaffData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.insuranceStaffData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.ISE_No}">${item.ISE_Name}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboise").html(options);
+      // Inject populated options into dropdown
+      $("#cboise").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboise").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboise").trigger('change.select2');
     }
   });
 
@@ -864,27 +867,27 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   /*--------------------- CUSTOMER INFO --------------------*/
   //======= Customer Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.customerTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-          // Iterate over JSON objects and build <option> elements
-          $.each(data, function(index, item) {
-            options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
-          });
+    type: "POST",
+    url: window.formRoutes.customerTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+      });
 
-          // Inject populated options into dropdown
-          $("#cbogroup").html(options);
+      // Inject populated options into dropdown
+      $("#cbogroup").html(options);
 
-          // Force Select2 to refresh its display
-          $("#cbogroup").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbogroup").trigger('change.select2');
     }
   });
 
@@ -892,26 +895,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= Region =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.regionData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.RegCode}">${item.Region}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.regionData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.RegCode}">${item.Region}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboregion").html(options);
+      // Inject populated options into dropdown
+      $("#cboregion").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboregion").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboregion").trigger('change.select2');
     }
   });
 
@@ -919,7 +922,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
@@ -928,7 +931,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
@@ -937,7 +940,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
@@ -946,7 +949,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
@@ -955,27 +958,27 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   /*--------------------- VEHICLE INFO --------------------*/
   //======= Body Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.bodyTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.bodyTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cbobodytype").html(options);
+      // Inject populated options into dropdown
+      $("#cbobodytype").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cbobodytype").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbobodytype").trigger('change.select2');
     }
   });
 
@@ -983,26 +986,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= Fuel Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.fuelTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.fuelTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Fuel_TID}">${item.Fuel_Type}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cbofueltype").html(options);
+      // Inject populated options into dropdown
+      $("#cbofueltype").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cbofueltype").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbofueltype").trigger('change.select2');
     }
   });
 
@@ -1010,26 +1013,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= Product Classification =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.productClassData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.productClassData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Prod_Class_ID}">${item.Prod_Class}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboprodclass").html(options);
+      // Inject populated options into dropdown
+      $("#cboprodclass").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboprodclass").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboprodclass").trigger('change.select2');
     }
   });
 
@@ -1037,26 +1040,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
-   //======= Owner Type =====//
+  //======= Owner Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.customerTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.customerTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Customer_TID}">${item.Customer_Type}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboowntype").html(options);
+      // Inject populated options into dropdown
+      $("#cboowntype").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboowntype").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboowntype").trigger('change.select2');
     }
   });
 
@@ -1064,28 +1067,28 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
-  /*--------------------- PAYMENT INFO --------------------*/ 
+  /*--------------------- PAYMENT INFO --------------------*/
   //======= Payment Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.paymentTypeData,
-    success: function(data) {
-        let options = '<option value=" " disabled>PLEASE SELECT</option>';
+    type: "POST",
+    url: window.formRoutes.paymentTypeData,
+    success: function (data) {
+      let options = '<option value=" " disabled>PLEASE SELECT</option>';
 
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.PayType}">${item.PayType}</option>`;
-        });
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.PayType}">${item.PayType}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cbopaytype, #cbopaytype-n").html(options);
+      // Inject populated options into dropdown
+      $("#cbopaytype, #cbopaytype-n").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cbopaytype, #cbopaytype-n").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbopaytype, #cbopaytype-n").trigger('change.select2');
     }
   });
 
@@ -1093,26 +1096,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= E-Wallet Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.ewalletTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.EWType}">${item.EWType}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.ewalletTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.EWType}">${item.EWType}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboewallet, #cboewallet-n").html(options);
+      // Inject populated options into dropdown
+      $("#cboewallet, #cboewallet-n").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboewallet, #cboewallet-n").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboewallet, #cboewallet-n").trigger('change.select2');
     }
   });
 
@@ -1120,28 +1123,29 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
- /*--------------------- INSURER INFO --------------------*/ 
+  /*--------------------- INSURER INFO --------------------*/
   //======= Insurance Type =====//
+
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.insuranceTypeData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
+    type: "POST",
+    url: window.formRoutes.insuranceTypeData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
 
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Insurance_Type}">${item.Insurance_Type}</option>`;
-        });
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Insurance_TID}">${item.Insurance_Type}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cboinstype").html(options);
+      // Inject populated options into dropdown
+      $("#cboinstype").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cboinstype").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cboinstype").trigger('change.select2');
     }
   });
 
@@ -1149,112 +1153,134 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
+
+
   //======= Insurance =====//
-  $.ajax({
-    type:"POST",
-    url:window.formRoutes.insuranceCoData,
-    success: function(data) {
+  function loadInsuranceCompanies(type) {
+    $.ajax({
+      type: "POST",
+      url: window.formRoutes.insuranceCoData,
+      data: { insType: type },
+      success: function (data) {
         let options = '<option value="">PLEASE SELECT</option>';
 
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
+        $.each(data, function (index, item) {
           options += `<option value="${item.Insurance_Desc}">${item.Insurance_Desc}</option>`;
         });
 
-        // Inject populated options into dropdown
         $("#cboinsco").html(options);
-
-        // Force Select2 to refresh its display
         $("#cboinsco").trigger('change.select2');
-    }
-  });
+      }
+    });
+  }
+
+  function refreshInsurer() {
+    const $opt = $("#cboinstype option:selected");
+    const name = $opt.val() ? $opt.text().trim() : "";   // "" when PLEASE SELECT
+
+    $("#cboinstype_summary").val(name);
+    loadInsuranceCompanies($opt.val());
+  }
+
+  // loadInsuranceCompanies();
+  $(document).on("change", "#cboinstype", refreshInsurer);
+
+
+  // $(document).on("change", "#cboinstype", function () {
+  //       let instype = $(this).val();  
+  //       const instypeName = $(this).find("option:selected").text().trim();        
+
+  //       loadInsuranceCompanies(instype);   
+  //       $("#cboinstype_summary").val(instypeName);
+  // });
+
 
   $("#cboinsco").select2({
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= Bank =====//
   $.ajax({
-      type:"POST",
-      url:window.formRoutes.bankData,
-      success: function(data) {
-          let options = '<option value="">PLEASE SELECT</option>';
+    type: "POST",
+    url: window.formRoutes.bankData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
 
-          // Iterate over JSON objects and build <option> elements
-          $.each(data, function(index, item) {
-            options += `<option value="${item.BankDesc}">${item.BankDesc}</option>`;
-          });
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.BankDesc}">${item.BankDesc}</option>`;
+      });
 
-          // Inject populated options into dropdown
-          $("#cbomortgage").html(options);
+      // Inject populated options into dropdown
+      $("#cbomortgage").html(options);
 
-          // Force Select2 to refresh its display
-          $("#cbomortgage").trigger('change.select2');
-      }
+      // Force Select2 to refresh its display
+      $("#cbomortgage").trigger('change.select2');
+    }
   });
 
   $("#cbomortgage").select2({
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
-  /*--------------------- CHANGE STATUS --------------------*/ 
+  /*--------------------- CHANGE STATUS --------------------*/
   //======= Transaction Status =====//
   $.ajax({
-      type:"POST",
-      data:{ businesstype: "RENEWAL BUSINESS" },
-      url:window.loadData.getTransactionStatus,
-      success: function(data) {    
-          let options = '<option disabled value="">PLEASE SELECT</option>';
-          // Iterate over JSON objects and build <option> elements
-          $.each(data, function(index, item) {
-            options += `<option value="${item.Trans_Status}">${item.Trans_Status}</option>`;
-          });
+    type: "POST",
+    data: { businesstype: "RENEWAL BUSINESS" },
+    url: window.loadData.getTransactionStatus,
+    success: function (data) {
+      let options = '<option disabled value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Trans_Status}">${item.Trans_Status}</option>`;
+      });
 
-          // Inject populated options into dropdown
-          $("#cbotransstatus").html(options);
+      // Inject populated options into dropdown
+      $("#cbotransstatus").html(options);
 
-          // Force Select2 to refresh its display
-          $("#cbotransstatus").trigger('change.select2');
-      }
+      // Force Select2 to refresh its display
+      $("#cbotransstatus").trigger('change.select2');
+    }
   });
 
   $("#cbotransstatus").select2({
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   /*--------------------- CALL STATUS --------------------*/
   //======= Communication Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.communicationTypeData,
-    success: function(data) {
+    type: "POST",
+    url: window.formRoutes.communicationTypeData,
+    success: function (data) {
       let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Communication_ID}">${item.Communication_Type}</option>`;
-        });
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Communication_ID}">${item.Communication_Type}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cbomodecomm").html(options);
+      // Inject populated options into dropdown
+      $("#cbomodecomm").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cbomodecomm").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbomodecomm").trigger('change.select2');
     }
   });
 
@@ -1262,26 +1288,26 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
   //======= Call Status Type =====//
   $.ajax({
-    type:"POST",
-    url:window.formRoutes.callStatusData,
-    success: function(data) {
-        let options = '<option value="">PLEASE SELECT</option>';
-        // Iterate over JSON objects and build <option> elements
-        $.each(data, function(index, item) {
-          options += `<option value="${item.Call_SID}">${item.Call_Status}</option>`;
-        });
+    type: "POST",
+    url: window.formRoutes.callStatusData,
+    success: function (data) {
+      let options = '<option value="">PLEASE SELECT</option>';
+      // Iterate over JSON objects and build <option> elements
+      $.each(data, function (index, item) {
+        options += `<option value="${item.Call_SID}">${item.Call_Status}</option>`;
+      });
 
-        // Inject populated options into dropdown
-        $("#cbocallstatus").html(options);
+      // Inject populated options into dropdown
+      $("#cbocallstatus").html(options);
 
-        // Force Select2 to refresh its display
-        $("#cbocallstatus").trigger('change.select2');
+      // Force Select2 to refresh its display
+      $("#cbocallstatus").trigger('change.select2');
     }
   });
 
@@ -1289,7 +1315,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
 
@@ -1298,7 +1324,7 @@ $(document).ready( function () {
     allowClear: true,
     width: "100%",
     placeholder: "PLEASE SELECT"
-  }).on('select2:close', function() {
+  }).on('select2:close', function () {
     $(this).trigger("change.select2");
   });
   //============== END COMBO BOX INITIALIZED ===========//
@@ -1307,27 +1333,27 @@ $(document).ready( function () {
   /*--------------------- CUSTOMER INFO --------------------*/
   $("#dpbirthdate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   /*--------------------- VEHICLE INFO --------------------*/
   $("#dpvsidate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   $("#dpreldate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   $("#dptechdate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   /*--------------------- PAYMENT INFO --------------------*/
@@ -1335,8 +1361,8 @@ $(document).ready( function () {
 
   $("#dppdccheckdate, #dppdccheckdate-n").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   /*--------------------- INSURER INFO --------------------*/
@@ -1348,72 +1374,72 @@ $(document).ready( function () {
 
   $("#dpissuedate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   $("#dppexpiredate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   /*--------------------- CALL STATUS --------------------*/
   $("#dpppdate").datepicker({
     autoclose: true,
-    format:'dd-MM-yyyy',
-    todayHighlight : true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true
   });
 
   //================== Date From & Date To Picker ===================//
-    var today = new Date();
-    var thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(today.getDate() - 30);
+  var today = new Date();
+  var thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(today.getDate() - 30);
 
-    // 2. Initialize DateFrom (30 days ago)
-    $("#dpdatefrom").datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy', // Lowercase mm outputs numeric months (01-12)
-      todayHighlight: true
-    }).datepicker("setDate", thirtyDaysAgo);
+  // 2. Initialize DateFrom (30 days ago)
+  $("#dpdatefrom").datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy', // Lowercase mm outputs numeric months (01-12)
+    todayHighlight: true
+  }).datepicker("setDate", thirtyDaysAgo);
 
-    // 3. Initialize DateTo (Today)
-    $("#dpdateto").datepicker({
-      autoclose: true,
-      format: 'dd-mm-yyyy',
-      todayHighlight: true
-    }).datepicker("setDate", today);
+  // 3. Initialize DateTo (Today)
+  $("#dpdateto").datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+    todayHighlight: true
+  }).datepicker("setDate", today);
   //==================================================//
   //================== END DATE & TIME PICKER ===================//
 
   //======= Clearable text inputs =======//
-  function tog(v){return v ? "addClass" : "removeClass";} 
-  $(document).on("input", ".clearable", function(){
-      $(this)[tog(this.value)]("x");
-  }).on("mousemove", ".x", function( e ){
-      $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]("onX");
-  }).on("touchstart click", ".onX", function( ev ){
-      ev.preventDefault();
-      $(this).removeClass("x onX").val("").change();
-      
-      LoadTransactionData();
+  function tog(v) { return v ? "addClass" : "removeClass"; }
+  $(document).on("input", ".clearable", function () {
+    $(this)[tog(this.value)]("x");
+  }).on("mousemove", ".x", function (e) {
+    $(this)[tog(this.offsetWidth - 18 < e.clientX - this.getBoundingClientRect().left)]("onX");
+  }).on("touchstart click", ".onX", function (ev) {
+    ev.preventDefault();
+    $(this).removeClass("x onX").val("").change();
+
+    LoadTransactionData();
   });
 
-  $(document).on("input", ".clearable-s", function(){
-      $(this)[tog(this.value)]("x");
-  }).on("mousemove", ".x", function( e ){
-      $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]("onX");
-  }).on("touchstart click", ".onX", function( ev ){
-      ev.preventDefault();
-      $(this).removeClass("x onX").val("").change();
-      
-      if (activeCustTab === '#tmiatab') {
-        LoadCustomerData();
-      }
+  $(document).on("input", ".clearable-s", function () {
+    $(this)[tog(this.value)]("x");
+  }).on("mousemove", ".x", function (e) {
+    $(this)[tog(this.offsetWidth - 18 < e.clientX - this.getBoundingClientRect().left)]("onX");
+  }).on("touchstart click", ".onX", function (ev) {
+    ev.preventDefault();
+    $(this).removeClass("x onX").val("").change();
 
-      if (activeCustTab === '#uploadtab') {
-        LoadCustomerDataEDAFSAP();
-      }
+    if (activeCustTab === '#tmiatab') {
+      LoadCustomerData();
+    }
+
+    if (activeCustTab === '#uploadtab') {
+      LoadCustomerDataEDAFSAP();
+    }
   });
 
   const container = document.getElementById('alphabet-container');
@@ -1430,11 +1456,11 @@ $(document).ready( function () {
       button.classList.add('active');
       // You can add your custom action here (e.g., filter items)
       btnselect = `${label}`;
-      
+
       // activeCustTab = $('.customertab li.active a').attr('href');
 
       // console.log(activeCustTab); // #tmiatab or #uploadtab
-      
+
       if (activeCustTab === '#tmiatab') {
         LoadCustomerData();
       }
@@ -1468,14 +1494,14 @@ $(document).ready( function () {
   // Active listener: Listens for any change/typing on source inputs that have a corresponding _summary field
   $(document).ready(function () {
 
-      // Actively listens for user input on any element with data-summary
-      $(document).on("input change", "[data-summary]", function () {
-          const summaryTargetId = $(this).attr("data-summary");
-          
-          if (summaryTargetId) {
-              const upperVal = $(this).val().toUpperCase();$(`#${summaryTargetId}`).val(upperVal);
-          }
-      });
+    // Actively listens for user input on any element with data-summary
+    $(document).on("input change", "[data-summary]", function () {
+      const summaryTargetId = $(this).attr("data-summary");
+
+      if (summaryTargetId) {
+        const upperVal = $(this).val().toUpperCase(); $(`#${summaryTargetId}`).val(upperVal);
+      }
+    });
   });
 
 });
@@ -1486,174 +1512,174 @@ $(document).ready( function () {
 //============== COUNTS PENDING ===============//
 function LoadStatusCounts() {
   $.ajax({
-    type:"POST",
-    url:window.loadData.getRBCount,
+    type: "POST",
+    url: window.loadData.getRBCount,
     dataType: "json",
-    success: function(data) {
+    success: function (data) {
       console.log(data);
-      $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
-      $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
+      $("#pending-counts").text(NumberFormat(data.Pending_Counts, 0));
+      $("#expiring-counts").text(NumberFormat(data.Expiring_Counts, 0));
     }
   });
 }
 
 // Trigger search when typing in search input field
 $('#txtsearch').on('keyup search', function (e) {
-    if (e.keyCode === 13 || $(this).val() === '') { // Enter key or clear
-        window.viewpending = false;
-        window.viewexpiring = false;
-        table.draw();
-    }
+  if (e.keyCode === 13 || $(this).val() === '') { // Enter key or clear
+    window.viewpending = false;
+    window.viewexpiring = false;
+    table.draw();
+  }
 });
 
 
 //============== Transaction List ============//
 function LoadTransactionData() {
-    if ($.fn.dataTable.isDataTable('#table_trans')) {
-        $('#table_trans').DataTable().ajax.reload(null, false);
-        return;
+  if ($.fn.dataTable.isDataTable('#table_trans')) {
+    $('#table_trans').DataTable().ajax.reload(null, false);
+    return;
+  }
+
+  //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
+  let tableColumns = [
+    { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+    {
+      data: "Trans_Date",
+      name: "Trans_Date",
+      defaultContent: "- - -",
+      render: function (data, type) {
+        if (!data) return "- - -";
+        return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+      }
+    },
+
+    {
+      data: "Policy_Expiration",
+      name: "Policy_Expiration",
+      defaultContent: "- - -",
+      render: function (data, type) {
+        if (!data) return "- - -";
+        return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+      }
+    },
+
+    {
+      data: "Issue_Date",
+      name: "Issue_Date",
+      defaultContent: "- - -",
+      render: function (data, type) {
+        if (!data) return "- - -";
+        return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+      }
+    },
+
+    { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+    { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+
+    // Flattened Columns (Matches leftJoin backend)
+    { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+    { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+
+    { data: "VIN", name: "VIN", defaultContent: "- - -" },
+    { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+    { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+    { data: "Model", name: "Model", defaultContent: "- - -" },
+    { data: "Variant", name: "Variant", defaultContent: "- - -" },
+
+    // Main Table Columns
+    {
+      data: "Insurance_Company",
+      name: "Insurance_Company",
+      defaultContent: "- - -"
+    },
+
+
+    {
+      data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+      name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+      defaultContent: "- - -"
+    },
+
+
+    { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
+    { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+
+
+    {
+      data: "button",
+      name: "button",
+      orderable: false,
+      searchable: false,
+      defaultContent: "- - -"
     }
 
-    //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
-    let tableColumns = [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { 
-              data: "Trans_Date", 
-              name: "Trans_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-              }
-          },
 
-          { 
-              data: "Policy_Expiration", 
-              name: "Policy_Expiration", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+  ];
 
-          { 
-              data: "Issue_Date", 
-              name: "Issue_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+  // if( ulevel_declartion === 1 ){
+  //     tableColumns.push({
+  //         data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+  //         name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+  //         defaultContent: "- - -" 
+  //     }
+  // );}
 
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-          
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
-            
-          // Main Table Columns
-          { 
-            data: "Insurance_Company", 
-            name: "Insurance_Company", 
-            defaultContent: "- - -" 
-          },                  
+  // if( ulevel_declartion === 1 ){
+  //     tableColumns.push({
+  //         data: "button",            
+  //         name: "button",
+  //         orderable: false,
+  //         searchable: false,
+  //         defaultContent: "- - -" 
+  //     });
+  // }
 
-
-          {
-            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-            defaultContent: "- - -" 
-          }, 
-
-         
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-
-
-          {
-              data: "button",            
-              name: "button",
-              orderable: false,
-              searchable: false,
-              defaultContent: "- - -" 
+  table = $('#table_trans').DataTable({
+    language: {
+      processing: "Loading Transaction List..."
+    },
+    processing: true,
+    serverSide: true,
+    searching: false,
+    pageLength: 10,
+    responsive: true,
+    autoWidth: false,
+    ajax: {
+      url: window.tableRoutes.renewalBusinessData,
+      type: "POST",
+      data: function (d) {
+        d.viewpending = window.viewpending;
+        d.viewexpiring = window.viewexpiring;
+        d.searchval = $('#txtsearch').val().trim();
+        d.datefrom = $('#dpdatefrom').val();
+        d.dateto = $('#dpdateto').val();
+        d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+        d.dpFilter = $('#dpFilterSelect').val();
+      }
+    },
+    order: [[1, 'desc']],
+    columns: tableColumns,
+    initComplete: function () {
+      $('#modal-show-expiring-policies').iziModal('open');
+    },
+    columnDefs: [
+      {
+        targets: [5, 11, 12, 13, 14],
+        render: function (data, type, row, meta) {
+          const maxLength = 30;
+          if (typeof data === 'string' && data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
           }
-          
-          
-    ];
-
-    // if( ulevel_declartion === 1 ){
-    //     tableColumns.push({
-    //         data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-    //         name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-    //         defaultContent: "- - -" 
-    //     }
-    // );}
-
-    // if( ulevel_declartion === 1 ){
-    //     tableColumns.push({
-    //         data: "button",            
-    //         name: "button",
-    //         orderable: false,
-    //         searchable: false,
-    //         defaultContent: "- - -" 
-    //     });
-    // }
-
-    table = $('#table_trans').DataTable({
-      language: {
-        processing: "Loading Transaction List..."
-      },
-      processing: true,
-      serverSide: true,
-      searching: false,
-      pageLength: 10,
-      responsive: true,
-      autoWidth: false,
-      ajax: {
-        url: window.tableRoutes.renewalBusinessData,
-        type: "POST",
-        data: function (d) {
-          d.viewpending  = window.viewpending;
-          d.viewexpiring = window.viewexpiring;
-          d.searchval    = $('#txtsearch').val().trim();
-          d.datefrom     = $('#dpdatefrom').val();
-          d.dateto       = $('#dpdateto').val();
-          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-          d.dpFilter     = $('#dpFilterSelect').val();
+          return data;
         }
-      },                                   
-      order: [[1, 'desc']],
-      columns: tableColumns,
-      initComplete: function(){
-        $('#modal-show-expiring-policies').iziModal('open'); 
-      },
-      columnDefs: [
-        {
-          targets: [5, 11, 12, 13, 14],
-          render: function (data, type, row, meta) {
-            const maxLength = 30;
-            if (typeof data === 'string' && data.length > maxLength) {
-              const truncated = data.substring(0, maxLength) + '...';
-              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
-            }
-            return data;
-          }
-        }
-      ]
-    });  
+      }
+    ]
+  });
 
 
-    viewpending = false;
-    viewexpiring = false;
+  viewpending = false;
+  viewexpiring = false;
 }
 //======================================//
 
@@ -1679,12 +1705,16 @@ $(document).on("click", "#btnSearch", function () {
 
 $('#modal-show-expiring-policies').on('opened', initExpiringTable);
 
-
-function initExpiringTable(){
+/**
+ *  
+ *  Initialize Expiring table  
+ * 
+ **/
+function initExpiringTable() {
 
   // Already initialized: just refetch data and keep the current page
   if ($.fn.dataTable.isDataTable('#table_expiring_list')) {
-     $('#table_expiring_list').DataTable().ajax.reload(); 
+    $('#table_expiring_list').DataTable().ajax.reload();
     return;
   }
 
@@ -1693,11 +1723,11 @@ function initExpiringTable(){
   }
 
   function escapeAttr(str) {
-      return String(str)
-          .replace(/&/g, '&amp;')
-          .replace(/"/g, '&quot;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 
 
@@ -1705,300 +1735,300 @@ function initExpiringTable(){
    *  
    *  Expiring list  
    * 
-  **/ 
+  **/
   let tableExpiring = $('#table_expiring_list').DataTable({
-      language: {
-        processing: "Loading Transaction List..."
+    language: {
+      processing: "Loading Transaction List..."
+    },
+    processing: true,
+    serverSide: true,
+    searching: false,
+    pageLength: 10,
+    responsive: true,
+    autoWidth: false,
+    ajax: {
+      url: window.tableRoutes.getExpiringPolicies,
+      type: "POST",
+      data: function (d) {
+        d.viewpending = window.viewpending === true;
+        d.viewexpiring = window.viewexpiring === true;
+        d.searchval = $('#txtsearch').val().trim();
+        d.datefrom = $('#dpdatefrom').val();
+        d.dateto = $('#dpdateto').val();
+        d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+        d.dpFilter = $('#dpFilterSelect').val();
+      }
+    },                                   // <-- closes ajax
+    columns: [
+      { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+      {
+        data: "Trans_Date",
+        name: "Trans_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+        }
       },
-      processing: true,
-      serverSide: true,
-      searching: false,
-      pageLength: 10,
-      responsive: true,
-      autoWidth: false,
-      ajax: {
-        url: window.tableRoutes.getExpiringPolicies,
-        type: "POST",
-        data: function (d) {
-          d.viewpending  = window.viewpending === true;
-          d.viewexpiring = window.viewexpiring === true;
-          d.searchval    = $('#txtsearch').val().trim();
-          d.datefrom     = $('#dpdatefrom').val();
-          d.dateto       = $('#dpdateto').val();
-          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-          d.dpFilter     = $('#dpFilterSelect').val();
+
+      { data: 'Days_To_Expiry', name: 'Days_To_Expiry', defaultContent: "- - -" },
+
+      {
+        data: "Start_Date",
+        name: "Start_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
         }
-      },                                   // <-- closes ajax
-      columns: [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { 
-              data: "Trans_Date", 
-              name: "Trans_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-              }
-          },
-
-          { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
-
-          { 
-              data: "Start_Date", 
-              name: "Start_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      },
 
 
-          { 
-              data: "Policy_Expiration", 
-              name: "Policy_Expiration", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      {
+        data: "Policy_Expiration",
+        name: "Policy_Expiration",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+        }
+      },
 
-          { data: "Issue_Date",  name: "Issue_Date", defaultContent: "- - -", },
+      { data: "Issue_Date", name: "Issue_Date", defaultContent: "- - -", },
 
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-          
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          // { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
-            
-          // Main Table Columns
-          { 
-            data: "Insurance_Company", 
-            name: "Insurance_Company", 
-            defaultContent: "- - -" 
-          },                  
-      ],
-      columnDefs: [
-        {
-          targets: [5, 11, 12, 13],
-          render: function (data, type, row, meta) {
-              // Use plain text for sorting, searching, and export
-              if (type !== 'display') {
-                return typeof data === 'string' ? stripHtml(data) : data;
-              }
+      { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
 
-              const maxLength = 30;
-              if (typeof data !== 'string') return data;
+      { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
 
-              // Cell contains HTML (e.g. status badges): return as-is, no truncation
-              if (/<[a-z][\s\S]*>/i.test(data)) {
-                return data;
-              }
+      // Flattened Columns (Matches leftJoin backend)
+      { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+      { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
 
-              if (data.length > maxLength) {
-                const truncated = data.substring(0, maxLength) + '...';
-                const safe = escapeAttr(data);
-                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
-              }
+      { data: "VIN", name: "VIN", defaultContent: "- - -" },
+      { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+      // { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+      { data: "Model", name: "Model", defaultContent: "- - -" },
+      { data: "Variant", name: "Variant", defaultContent: "- - -" },
 
-              return data;
+      // Main Table Columns
+      {
+        data: "Insurance_Company",
+        name: "Insurance_Company",
+        defaultContent: "- - -"
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [5, 11, 12, 13],
+        render: function (data, type, row, meta) {
+          // Use plain text for sorting, searching, and export
+          if (type !== 'display') {
+            return typeof data === 'string' ? stripHtml(data) : data;
           }
+
+          const maxLength = 30;
+          if (typeof data !== 'string') return data;
+
+          // Cell contains HTML (e.g. status badges): return as-is, no truncation
+          if (/<[a-z][\s\S]*>/i.test(data)) {
+            return data;
+          }
+
+          if (data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            const safe = escapeAttr(data);
+            return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+          }
+
+          return data;
         }
-      ]
-  });  
-  
-    // 2) SINGLE CLICK: select the row and load its data
-    $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {          
-          const row = tableExpiring.row(this).data();
-          if (!row) return;                       // ignores responsive child rows
+      }
+    ]
+  });
 
-          tableExpiring.$('tr.selected').removeClass('selected');
-          $(this).addClass('selected');
+  // 2) SINGLE CLICK: select the row and load its data
+  $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {
+      const row = tableExpiring.row(this).data();
+      if (!row) return;                       // ignores responsive child rows
 
-          $('.policyAction').show(); 
-          renewal_flag = 1; 
-          
-          xcustno       = row.Customer_No;
-          xcustnoupload = row.Customer_No;
-          xvin          = row.VIN;
-          xcsno         = row.CS_No;
-          xplateno      = row.Plate_No;
-          insuranceno   = row.Insurance_No;
+      tableExpiring.$('tr.selected').removeClass('selected');
+      $(this).addClass('selected');
 
-    });
-  
-    // 3) DOUBLE CLICK: confirm selection and close the modal
-    $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-          $('#modal-show-expiring-policies').iziModal('close');
-          $('#btncustselect').trigger('click');
-          // $('#btnnbselect').trigger('click');
-    });
+      $('.policyAction').show();
 
-    console.log('renewal flag', renewal_flag);
-  
-  
+      renewal_flag = 1;
+      near_expiration_flag = 1;
 
+      xcustno = row.Customer_No;
+      xcustnoupload = row.Customer_No;
+      xvin = row.VIN;
+      xcsno = row.CS_No;
+      xplateno = row.Plate_No;
+      insuranceno = row.Insurance_No;
 
-     
+  });
 
-  
+  // 3) DOUBLE CLICK: confirm selection and close the modal
+  $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+    near_expiration_flag = 1;
+    $('#modal-show-expiring-policies').iziModal('close');
+
+    // $('#btncustselect').trigger('click');
+    $('#btnnbselect').trigger('click');
+  });
 
 
   /**
    *  
    *  Expired list  
    * 
-  **/ 
+  **/
   let tableExpired = $('#table_expired_list').DataTable({
-      language: {
-        processing: "Loading Transaction List..."
+    language: {
+      processing: "Loading Transaction List..."
+    },
+    processing: true,
+    serverSide: true,
+    searching: false,
+    pageLength: 10,
+    responsive: true,
+    autoWidth: false,
+    ajax: {
+      url: window.tableRoutes.getExpiredPolicies,
+      type: "POST",
+      data: function (d) {
+        d.viewpending = window.viewpending === true;
+        d.viewexpiring = window.viewexpiring === true;
+        d.searchval = $('#txtsearch').val().trim();
+        d.datefrom = $('#dpdatefrom').val();
+        d.dateto = $('#dpdateto').val();
+        d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+        d.dpFilter = $('#dpFilterSelect').val();
+      }
+    },                                   // <-- closes ajax
+    columns: [
+      { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+      {
+        data: "Trans_Date",
+        name: "Trans_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+        }
       },
-      processing: true,
-      serverSide: true,
-      searching: false,
-      pageLength: 10,
-      responsive: true,
-      autoWidth: false,
-      ajax: {
-        url: window.tableRoutes.getExpiredPolicies,
-        type: "POST",
-        data: function (d) {
-          d.viewpending  = window.viewpending === true;
-          d.viewexpiring = window.viewexpiring === true;
-          d.searchval    = $('#txtsearch').val().trim();
-          d.datefrom     = $('#dpdatefrom').val();
-          d.dateto       = $('#dpdateto').val();
-          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-          d.dpFilter     = $('#dpFilterSelect').val();
+
+      { data: 'Days_To_Expiry', name: 'Days_To_Expiry', defaultContent: "- - -" },
+
+      {
+        data: "Start_Date",
+        name: "Start_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
         }
-      },                                   // <-- closes ajax
-      columns: [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { 
-              data: "Trans_Date", 
-              name: "Trans_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-              }
-          },
-
-           { data: 'Days_To_Expiry', name: 'Days_To_Expiry',  defaultContent: "- - -" },
-
-            { 
-              data: "Start_Date", 
-              name: "Start_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      },
 
 
-          { 
-              data: "Policy_Expiration", 
-              name: "Policy_Expiration", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      {
+        data: "Policy_Expiration",
+        name: "Policy_Expiration",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+        }
+      },
 
-            { 
-                data: "Issue_Date", 
-                name: "Issue_Date", 
-                defaultContent: "- - -", 
-            },
+      // { 
+      //     data: "Start_Date", 
+      //     name: "Start_Date", 
+      //     defaultContent: "- - -", 
+      // },
 
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-          
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
-            
-          // Main Table Columns
-          { 
-            data: "Insurance_Company", 
-            name: "Insurance_Company", 
-            defaultContent: "- - -" 
-          },                  
-      ],
-      columnDefs: [
-        {
-          targets: [5, 11, 12, 13],
-          render: function (data, type, row, meta) {
-              // Use plain text for sorting, searching, and export
-              if (type !== 'display') {
-                return typeof data === 'string' ? stripHtml(data) : data;
-              }
+      { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
 
-              const maxLength = 30;
-              if (typeof data !== 'string') return data;
+      { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
 
-              // Cell contains HTML (e.g. status badges): return as-is, no truncation
-              if (/<[a-z][\s\S]*>/i.test(data)) {
-                return data;
-              }
+      // Flattened Columns (Matches leftJoin backend)
+      { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+      { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
 
-              if (data.length > maxLength) {
-                const truncated = data.substring(0, maxLength) + '...';
-                const safe = escapeAttr(data);
-                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
-              }
+      { data: "VIN", name: "VIN", defaultContent: "- - -" },
+      { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+      { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+      { data: "Model", name: "Model", defaultContent: "- - -" },
+      { data: "Variant", name: "Variant", defaultContent: "- - -" },
 
-              return data;
+      // Main Table Columns
+      {
+        data: "Insurance_Company",
+        name: "Insurance_Company",
+        defaultContent: "- - -"
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [5, 11, 12, 13],
+        render: function (data, type, row, meta) {
+          // Use plain text for sorting, searching, and export
+          if (type !== 'display') {
+            return typeof data === 'string' ? stripHtml(data) : data;
           }
+
+          const maxLength = 30;
+          if (typeof data !== 'string') return data;
+
+          // Cell contains HTML (e.g. status badges): return as-is, no truncation
+          if (/<[a-z][\s\S]*>/i.test(data)) {
+            return data;
+          }
+
+          if (data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            const safe = escapeAttr(data);
+            return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+          }
+
+          return data;
         }
-      ]
-  });  
-  
-    // 2) SINGLE CLICK: select the row and load its data
-    $('#table_expired_list tbody').off('click', 'tr').on('click', 'tr', function () {          
-          const row = tableExpired.row(this).data();
-          if (!row) return;                       // ignores responsive child rows
+      }
+    ]
+  });
 
-          tableExpired.$('tr.selected').removeClass('selected');
-          $(this).addClass('selected');
+  // 2) SINGLE CLICK: select the row and load its data
+  $('#table_expired_list tbody').off('click', 'tr').on('click', 'tr', function () {
+    const row = tableExpired.row(this).data();
+    if (!row) return;                       // ignores responsive child rows
 
-          renewal_flag = 1; 
+    tableExpired.$('tr.selected').removeClass('selected');
+    $(this).addClass('selected');
 
-          xcustno       = row.Customer_No;
-          xcustnoupload = row.Customer_No;
-          xvin          = row.VIN;
-          xcsno         = row.CS_No;
-          xplateno      = row.Plate_No;
-          insuranceno   = row.Insurance_No;
+    renewal_flag = 1;
+    expired_flag = 1;
+    policy_source = row.Source;
 
-    });
-  
-    // 3) DOUBLE CLICK: confirm selection and close the modal
-    $('#table_expired_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-          // $('#btncustselect').trigger('click');
-          $('#btnnbselect').trigger('click');
+    xcustno = row.Customer_No;
+    xcustnoupload = row.Customer_No;
+    xvin = row.VIN;
+    xcsno = row.CS_No;
+    xplateno = row.Plate_No;
+    insuranceno = row.Insurance_No;
 
-          // $('#policyAction').attr();
-          $('#modal-show-expiring-policies').iziModal('close');
-    });
+  });
+
+  // 3) DOUBLE CLICK: confirm selection and close the modal
+  $('#table_expired_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+    // $('#btncustselect').trigger('click');
+    expired_flag = 1;
+
+    $('#btnnbselect').trigger('click');
+
+    // $('#policyAction').attr();
+    $('#modal-show-expiring-policies').iziModal('close');
+  });
+
 
 
 
@@ -2006,180 +2036,169 @@ function initExpiringTable(){
    *  
    *  Renewed  
    * 
-  **/ 
+  **/
   $('#renewedTable').DataTable({
-      language: {
-        processing: "Loading Transaction List..."
+    language: {
+      processing: "Loading Transaction List..."
+    },
+    processing: true,
+    serverSide: true,
+    searching: false,
+    pageLength: 10,
+    responsive: true,
+    autoWidth: false,
+    ajax: {
+      url: window.tableRoutes.getRenewedPolicies,
+      type: "POST",
+      data: function (d) {
+        d.viewpending = window.viewpending === true;
+        d.viewexpiring = window.viewexpiring === true;
+        d.searchval = $('#txtsearch').val().trim();
+        d.datefrom = $('#dpdatefrom').val();
+        d.dateto = $('#dpdateto').val();
+        d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+        d.dpFilter = $('#dpFilterSelect').val();
+      }
+    },                                   // <-- closes ajax
+    columns: [
+      { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+      {
+        data: "Trans_Date",
+        name: "Trans_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+        }
       },
-      processing: true,
-      serverSide: true,
-      searching: false,
-      pageLength: 10,
-      responsive: true,
-      autoWidth: false,
-      ajax: {
-        url: window.tableRoutes.getRenewedPolicies,
-        type: "POST",
-        data: function (d) {
-          d.viewpending  = window.viewpending === true;
-          d.viewexpiring = window.viewexpiring === true;
-          d.searchval    = $('#txtsearch').val().trim();
-          d.datefrom     = $('#dpdatefrom').val();
-          d.dateto       = $('#dpdateto').val();
-          d.chkall       = $('#chkall').is(':checked') ? 1 : 0;
-          d.dpFilter     = $('#dpFilterSelect').val();
+
+      {
+        data: "Start_Date",
+        name: "Start_Date",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
         }
-      },                                   // <-- closes ajax
-      columns: [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-          { 
-              data: "Trans_Date", 
-              name: "Trans_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-              }
-          },
-
-          { 
-              data: "Start_Date", 
-              name: "Start_Date", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      },
 
 
-          { 
-              data: "Policy_Expiration", 
-              name: "Policy_Expiration", 
-              defaultContent: "- - -", 
-              render: function (data, type) {
-                if (!data) return "- - -";
-                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-              }
-          },
+      {
+        data: "Policy_Expiration",
+        name: "Policy_Expiration",
+        defaultContent: "- - -",
+        render: function (data, type) {
+          if (!data) return "- - -";
+          return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+        }
+      },
 
-          { 
-              data: "Trans_Status", 
-              name: "Trans_Status", 
-              defaultContent: "- - -", 
-          },
-          
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-          
-          // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
-            
-          // Main Table Columns
-          { 
-            data: "Insurance_Company", 
-            name: "Insurance_Company", 
-            defaultContent: "- - -" 
-          },                  
-      ],
-      columnDefs: [
-        {
-          targets: [5, 11, 12, 13],
-          render: function (data, type, row, meta) {
-              // Use plain text for sorting, searching, and export
-              if (type !== 'display') {
-                return typeof data === 'string' ? stripHtml(data) : data;
-              }
+      {
+        data: "Trans_Status",
+        name: "Trans_Status",
+        defaultContent: "- - -",
+      },
 
-              const maxLength = 30;
-              if (typeof data !== 'string') return data;
+      { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
 
-              // Cell contains HTML (e.g. status badges): return as-is, no truncation
-              if (/<[a-z][\s\S]*>/i.test(data)) {
-                return data;
-              }
+      // Flattened Columns (Matches leftJoin backend)
+      { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+      { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
 
-              if (data.length > maxLength) {
-                const truncated = data.substring(0, maxLength) + '...';
-                const safe = escapeAttr(data);
-                return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
-              }
+      { data: "VIN", name: "VIN", defaultContent: "- - -" },
+      { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+      { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+      { data: "Model", name: "Model", defaultContent: "- - -" },
+      { data: "Variant", name: "Variant", defaultContent: "- - -" },
 
-              return data;
+      // Main Table Columns
+      {
+        data: "Insurance_Company",
+        name: "Insurance_Company",
+        defaultContent: "- - -"
+      },
+    ],
+    columnDefs: [
+      {
+        targets: [5, 11, 12, 13],
+        render: function (data, type, row, meta) {
+          // Use plain text for sorting, searching, and export
+          if (type !== 'display') {
+            return typeof data === 'string' ? stripHtml(data) : data;
           }
+
+          const maxLength = 30;
+          if (typeof data !== 'string') return data;
+
+          // Cell contains HTML (e.g. status badges): return as-is, no truncation
+          if (/<[a-z][\s\S]*>/i.test(data)) {
+            return data;
+          }
+
+          if (data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            const safe = escapeAttr(data);
+            return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+          }
+
+          return data;
         }
-      ]
-  });  
-  
+      }
+    ]
+  });
+
 }
-
-
-
-
-
-
-
 
 
 /**
  *  
  *  Dynamic change on summary input  
- **/ 
-$(document).on("change", "#cboinstype", function () {
-      let value_input = $(this).val();      
-      $("#cboinstype_summary").val(value_input);
-});
-
+ **/
 $(document).on("change", "#cboinsco", function () {
-      let value_input = $(this).val();      
-      $("#cboinsco_summary").val(value_input);
+  let value_input = $(this).val();
+  $("#cboinsco_summary").val(value_input);
 });
 
 $(document).on("change", "#dpstartdate", function () {
-      let value_input = $(this).val();      
-      $("#dpstartdate_summary").val(value_input);
+  let value_input = $(this).val();
+  $("#dpstartdate_summary").val(value_input);
 });
 
 $(document).on("change", "#txtpolicyno", function () {
-      let value_input = $(this).val();      
-      $("#txtpolicyno_summary").val(value_input);
+  let value_input = $(this).val();
+  $("#txtpolicyno_summary").val(value_input);
 });
 
 $(document).on("change", "#dpissuedate", function () {
-      let value_input = $(this).val();      
-      $("#dpissuedate_summary").val(value_input);
+  let value_input = $(this).val();
+  $("#dpissuedate_summary").val(value_input);
 });
 
 
 $(document).on("change", "#cbomortgage", function () {
-      let value_input = $(this).val();      
-      $("#cbomortgage_summary").val(value_input);
+  let value_input = $(this).val();
+  console.log('mortgagee', value_input);
+  $("#cbomortgage_summary").val(value_input);
 });
 
 $(document).on("change", "#dppexpiredate", function () {
-      let value_input = $(this).val();      
-      $("#dppexpiredate_summary").val(value_input);
+  let value_input = $(this).val();
+  $("#dppexpiredate_summary").val(value_input);
 });
 /////////// End Filter on Renewal of business ///////////
 
 //============== Customer List ============//
 function LoadCustomerData() {
   const searchval = $("#txtcustomersearch").val().trim();
-  if (typeof btnselect === 'undefined') { btnselect = '';}
+  if (typeof btnselect === 'undefined') { btnselect = ''; }
 
   const value = {
-    searchval:searchval,
-    btnselect:btnselect
+    searchval: searchval,
+    btnselect: btnselect
   };
 
   if ($.fn.dataTable.isDataTable('#table_customerlist')) {
-    $('#table_customerlist').DataTable().clear().destroy();               
+    $('#table_customerlist').DataTable().clear().destroy();
   }
 
   table = $('#table_customerlist').DataTable({
@@ -2199,7 +2218,7 @@ function LoadCustomerData() {
     columns: [
       { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
       { data: "Customer_No" },
-      { data: "Group"},
+      { data: "Group" },
       { data: "Full_Name" },
       { data: "Birth_Date" },
       { data: "Contact_No" },
@@ -2212,16 +2231,16 @@ function LoadCustomerData() {
       { data: "Variant" },
       {
         data: "Active_Status",
-          render: function (data) {
-            return data == "1" ? "ACTIVE" : "INACTIVE";
-          }
+        render: function (data) {
+          return data == "1" ? "ACTIVE" : "INACTIVE";
+        }
       },
       // { data: "Inactive_Date" }
     ],
     columnDefs: [
       {
         targets: [3, 7, 12],
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
             const truncated = data.substring(0, maxLength) + '...';
@@ -2252,7 +2271,7 @@ function LoadCustomerData() {
   });
 
   // ✅ Bind row click for selection AFTER table initialization
-  $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {    
+  $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     $('#btncustselect').trigger("click");
   });
 }
@@ -2260,15 +2279,15 @@ function LoadCustomerData() {
 //============== Customer List FROM DAF/SAP ============//
 function LoadCustomerDataEDAFSAP() {
   const searchval = $("#txtcustomersearch").val().trim();
-  if (typeof btnselect === 'undefined') { btnselect = '';}
+  if (typeof btnselect === 'undefined') { btnselect = ''; }
 
   const value = {
-    searchval:searchval,
-    btnselect:btnselect
+    searchval: searchval,
+    btnselect: btnselect
   };
 
   if ($.fn.dataTable.isDataTable('#table_customerlistupload')) {
-    $('#table_customerlistupload').DataTable().clear().destroy();               
+    $('#table_customerlistupload').DataTable().clear().destroy();
   }
 
   table = $('#table_customerlistupload').DataTable({
@@ -2286,30 +2305,30 @@ function LoadCustomerDataEDAFSAP() {
       data: value
     },
     columns: [
-        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "Customer_No", name: "Customer_No" },
-        { data: "Group", name: "Group", defaultContent: "" },
-        { data: "Full_Name", name: "Full_Name", defaultContent: "" },
-        { 
-          data: "Birth_Date", 
-          name: "Birth_Date", 
-          defaultContent: "",
-          render: function (data) {
-            return data ? new Date(data).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() : '';
-          }
-        },
-        { data: "Contact_No", name: "Contact_No", defaultContent: "" },
-        { data: "Email_Address", name: "Email_Address", defaultContent: "" },
-        { data: "Address", name: "Address", defaultContent: "" },
-        { data: "VIN", name: "VIN", defaultContent: "" },
-        { data: "CS_No", name: "CS_No", defaultContent: "" },
-        { data: "Plate_No", name: "Plate_No", defaultContent: "" },
-        { data: "Variant", name: "Variant", defaultContent: "" },
+      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+      { data: "Customer_No", name: "Customer_No" },
+      { data: "Group", name: "Group", defaultContent: "" },
+      { data: "Full_Name", name: "Full_Name", defaultContent: "" },
+      {
+        data: "Birth_Date",
+        name: "Birth_Date",
+        defaultContent: "",
+        render: function (data) {
+          return data ? new Date(data).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() : '';
+        }
+      },
+      { data: "Contact_No", name: "Contact_No", defaultContent: "" },
+      { data: "Email_Address", name: "Email_Address", defaultContent: "" },
+      { data: "Address", name: "Address", defaultContent: "" },
+      { data: "VIN", name: "VIN", defaultContent: "" },
+      { data: "CS_No", name: "CS_No", defaultContent: "" },
+      { data: "Plate_No", name: "Plate_No", defaultContent: "" },
+      { data: "Variant", name: "Variant", defaultContent: "" },
     ],
     columnDefs: [
       {
         targets: [3, 7, 11],
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
             const truncated = data.substring(0, maxLength) + '...';
@@ -2341,14 +2360,16 @@ function LoadCustomerDataEDAFSAP() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlistupload tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btncustselect').trigger("click");
+    $('#btncustselect').trigger("click");
   });
+
 }
+
 
 //============== Vehicle List ============//
 function LoadVehicleData() {
   if ($.fn.dataTable.isDataTable('#table_vehiclelist')) {
-    $('#table_vehiclelist').DataTable().clear().destroy();               
+    $('#table_vehiclelist').DataTable().clear().destroy();
   }
 
   table = $('#table_vehiclelist').DataTable({
@@ -2363,7 +2384,7 @@ function LoadVehicleData() {
     ajax: {
       url: "renewal_business_vehicles.php",
       type: "POST",
-      data: {custno:xcustno}
+      data: { custno: xcustno }
     },
     columns: [
       { data: "urutan" },
@@ -2386,7 +2407,7 @@ function LoadVehicleData() {
     columnDefs: [
       {
         targets: [4],
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
             const truncated = data.substring(0, maxLength) + '...';
@@ -2415,13 +2436,13 @@ function LoadVehicleData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_vehiclelist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btnvehselect').trigger("click");
+    $('#btnvehselect').trigger("click");
   });
 }
 
 function LoadVehicleEDAFSAPData() {
   if ($.fn.dataTable.isDataTable('#table_uploadvehlist')) {
-    $('#table_uploadvehlist').DataTable().clear().destroy();               
+    $('#table_uploadvehlist').DataTable().clear().destroy();
   }
 
   table = $('#table_uploadvehlist').DataTable({
@@ -2436,7 +2457,7 @@ function LoadVehicleEDAFSAPData() {
     ajax: {
       url: "fetch_vehicle_upload.php",
       type: "POST",
-      data: {custno:xcustnoupload}
+      data: { custno: xcustnoupload }
     },
     columns: [
       { data: "urutan" },
@@ -2459,7 +2480,7 @@ function LoadVehicleEDAFSAPData() {
     columnDefs: [
       {
         targets: [4],
-        render: function(data, type, row, meta) {
+        render: function (data, type, row, meta) {
           const maxLength = 30;
           if (typeof data === 'string' && data.length > maxLength) {
             const truncated = data.substring(0, maxLength) + '...';
@@ -2488,14 +2509,14 @@ function LoadVehicleEDAFSAPData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_uploadvehlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-     $('#btnvehselect').trigger("click");
+    $('#btnvehselect').trigger("click");
   });
 }
 
 //============== NB List ============//
 function LoadNBData() {
   if ($.fn.dataTable.isDataTable('#table_nblist')) {
-    $('#table_nblist').DataTable().clear().destroy();               
+    $('#table_nblist').DataTable().clear().destroy();
   }
 
   table = $('#table_nblist').DataTable({
@@ -2517,46 +2538,46 @@ function LoadNBData() {
       type: "POST"
     },
     columns: [
-        { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false }, // Yajra auto index
-        { data: "Insurance_No", name: "t.Insurance_No" },
-        { data: "Trans_Date", name: "t.Trans_Date" },
-        { data: "Trans_Status", name: "t.Trans_Status" },
-        { data: "Customer_No", name: "t.Customer_No" },
-        { data: "Full_Name", name: "c.Full_Name" },
-        { data: "Contact_No", name: "c.Contact_No" },
-        { data: "VIN", name: "t.VIN" },
-        { data: "CS_No", name: "v.CS_No" },
-        { data: "Plate_No", name: "v.Plate_No" },
-        { data: "Model", name: "v.Model" },
-        { data: "Variant", name: "v.Variant" },
-        { data: "Insurance_Company", name: "t.Insurance_Company" },
-        { data: "ISE_Name", name: "i.ISE_Name" },
-        { data: "Policy_Expiration", name: "t.Policy_Expiration" }
+      { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false }, // Yajra auto index
+      { data: "Insurance_No", name: "t.Insurance_No" },
+      { data: "Trans_Date", name: "t.Trans_Date" },
+      { data: "Trans_Status", name: "t.Trans_Status" },
+      { data: "Customer_No", name: "t.Customer_No" },
+      { data: "Full_Name", name: "c.Full_Name" },
+      { data: "Contact_No", name: "c.Contact_No" },
+      { data: "VIN", name: "t.VIN" },
+      { data: "CS_No", name: "v.CS_No" },
+      { data: "Plate_No", name: "v.Plate_No" },
+      { data: "Model", name: "v.Model" },
+      { data: "Variant", name: "v.Variant" },
+      { data: "Insurance_Company", name: "t.Insurance_Company" },
+      { data: "ISE_Name", name: "i.ISE_Name" },
+      { data: "Policy_Expiration", name: "t.Policy_Expiration" }
     ],
     columnDefs: [
-        {
-          targets: [5, 11, 12, 13],
-          render: function (data, type, row, meta) {
-            const maxLength = 30;
-            if (typeof data === 'string' && data.length > maxLength) {
-              const truncated = data.substring(0, maxLength) + '...';
-              return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
-            }
-            return data ?? '';
+      {
+        targets: [5, 11, 12, 13],
+        render: function (data, type, row, meta) {
+          const maxLength = 30;
+          if (typeof data === 'string' && data.length > maxLength) {
+            const truncated = data.substring(0, maxLength) + '...';
+            return `<span class="popup-data" title="${data}" data-full="${data}">${truncated}</span>`;
           }
+          return data ?? '';
         }
-      ]
+      }
+    ]
   });
 }
 
 
 function LoadInsuranceInfo(insuranceno) {
   $.ajax({
-    type:"POST",
-    url:window.loadData.loadTransactionByInsurance,
-    data:{insuranceno:insuranceno},
-    success: function(data){
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.loadData.loadTransactionByInsurance,
+    data: { insuranceno: insuranceno },
+    success: function (data) {
+      $.each(data, function (i, value) {
         $("#txtgrosspremium").val(NumberFormat(value.Gross_Premium));
         $("#txtnetremittance").val(NumberFormat(value.Net_Rem));
         $("#txtcommission").val(NumberFormat(value.Commission));
@@ -2571,11 +2592,11 @@ function LoadInsuranceInfo(insuranceno) {
 
 function LoadInsurerInfo(insuranceno, loadingflag) {
   $.ajax({
-    type:"POST",
-    url:window.loadData.loadPaymentData,
-    data:{insuranceno:insuranceno},
-    success: function(data){
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.loadData.loadPaymentData,
+    data: { insuranceno: insuranceno },
+    success: function (data) {
+      $.each(data, function (i, value) {
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2588,10 +2609,12 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
         }
 
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
-        setSelectOption("#cboinsco, .cboinsco", value.Insurance_Company, value.Insurance_Company);
+        setSelectOption("#cboinsco, .cboinsco", value.Insurance_Desc, value.Insurance_Desc);
+
+        console.log('insurer info', value);
 
         $("#cboinstype_summary").val(value.Insurance_Type);
-        $("#cboinsco_summary").val(value.Insurance_Company);
+        $("#cboinsco_summary, #cboprevinsco").val(value.Insurance_Desc);
         $("#txtpolicyno_summary").val(value.Policy_No);
         $("#dpissuedate_summary").val(value.Issue_Date);
         $("#cbomortgage_summary").val(value.Mortgage);
@@ -2599,19 +2622,19 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 
         // Safe date handling with default to today
         if (value && value.Start_Date) {
-            const safeSDate = new Date(value.Start_Date);
-            
-            // Check if valid date format
-            if (!isNaN(safeSDate.getTime())) {
-                $("#dpstartdate").datepicker("setDate", safeSDate);
-            } else {
-                // Fallback to today if string is invalid date
-                $("#dpstartdate").datepicker("setDate", new Date());
-            }
+          const safeSDate = new Date(value.Start_Date);
+
+          // Check if valid date format
+          if (!isNaN(safeSDate.getTime())) {
+            $("#dpstartdate").datepicker("setDate", safeSDate);
+          } else {
+            // Fallback to today if string is invalid date
+            $("#dpstartdate").datepicker("setDate", new Date());
+          }
 
         } else {
-            // Default to today if Start_Date is null/undefined/empty
-            $("#dpstartdate").datepicker("setDate", new Date());
+          // Default to today if Start_Date is null/undefined/empty
+          $("#dpstartdate").datepicker("setDate", new Date());
         }
 
 
@@ -2633,7 +2656,7 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
             $("#dppexpiredate").datepicker("setDate", safePEDate);
           }
         }
-        
+
         setSelectOption("#cbomortgage", value.Mortgage, value.Mortgage);
 
         window.hideLoading("Loading data...")
@@ -2645,54 +2668,52 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 
 // Listen for changes on the radio action group
 $(document).on("change", "input[name='rdpolicyaction']", function () {
-    let actionVal = $("input[name='rdpolicyaction']:checked").val();
+  let actionVal = $("input[name='rdpolicyaction']:checked").val();
 
-    if (actionVal === "TRANSFER"){
-        window.showLoading("loading data...") 
+  if (actionVal === "TRANSFER") {
+    window.showLoading("loading data...")
 
-        // --- TO ENABLE THE 4 INPUTS ---
-        $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
-        $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
-        $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
-        $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
-        $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
-        $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
+    // --- TO ENABLE THE 4 INPUTS ---
+    $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
+    $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
+    $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
+    $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
+    $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
+    $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
 
-        $("#cboinstype_summary").val('');
-        $("#cboinsco_summary").val('');
-        $("#dpstartdate_summary").val('');
-        $("#txtpolicyno_summary").val('');
-        $("#dpissuedate_summary").val('');
-        $("#cbomortgage_summary").val('');
-        $("#dppexpiredate_summary").val('');
-
-        
-        setTimeout(function(){
-          window.hideLoading("Loading data...")
-        },320);
+    $("#cboinstype_summary").val('');
+    $("#cboinsco_summary").val('');
+    $("#dpstartdate_summary").val('');
+    $("#txtpolicyno_summary").val('');
+    $("#dpissuedate_summary").val('');
+    $("#cbomortgage_summary").val('');
+    $("#dppexpiredate_summary").val('');
 
 
-        // $("#cbomortgage").prop("disabled", false).val('').trigger("change.select2");
+    setTimeout(function () {
+      window.hideLoading("Loading data...")
+    }, 320);
 
-    } else {
-      
-        window.showLoading("loading data...")
-        LoadInsurerInfo(insuranceno, true);   
-        
-        // --- TO DISABLE THE 4 INPUTS ---
-        $("#cboinstype").prop("disabled", true).trigger("change.select2");
-        $("#cboinsco").prop("disabled", true).trigger("change.select2");
-        $("#cbomortgage").prop("disabled", true).trigger("change.select2");        
 
-    }
+  } else {
+
+    window.showLoading("loading data...")
+    LoadInsurerInfo(insuranceno, true);
+
+    // --- TO DISABLE THE 4 INPUTS ---
+    $("#cboinstype").prop("disabled", true).trigger("change.select2");
+    $("#cboinsco").prop("disabled", true).trigger("change.select2");
+    $("#cbomortgage").prop("disabled", true).trigger("change.select2");
+
+  }
 });
 ///////////////////////// FETCH VIEW OF DEVICE SCREEN ////////////////////////////////////
 
 
-function fetchView(){
+function fetchView() {
   var fetchview = '';
-  if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
-          || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))){
+  if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
+    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
     fetchview = 'top';
   } else {
     fetchview = 'left';
@@ -2706,11 +2727,11 @@ function fetchView(){
 //===== LOAD DATA TO MODIFY =====
 function LoadCustomerInfo() {
   $.ajax({
-    type:"POST",
-    url:window.LaravelRoutes.loadSelectedCustomer,
-    data:{custno:xcustno},
-    success: function(data){      
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.LaravelRoutes.loadSelectedCustomer,
+    data: { custno: xcustno },
+    success: function (data) {
+      $.each(data, function (i, value) {
 
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2755,7 +2776,7 @@ function LoadCustomerInfo() {
         $("#txtcontactno, .txtcontactno").val(value.Contact_No);
         $("#txtemailadd, .txtemailadd").val(value.Email_Address);
         $("#txtaddress, .txtaddress").val(value.Address);
-        
+
         // Location: Region
         if (value.RegCode) {
           setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
@@ -2780,15 +2801,15 @@ function LoadCustomerInfo() {
         // Loading of previoous insurance details on the creation of Renewal business insurance
         LoadPreviousInsuranceCo(value.renew_business_data);
 
-        if( !newdata ){
-            $("#cboinstype").prop('disabled', true).trigger('change.select2');
-            $("#cboinsco").prop('disabled', true).trigger('change.select2');
-            $("#cbomortgage").prop('disabled', true).trigger('change.select2');
+        if (!newdata) {
+          $("#cboinstype").prop('disabled', true).trigger('change.select2');
+          $("#cboinsco").prop('disabled', true).trigger('change.select2');
+          $("#cbomortgage").prop('disabled', true).trigger('change.select2');
         }
-        
+
         // Condition: Disable the entire dropdown if no data or custom rule met
         // if (data.length > 0) {
-            
+
         // } else {
         //     $("#cboinstype").prop('disabled', false);
         // }
@@ -2796,7 +2817,7 @@ function LoadCustomerInfo() {
       });
     }
   });
-  
+
   LoadVehicleInfo();
 
   $(".box-body").validator('reset');
@@ -2804,11 +2825,11 @@ function LoadCustomerInfo() {
 
 function LoadCustomerEDAFSAPInfo() {
   $.ajax({
-    type:"POST",
-    url:window.tableRoutes.uploadEDAFcustomers,
-    data:{custno:xcustnoupload},
-    success: function(data){
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.tableRoutes.uploadEDAFcustomers,
+    data: { custno: xcustnoupload },
+    success: function (data) {
+      $.each(data, function (i, value) {
 
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2821,7 +2842,7 @@ function LoadCustomerEDAFSAPInfo() {
           }
         }
 
-        if(value.Cust_Exist){
+        if (value.Cust_Exist) {
           $("#txtcustno").val(value.Customer_No);
           $("#txtcustnoupload").val(value.Upload_Cust_No);
         } else {
@@ -2856,7 +2877,7 @@ function LoadCustomerEDAFSAPInfo() {
         $("#txtcontactno").val(value.Contact_No);
         $("#txtemailadd").val(value.Email_Address);
         $("#txtaddress").val(value.Address);
-        
+
         // Location: Region
         if (value.RegCode) {
           setSelectOption("#cboregion", value.Region, value.RegCode);
@@ -2889,14 +2910,14 @@ function LoadCustomerEDAFSAPInfo() {
 
 function LoadVehicleInfo() {
   $.ajax({
-    type:"POST",
-    url:window.getData.vehicleSpecific,
-    data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){     
+    type: "POST",
+    url: window.getData.vehicleSpecific,
+    data: { vin: xvin, csno: xcsno, plateno: xplateno },
+    success: function (data) {
 
       console.log(data);
 
-      $.each(data, function(i, value) {
+      $.each(data, function (i, value) {
 
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2920,7 +2941,7 @@ function LoadVehicleInfo() {
         // $("#txtorderno").val(value.Order_No);
         // $("#txtorderstatus").val(value.Order_Status);
         $("#txtsrp, .txtsrp").val(NumberFormat(value.SRP));
-        
+
         // Safe date handling
         if (value.VSI_Date) {
           const safeVSIDate = new Date(value.VSI_Date);
@@ -2942,7 +2963,7 @@ function LoadVehicleInfo() {
             $("#dptechdate").datepicker("setDate", safeTechDate);
           }
         }
-        
+
         // $("#txtmsalecode").val(value.Model_Sales_Code);
         $("#txtvariant").val(value.Variant);
         setSelectOption("#cbobodytype", value.Body_Type, value.Body_Type);
@@ -2958,18 +2979,18 @@ function LoadVehicleInfo() {
       });
     }
   });
-  
+
   $(".box-body").validator('reset');
 }
 
 function LoadVehicleEDAFSAPInfo() {
   $.ajax({
-    type:"POST",
-    url:window.getData.edafVehicleSpecific,
-    data:{vin:xvin, csno:xcsno, plateno:xplateno},
-    success: function(data){
-      
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.getData.edafVehicleSpecific,
+    data: { vin: xvin, csno: xcsno, plateno: xplateno },
+    success: function (data) {
+
+      $.each(data, function (i, value) {
 
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -2993,7 +3014,7 @@ function LoadVehicleEDAFSAPInfo() {
         // $("#txtorderno").val(value.Order_No);
         // $("#txtorderstatus").val(value.Order_Status);
         $("#txtsrp").val(NumberFormat(value.SRP));
-        
+
         // Safe date handling
         if (value.VSI_Date) {
           const safeVSIDate = new Date(value.VSI_Date);
@@ -3031,18 +3052,18 @@ function LoadVehicleEDAFSAPInfo() {
       });
     }
   });
-  
+
   $(".box-body").validator('reset');
 }
 
 function LoadPayData() {
   $.ajax({
-    type:"POST",
-    url:window.loadData.loadTransactionByInsurance,
-    data:{insuranceno:insuranceno},
-    success: function(data){
+    type: "POST",
+    url: window.loadData.loadTransactionByInsurance,
+    data: { insuranceno: insuranceno },
+    success: function (data) {
 
-      $.each(data, function(i, value) {
+      $.each(data, function (i, value) {
         // xtpremium = value.Total_Premium;
         xtpremium = value.Gross_Premium;
         $("#txtpayamount").val(NumberFormat(value.Month_Pay));
@@ -3068,84 +3089,84 @@ function LoadPaymentInfo() {
 
 
   $.ajax({
-      type: "POST",
-      url: window.tableRoutes.getPaymentData,
-      data: { insuranceno: insuranceno },
-      success: function(response){
-          // Safely handle both single object or array responses
-          const dataList = Array.isArray(response) ? response : [response];
+    type: "POST",
+    url: window.tableRoutes.getPaymentData,
+    data: { insuranceno: insuranceno },
+    success: function (response) {
+      // Safely handle both single object or array responses
+      const dataList = Array.isArray(response) ? response : [response];
 
-          // Grab the very first (most recent) item
-          if (dataList.length > 0) {
-              const latestItem = dataList[0].data[0]['Payment_Terms'];
-              
-              if (latestItem !== undefined) {
-                  $("#txtpayterms").val(latestItem - 1);
-              }
-          }
-          
+      // Grab the very first (most recent) item
+      if (dataList.length > 0) {
+        const latestItem = dataList[0].data[0]['Payment_Terms'];
+
+        if (latestItem !== undefined) {
+          $("#txtpayterms").val(latestItem - 1);
+        }
       }
+
+    }
 
   });
 
   var tablepay = $('#table_payment').DataTable({
-      language: {
-          processing: "Loading Payment List..."
+    language: {
+      processing: "Loading Payment List..."
+    },
+    processing: true,
+    serverSide: false,
+    responsive: true,
+    autoWidth: false,
+    ordering: false,
+    searching: false,
+    paging: false,
+    info: false,
+    scrollX: true,
+    scrollCollapse: true,
+    fnRowCallback: function (nRow, aData, iDisplayIndex) {
+      // Auto-number column
+      $("td:first", nRow).html(iDisplayIndex + 1);
+      return nRow;
+    },
+    ajax: {
+      url: window.tableRoutes.getPaymentData,
+      type: "POST",
+      data: { insuranceno: insuranceno }
+    },
+    drawCallback: function () {
+      // 🔥 Calculate totals after data is loaded/refreshed
+      updatePaymentTotals();
+    },
+    columnDefs: [{ targets: [11], visible: false }],
+    columns: [
+      { data: null },            // Auto numbering
+      { data: "Payment_ID" },
+      { data: "Payment_Type" },
+      { data: "EWallet_Type" },
+      { data: "PDC_No" },
+      { data: "PDC_Account_Name" },
+      { data: "PDC_Bank_Name" },
+      { data: "PDC_Date" },
+      { data: "Payment_Terms" },
+      {
+        data: "Payment_Amount",
+        render: function (data) {
+          return NumberFormat(data);
+        }
       },
-      processing: true,
-      serverSide: false,
-      responsive: true,
-      autoWidth: false,
-      ordering: false,
-      searching: false,
-      paging: false,
-      info: false,
-      scrollX: true,
-      scrollCollapse: true, 
-      fnRowCallback: function (nRow, aData, iDisplayIndex) {
-        // Auto-number column
-        $("td:first", nRow).html(iDisplayIndex + 1);
-        return nRow;
+      {
+        data: "Payment_Date",
+        render: function (data) {
+          return getDisplayDateTimeFormatted(data);
+        }
       },
-      ajax: {
-          url: window.tableRoutes.getPaymentData,
-          type: "POST",
-          data: { insuranceno: insuranceno }
-      },
-      drawCallback: function () {
-        // 🔥 Calculate totals after data is loaded/refreshed
-        updatePaymentTotals();
-      },
-      columnDefs: [{ targets: [11], visible: false }],
-      columns: [
-          { data: null },            // Auto numbering
-          { data: "Payment_ID" },
-          { data: "Payment_Type" },
-          { data: "EWallet_Type" },
-          { data: "PDC_No" },
-          { data: "PDC_Account_Name" },
-          { data: "PDC_Bank_Name" },
-          { data: "PDC_Date" },
-          { data: "Payment_Terms" },
-          {
-            data: "Payment_Amount",
-            render: function (data) {
-              return NumberFormat(data);
-            }
-          },
-          {
-            data: "Payment_Date",
-            render: function (data) {
-              return getDisplayDateTimeFormatted(data);
-            }
-          },
-          {
-            data: "button",          // 11
-            className: "never",     // never show in responsive child rows
-            searchable: false,
-            orderable: false
-          }
-      ]
+      {
+        data: "button",          // 11
+        className: "never",     // never show in responsive child rows
+        searchable: false,
+        orderable: false
+      }
+    ]
   });
 
 
@@ -3215,7 +3236,7 @@ function updatePaymentTotals() {
   var total = 0;
   let hasMissingID = false;
 
-  data.each(function(row){
+  data.each(function (row) {
     var amt = parseFloat(String(row.Payment_Amount).replace(/,/g, "")) || 0;
     total += amt;
 
@@ -3242,10 +3263,10 @@ function updatePaymentTotals() {
   if (editpay == true) {
     if (balance <= 0) {
       $(".pay-section, .term-amount-section, .btnadd-section").fadeOut();
-      if (hasMissingID == false){
-        $("#btnupdatepay").fadeOut(); 
+      if (hasMissingID == false) {
+        $("#btnupdatepay").fadeOut();
       } else {
-        $("#btnupdatepay").fadeIn();  
+        $("#btnupdatepay").fadeIn();
       }
     } else {
       $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeIn();
@@ -3253,26 +3274,26 @@ function updatePaymentTotals() {
   }
 }
 
-$(document).on( "click", ".btnnetrem", function () {
-    let insuranceNo = $(this).data('insurance-no');
-    $("#insurance_no_input").val(insuranceNo);
-    FormClearNetRem();
-    FormDisableNetRem(true);
-    LoadNetRemData(insuranceNo);
+$(document).on("click", ".btnnetrem", function () {
+  let insuranceNo = $(this).data('insurance-no');
+  $("#insurance_no_input").val(insuranceNo);
+  FormClearNetRem();
+  FormDisableNetRem(true);
+  LoadNetRemData(insuranceNo);
 });
 
 function LoadNetRemData(insuranceno) {
   $.ajax({
-    type:"POST",
-    url:window.loadData.getInsurance,
-    data:{insurance_no:insuranceno},
-    success: function(data){
+    type: "POST",
+    url: window.loadData.getInsurance,
+    data: { insurance_no: insuranceno },
+    success: function (data) {
       console.log("load net rem data", data);
 
-      $.each(data, function(i, value) {
-        $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium,2));
-        $("#txtnetrem").val(NumberFormat(value.Net_Rem,2));
-        $("#txtinscommission").val(NumberFormat(value.Commission,2));
+      $.each(data, function (i, value) {
+        $("#txtinsgpremium").val(NumberFormat(value.Gross_Premium, 2));
+        $("#txtnetrem").val(NumberFormat(value.Net_Rem, 2));
+        $("#txtinscommission").val(NumberFormat(value.Commission, 2));
       });
     }
   });
@@ -3286,12 +3307,12 @@ function LoadNetRemData(insuranceno) {
 
 function LoadStatusData(insuranceNo) {
   $.ajax({
-    type:"POST",
-    url:window.loadData.getInsurance,
-    data:{insurance_no:insuranceNo},
-    success: function(data){
+    type: "POST",
+    url: window.loadData.getInsurance,
+    data: { insurance_no: insuranceNo },
+    success: function (data) {
 
-      $.each(data, function(i, value) {
+      $.each(data, function (i, value) {
 
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
@@ -3304,7 +3325,7 @@ function LoadStatusData(insuranceNo) {
           }
         }
 
-        setSelectOption("#cbotransstatus", value.Trans_Status, value.Trans_Status); 
+        setSelectOption("#cbotransstatus", value.Trans_Status, value.Trans_Status);
         $("#txttranssremarks").val(value.Trans_Status_Remarks);
 
       });
@@ -3320,40 +3341,40 @@ function LoadStatusData(insuranceNo) {
 
 function LoadCallData() {
   $.ajax({
-    type:"POST",
-    url:window.getData.get_latest_call_logs,
-    data:{insuranceno:insuranceno},
-    success: function(data){
-      
-      $.each(data, function(i, value) {
+    type: "POST",
+    url: window.getData.get_latest_call_logs,
+    data: { insuranceno: insuranceno },
+    success: function (data) {
+
+      $.each(data, function (i, value) {
         $("#txtinsuranceno").val(value.Insurance_No);
-        if(value.Communication_ID !== null){
+        if (value.Communication_ID !== null) {
           if ($("#cbomodecomm").find("option[value='" + value.Communication_ID + "']").length) {
             $("#cbomodecomm").val(value.Communication_ID).trigger('change');
-          } else { 
+          } else {
             var newmodecomm = new Option(value.Communication_Type, value.Communication_ID, true, true);
             $("#cbomodecomm").append(newmodecomm).trigger('change');
           }
         }
-        if(value.Call_SID !== null){
+        if (value.Call_SID !== null) {
           if ($("#cbocallstatus").find("option[value='" + value.Call_SID + "']").length) {
             $("#cbocallstatus").val(value.Call_SID).trigger('change');
-          } else { 
+          } else {
             var newcallstatus = new Option(value.Call_Status, value.Call_SID, true, true);
             $("#cbocallstatus").append(newcallstatus).trigger('change');
-          } 
-          FetchCall(value.Call_SID,value.Reason_ID);
+          }
+          FetchCall(value.Call_SID, value.Reason_ID);
         }
-        if (value.Promised_Pay_Date !== null && value.Promised_Pay_Date !== ''){
+        if (value.Promised_Pay_Date !== null && value.Promised_Pay_Date !== '') {
           $("#dpppdate").datepicker("setDate", new Date(value.Promised_Pay_Date));
         } else {
           $("#dpppdate").val('');
-        } 
+        }
         $("#txtcallremarks").val(value.Call_Remarks);
       });
     }
   });
-  
+
   if ($('#modal-call').is(':visible') == false) {
     $('#modal-call').iziModal('open');
   }
@@ -3363,7 +3384,7 @@ function LoadCallData() {
 function LoadCallLogsData() {
   // If DataTable exists, destroy it and reinitialize
   if ($.fn.dataTable.isDataTable('#table_logs')) {
-    $('#table_logs').DataTable().clear().destroy();               
+    $('#table_logs').DataTable().clear().destroy();
   }
 
   // Reinitialize the DataTable with updated AJAX configuration
@@ -3381,7 +3402,7 @@ function LoadCallLogsData() {
     "scrollX": true,
     "scrollCollapse": true,
     "fixedHeader": true,
-    "fixedColumns":   {
+    "fixedColumns": {
       "left": 1
     },
     "info": true,
@@ -3390,7 +3411,7 @@ function LoadCallLogsData() {
     "ajax": {
       "url": window.loadData.getCallLogsByInsuranceNo,
       "type": "POST",
-      "data": {insuranceno:insuranceno}
+      "data": { insuranceno: insuranceno }
     },
     "columns": [
       { "data": "urutan" },
@@ -3410,7 +3431,7 @@ function LoadCallLogsData() {
     "columnDefs": [
       {
         "targets": [4, 9],  // Modify this if you want to target multiple columns
-        "render": function(data, type, row, meta) {
+        "render": function (data, type, row, meta) {
           var maxLength = 25; // Set max length for truncation
           if (data.length > maxLength) {
             var truncatedData = data.substring(0, maxLength) + '...';
@@ -3428,55 +3449,55 @@ function LoadCallLogsData() {
 }
 
 // Loading of previous insurance details
-function LoadPreviousInsuranceCo(data){
-      // 1. Guard check: Ensure data exists and is an array with items
-      if (!Array.isArray(data) || data.length === 0) {
-          console.warn("No insurance history data available.");
-          return;
+function LoadPreviousInsuranceCo(data) {
+  // 1. Guard check: Ensure data exists and is an array with items
+  if (!Array.isArray(data) || data.length === 0) {
+    console.warn("No insurance history data available.");
+    return;
+  }
+
+  // 2. Get the latest/most recent entry from the array (Index 0 or last index)
+  // Assuming data[0] is the latest entry based on your array log
+  const latestItem = data[0];
+
+  // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
+  if (latestItem) {
+    // Set dropdown values & trigger Select2 updates
+    $("#cboinstype, #cboinstype_summary").val(latestItem.Insurance_Type).trigger('change.select2');
+    $("#cboinsco, #cboprevinsco, #cboinsco_summary").val(latestItem.Insurance_Type).trigger('change.select2');
+    $("#cbomortgage, #cbomortgage_summary, .cbomortgage").val(latestItem.Mortgage).trigger('change.select2');
+
+    // Set text inputs & date fields from the latest record
+    $("#txtpolicyno, #txtpolicyno_summary").val(latestItem.Policy_No || "");
+
+    // Set datepicker fields cleanly
+    if (latestItem.Start_Date) {
+      $("#dpstartdate").val(latestItem.Start_Date);
+      if ($.fn.datepicker) {
+        $("#dpstartdate").datepicker("setDate", new Date(latestItem.Start_Date));
       }
-
-      // 2. Get the latest/most recent entry from the array (Index 0 or last index)
-      // Assuming data[0] is the latest entry based on your array log
-      const latestItem = data[0]; 
-
-      // 5. Automatically pre-select values from the LATEST entry into the dropdowns & inputs
-    if (latestItem) {
-        // Set dropdown values & trigger Select2 updates
-        $("#cboinstype, #cboinstype_summary").val(latestItem.Insurance_Type).trigger('change.select2');
-        $("#cboinsco, #cboprevinsco, #cboinsco_summary" ).val(latestItem.Insurance_Company).trigger('change.select2');
-        $("#cbomortgage, #cbomortgage_summary, .cbomortgage").val(latestItem.Mortgage).trigger('change.select2');
-
-        // Set text inputs & date fields from the latest record
-        $("#txtpolicyno, #txtpolicyno_summary").val(latestItem.Policy_No || "");
-
-        // Set datepicker fields cleanly
-        if (latestItem.Start_Date) {
-            $("#dpstartdate").val(latestItem.Start_Date);
-            if ($.fn.datepicker) {
-                $("#dpstartdate").datepicker("setDate", new Date(latestItem.Start_Date));
-            }
-        }
-
-        if (latestItem.Issue_Date) {
-            $("#dpissuedate").val(latestItem.Issue_Date);
-            if ($.fn.datepicker) {
-                $("#dpissuedate").datepicker("setDate", new Date(latestItem.Issue_Date));
-            }
-        }
     }
+
+    if (latestItem.Issue_Date) {
+      $("#dpissuedate").val(latestItem.Issue_Date);
+      if ($.fn.datepicker) {
+        $("#dpissuedate").datepicker("setDate", new Date(latestItem.Issue_Date));
+      }
+    }
+  }
 }
 
 
 
 $(document).on("change", "#cboinsco", function () {
   const value = $(this).val();                          // selected option's value
-  const text  = $(this).find("option:selected").text(); // selected option's visible text
+  const text = $(this).find("option:selected").text(); // selected option's visible text
 });
 
 /////////////////////// END LOAD DATA FUNCTION ///////////////////////
 
 //============= TAB CUSTOMER ============//
-$(document).ready( function () {
+$(document).ready(function () {
   activeCustTab = $('.customertab li.active a').attr('href');
 
   console.log(activeCustTab); // #tmiatab or #uploadtab
@@ -3512,12 +3533,12 @@ $(document).ready( function () {
       LoadVehicleEDAFSAPData();
     }
   });
-  
+
 });
 //============= END TAB CUSTOMER ============//
 
 /////////////////////////////// DATATABLE CLICK EVENT ////////////////////////////////////
-$('#table_trans tbody').on('click', 'tr', function(event) {
+$('#table_trans tbody').on('click', 'tr', function (event) {
   //csno = table.cell(this,2).data();
   //plateno = table.cell(this,2).data();
   /*
@@ -3529,7 +3550,7 @@ $('#table_trans tbody').on('click', 'tr', function(event) {
       console.log(x);
     }
   */
-  rowindex = table.row( this ).index();
+  rowindex = table.row(this).index();
 });
 
 $('#table_trans tbody').on('click', '.btncall', function () {
@@ -3581,144 +3602,144 @@ $(document).on("change", "#cbogroup", function () {
 });
 
 $(document).on("change", "#cboregion", function () {
-    var regcode = $(this).val();
-    $("#cboprovince").html('<option value="">PLEASE SELECT</option>');
-    $("#cbocity").html('<option value="">PLEASE SELECT</option>');
-    $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
-    FetchProv(regcode,'');
+  var regcode = $(this).val();
+  $("#cboprovince").html('<option value="">PLEASE SELECT</option>');
+  $("#cbocity").html('<option value="">PLEASE SELECT</option>');
+  $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
+  FetchProv(regcode, '');
 });
 
 $(document).on("change", "#cboprovince", function () {
-    var provcode = $(this).val();
-    $("#cbocity").html('<option value="">PLEASE SELECT</option>');
-    $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
-    FetchCM(provcode,'');
+  var provcode = $(this).val();
+  $("#cbocity").html('<option value="">PLEASE SELECT</option>');
+  $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
+  FetchCM(provcode, '');
 });
 
 $(document).on("change", "#cbocity", function () {
-    var cmcode = $(this).val();
-    $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
-    FetchBrgy(cmcode,'');
+  var cmcode = $(this).val();
+  $("#cbobrgy").html('<option value="">PLEASE SELECT</option>');
+  FetchBrgy(cmcode, '');
 });
 
-function FetchProv(regcode,provcode) {
+function FetchProv(regcode, provcode) {
   if (regcode !== null) {
     $.ajax({
-      type:"POST",
-      data: {regcode:regcode},
-      url:window.formRoutes.provinceData,
-      success: function(data) {
-            let options = '<option value="">PLEASE SELECT</option>';
+      type: "POST",
+      data: { regcode: regcode },
+      url: window.formRoutes.provinceData,
+      success: function (data) {
+        let options = '<option value="">PLEASE SELECT</option>';
 
-            // Iterate over JSON objects and build <option> elements
-            $.each(data, function(index, item) {
-              options += `<option value="${item.ProvCode}">${item.Province}</option>`;
-            });
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function (index, item) {
+          options += `<option value="${item.ProvCode}">${item.Province}</option>`;
+        });
 
-            // Inject populated options into dropdown
-            $("#cboprovince").html(options);
+        // Inject populated options into dropdown
+        $("#cboprovince").html(options);
 
-            // Pre-select province code if available
-            if (provcode !== null && provcode !== '') {
-              $("#cboprovince").val(provcode);
-            }
+        // Pre-select province code if available
+        if (provcode !== null && provcode !== '') {
+          $("#cboprovince").val(provcode);
+        }
 
-            // Force Select2 to refresh its display
-            $("#cboprovince").trigger('change.select2');
+        // Force Select2 to refresh its display
+        $("#cboprovince").trigger('change.select2');
       }
     });
   }
 }
 
-function FetchCM(provcode,cmcode) {
+function FetchCM(provcode, cmcode) {
   if (provcode !== null) {
     $.ajax({
-      type:"POST",
-      data: {provcode:provcode},
-      url:window.formRoutes.cityMunicipalData,
-      success: function(data) {
-          let options = '<option value="">PLEASE SELECT</option>';
+      type: "POST",
+      data: { provcode: provcode },
+      url: window.formRoutes.cityMunicipalData,
+      success: function (data) {
+        let options = '<option value="">PLEASE SELECT</option>';
 
-          // Iterate over JSON objects and build <option> elements
-          $.each(data, function(index, item) {
-            options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
-          });
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function (index, item) {
+          options += `<option value="${item.CMCode}">${item.CityMunicipal}</option>`;
+        });
 
-          // Inject populated options into dropdown
-          $("#cbocity").html(options);
+        // Inject populated options into dropdown
+        $("#cbocity").html(options);
 
-          // Pre-select province code if available
-          if (provcode !== null && provcode !== '') {
-            $("#cbocity").val(cmcode);
-          }
+        // Pre-select province code if available
+        if (provcode !== null && provcode !== '') {
+          $("#cbocity").val(cmcode);
+        }
 
-          // Force Select2 to refresh its display
-          $("#cbocity").trigger('change.select2');
+        // Force Select2 to refresh its display
+        $("#cbocity").trigger('change.select2');
       }
     });
   }
 }
 
-function FetchBrgy(cmcode,brgycode) {
+function FetchBrgy(cmcode, brgycode) {
   if (cmcode !== null) {
     $.ajax({
-      type:"POST",
-      data: {cmcode:cmcode},
-      url:window.formRoutes.barangayData,
-      success: function(data) {
-            let options = '<option value="">PLEASE SELECT</option>';
+      type: "POST",
+      data: { cmcode: cmcode },
+      url: window.formRoutes.barangayData,
+      success: function (data) {
+        let options = '<option value="">PLEASE SELECT</option>';
 
-            // Iterate over JSON objects and build <option> elements
-            $.each(data, function(index, item) {
-              options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
-            });
+        // Iterate over JSON objects and build <option> elements
+        $.each(data, function (index, item) {
+          options += `<option value="${item.BrgyCode}">${item.Barangay}</option>`;
+        });
 
-            // Inject populated options into dropdown
-            $("#cbobrgy").html(options);
+        // Inject populated options into dropdown
+        $("#cbobrgy").html(options);
 
-            // Pre-select province code if available
-            if (brgycode !== null && brgycode !== '') {
-              $("#cbobrgy").val(brgycode);
-            }
+        // Pre-select province code if available
+        if (brgycode !== null && brgycode !== '') {
+          $("#cbobrgy").val(brgycode);
+        }
 
-            // Force Select2 to refresh its display
-            $("#cbobrgy").trigger('change.select2');
+        // Force Select2 to refresh its display
+        $("#cbobrgy").trigger('change.select2');
       }
     });
   }
 }
 
 $(document).on("change", "#cbopaytype", function () {
-    var paytype = $(this).val();
+  var paytype = $(this).val();
 
-    // Hide all sections first
-    // $(".cc-section, .pdc-section, .ew-section").fadeOut();
-    $(".pdc-section, .ew-section").fadeOut();
+  // Hide all sections first
+  // $(".cc-section, .pdc-section, .ew-section").fadeOut();
+  $(".pdc-section, .ew-section").fadeOut();
 
-    // Map payment types to sections
-    var sectionMap = {
-        // "CREDIT CARD": ".cc-section",
-        "POST-DATED CHECK (PDC)": ".pdc-section",
-        "E-WALLET": ".ew-section"
-    };
+  // Map payment types to sections
+  var sectionMap = {
+    // "CREDIT CARD": ".cc-section",
+    "POST-DATED CHECK (PDC)": ".pdc-section",
+    "E-WALLET": ".ew-section"
+  };
 
-    // Map payment types to focus fields
-    var focusMap = {
-        // "CREDIT CARD": "#txtccno",
-        "POST-DATED CHECK (PDC)": "#txtpdcno",
-        "E-WALLET": "#cboewallet"
-    };
+  // Map payment types to focus fields
+  var focusMap = {
+    // "CREDIT CARD": "#txtccno",
+    "POST-DATED CHECK (PDC)": "#txtpdcno",
+    "E-WALLET": "#cboewallet"
+  };
 
-    if (sectionMap[paytype]) {
-        $(sectionMap[paytype]).fadeIn(function() {
-            // Set focus on the appropriate field after the fadeIn completes
-            if (focusMap[paytype]) {
-                // $(focusMap[paytype]).focus();
-            }
-        });
-    }
+  if (sectionMap[paytype]) {
+    $(sectionMap[paytype]).fadeIn(function () {
+      // Set focus on the appropriate field after the fadeIn completes
+      if (focusMap[paytype]) {
+        // $(focusMap[paytype]).focus();
+      }
+    });
+  }
 
-    $(".box-body").validator('reset');
+  $(".box-body").validator('reset');
 });
 
 $(document).on("click", "#pgcash", function () {
@@ -3736,34 +3757,34 @@ $(document).on("click", "#ptwallet", function () {
 $(document).on("click", "#btnaddpay", function () {
   var tablepay = $("#table_payment").DataTable();
 
-  var paytype        = $("#cbopaytype").val();
-  var ewallet        = $("#cboewallet").val();
-  var ccno           = $("#txtccno").val().trim();
-  var ccholder       = $("#txtccholder").val().trim();
-  var ccexpirydate   = $("#txtccexpirydate").val().trim();
-  var ccvv           = $("#txtccvv").val().trim();
-  var pdcno          = $("#txtpdcno").val().trim();
-  var pdcholdername  = $("#txtpdcholdername").val().trim();
-  var pdcbankname    = $("#txtpdcbankname").val().trim();
-  var pdccheckdate   = $("#dppdccheckdate").val();
-  var payterms       = $("#txtpayterms").val().trim();
-  var payamount      = $("#txtpayamount").val().trim();
+  var paytype = $("#cbopaytype").val();
+  var ewallet = $("#cboewallet").val();
+  var ccno = $("#txtccno").val().trim();
+  var ccholder = $("#txtccholder").val().trim();
+  var ccexpirydate = $("#txtccexpirydate").val().trim();
+  var ccvv = $("#txtccvv").val().trim();
+  var pdcno = $("#txtpdcno").val().trim();
+  var pdcholdername = $("#txtpdcholdername").val().trim();
+  var pdcbankname = $("#txtpdcbankname").val().trim();
+  var pdccheckdate = $("#dppdccheckdate").val();
+  var payterms = $("#txtpayterms").val().trim();
+  var payamount = $("#txtpayamount").val().trim();
 
   function warn(field, msg) {
-      $(field).focus();
-      swal({
-          title: "Warning",
-          text: msg,
-          type: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#00a65a",
-          confirmButtonText: "OK"
-      });
+    $(field).focus();
+    swal({
+      title: "Warning",
+      text: msg,
+      type: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#00a65a",
+      confirmButtonText: "OK"
+    });
   }
 
   // Validation
-  if (!paytype)   return warn("#cbopaytype", "Please select Payment Type.");
-  if (!payterms)  return warn("#txtpayterms", "Please fill Payment Terms.");
+  if (!paytype) return warn("#cbopaytype", "Please select Payment Type.");
+  if (!payterms) return warn("#txtpayterms", "Please fill Payment Terms.");
   if (!payamount) return warn("#txtpayamount", "Please fill Payment Amount.");
 
   // if (paytype === "CREDIT CARD") {
@@ -3774,14 +3795,14 @@ $(document).on("click", "#btnaddpay", function () {
   // }
 
   if (paytype === "POST-DATED CHECK (PDC)") {
-      if (!pdcno)          return warn("#txtpdcno", "Please fill Check No.");
-      if (!pdcholdername)  return warn("#txtpdcholdername", "Please fill Account Holder Name.");
-      if (!pdcbankname)    return warn("#txtpdcbankname", "Please fill Bank Name.");
-      if (!pdccheckdate)   return warn("#dppdccheckdate", "Please fill Check Date.");
+    if (!pdcno) return warn("#txtpdcno", "Please fill Check No.");
+    if (!pdcholdername) return warn("#txtpdcholdername", "Please fill Account Holder Name.");
+    if (!pdcbankname) return warn("#txtpdcbankname", "Please fill Bank Name.");
+    if (!pdccheckdate) return warn("#dppdccheckdate", "Please fill Check Date.");
   }
 
   if (paytype === "E-WALLET") {
-      if (!ewallet) return warn("#cboewallet", "Please select E-Wallet Type.");
+    if (!ewallet) return warn("#cboewallet", "Please select E-Wallet Type.");
   }
 
   var rowData = {
@@ -3794,7 +3815,7 @@ $(document).on("click", "#btnaddpay", function () {
     PDC_Date: pdccheckdate,
     Payment_Terms: payterms,
     Payment_Amount: NumberFormat(payamount),
-    Payment_Date: null, 
+    Payment_Date: null,
     button: "<button type='button' data-toggle='tooltip' data-placement='top' title='Remove Payment' class='btn btn-success btn-action btnremovepay'><i class='fa fa-remove'></i></button>"
   };
 
@@ -3836,8 +3857,8 @@ $(document).on("click", ".btnremovepaysave", function () {
 
   swal({
     title: "Are you sure?",
-    text: "This payment (ID: " + xpayid + 
-          ") will be permanently deleted and cannot be recovered once you click Update Info.",
+    text: "This payment (ID: " + xpayid +
+      ") will be permanently deleted and cannot be recovered once you click Update Info.",
     type: "info",
     showCancelButton: true,
     confirmButtonColor: "#00a65a",
@@ -3845,43 +3866,43 @@ $(document).on("click", ".btnremovepaysave", function () {
     closeOnConfirm: false,
     closeOnCancel: false
   },
-  function(isConfirm){
-    if (isConfirm) {
-      // hide tooltip of clicked button
-      $btn.tooltip('hide');
+    function (isConfirm) {
+      if (isConfirm) {
+        // hide tooltip of clicked button
+        $btn.tooltip('hide');
 
-      var tblpay = $("#table_payment").DataTable();
+        var tblpay = $("#table_payment").DataTable();
 
-      // remove row of clicked button
-      tblpay.row($btn.closest("tr")).remove().draw();
+        // remove row of clicked button
+        tblpay.row($btn.closest("tr")).remove().draw();
 
-      // reinitialize tooltips
-      $('[data-toggle="tooltip"]').tooltip();
-      xpayid = '';
+        // reinitialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+        xpayid = '';
 
-      swal.close();
-    } else {
-      swal({
-        title: "Cancelled",
-        text: "Nothing Happen!",
-        type: "error",
-        confirmButtonColor: "#00a65a",
-        confirmButtonText: "OK"
-      });
-  }
-  });
+        swal.close();
+      } else {
+        swal({
+          title: "Cancelled",
+          text: "Nothing Happen!",
+          type: "error",
+          confirmButtonColor: "#00a65a",
+          confirmButtonText: "OK"
+        });
+      }
+    });
 });
 
-$(document).on( "click", "#btneditpay", function () {
+$(document).on("click", "#btneditpay", function () {
   editpay = true;
   FormDisablePay(false);
 });
 
-$(document).on( "click", "#btnclosepay", function () {
+$(document).on("click", "#btnclosepay", function () {
   $('#modal-modify-pay').iziModal('close');
 });
 
-$(document).on("click", "#btncancelpay", function() {
+$(document).on("click", "#btncancelpay", function () {
   editpay = false;
   FormClearPay();
   FormDisablePay(true);
@@ -3889,11 +3910,11 @@ $(document).on("click", "#btncancelpay", function() {
   $(".iziModal-wrap").scrollTop(0);
 });
 
-$(document).on("click", "#btnupdatepay", function() {
+$(document).on("click", "#btnupdatepay", function () {
   var tablepay = $("#table_payment").DataTable();
   var allData = [];
 
-  tablepay.rows().every(function() {
+  tablepay.rows().every(function () {
     var row = this.data();
     // Remove commas from numeric fields
     if (row.Payment_Amount) {
@@ -3916,8 +3937,8 @@ $(document).on("click", "#btnupdatepay", function() {
   $.ajax({
     url: window.saveData.saveRenewalPayments, // Your PHP endpoint
     type: "POST",
-    data: {insuranceno:insuranceno, payments:JSON.stringify(allData) },
-    success: function(response) {
+    data: { insuranceno: insuranceno, payments: JSON.stringify(allData) },
+    success: function (response) {
       // You can parse response and show message
       swal({
         title: "Success",
@@ -3934,7 +3955,7 @@ $(document).on("click", "#btnupdatepay", function() {
         // LoadPaymentInfo();
       });
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       console.error(error);
       swal({
         title: "Error",
@@ -3949,36 +3970,36 @@ $(document).on("click", "#btnupdatepay", function() {
 
 
 $(document).on("change", "#cbopaytype-n", function () {
-    var paytype = $(this).val();
+  var paytype = $(this).val();
 
-    // Hide all sections first
-    // $(".cc-section-n, .pdc-section-n, .ew-section-n").fadeOut();
-    $(".pdc-section-n, .ew-section-n").fadeOut();
+  // Hide all sections first
+  // $(".cc-section-n, .pdc-section-n, .ew-section-n").fadeOut();
+  $(".pdc-section-n, .ew-section-n").fadeOut();
 
-    // Map payment types to sections
-    var sectionMap = {
-        // "CREDIT CARD": ".cc-section-n",
-        "POST-DATED CHECK (PDC)": ".pdc-section-n",
-        "E-WALLET": ".ew-section-n"
-    };
+  // Map payment types to sections
+  var sectionMap = {
+    // "CREDIT CARD": ".cc-section-n",
+    "POST-DATED CHECK (PDC)": ".pdc-section-n",
+    "E-WALLET": ".ew-section-n"
+  };
 
-    // Map payment types to focus fields
-    var focusMap = {
-        // "CREDIT CARD": "#txtccno-n",
-        "POST-DATED CHECK (PDC)": "#txtpdcno-n",
-        "E-WALLET": "#cboewallet-n"
-    };
+  // Map payment types to focus fields
+  var focusMap = {
+    // "CREDIT CARD": "#txtccno-n",
+    "POST-DATED CHECK (PDC)": "#txtpdcno-n",
+    "E-WALLET": "#cboewallet-n"
+  };
 
-    if (sectionMap[paytype]) {
-        $(sectionMap[paytype]).fadeIn(function() {
-            // Set focus on the appropriate field after the fadeIn completes
-            if (focusMap[paytype]) {
-                // $(focusMap[paytype]).focus();
-            }
-        });
-    }
+  if (sectionMap[paytype]) {
+    $(sectionMap[paytype]).fadeIn(function () {
+      // Set focus on the appropriate field after the fadeIn completes
+      if (focusMap[paytype]) {
+        // $(focusMap[paytype]).focus();
+      }
+    });
+  }
 
-    // Clear form
+  // Clear form
   xpayid = "";
   $("#cboewallet-n").val("").trigger("change");
   $("#txtccno-n, #txtccholder-n, #txtccexpirydate-n, #txtccvv-n").val("");
@@ -4004,7 +4025,7 @@ $(document).ready(function () {
   $('#table_payment-n').DataTable({
 
     language: {
-        processing: "Loading Payment List..."
+      processing: "Loading Payment List..."
     },
 
     processing: true,
@@ -4021,43 +4042,43 @@ $(document).ready(function () {
     info: false,
 
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
-        $("td:first", nRow).html(iDisplayIndex + 1);
+      $("td:first", nRow).html(iDisplayIndex + 1);
     },
 
     drawCallback: function () {
-        updatePaymentTotalsNew();
+      updatePaymentTotalsNew();
     },
 
-    columnDefs: [ { targets: [1], visible: false } ],
+    columnDefs: [{ targets: [1], visible: false }],
     columns: [
-          { data: null },            // Auto numbering
-          { data: "Payment_ID" },
-          { data: "Payment_Type" },
-          { data: "EWallet_Type" },
-          { data: "PDC_No" },
-          { data: "PDC_Account_Name" },
-          { data: "PDC_Bank_Name" },
-          { data: "PDC_Date" },
-          { data: "Payment_Terms" },
-          {
-            data: "Payment_Amount",
-            render: function (data) {
-              return NumberFormat(data);
-            }
-          },
-          {
-            data: "Payment_Date",
-            render: function (data) {
-              return getDisplayDateTimeFormatted(data);
-            }
-          },
-          {
-            data: "button",          // 11
-            className: "never",     // never show in responsive child rows
-            searchable: false,
-            orderable: false
-          }
-      ]
+      { data: null },            // Auto numbering
+      { data: "Payment_ID" },
+      { data: "Payment_Type" },
+      { data: "EWallet_Type" },
+      { data: "PDC_No" },
+      { data: "PDC_Account_Name" },
+      { data: "PDC_Bank_Name" },
+      { data: "PDC_Date" },
+      { data: "Payment_Terms" },
+      {
+        data: "Payment_Amount",
+        render: function (data) {
+          return NumberFormat(data);
+        }
+      },
+      {
+        data: "Payment_Date",
+        render: function (data) {
+          return getDisplayDateTimeFormatted(data);
+        }
+      },
+      {
+        data: "button",          // 11
+        className: "never",     // never show in responsive child rows
+        searchable: false,
+        orderable: false
+      }
+    ]
   });
 
   function updatePaymentTotalsNew() {
@@ -4067,7 +4088,7 @@ $(document).ready(function () {
     var total = 0;
     let hasMissingID = false;
 
-    data.each(function(row){
+    data.each(function (row) {
       var amt = parseFloat(String(row.Payment_Amount).replace(/,/g, "")) || 0;
       total += amt;
 
@@ -4100,7 +4121,7 @@ $(document).ready(function () {
     }
   }
 
-$('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+  $('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     var tablepay = $("#table_payment-n").DataTable();
     var rowData = tablepay.row(this).data();
 
@@ -4136,41 +4157,41 @@ $('#table_payment-n tbody').off('dblclick', 'tr').on('dblclick', 'tr', function 
     // Populate Terms & Payment Amounts
     $("#txtpayterms-n").val(rowData.Payment_Terms || "");
     $("#txtpayamount-n").val(rowData.Payment_Amount || "");
-});
+  });
 
 });
 
 $(document).on("click", "#btnaddpay-n", function () {
   var tablepay = $("#table_payment-n").DataTable();
 
-  var paytype        = $("#cbopaytype-n").val();
-  var ewallet        = $("#cboewallet-n").val();
-  var ccno           = $("#txtccno-n").val().trim();
-  var ccholder       = $("#txtccholder-n").val().trim();
-  var ccexpirydate   = $("#txtccexpirydate-n").val().trim();
-  var ccvv           = $("#txtccvv-n").val().trim();
-  var pdcno          = $("#txtpdcno-n").val().trim();
-  var pdcholdername  = $("#txtpdcholdername-n").val().trim();
-  var pdcbankname    = $("#txtpdcbankname-n").val().trim();
-  var pdccheckdate   = $("#dppdccheckdate-n").val();
-  var payterms       = $("#txtpayterms-n").val().trim();
-  var payamount      = $("#txtpayamount-n").val().trim();
+  var paytype = $("#cbopaytype-n").val();
+  var ewallet = $("#cboewallet-n").val();
+  var ccno = $("#txtccno-n").val().trim();
+  var ccholder = $("#txtccholder-n").val().trim();
+  var ccexpirydate = $("#txtccexpirydate-n").val().trim();
+  var ccvv = $("#txtccvv-n").val().trim();
+  var pdcno = $("#txtpdcno-n").val().trim();
+  var pdcholdername = $("#txtpdcholdername-n").val().trim();
+  var pdcbankname = $("#txtpdcbankname-n").val().trim();
+  var pdccheckdate = $("#dppdccheckdate-n").val();
+  var payterms = $("#txtpayterms-n").val().trim();
+  var payamount = $("#txtpayamount-n").val().trim();
 
   function warn(field, msg) {
-      $(field).focus();
-      swal({
-          title: "Warning",
-          text: msg,
-          type: "warning",
-          showCancelButton: false,
-          confirmButtonColor: "#00a65a",
-          confirmButtonText: "OK"
-      });
+    $(field).focus();
+    swal({
+      title: "Warning",
+      text: msg,
+      type: "warning",
+      showCancelButton: false,
+      confirmButtonColor: "#00a65a",
+      confirmButtonText: "OK"
+    });
   }
 
   // Validation
-  if (!paytype)   return warn("#cbopaytype-n", "Please select Payment Type.");
-  if (!payterms)  return warn("#txtpayterms-n", "Please fill Payment Terms.");
+  if (!paytype) return warn("#cbopaytype-n", "Please select Payment Type.");
+  if (!payterms) return warn("#txtpayterms-n", "Please fill Payment Terms.");
   if (!payamount) return warn("#txtpayamount-n", "Please fill Payment Amount.");
 
   // if (paytype === "CREDIT CARD") {
@@ -4181,14 +4202,14 @@ $(document).on("click", "#btnaddpay-n", function () {
   // }
 
   if (paytype === "POST-DATED CHECK (PDC)") {
-      if (!pdcno)          return warn("#txtpdcno-n", "Please fill Check No.");
-      if (!pdcholdername)  return warn("#txtpdcholdername-n", "Please fill Account Holder Name.");
-      if (!pdcbankname)    return warn("#txtpdcbankname-n", "Please fill Bank Name.");
-      if (!pdccheckdate)   return warn("#dppdccheckdate-n", "Please fill Check Date.");
+    if (!pdcno) return warn("#txtpdcno-n", "Please fill Check No.");
+    if (!pdcholdername) return warn("#txtpdcholdername-n", "Please fill Account Holder Name.");
+    if (!pdcbankname) return warn("#txtpdcbankname-n", "Please fill Bank Name.");
+    if (!pdccheckdate) return warn("#dppdccheckdate-n", "Please fill Check Date.");
   }
 
   if (paytype === "E-WALLET") {
-      if (!ewallet) return warn("#cboewallet-n", "Please select E-Wallet Type.");
+    if (!ewallet) return warn("#cboewallet-n", "Please select E-Wallet Type.");
   }
 
   var rowData = {
@@ -4201,7 +4222,7 @@ $(document).on("click", "#btnaddpay-n", function () {
     PDC_Date: pdccheckdate,
     Payment_Terms: payterms,
     Payment_Amount: NumberFormat(payamount),
-    Payment_Date: null, 
+    Payment_Date: null,
     button: "<button type='button' data-toggle='tooltip' data-placement='top' title='Remove Payment' class='btn btn-success btn-action btnremovepay-n'><i class='fa fa-remove'></i></button>"
   };
 
@@ -4238,21 +4259,21 @@ $(document).on("click", ".btnremovepay-n", function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-$(document).on( "click", "#btneditstatus", function () {
+$(document).on("click", "#btneditstatus", function () {
   editstatus = true;
   FormDisableStatus(false);
 });
 
-$(document).on( "click", "#btnclosestatus", function () {
+$(document).on("click", "#btnclosestatus", function () {
   $('#modal-modify-status').iziModal('close');
 });
 
-$(document).on("click", "#btncancelstatus", function() {
+$(document).on("click", "#btncancelstatus", function () {
   editstatus = false;
   FormClearStatus();
   FormDisableStatus(true);
   LoadStatusData();
-  $(".iziModal-wrap").scrollTop(0); 
+  $(".iziModal-wrap").scrollTop(0);
 });
 
 $(document).on("click", "#btnupdatestatus", function () {
@@ -4335,7 +4356,7 @@ $(document).on("click", "#btnupdatestatus", function () {
           editstatus = false;
           FormDisableStatus(true);
           LoadStatusData();
-          $(".iziModal-wrap").scrollTop(0); 
+          $(".iziModal-wrap").scrollTop(0);
           LoadTransactionData();
           // $("#modal-modify-status").iziModal("close");
         });
@@ -4349,7 +4370,7 @@ $(document).on("click", "#btnupdatestatus", function () {
         });
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       $("#modalsaving").iziModal('close');
       swal({
         title: "Error",
@@ -4362,20 +4383,20 @@ $(document).on("click", "#btnupdatestatus", function () {
   });
 });
 
-$(document).on( "click", "#btneditnetrem", function () {
+$(document).on("click", "#btneditnetrem", function () {
   editnetrem = true;
   FormDisableNetRem(false);
 });
 
-$(document).on( "click", "#btnclosenetrem", function () {
+$(document).on("click", "#btnclosenetrem", function () {
   $('#modal-modify-netrem').iziModal('close');
 });
 
-$(document).on("click", "#btncancelnetrem", function() {
+$(document).on("click", "#btncancelnetrem", function () {
   editnetrem = false;
   FormClearNetRem();
   FormDisableNetRem(true);
-  $(".iziModal-wrap").scrollTop(0); 
+  $(".iziModal-wrap").scrollTop(0);
   LoadNetRemData();
 });
 
@@ -4416,7 +4437,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
   // ======================================================
   // CHANGE TRANSACTION STATUS
   // ======================================================    
-    const NetRem = { 
+  const NetRem = {
     insuranceNo: $("#insurance_no_input").val(),
     insgpremium: getNum("#txtinsgpremium"),
     netrem: getNum("#txtnetrem"),
@@ -4447,7 +4468,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
     data: formdata,
     processData: false,
     contentType: false,
-    success: function (response) {      
+    success: function (response) {
       $("#modalsaving").iziModal('close');
 
       if (response.result == 1) {
@@ -4475,7 +4496,7 @@ $(document).on("click", "#btnupdatenetrem", function () {
         });
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       $("#modalsaving").iziModal('close');
       swal({
         title: "Error",
@@ -4488,69 +4509,69 @@ $(document).on("click", "#btnupdatenetrem", function () {
   });
 });
 
-$(document).on( "change", "#cbocallstatus", function () {
+$(document).on("change", "#cbocallstatus", function () {
   var callsid = $(this).val();
 
   if (editcall == true) {
     if (callsid === '1' || callsid === '') {
-      $("#cbocallreason").attr("disabled",true);
+      $("#cbocallreason").attr("disabled", true);
     } else {
-      $("#cbocallreason").attr("disabled",false);
+      $("#cbocallreason").attr("disabled", false);
     }
-      FetchCall(callsid,'');
+    FetchCall(callsid, '');
   } else {
-      $("#cbocallreason").attr("disabled",true);
+    $("#cbocallreason").attr("disabled", true);
   }
-  
+
 });
 
-function FetchCall(callsid,reasonid) {
+function FetchCall(callsid, reasonid) {
   if (callsid !== null) {
     $.ajax({
-      type:"POST",
+      type: "POST",
       datatype: "json",
-      data: {callsid:callsid},
-      url:window.fetchData.callReasonData,
-      success: function(data) {
-          // Build options HTML dynamically from JSON response
-          let options = '<option value="">PLEASE SELECT</option>';
-          
-          $.each(data, function(index, item) {
-            options += `<option value="${item.Reason_ID}">${item.Reason_Desc}</option>`;
-          });
+      data: { callsid: callsid },
+      url: window.fetchData.callReasonData,
+      success: function (data) {
+        // Build options HTML dynamically from JSON response
+        let options = '<option value="">PLEASE SELECT</option>';
 
-          // Inject into dropdown
-          $("#cbocallreason").html(options);
+        $.each(data, function (index, item) {
+          options += `<option value="${item.Reason_ID}">${item.Reason_Desc}</option>`;
+        });
 
-          // Pre-select saved reason if provided
-          if (reasonid != null && reasonid !== '') {
-            if ($("#cbocallreason").find("option[value='" + reasonid + "']").length) {
-              $("#cbocallreason").val(reasonid).trigger('change');
-            }
+        // Inject into dropdown
+        $("#cbocallreason").html(options);
+
+        // Pre-select saved reason if provided
+        if (reasonid != null && reasonid !== '') {
+          if ($("#cbocallreason").find("option[value='" + reasonid + "']").length) {
+            $("#cbocallreason").val(reasonid).trigger('change');
           }
+        }
 
-          // Reset validator if present
-          if ($.fn.validator) {
-            $(".box-body").validator('reset');
-          }
+        // Reset validator if present
+        if ($.fn.validator) {
+          $(".box-body").validator('reset');
+        }
       },
-      error: function(xhr) {
+      error: function (xhr) {
         console.error('Error fetching call reasons:', xhr.responseText);
       }
     });
   }
 }
 
-$(document).on( "change", "#cbocallreason", function () {
+$(document).on("change", "#cbocallreason", function () {
   var callreason = $("#cbocallreason :selected").text();
 
   // Show only if reason is 'CONFIRM RENEWAL' and edit mode is enabled
   if (editcall === true && callreason === 'CONFIRM RENEWAL') {
-      $("#div_promised_pay_date").show(); // Displays as block
+    $("#div_promised_pay_date").show(); // Displays as block
   } else {
-      // For any other selection (or when editcall is false), hide and clear
-      $("#div_promised_pay_date").hide(); // Hides (display: none)
-      $("#dpppdate").val("");             // Clears date value
+    // For any other selection (or when editcall is false), hide and clear
+    $("#div_promised_pay_date").hide(); // Hides (display: none)
+    $("#dpppdate").val("");             // Clears date value
   }
 
 });
@@ -4573,7 +4594,7 @@ $(document).on( "change", "#cbocallreason", function () {
 //       if (data.result == 1) {
 
 //         inputField.focus();
-        
+
 //         // Remove last character or digit
 //         var newVal = custno.slice(0, -1);
 //         inputField.val(newVal);
@@ -4616,7 +4637,7 @@ $(document).on( "change", "#cbocallreason", function () {
 //       if (data.result == 1) {
 
 //         inputField.focus();
-        
+
 //         // Remove last character or digit
 //         var newVal = vin.slice(0, -1);
 //         inputField.val(newVal);
@@ -4714,12 +4735,12 @@ $(document).on("blur", "#txtvin", function () {
 
       if (data.result == 1) {
 
-        if (customerno == data.customerno ) {
+        if (customerno == data.customerno) {
           swal({
             title: "Record Exists!",
             text: "Vehicle Identification Number " + vin +
-                  " is already assigned to a " + data.model +
-                  " vehicle owned by " + data.fullname + ". Click OK to display all info.",
+              " is already assigned to a " + data.model +
+              " vehicle owned by " + data.fullname + ". Click OK to display all info.",
             type: "warning",
             confirmButtonColor: "#00a65a",
             confirmButtonText: "OK"
@@ -4739,8 +4760,8 @@ $(document).on("blur", "#txtvin", function () {
           swal({
             title: "Record Exists!",
             text: "Vehicle Identification Number " + vin +
-                  " is already assigned to a " + data.model +
-                  " vehicle owned by " + data.fullname + ".",
+              " is already assigned to a " + data.model +
+              " vehicle owned by " + data.fullname + ".",
             type: "warning",
             confirmButtonColor: "#00a65a",
             confirmButtonText: "OK"
@@ -4769,14 +4790,14 @@ $(document).on("blur", "#txtvin", function () {
 });
 
 //Button View 
-$(document).on( "click", "#viewpending", function () {
+$(document).on("click", "#viewpending", function () {
   viewpending = true;
   viewexpiring = false;
   LoadTransactionData();
   LoadStatusCounts();
 });
 
-$(document).on( "click", "#viewexpiring", function () {
+$(document).on("click", "#viewexpiring", function () {
   viewexpiring = true;
   viewpending = false;
   LoadTransactionData();
@@ -4784,7 +4805,7 @@ $(document).on( "click", "#viewexpiring", function () {
 });
 
 //Button View 
-$(document).on( "click", "#btnrefresh", function () {
+$(document).on("click", "#btnrefresh", function () {
   viewpending = false;
   viewexpiring = false;
   $("#txtsearch").val("");
@@ -4792,16 +4813,16 @@ $(document).on( "click", "#btnrefresh", function () {
 });
 
 /*====== KEY UP ======*/
-$(document).on( "keyup", "#txtsearch", function () {
+$(document).on("keyup", "#txtsearch", function () {
   var searchval = $(this).val().trim();
-  if($.trim(searchval) == "" ) {
+  if ($.trim(searchval) == "") {
     LoadTransactionData();
   }
 });
 
-$(document).on( "keyup", "#txtcustomersearch", function () {
+$(document).on("keyup", "#txtcustomersearch", function () {
   var searchval = $(this).val().trim();
-  if($.trim(searchval) == "" ) {
+  if ($.trim(searchval) == "") {
     if (activeCustTab === '#tmiatab') {
       LoadCustomerData();
     }
@@ -4813,7 +4834,7 @@ $(document).on( "keyup", "#txtcustomersearch", function () {
 });
 
 /*====== KEY DOWN ======*/
-$(document).on( "keydown", "#txtsearch", function (e) {
+$(document).on("keydown", "#txtsearch", function (e) {
   if (e.which == 13) {
     e.preventDefault();
     var search = $(this).val();
@@ -4824,7 +4845,7 @@ $(document).on( "keydown", "#txtsearch", function (e) {
   }
 });
 
-$(document).on( "keydown", "#txtcustomersearch", function (e) {
+$(document).on("keydown", "#txtcustomersearch", function (e) {
   if (e.which == 13) {
     e.preventDefault();
     var search = $(this).val();
@@ -4842,22 +4863,22 @@ $(document).on( "keydown", "#txtcustomersearch", function (e) {
 });
 
 //Button Search 
-$(document).on( "click", "#btnfind", function () {
-    LoadTransactionData();
+$(document).on("click", "#btnfind", function () {
+  LoadTransactionData();
 
-    // If search button is triggered, clear specific card quick-filters if needed
-    window.viewpending = false;
-    window.viewexpiring = false;
-    
-    // Trigger DataTable AJAX refresh[cite: 2]
-    if (table) {
-        table.draw(); 
-    } else {
-        initTable();
-    }
+  // If search button is triggered, clear specific card quick-filters if needed
+  window.viewpending = false;
+  window.viewexpiring = false;
+
+  // Trigger DataTable AJAX refresh[cite: 2]
+  if (table) {
+    table.draw();
+  } else {
+    initTable();
+  }
 });
 
-$(document).on( "click", "#btnfindcust", function () {
+$(document).on("click", "#btnfindcust", function () {
   if (activeCustTab === '#tmiatab') {
     LoadCustomerData();
   }
@@ -4869,20 +4890,20 @@ $(document).on( "click", "#btnfindcust", function () {
 
 /*====== KEY PRESS ======*/
 /*----------- CUSTOMER INFO ------------*/
-$(document).on( "keypress", "#txtzipcode", function () {
+$(document).on("keypress", "#txtzipcode", function () {
   return isNumberKey(this, event);
 });
 
 /*---------- VEHICLE INFO ---------------*/
-$(document).on( "keypress", "#txtmodelyear", function () {
+$(document).on("keypress", "#txtmodelyear", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtsrp", function () {
+$(document).on("keypress", "#txtsrp", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtseats", function () {
+$(document).on("keypress", "#txtseats", function () {
   return isNumberKey(this, event);
 });
 
@@ -4895,176 +4916,176 @@ $(document).on( "keypress", "#txtseats", function () {
 // });
 
 /*----------- INSURANCE CALC ------------*/
-$(document).on( "keypress", "#txtgrosspremium", function () {
+$(document).on("keypress", "#txtgrosspremium", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtnetremittance", function () {
+$(document).on("keypress", "#txtnetremittance", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtcommission", function () {
+$(document).on("keypress", "#txtcommission", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtterms", function () {
+$(document).on("keypress", "#txtterms", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtmonthpay", function () {
+$(document).on("keypress", "#txtmonthpay", function () {
   return isNumberKey(this, event);
 });
 
 /*---------- PAYMENT INFO ---------------*/
-$(document).on( "keypress", "#txtpayamount, #txtpayamount-n", function () {
+$(document).on("keypress", "#txtpayamount, #txtpayamount-n", function () {
   return isNumberKey(this, event);
 });
 
 /*---------- GP / NET REM ---------------*/
-$(document).on( "keypress", "#txtinsgpremium", function () {
+$(document).on("keypress", "#txtinsgpremium", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtnetrem", function () {
+$(document).on("keypress", "#txtnetrem", function () {
   return isNumberKey(this, event);
 });
 
-$(document).on( "keypress", "#txtinscommission", function () {
+$(document).on("keypress", "#txtinscommission", function () {
   return isNumberKey(this, event);
 });
 
 /*====== FOCUS ======*/
-$("#txtsearch").focus(function(){
+$("#txtsearch").focus(function () {
   $(this).select();
 });
 
-$("#txtcustomersearch").focus(function(){
+$("#txtcustomersearch").focus(function () {
   $(this).select();
 });
 
 /*---------- VEHICLE INFO ---------------*/
 $(document).on("focus", "#txtsrp", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 /*----------- INSURANCE CALC ------------*/
 $(document).on("focus", "#txtgrosspremium", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtnetremittance", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtcommission", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtterms", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtmonthpay", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 /*---------- PAYMENT INFO ---------------*/
 $(document).on("focus", "#txtpayamount, #txtpayamount-n", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 /*---------- GP / NET REM ---------------*/
 $(document).on("focus", "#txtinsgpremium", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtnetrem", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 $(document).on("focus", "#txtinscommission", function () {
-    const raw = $(this).val();
-    $(this).val(RemoveNumFormat(raw)).select();
+  const raw = $(this).val();
+  $(this).val(RemoveNumFormat(raw)).select();
 });
 
 /*====== LOST FOCUS ======*/
 /*---------- CUSTOMER INFO ---------------*/
-$(document).on( "blur", "#txtcustno", function () {
+$(document).on("blur", "#txtcustno", function () {
   var txtcustno = $(this).val().toUpperCase().trim();
   $(this).val(txtcustno);
 });
 
-$(document).on( "blur", "#txtcustname", function () {
+$(document).on("blur", "#txtcustname", function () {
   var txtcustname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustname);
 });
 
-$(document).on( "blur", ".txtcustfname, #txtcustfname", function () {
+$(document).on("blur", ".txtcustfname, #txtcustfname", function () {
   var txtcustfname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustfname);
 });
 
-$(document).on( "blur", "#txtcustmname", function () {
+$(document).on("blur", "#txtcustmname", function () {
   var txtcustfname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustfname);
 });
 
-$(document).on( "blur", "#txtcustlname", function () {
+$(document).on("blur", "#txtcustlname", function () {
   var txtcustlname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustlname);
 });
 
-$(document).on( "blur", "#txtcustsname", function () {
+$(document).on("blur", "#txtcustsname", function () {
   var txtcustsname = $(this).val().toUpperCase().trim();
   $(this).val(txtcustsname);
 });
 
-$(document).on( "blur", "#txtaddress", function () {
+$(document).on("blur", "#txtaddress", function () {
   var txtaddress = $(this).val().toUpperCase().trim();
   $(this).val(txtaddress);
 });
 
 /*---------- VEHICLE INFO ---------------*/
-$(document).on( "blur", "#txtvin", function () {
+$(document).on("blur", "#txtvin", function () {
   var txtvin = $(this).val().toUpperCase().trim();
   $(this).val(txtvin);
 });
 
-$(document).on( "blur", "#txtmake", function () {
+$(document).on("blur", "#txtmake", function () {
   var txtmake = $(this).val().toUpperCase().trim();
   $(this).val(txtmake);
 });
 
-$(document).on( "blur", "#txtmodel", function () {
+$(document).on("blur", "#txtmodel", function () {
   var txtmodel = $(this).val().toUpperCase().trim();
   $(this).val(txtmodel);
 });
 
-$(document).on( "blur", "#txtcolor", function () {
+$(document).on("blur", "#txtcolor", function () {
   var txtcolor = $(this).val().toUpperCase().trim();
   $(this).val(txtcolor);
 });
 
-$(document).on( "blur", "#txtengineno", function () {
+$(document).on("blur", "#txtengineno", function () {
   var txtengineno = $(this).val().toUpperCase().trim();
   $(this).val(txtengineno);
 });
 
-$(document).on( "blur", "#txtcsno", function () {
+$(document).on("blur", "#txtcsno", function () {
   var txtcsno = $(this).val().toUpperCase().trim();
   $(this).val(txtcsno);
 });
 
-$(document).on( "blur", "#txtplateno", function () {
+$(document).on("blur", "#txtplateno", function () {
   var txtplateno = $(this).val().toUpperCase().trim();
   $(this).val(txtplateno);
 });
@@ -5080,11 +5101,11 @@ $(document).on( "blur", "#txtplateno", function () {
 // });
 
 $(document).on("blur", "#txtsrp", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 // $(document).on( "blur", "#txtmsalecode", function () {
@@ -5092,61 +5113,61 @@ $(document).on("blur", "#txtsrp", function () {
 //   $(this).val(txtmsalecode);
 // });
 
-$(document).on( "blur", "#txtvariant", function () {
+$(document).on("blur", "#txtvariant", function () {
   var txtvariant = $(this).val().toUpperCase().trim();
   $(this).val(txtvariant);
 });
 
-$(document).on( "blur", "#txttransmission", function () {
+$(document).on("blur", "#txttransmission", function () {
   var txttransmission = $(this).val().toUpperCase().trim();
   $(this).val(txttransmission);
 });
 
-$(document).on( "blur", "#txtvoname", function () {
+$(document).on("blur", "#txtvoname", function () {
   var txtvoname = $(this).val().toUpperCase().trim();
   $(this).val(txtvoname);
 });
 
-$(document).on( "blur", "#txtmpname", function () {
+$(document).on("blur", "#txtmpname", function () {
   var txtmpname = $(this).val().toUpperCase().trim();
   $(this).val(txtmpname);
 });
 
 /*---------- INSURANCE CALC ---------------*/
 $(document).on("blur", "#txtgrosspremium", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 $(document).on("blur", "#txtnetremittance", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 $(document).on("blur", "#txtcommission", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 $(document).on("blur", "#txtmonthpay", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 /*---------- INSURER INFO ---------------*/
-$(document).on( "blur", "#txtpolicyno", function () {
+$(document).on("blur", "#txtpolicyno", function () {
   var txtpolicyno = $(this).val().toUpperCase().trim();
   $(this).val(txtpolicyno);
 });
@@ -5158,46 +5179,46 @@ $(document).on( "blur", "#txtpolicyno", function () {
 
 /*---------- PAYMENT INFO ---------------*/
 $(document).on("blur", "#txtpayamount, #txtpayamount-n", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 /*---------- GP / NET REM ---------------*/
 $(document).on("blur", "#txtinsgpremium", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 $(document).on("blur", "#txtnetrem", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 $(document).on("blur", "#txtinscommission", function () {
-    let val = $(this).val().replace(/[^0-9.]/g, "").trim();
+  let val = $(this).val().replace(/[^0-9.]/g, "").trim();
 
-    if (val !== "") {
-        $(this).val(NumberFormat(val));
-    }
+  if (val !== "") {
+    $(this).val(NumberFormat(val));
+  }
 });
 
 /*---------- Transaction Status ---------------*/
-$(document).on( "blur", "#txttranssremarks", function () {
+$(document).on("blur", "#txttranssremarks", function () {
   var txttranssremarks = $(this).val().toUpperCase().trim();
   $(this).val(txttranssremarks);
 });
 
 /*---------- Call Status ---------------*/
-$(document).on( "blur", "#txtcallremarks", function () {
+$(document).on("blur", "#txtcallremarks", function () {
   var txtcallremarks = $(this).val().toUpperCase().trim();
   $(this).val(txtcallremarks);
 });
@@ -5206,7 +5227,7 @@ $(document).on( "blur", "#txtcallremarks", function () {
 //////////// Date Picker Event ///////
 $(document).ready(function () {
   const dateFrom = $("#dpdatefrom").val();
-  const dateTo   = $("#dpdateto").val();
+  const dateTo = $("#dpdateto").val();
 
   if (dateFrom && dateTo) {
     LoadTransactionData();
@@ -5239,19 +5260,19 @@ $(document).on("changeDate", "#dpstartdate", function () {
 });
 
 /////////// CHECKED BOX EVENT //////////////
-$(document).on( "change", "#chkall", function () {
+$(document).on("change", "#chkall", function () {
   if ($(this).is(":checked")) {
-    $("#dpdatefrom").attr("disabled",true);
-    $("#dpdateto").attr("disabled",true);
+    $("#dpdatefrom").attr("disabled", true);
+    $("#dpdateto").attr("disabled", true);
   } else {
-    $("#dpdatefrom").attr("disabled",false);
-    $("#dpdateto").attr("disabled",false);
+    $("#dpdatefrom").attr("disabled", false);
+    $("#dpdateto").attr("disabled", false);
   }
   LoadTransactionData();
 });
 
 ////////////////////////////// INSUIRANCE CALCULATION /////////////////////////////////
-$(document).ready( function () {
+$(document).ready(function () {
   // ------------------------------
   // Commission Calculation
   // ------------------------------
@@ -5272,14 +5293,14 @@ $(document).ready( function () {
   // }
 
   function calculateMonthlyPayment() {
-      const grosspremium = RemoveNumFormat($('#txtgrosspremium').val());
-      const term = Number(RemoveNumFormat($('#txtterms').val())) || 1; // prevent div by zero
-      const monthly = grosspremium / term;
-      $('#txtmonthpay').val(NumberFormat(monthly));
+    const grosspremium = RemoveNumFormat($('#txtgrosspremium').val());
+    const term = Number(RemoveNumFormat($('#txtterms').val())) || 1; // prevent div by zero
+    const monthly = grosspremium / term;
+    $('#txtmonthpay').val(NumberFormat(monthly));
 
-      $('#txtpayterms-n').val(term);
-      $('#txtpayamount-n').val(NumberFormat(monthly));
-      $(".box-body").validator('reset');
+    $('#txtpayterms-n').val(term);
+    $('#txtpayamount-n').val(NumberFormat(monthly));
+    $(".box-body").validator('reset');
   }
 
   // ------------------------------
@@ -5316,7 +5337,7 @@ $(document).ready( function () {
   // ------------------------------
   $('#txtterms').on('input', calculateMonthlyPayment);
 
-  $(document).on( "change", "#chkpayment", function () {
+  $(document).on("change", "#chkpayment", function () {
     if ($(this).is(':checked')) {
       $("#installpay-terms").fadeIn();
       $("#installpay-mpay").fadeIn();
@@ -5331,7 +5352,7 @@ $(document).ready( function () {
     }
   });
 
-  $('input[name="rdoptiontype"]').on('change', function() {
+  $('input[name="rdoptiontype"]').on('change', function () {
     const val = $(this).val();
     if (val === 'FREE') {
       $(".installment-section").fadeOut();
@@ -5407,7 +5428,7 @@ $(document).ready( function () {
 
 ////////////////////////////// BUTTONS CLICKED /////////////////////////////////
 //============= BUTTONS OUTSIDE TABLE ============//
-$(document).on( "click", "#btnfindcustomer", function () {
+$(document).on("click", "#btnfindcustomer", function () {
   if (activeCustTab === '#tmiatab') {
     LoadCustomerData();
   }
@@ -5415,28 +5436,28 @@ $(document).on( "click", "#btnfindcustomer", function () {
   if (activeCustTab === '#uploadtab') {
     LoadCustomerDataEDAFSAP();
   }
-  
+
 
   // Select customer will only show if it is not clicked on expiring
-  if(renewal_flag != 1){
+  if (renewal_flag != 1) {
     $('#modal-customerlist').iziModal('open');
   }
 
 });
 
-$(document).on( "click", "#btncustselect", function () {
+$(document).on("click", "#btncustselect", function () {
   if (activeCustTab === '#tmiatab') {
-        LoadCustomerInfo();
+    LoadCustomerInfo();
   }
 
-  if (activeCustTab === '#uploadtab') { 
-        LoadCustomerEDAFSAPInfo();
+  if (activeCustTab === '#uploadtab') {
+    LoadCustomerEDAFSAPInfo();
   }
 
   $('#modal-customerlist').iziModal('close');
 });
 
-$(document).on( "click", "#btnfindvehicle", function () {
+$(document).on("click", "#btnfindvehicle", function () {
   if (activeVehTab === '#tmiavehtab') {
     LoadVehicleData();
   }
@@ -5448,7 +5469,7 @@ $(document).on( "click", "#btnfindvehicle", function () {
 });
 
 
-$(document).on( "click", "#btnvehselect", function () {
+$(document).on("click", "#btnvehselect", function () {
   if (activeVehTab === '#tmiavehtab') {
     LoadVehicleInfo();
   }
@@ -5460,33 +5481,30 @@ $(document).on( "click", "#btnvehselect", function () {
 });
 
 
-$(document).on( "click", "#btnnblist", function () {
+$(document).on("click", "#btnnblist", function () {
   // LoadNBData();
   // $('#modal-nblist').iziModal('open');
   $('#modal-show-expiring-policies').iziModal('open');
 });
 
 
-$(document).on( "click", "#btnnbselect", function () {
+$(document).on("click", "#btnnbselect", function () {
   newdata = true;
   transid = '';
   editinfo = true;
   FormClear();
   FormDisable(false);
-  
-  renewal_flag = 0;
 
   $('#modal-nblist').iziModal('close');
-  
   LoadCustomerInfo();
   LoadVehicleInfo();
-  LoadInsuranceInfo(xnbno);
-  LoadInsurerInfo(xnbno);
+  LoadInsuranceInfo(insuranceno);
+  LoadInsurerInfo(insuranceno);
 
-  if (ulevel == 7){ 
+  if (ulevel == 7) {
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
-  } else {    
+  } else {
     $('#modal-modify-ise').iziModal('open');
   }
 
@@ -5495,7 +5513,7 @@ $(document).on( "click", "#btnnbselect", function () {
 
 
 
-$(document).on( "click", "#btnadd", function () {
+$(document).on("click", "#btnadd", function () {
   newdata = true;
   transid = '';
   editinfo = true;
@@ -5503,15 +5521,15 @@ $(document).on( "click", "#btnadd", function () {
   FormClear();
   FormDisable(false);
 
-  $("#cboinstype").attr("disabled",false);
-  
+  $("#cboinstype").attr("disabled", false);
+
   // renewal flag for determining the policy action and other elements existence
-  renewal_flag = 0;  
+  renewal_flag = 0;
 
   $("#policy_actions").hide();
   $('.policyAction').hide();
 
-  if ( ulevel == 7) { 
+  if (ulevel == 7) {
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
   } else {
@@ -5533,7 +5551,7 @@ $(document).on("input change", fields.join(", "), function () {
 });
 
 
-$(document).on( "click", "#btnselectise", function () {
+$(document).on("click", "#btnselectise", function () {
   var selectise = $("#cboise").val();
   if ($.trim(selectise) == '' || $.trim(selectise) == null || $.trim(selectise) == 'PLEASE SELECT') {
     $("#cboise").focus();
@@ -5547,16 +5565,16 @@ $(document).on( "click", "#btnselectise", function () {
     });
     return;
   }
-  
+
   $('#modal-add').iziModal('open');
   $('#modal-modify-ise').iziModal('close');
 });
 
-$(document).on( "click", "#btncancelise", function () {
+$(document).on("click", "#btncancelise", function () {
   $('#modal-modify-ise').iziModal('close');
 });
 
-$(document).on( "click", "#btnaddveh", function () {
+$(document).on("click", "#btnaddveh", function () {
   newdata = true;
   xvin = '';
   xcsno = '';
@@ -5567,7 +5585,7 @@ $(document).on( "click", "#btnaddveh", function () {
   $('#modal-modifyveh').iziModal('open');
 });
 
-$(document).on( "click", "#btnupload", function () {
+$(document).on("click", "#btnupload", function () {
   $('#modal-upload').iziModal('open');
 });
 //============= END BUTTONS OUTSIDE TABLE ============//
@@ -5838,108 +5856,108 @@ var popoverTemplate = `
 
 // Click handler
 $(document).on("click", ".badge", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 
-    var $badge = $(this);
-    var insuranceno = $badge.attr("insuranceno");
+  var $badge = $(this);
+  var insuranceno = $badge.attr("insuranceno");
 
-    // Toggle same badge
-    if (currentPopover && currentPopover.is($badge)) {
-        $badge.popover("hide");
-        currentPopover = null;
-        return;
-    }
+  // Toggle same badge
+  if (currentPopover && currentPopover.is($badge)) {
+    $badge.popover("hide");
+    currentPopover = null;
+    return;
+  }
 
-    // Hide previous
-    if (currentPopover) {
-        currentPopover.popover("hide");
-        currentPopover = null;
-    }
+  // Hide previous
+  if (currentPopover) {
+    currentPopover.popover("hide");
+    currentPopover = null;
+  }
 
-    // Initialize only once
-    if (!$badge.data('bs.popover')) {
-        $badge.popover({
-            html: true,
-            trigger: "manual",
-            placement: fetchView,
-            container: "body",
-            title: 'TRANSACTION STATUS INFO. &emsp;&emsp;&emsp;<button type="button" class="close popover-close-btn">&times;</button>',
-            content: popoverTemplate
-        });
-    }
-
-    // Show popover
-    $badge.popover("show");
-    currentPopover = $badge;
-
-    // Wait until popover is fully shown
-    $badge.one('shown.bs.popover', function () {
-        var popoverInstance = $badge.data('bs.popover');
-        if (!popoverInstance || !popoverInstance.tip) return;
-
-        var tip = popoverInstance.tip;
-
-        // If cached, fill placeholders
-        if ($badge.data('loadedContent')) {
-            updatePopover(tip, $badge.data('loadedContent'));
-            return;
-        }
-
-        // AJAX JSON fetch
-        $.ajax({
-            url: "renewal_business_status.php",
-            type: "POST",
-            data: { insuranceno: insuranceno },
-            dataType: "json",
-            success: function (data) {
-                if (!tip || !data) return;
-                $badge.data('loadedContent', data); // cache
-                updatePopover(tip, data);
-            },
-            error: function () {
-                if (!tip) return;
-                $(tip).find('#popover-status').text('Error').addClass('label label-danger');
-                $(tip).find('#popover-user-id').text('-');
-                $(tip).find('#popover-display-name').text('-');
-                $(tip).find('#popover-status-date').text('-');
-                $(tip).find('#popover-remarks').text('Failed to load data');
-            }
-        });
+  // Initialize only once
+  if (!$badge.data('bs.popover')) {
+    $badge.popover({
+      html: true,
+      trigger: "manual",
+      placement: fetchView,
+      container: "body",
+      title: 'TRANSACTION STATUS INFO. &emsp;&emsp;&emsp;<button type="button" class="close popover-close-btn">&times;</button>',
+      content: popoverTemplate
     });
+  }
+
+  // Show popover
+  $badge.popover("show");
+  currentPopover = $badge;
+
+  // Wait until popover is fully shown
+  $badge.one('shown.bs.popover', function () {
+    var popoverInstance = $badge.data('bs.popover');
+    if (!popoverInstance || !popoverInstance.tip) return;
+
+    var tip = popoverInstance.tip;
+
+    // If cached, fill placeholders
+    if ($badge.data('loadedContent')) {
+      updatePopover(tip, $badge.data('loadedContent'));
+      return;
+    }
+
+    // AJAX JSON fetch
+    $.ajax({
+      url: "renewal_business_status.php",
+      type: "POST",
+      data: { insuranceno: insuranceno },
+      dataType: "json",
+      success: function (data) {
+        if (!tip || !data) return;
+        $badge.data('loadedContent', data); // cache
+        updatePopover(tip, data);
+      },
+      error: function () {
+        if (!tip) return;
+        $(tip).find('#popover-status').text('Error').addClass('label label-danger');
+        $(tip).find('#popover-user-id').text('-');
+        $(tip).find('#popover-display-name').text('-');
+        $(tip).find('#popover-status-date').text('-');
+        $(tip).find('#popover-remarks').text('Failed to load data');
+      }
+    });
+  });
 });
 
 // Function to update placeholders
 function updatePopover(tip, data) {
-    $(tip).find('#popover-status')
-        .text(data.status)
-        .attr('class', 'badge-lg ' + data.labelClass);
+  $(tip).find('#popover-status')
+    .text(data.status)
+    .attr('class', 'badge-lg ' + data.labelClass);
 
-    $(tip).find('#popover-user-id').text(data.userId);
-    $(tip).find('#popover-display-name').text(data.displayName);
-    $(tip).find('#popover-status-date').text(data.statusDate);
-    $(tip).find('#popover-remarks').html(data.remarks.replace(/\n/g,'<br>'));
+  $(tip).find('#popover-user-id').text(data.userId);
+  $(tip).find('#popover-display-name').text(data.displayName);
+  $(tip).find('#popover-status-date').text(data.statusDate);
+  $(tip).find('#popover-remarks').html(data.remarks.replace(/\n/g, '<br>'));
 }
 
 // Close popover
 $(document).on("click", ".popover-close-btn", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (currentPopover) {
-        currentPopover.popover("hide");
-        currentPopover = null;
-    }
+  e.preventDefault();
+  e.stopPropagation();
+  if (currentPopover) {
+    currentPopover.popover("hide");
+    currentPopover = null;
+  }
 });
 
 // Close when clicking outside
 $(document).on("click", function (e) {
-    if (currentPopover && !$(e.target).closest(".popover, .badge").length) {
-        currentPopover.popover("hide");
-        currentPopover = null;
-    }
+  if (currentPopover && !$(e.target).closest(".popover, .badge").length) {
+    currentPopover.popover("hide");
+    currentPopover = null;
+  }
 });
 
-$(document).on( "click", ".btnpay", function () {
+$(document).on("click", ".btnpay", function () {
   insuranceno = $(this).data('insurance-no');
   FormClearPay();
   LoadPayData();
@@ -5948,10 +5966,10 @@ $(document).on( "click", ".btnpay", function () {
 
 
 
-$(document).on("click",".btnsoa",function(){
+$(document).on("click", ".btnsoa", function () {
   insuranceno = $(this).data('insurance-no');
 
-  window.location = 'renewal_business_soa_xls.php?insuranceno='+insuranceno;
+  window.location = 'renewal_business_soa_xls.php?insuranceno=' + insuranceno;
 
   swal({
     title: "Downloaded!",
@@ -5963,33 +5981,33 @@ $(document).on("click",".btnsoa",function(){
   });
 });
 
-$(document).on( "click", ".btnstatus", function () {
+$(document).on("click", ".btnstatus", function () {
   insuranceno = $(this).data('insurance-no');
   FormClearStatus();
   LoadStatusData(insuranceno);
   FormDisableStatus(true);
 });
 
-$(document).on( "click", ".btncall", function () {
+$(document).on("click", ".btncall", function () {
   insuranceno = $(this).data('insurance-no');
   FormClearCall();
   LoadCallData();
   FormDisableCall(true);
 });
 
-$(document).on( "click", ".btncalllog", function () {
+$(document).on("click", ".btncalllog", function () {
   insuranceno = $(this).data('insurance-no');
   LoadCallLogsData();
 });
 
-$(document).on( "click", ".btnedit", function () {
+$(document).on("click", ".btnedit", function () {
   insuranceno = $(this).data('insurance-no');
-  $.post(window.loadData.sessionSetTransaction, { insuranceno:insuranceno }) .done(function(data) {
+  $.post(window.loadData.sessionSetTransaction, { insuranceno: insuranceno }).done(function (data) {
     window.open(window.LaravelRoutes.loadModifyRenewalPage, '_self');
   });
 });
 
-$(document).on( "click", ".btndelete", function () {
+$(document).on("click", ".btndelete", function () {
   insuranceno = $(this).data('insurance-no');
   swal({
     title: "Are you sure?",
@@ -6001,66 +6019,66 @@ $(document).on( "click", ".btndelete", function () {
     closeOnConfirm: false,
     closeOnCancel: false
   },
-  function(isConfirm){
-    if (isConfirm) {
-      $.ajax({
-        type:"POST",
-        url:window.deletefunction.deleteData,
-        data:{ insuranceno:insuranceno },
-        dataType: "json",   // keep this
-        success: function(data){
-          if(data.result == 1){
-            swal({
-              title: "Deleted!",
-              text: "Selected record has been deleted succesfully.",
-              type: "success",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK"
-            });
-            LoadTransactionData();
-          }else{
-            swal({
-              title: "Error!",
-              text: "Can't delete data.",
-              type: "error",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK"
-            });
+    function (isConfirm) {
+      if (isConfirm) {
+        $.ajax({
+          type: "POST",
+          url: window.deletefunction.deleteData,
+          data: { insuranceno: insuranceno },
+          dataType: "json",   // keep this
+          success: function (data) {
+            if (data.result == 1) {
+              swal({
+                title: "Deleted!",
+                text: "Selected record has been deleted succesfully.",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK"
+              });
+              LoadTransactionData();
+            } else {
+              swal({
+                title: "Error!",
+                text: "Can't delete data.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK"
+              });
+            }
           }
-        }
-      });
-    } else {
-      swal({
-        title: "Cancelled",
-        text: "Nothing Happen!",
-        type: "error",
-        showCancelButton: false,
-        confirmButtonColor: "#00a65a",
-        confirmButtonText: "OK"
-      });
-    }
-  });
+        });
+      } else {
+        swal({
+          title: "Cancelled",
+          text: "Nothing Happen!",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonColor: "#00a65a",
+          confirmButtonText: "OK"
+        });
+      }
+    });
 });
 //============= END BUTTONS INSIDE TABLE ============//
 
 //============= BUTTONS ON MODAL MODIFY ============//
-$(document).on( "click", "#btneditcall", function () {
+$(document).on("click", "#btneditcall", function () {
   editcall = true;
   FormDisableCall(false);
 });
 
-$(document).on( "click", "#btnclosecall", function () {
+$(document).on("click", "#btnclosecall", function () {
   $('#modal-call').iziModal('close');
 });
 
-$(document).on( "click", "#btncancelcall", function () {
+$(document).on("click", "#btncancelcall", function () {
   editcall = false;
   FormClearCall();
   FormDisableCall(true);
   LoadCallData();
-  $(".iziModal-wrap").scrollTop(0); 
+  $(".iziModal-wrap").scrollTop(0);
 });
 
 $(document).on("click", "#btnupdatecall", function () {
@@ -6200,6 +6218,14 @@ $(document).on("click", "#btnupdatecall", function () {
 
 
 $(document).on("click", "#btnsubmit", function () {
+
+  const flagValues = {
+      near_expiration_flag,
+      expired_flag,
+      policy_source,
+      insuranceno
+  }
+
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -6232,7 +6258,7 @@ $(document).on("click", "#btnsubmit", function () {
     }
     return true;
   }
-  
+
   // ======================================================
   // CUSTOMER INFO
   // ======================================================
@@ -6250,10 +6276,10 @@ $(document).on("click", "#btnsubmit", function () {
       .filter((x) => x && x !== "")
       .join(" ");
   }
-
+ 
   // Customer fields
   const customerFields = {
-    renewalFlagSave: renewal_flag, 
+    renewalFlagSave: renewal_flag,
     custno: getVal("#txtcustno"),
     custnoupload: getVal("#txtcustnoupload"),
     group,
@@ -6394,7 +6420,7 @@ $(document).on("click", "#btnsubmit", function () {
   var tablepay = $("#table_payment-n").DataTable();
   var allData = [];
 
-  tablepay.rows().every(function() {
+  tablepay.rows().every(function () {
     var row = this.data();
     // Remove commas from numeric fields
     if (row.Payment_Amount) {
@@ -6411,7 +6437,7 @@ $(document).on("click", "#btnsubmit", function () {
     chkpayment: $("#chkpayment").is(":checked") ? 1 : 0,
     terms: getVal("#txtterms"),
     monthpay: getNum("#txtmonthpay"),
-    payments:JSON.stringify(allData)
+    payments: JSON.stringify(allData)
   }
 
   if (!runValidation([
@@ -6440,7 +6466,7 @@ $(document).on("click", "#btnsubmit", function () {
     mortgage: getVal("#cbomortgage"),
     // mortaddress: getUpper("#txtmortaddress"),
     // selectedPromo: $('input[name="promo"]:checked').val() === "YES" ? 1 : 0
-  };  
+  };
 
   if (!runValidation([
     { value: insurerFields.instype, selector: "#cboinstype", message: "Please fill out Insurance Type." },
@@ -6462,7 +6488,7 @@ $(document).on("click", "#btnsubmit", function () {
   $("#modalsaving").iziModal("open");
 
   const formdata = new FormData();
-  [customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
+  [flagValues, customerFields, vehicleFields, insuranceFields, insurerFields].forEach(group => {
     Object.entries(group).forEach(([key, val]) => formdata.append(key, val));
   });
 
@@ -6476,19 +6502,20 @@ $(document).on("click", "#btnsubmit", function () {
     processData: false,
     contentType: false,
     success: function (response) {
+
       $("#modalsaving").iziModal('close');
 
       if (response.result == 1) {
         swal({
           title: "Saved!",
-          text: "New record with Insurance No "+ response.Insurance_No +" has been created successfully.",
+          text: "New record with Insurance No " + response.Insurance_No + " has been created successfully.",
           type: "success",
           confirmButtonColor: "#00a65a",
           confirmButtonText: "OK"
         }, function () {
-              $("#modal-add").iziModal("close");
-              console.log("reload");
-              $('#table_trans').DataTable().ajax.reload(null, false);
+          $("#modal-add").iziModal("close");
+          console.log("reload");
+          $('#table_trans').DataTable().ajax.reload(null, false);
         });
       } else {
         swal({
@@ -6500,7 +6527,7 @@ $(document).on("click", "#btnsubmit", function () {
         });
       }
     },
-    error: function(xhr, status, error) {
+    error: function (xhr, status, error) {
       $("#modalsaving").iziModal('close');
       swal({
         title: "Error",
@@ -6514,7 +6541,7 @@ $(document).on("click", "#btnsubmit", function () {
 });
 
 
-$(document).on( "click", "#btndelete", function () {
+$(document).on("click", "#btndelete", function () {
   swal({
     title: "Are you sure?",
     text: "Data record with Transaction ID " + transid + " will be permanently deleted.",
@@ -6525,67 +6552,67 @@ $(document).on( "click", "#btndelete", function () {
     closeOnConfirm: false,
     closeOnCancel: false
   },
-  function(isConfirm){
-    if (isConfirm) {
-      $.ajax({
-        type:"POST",
-        url:"customer_list_delete.php",
-        data:{ transid:transid },
-        success: function(data){
-          var data = jQuery.parseJSON(data);
-          if(data.result == 1){
-            swal({
-              title: "Deleted!",
-              text: "Selected record has been deleted succesfully.",
-              type: "success",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK",
-              closeOnConfirm: true
-            }, function(){
+    function (isConfirm) {
+      if (isConfirm) {
+        $.ajax({
+          type: "POST",
+          url: "customer_list_delete.php",
+          data: { transid: transid },
+          success: function (data) {
+            var data = jQuery.parseJSON(data);
+            if (data.result == 1) {
+              swal({
+                title: "Deleted!",
+                text: "Selected record has been deleted succesfully.",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK",
+                closeOnConfirm: true
+              }, function () {
                 LoadCustData();
                 FormClear();
                 FormDisable(true);
                 $('#modal-add').iziModal('close');
-            });
-          }else{
-            swal({
-              title: "Error!",
-              text: "Can't delete data.",
-              type: "error",
-              showCancelButton: false,
-              confirmButtonColor: "#00a65a",
-              confirmButtonText: "OK"
-            });
+              });
+            } else {
+              swal({
+                title: "Error!",
+                text: "Can't delete data.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#00a65a",
+                confirmButtonText: "OK"
+              });
+            }
           }
-        }
-      });
-    } else {
-      swal({
-        title: "Cancelled",
-        text: "Nothing Happen!",
-        type: "error",
-        showCancelButton: false,
-        confirmButtonColor: "#00a65a",
-        confirmButtonText: "OK"
-      });
-    }
-  });
+        });
+      } else {
+        swal({
+          title: "Cancelled",
+          text: "Nothing Happen!",
+          type: "error",
+          showCancelButton: false,
+          confirmButtonColor: "#00a65a",
+          confirmButtonText: "OK"
+        });
+      }
+    });
 });
 
 /*========== STEPPER =========*/
 let currentStep = 1;
 
-function showStep(step){
+function showStep(step) {
   currentStep = step;
   document.querySelectorAll('.step').forEach(el => {
-      el.classList.toggle('active', el.dataset.step == step);
+    el.classList.toggle('active', el.dataset.step == step);
   });
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  document.getElementById('page'+step).classList.add('active');
+  document.getElementById('page' + step).classList.add('active');
 
   const totalSteps = document.querySelectorAll('.step').length;
-  const percent = ((step-1)/(totalSteps-1))*100;
+  const percent = ((step - 1) / (totalSteps - 1)) * 100;
   document.getElementById('progressBar').style.width = percent + '%';
 }
 
@@ -6597,98 +6624,96 @@ $(document).on("click", ".step", function () {
 
 // Next button
 $(document).on("click", "#nextBtn", function () {
-  if(currentStep < 5) showStep(currentStep + 1);
+  if (currentStep < 5) showStep(currentStep + 1);
 });
 
 // Previous button
 $(document).on("click", "#prevBtn", function () {
-  if(currentStep > 1) showStep(currentStep - 1);
+  if (currentStep > 1) showStep(currentStep - 1);
 });
 //============= END BUTTONS ON MODAL MODIFY ============//
 ////////////////////////////// END BUTTONS CLICKED /////////////////////////////////
 
 /////////////////// ENABLED OR DISABLED /////////////////////
-function FormDisable(val) { 
-  console.log("Form disable", val);
-
-  $("#cboise").attr("disabled",val);
+function FormDisable(val) {
+  $("#cboise").attr("disabled", val);
 
   /*============== CUSTOMER INFO ===========*/
   // $("#txtcustno").attr("disabled",val);
-  $("#cbogroup").attr("disabled",val);
-  $("#txtcustname").attr("disabled",val);
-  $("#txtcustfname").attr("disabled",val);
-  $("#txtcustmname").attr("disabled",val);
-  $("#txtcustlname").attr("disabled",val);
-  $("#txtcustsname").attr("disabled",val);
-  $("#dpbirthdate").attr("disabled",val);
-  $("#txttin").attr("disabled",val);
-  $("#txtcontactno").attr("disabled",val);
-  $("#txtemailadd").attr("disabled",val);
-  $("#txtaddress").attr("disabled",val);
-  $("#cboregion").attr("disabled",val);
-  $("#cboprovince").attr("disabled",val);
-  $("#cbocity").attr("disabled",val);
-  $("#cbobrgy").attr("disabled",val);
-  $("#txtzipcode").attr("disabled",val);
-  $("#cbocountry").attr("disabled",val);
+  $("#cbogroup").attr("disabled", val);
+  $("#txtcustname").attr("disabled", val);
+  $("#txtcustfname").attr("disabled", val);
+  $("#txtcustmname").attr("disabled", val);
+  $("#txtcustlname").attr("disabled", val);
+  $("#txtcustsname").attr("disabled", val);
+  $("#dpbirthdate").attr("disabled", val);
+  $("#txttin").attr("disabled", val);
+  $("#txtcontactno").attr("disabled", val);
+  $("#txtemailadd").attr("disabled", val);
+  $("#txtaddress").attr("disabled", val);
+  $("#cboregion").attr("disabled", val);
+  $("#cboprovince").attr("disabled", val);
+  $("#cbocity").attr("disabled", val);
+  $("#cbobrgy").attr("disabled", val);
+  $("#txtzipcode").attr("disabled", val);
+  $("#cbocountry").attr("disabled", val);
 
   /*============= VEHICLE INFO ============*/
-  $("#txtvin").attr("disabled",val);
-  $("#txtmake").attr("disabled",val);
-  $("#txtmodel").attr("disabled",val);
-  $("#txtmodelyear").attr("disabled",val);
-  $("#txtcolor").attr("disabled",val);
-  $("#txtengineno").attr("disabled",val);
-  $("#txtcsno").attr("disabled",val);
-  $("#txtplateno").attr("disabled",val);
+  $("#txtvin").attr("disabled", val);
+  $("#txtmake").attr("disabled", val);
+  $("#txtmodel").attr("disabled", val);
+  $("#txtmodelyear").attr("disabled", val);
+  $("#txtcolor").attr("disabled", val);
+  $("#txtengineno").attr("disabled", val);
+  $("#txtcsno").attr("disabled", val);
+  $("#txtplateno").attr("disabled", val);
   // $("#txtorderno").attr("disabled",val);
   // $("#txtorderstatus").attr("disabled",val);
-  $("#txtsrp").attr("disabled",val);
-  $("#dpvsidate").attr("disabled",val);
-  $("#dpreldate").attr("disabled",val);
-  $("#dptechdate").attr("disabled",val);
+  $("#txtsrp").attr("disabled", val);
+  $("#dpvsidate").attr("disabled", val);
+  $("#dpreldate").attr("disabled", val);
+  $("#dptechdate").attr("disabled", val);
   // $("#txtmsalecode").attr("disabled",val);
-  $("#txtvariant").attr("disabled",val);
-  $("#cbobodytype").attr("disabled",val);
-  $("#txttransmission").attr("disabled",val);
-  $("#cbofueltype").attr("disabled",val);
-  $("#txtseats").attr("disabled",val);
+  $("#txtvariant").attr("disabled", val);
+  $("#cbobodytype").attr("disabled", val);
+  $("#txttransmission").attr("disabled", val);
+  $("#cbofueltype").attr("disabled", val);
+  $("#txtseats").attr("disabled", val);
   // $("#txtunloadweight").attr("disabled",val);
   // $("#txtmaxweight").attr("disabled",val);
-  $("#cboprodclass").attr("disabled",val);
-  $("#cboowntype").attr("disabled",val);
-  $("#txtvoname").attr("disabled",val);
-  $("#txtmpname").attr("disabled",val);
+  $("#cboprodclass").attr("disabled", val);
+  $("#cboowntype").attr("disabled", val);
+  $("#txtvoname").attr("disabled", val);
+  $("#txtmpname").attr("disabled", val);
 
   /*============= INSURANCE CALC ============*/
-  $("#txtgrosspremium").attr("disabled",val);
-  $("#txtnetremittance").attr("disabled",val);
+  $("#txtgrosspremium").attr("disabled", val);
+  $("#txtnetremittance").attr("disabled", val);
   $("#chkpayment").prop("disabled", val);
-  $("#txtterms").attr("disabled",val);
-  $("#txtmonthpay").attr("disabled",true);
+  $("#txtterms").attr("disabled", val);
+  $("#txtmonthpay").attr("disabled", true);
   // $("#chknonvat").prop("disabled", val);
-  $("#cbopaytype-n").attr("disabled",val);
-  $("#cboewallet-n").attr("disabled",val);
-  $("#txtccno-n").attr("disabled",val);
-  $("#txtccholder-n").attr("disabled",val);
-  $("#txtccexpirydate-n").attr("disabled",val);
-  $("#txtccvv-n").attr("disabled",val);
-  $("#txtpdcno-n").attr("disabled",val);
-  $("#txtpdcholdername-n").attr("disabled",val);
-  $("#txtpdcbankname-n").attr("disabled",val);
-  $("#dppdccheckdate-n").attr("disabled",val);
-  $("#txtpayamount-n").attr("disabled",val);
-  $("#btnaddpay-n").attr("disabled",val);
+  $("#cbopaytype-n").attr("disabled", val);
+  $("#cboewallet-n").attr("disabled", val);
+  $("#txtccno-n").attr("disabled", val);
+  $("#txtccholder-n").attr("disabled", val);
+  $("#txtccexpirydate-n").attr("disabled", val);
+  $("#txtccvv-n").attr("disabled", val);
+  $("#txtpdcno-n").attr("disabled", val);
+  $("#txtpdcholdername-n").attr("disabled", val);
+  $("#txtpdcbankname-n").attr("disabled", val);
+  $("#dppdccheckdate-n").attr("disabled", val);
+  $("#txtpayamount-n").attr("disabled", val);
+  $("#btnaddpay-n").attr("disabled", val);
 
   /*============= INSURER INFO ============*/
-  $("#cboinstype").attr("disabled",val);
-  $("#cboinsco").attr("disabled",val);
-  $("#dpstartdate").attr("disabled",val);
-  $("#txtpolicyno").attr("disabled",val);
-  $("#dpissuedate").attr("disabled",val);
-  $("#dppexpiredate").attr("disabled",val);
-  $("#cbomortgage").attr("disabled",val);
+  $("#cboinstype").attr("disabled", val);
+  $("#cboinsco").attr("disabled", val);
+  $("#dpstartdate").attr("disabled", val);
+  $("#txtpolicyno").attr("disabled", val);
+  $("#dpissuedate").attr("disabled", val);
+  $("#dppexpiredate").attr("disabled", val);
+  $("#cbomortgage").attr("disabled", val);
   // $("#txtmortaddress").attr("disabled",val);
   // $("#promoNo").prop("disabled", val);
   // $("#promoYes").prop("disabled", val);
@@ -6715,20 +6740,20 @@ function FormDisablePay(val) {
     $("#btnupdatepay").hide();
   }
 
-  
+
   var balance = $("#tfoot_balance").text();
   balance = RemoveNumFormat(balance);
 
   // if (editpay == true) {
-    if (val === true) {
+  if (val === true) {
+    $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();
+  } else {
+    if (balance <= 0) {
       $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();
     } else {
-      if (balance <= 0) {
-        $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeOut();
-      } else {
-        $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeIn();
-      }
+      $(".pay-section, .term-amount-section, .btnadd-section, #btnupdatepay").fadeIn();
     }
+  }
   // }
 
   var tablepay = $("#table_payment").DataTable();
@@ -6738,19 +6763,19 @@ function FormDisablePay(val) {
     tablepay.column('.col-action').visible(true);
   }
   tablepay.columns.adjust().draw(false);
-    
-  $("#cbopaytype").attr("disabled",val);
-  $("#cboewallet").attr("disabled",val);
-  $("#txtccno").attr("disabled",val);
-  $("#txtccholder").attr("disabled",val);
-  $("#txtccexpirydate").attr("disabled",val);
-  $("#txtccvv").attr("disabled",val);
-  $("#txtpdcno").attr("disabled",val);
-  $("#txtpdcholdername").attr("disabled",val);
-  $("#txtpdcbankname").attr("disabled",val);
-  $("#dppdccheckdate").attr("disabled",val);
-  $("#txtpayamount").attr("disabled",val);
-  $("#btnaddpay").attr("disabled",val);
+
+  $("#cbopaytype").attr("disabled", val);
+  $("#cboewallet").attr("disabled", val);
+  $("#txtccno").attr("disabled", val);
+  $("#txtccholder").attr("disabled", val);
+  $("#txtccexpirydate").attr("disabled", val);
+  $("#txtccvv").attr("disabled", val);
+  $("#txtpdcno").attr("disabled", val);
+  $("#txtpdcholdername").attr("disabled", val);
+  $("#txtpdcbankname").attr("disabled", val);
+  $("#dppdccheckdate").attr("disabled", val);
+  $("#txtpayamount").attr("disabled", val);
+  $("#btnaddpay").attr("disabled", val);
 
   $(".box-body").validator('reset');
 }
@@ -6774,9 +6799,9 @@ function FormDisableNetRem(val) {
     $("#btncancelnetrem").hide();
     $("#btnupdatenetrem").hide();
   }
-  
-  $("#txtinsgpremium").attr("disabled",val);
-  $("#txtnetrem").attr("disabled",val);
+
+  $("#txtinsgpremium").attr("disabled", val);
+  $("#txtnetrem").attr("disabled", val);
 
   $(".box-body").validator('reset');
 }
@@ -6800,9 +6825,9 @@ function FormDisableStatus(val) {
     $("#btncancelstatus").hide();
     $("#btnupdatestatus").hide();
   }
-  
-  $("#cbotransstatus").attr("disabled",val);
-  $("#txttranssremarks").attr("disabled",val);
+
+  $("#cbotransstatus").attr("disabled", val);
+  $("#txttranssremarks").attr("disabled", val);
 
   $(".box-body").validator('reset');
 }
@@ -6826,7 +6851,7 @@ function FormDisableCall(val) {
     $("#btncancelcall").hide();
     $("#btnupdatecall").hide();
   }
-  
+
   $("#cbomodecomm").attr("disabled", val);
 
   $("#cbocallstatus").attr("disabled", val);
@@ -6854,7 +6879,7 @@ function FormDisableCall(val) {
     $("#div_promised_pay_date").hide();
     $("#dpppdate").val("");
   }
-  
+
   $("#txtcallremarks").attr("disabled", val);
 
   $(".box-body").validator('reset');
@@ -6975,7 +7000,7 @@ function FormClearPay() {
   $(".box-body").validator('reset');
 }
 
-function formClearSummary(){
+function formClearSummary() {
   $(".txtcustno_summary").val("");
   $(".txtcustnoupload_summary").val("");
   $(".cbogroup_summary").val("");
@@ -7083,8 +7108,8 @@ function getAmPmTime(twentyFourHourString) {
   const minuteStr = minutes;
   const secondStr = ('0' + seconds).slice(-2);
 
-  return hasSeconds ? `${hourStr}:${minuteStr}:${secondStr} ${period}` 
-                    : `${hourStr}:${minuteStr} ${period}`;
+  return hasSeconds ? `${hourStr}:${minuteStr}:${secondStr} ${period}`
+    : `${hourStr}:${minuteStr} ${period}`;
   // → 12 Hour "HH:MM:SS AMPM"
 }
 
@@ -7115,57 +7140,57 @@ function getTwentyFourHourTime(amPmString) {
 function getSaveDateFormatted(DateString) {
   const d = new Date(DateString);
   if (isNaN(d.getTime())) return ""; // invalid date
-  
+
   const year = d.getFullYear();
   const month = ('0' + (d.getMonth() + 1)).slice(-2);
   const day = ('0' + d.getDate()).slice(-2);
-  
+
   return `${year}-${month}-${day}`;
   // → "YYYY-MM-DD"
 }
 
 function getDateFormatted(dateString) {
-    if (!dateString) return "";        // handles null, undefined, ""
-    
-    const d = new Date(dateString);
-    if (isNaN(d)) return "";
+  if (!dateString) return "";        // handles null, undefined, ""
 
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = d.toLocaleString('en-GB', { month: 'short' });
-    const year = d.getFullYear();
+  const d = new Date(dateString);
+  if (isNaN(d)) return "";
 
-    return `${day}-${month}-${year}`;
-    // → "DD-MMM-YYYY"
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = d.toLocaleString('en-GB', { month: 'short' });
+  const year = d.getFullYear();
+
+  return `${day}-${month}-${year}`;
+  // → "DD-MMM-YYYY"
 }
 
 function getSaveDateTimeFormatted(DateTimeString) {
-    const d = new Date(DateTimeString);
+  const d = new Date(DateTimeString);
 
-    // Check if date is valid
-    if (isNaN(d.getTime())) {
-        return ""; // Return empty string for invalid input
-    }
+  // Check if date is valid
+  if (isNaN(d.getTime())) {
+    return ""; // Return empty string for invalid input
+  }
 
-    // Format date parts
-    const year = d.getFullYear();
-    const month = ('0' + (d.getMonth() + 1)).slice(-2);
-    const day = ('0' + d.getDate()).slice(-2);
+  // Format date parts
+  const year = d.getFullYear();
+  const month = ('0' + (d.getMonth() + 1)).slice(-2);
+  const day = ('0' + d.getDate()).slice(-2);
 
-    // Format time parts
-    const hours = ('0' + d.getHours()).slice(-2);
-    const minutes = ('0' + d.getMinutes()).slice(-2);
-    const seconds = ('0' + d.getSeconds()).slice(-2);
+  // Format time parts
+  const hours = ('0' + d.getHours()).slice(-2);
+  const minutes = ('0' + d.getMinutes()).slice(-2);
+  const seconds = ('0' + d.getSeconds()).slice(-2);
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    // → "YYYY-MM-DD HH:mm:ss"
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  // → "YYYY-MM-DD HH:mm:ss"
 }
 
 function getDisplayDateTimeFormatted(DateTimeString) {
   // Check for null, undefined, empty, or whitespace-only
   if (!DateTimeString || String(DateTimeString).trim() === "") {
-      return "";
+    return "";
   }
-  
+
   const d = new Date(DateTimeString);
 
   // Check for invalid date
@@ -7175,7 +7200,7 @@ function getDisplayDateTimeFormatted(DateTimeString) {
 
   // Months in short text format
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const day = pad(d.getDate());
   const month = months[d.getMonth()];
@@ -7190,80 +7215,80 @@ function getDisplayDateTimeFormatted(DateTimeString) {
 }
 
 function isNumberKey(txt, evt) {
-    const char = evt.key;
+  const char = evt.key;
 
-    // Allow control keys (delete, arrows, tab, esc, enter)
-    if (
-        evt.ctrlKey || evt.metaKey ||
-        ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Escape", "Enter"].includes(char)
-    ) {
-        return true;
-    }
+  // Allow control keys (delete, arrows, tab, esc, enter)
+  if (
+    evt.ctrlKey || evt.metaKey ||
+    ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Escape", "Enter"].includes(char)
+  ) {
+    return true;
+  }
 
-    // Allow digits 0–9
-    if (/[0-9]/.test(char)) return true;
+  // Allow digits 0–9
+  if (/[0-9]/.test(char)) return true;
 
-    // Allow ONE decimal point, but not as the first character
-    if (char === ".") {
-        if (txt.value.includes(".")) return false;
-        if (txt.value === "" || txt.value === "-" || txt.value === "+") return false; // don't allow "."
-        return true;
-    }
+  // Allow ONE decimal point, but not as the first character
+  if (char === ".") {
+    if (txt.value.includes(".")) return false;
+    if (txt.value === "" || txt.value === "-" || txt.value === "+") return false; // don't allow "."
+    return true;
+  }
 
-    // Allow negative or positive sign only at the start
-    if (char === "-" || char === "+") {
-        // Only allow at beginning & only one "-"
-        if (txt.value.length === 0) return true;
-        return false;
-    }
-
-    // Block all other characters
+  // Allow negative or positive sign only at the start
+  if (char === "-" || char === "+") {
+    // Only allow at beginning & only one "-"
+    if (txt.value.length === 0) return true;
     return false;
+  }
+
+  // Block all other characters
+  return false;
 }
 
 function NumberFormat(value, decimals = 2) {
-    if (value === null || value === undefined) return "";
+  if (value === null || value === undefined) return "";
 
-    // Remove formatting before parsing
-    value = value.toString().replace(/,/g, "");
+  // Remove formatting before parsing
+  value = value.toString().replace(/,/g, "");
 
-    let num = parseFloat(value);
+  let num = parseFloat(value);
 
-    if (isNaN(num)) return "";
+  if (isNaN(num)) return "";
 
-    let fixed = num.toFixed(decimals);
+  let fixed = num.toFixed(decimals);
 
-    return fixed.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return fixed.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function RemoveNumFormat(text) {
-    // If null, undefined, or empty → return 0
-    if (text === null || text === undefined || text === "") return 0;
+  // If null, undefined, or empty → return 0
+  if (text === null || text === undefined || text === "") return 0;
 
-    // Remove commas and trim spaces
-    let raw = text.toString().replace(/,/g, "").trim();
+  // Remove commas and trim spaces
+  let raw = text.toString().replace(/,/g, "").trim();
 
-    // If still empty → return 0
-    if (raw === "") return 0;
+  // If still empty → return 0
+  if (raw === "") return 0;
 
-    // Convert to number
-    let num = Number(raw);
+  // Convert to number
+  let num = Number(raw);
 
-    // If cannot convert → return 0
-    if (isNaN(num)) return 0;
+  // If cannot convert → return 0
+  if (isNaN(num)) return 0;
 
-    // If integer → return integer
-    if (Number.isInteger(num)) {
-        return num;
-    }
-
-    // Strip unnecessary decimals (like 100.0 → 100)
-    if (Number(num.toFixed(0)) === num) {
-        return Number(num.toFixed(0));
-    }
-
-    // Otherwise, return numeric value as-is
+  // If integer → return integer
+  if (Number.isInteger(num)) {
     return num;
+  }
+
+  // Strip unnecessary decimals (like 100.0 → 100)
+  if (Number(num.toFixed(0)) === num) {
+    return Number(num.toFixed(0));
+  }
+
+  // Otherwise, return numeric value as-is
+  return num;
 }
 
 // Replace If Negative Number To ()
