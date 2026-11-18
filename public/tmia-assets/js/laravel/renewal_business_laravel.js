@@ -1514,9 +1514,13 @@ function LoadStatusCounts() {
   $.ajax({
     type: "POST",
     url: window.loadData.getRBCount,
+    data: function(d){
+      d.datefrom = $('#dpdatefrom').val() ?? '';
+      d.dateto = $('#dpdateto').val() ?? '';
+    },
     dataType: "json",
     success: function (data) {
-      console.log(data);
+      console.log('check expiring count', data);
       $("#pending-counts").text(NumberFormat(data.Pending_Counts, 0));
       $("#expiring-counts").text(NumberFormat(data.Expiring_Counts, 0));
     }
@@ -1539,100 +1543,7 @@ function LoadTransactionData() {
     $('#table_trans').DataTable().ajax.reload(null, false);
     return;
   }
-
-  //============== Table columns set separately before populating in attempt to create logic within the table columns ============//
-  let tableColumns = [
-    { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
-    {
-      data: "Trans_Date",
-      name: "Trans_Date",
-      defaultContent: "- - -",
-      render: function (data, type) {
-        if (!data) return "- - -";
-        return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
-      }
-    },
-
-    {
-      data: "Policy_Expiration",
-      name: "Policy_Expiration",
-      defaultContent: "- - -",
-      render: function (data, type) {
-        if (!data) return "- - -";
-        return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-      }
-    },
-
-    {
-      data: "Issue_Date",
-      name: "Issue_Date",
-      defaultContent: "- - -",
-      render: function (data, type) {
-        if (!data) return "- - -";
-        return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
-      }
-    },
-
-    { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-    { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-
-    // Flattened Columns (Matches leftJoin backend)
-    { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-    { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-
-    { data: "VIN", name: "VIN", defaultContent: "- - -" },
-    { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-    { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
-    { data: "Model", name: "Model", defaultContent: "- - -" },
-    { data: "Variant", name: "Variant", defaultContent: "- - -" },
-
-    // Main Table Columns
-    {
-      data: "Insurance_Company",
-      name: "Insurance_Company",
-      defaultContent: "- - -"
-    },
-
-
-    {
-      data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-      name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-      defaultContent: "- - -"
-    },
-
-
-    { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-    { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-
-
-    {
-      data: "button",
-      name: "button",
-      orderable: false,
-      searchable: false,
-      defaultContent: "- - -"
-    }
-
-
-  ];
-
-  // if( ulevel_declartion === 1 ){
-  //     tableColumns.push({
-  //         data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
-  //         name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
-  //         defaultContent: "- - -" 
-  //     }
-  // );}
-
-  // if( ulevel_declartion === 1 ){
-  //     tableColumns.push({
-  //         data: "button",            
-  //         name: "button",
-  //         orderable: false,
-  //         searchable: false,
-  //         defaultContent: "- - -" 
-  //     });
-  // }
+  
 
   table = $('#table_trans').DataTable({
     language: {
@@ -1658,7 +1569,78 @@ function LoadTransactionData() {
       }
     },
     order: [[1, 'desc']],
-    columns: tableColumns,
+    columns: [
+          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+          {
+            data: "Trans_Date",
+            name: "Trans_Date",
+            defaultContent: "- - -",
+            render: function (data, type) {
+              if (!data) return "- - -";
+              return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+            }
+          },
+
+          {
+            data: "Policy_Expiration",
+            name: "Policy_Expiration",
+            defaultContent: "- - -",
+            render: function (data, type) {
+              if (!data) return "- - -";
+              return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+            }
+          },
+
+          {
+            data: "Issue_Date",
+            name: "Issue_Date",
+            defaultContent: "- - -",
+            render: function (data, type) {
+              if (!data) return "- - -";
+              return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+            }
+          },
+
+          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
+          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+
+          // Flattened Columns (Matches leftJoin backend)
+          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+
+          { data: "VIN", name: "VIN", defaultContent: "- - -" },
+          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+          { data: "Model", name: "Model", defaultContent: "- - -" },
+          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+
+          // Main Table Columns
+          {
+            data: "Insurance_Company",
+            name: "Insurance_Company",
+            defaultContent: "- - -"
+          },
+
+
+          {
+            data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
+            name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
+            defaultContent: "- - -"
+          },
+
+
+          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
+          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+
+
+          {
+            data: "button",
+            name: "button",
+            orderable: false,
+            searchable: false,
+            defaultContent: "- - -"
+          }
+    ],
     initComplete: function () {
       $('#modal-show-expiring-policies').iziModal('open');
     },
@@ -1859,6 +1841,7 @@ function initExpiringTable() {
       renewal_flag = 1;
       near_expiration_flag = 1;
 
+      policy_source = row.Source
       xcustno = row.Customer_No;
       xcustnoupload = row.Customer_No;
       xvin = row.VIN;
@@ -1871,13 +1854,14 @@ function initExpiringTable() {
   // 3) DOUBLE CLICK: confirm selection and close the modal
   $('#table_expiring_list tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
     near_expiration_flag = 1;
-    $('#modal-show-expiring-policies').iziModal('close');
 
+    $('#modal-show-expiring-policies').iziModal('close');
     $('#btnnbselect').trigger('click');
     // $('#btncustselect').trigger('click');
+
   });
 
-
+  
   /**
    *  
    *  Expired list  
@@ -2007,7 +1991,9 @@ function initExpiringTable() {
 
     renewal_flag = 1;
     expired_flag = 1;
-    policy_source = row.Source;
+    policy_source = row;
+
+    console.log('getting policy if nb or rb', policy_source);
 
     xcustno = row.Customer_No;
     xcustnoupload = row.Customer_No;
@@ -2161,7 +2147,7 @@ $(document).on("change", "#cboinsco", function () {
 
 $(document).on("change", "#dpstartdate", function () {
   let value_input = $(this).val();
-  console.log('value start date',value_input);
+  
   $("#dpstartdate_summary").val(value_input);
 });
 
@@ -2172,7 +2158,6 @@ $(document).on("change", "#txtpolicyno", function () {
 
 $(document).on("change", "#dpissuedate", function () {
   let value_input = $(this).val();
-  console.log('value issue date',value_input);
   $("#dpissuedate_summary").val(value_input);
 });
 
@@ -2612,8 +2597,6 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco, .cboinsco", value.Insurance_Desc, value.Insurance_Desc);
-
-        console.log("loading here for LoadInsurerInfo");
 
         $("#cboinstype_summary").val(value.Insurance_Type);
         $("#cboinsco_summary, #cboprevinsco").val(value.Insurance_Desc);
@@ -3983,6 +3966,34 @@ $(document).on("click", "#btnupdatepay", function () {
 });
 
 
+//Button View 
+$(document).on("click", "#viewpending", function () {
+  viewpending = true;
+  viewexpiring = false;
+  LoadTransactionData();
+  LoadStatusCounts();
+});
+
+$(document).on("click", "#viewexpiring", function () {
+  viewexpiring = true;
+  viewpending = false;
+
+  console.log('check button');
+
+  LoadTransactionData();
+  LoadStatusCounts();
+});
+
+//Button View 
+$(document).on("click", "#btnrefresh", function () {
+  viewpending = false;
+  viewexpiring = false;
+  $("#txtsearch").val("");
+  LoadTransactionData();
+});
+
+
+
 $(document).on("change", "#cbopaytype-n", function () {
   var paytype = $(this).val();
 
@@ -4801,29 +4812,6 @@ $(document).on("blur", "#txtvin", function () {
       });
     }
   });
-});
-
-//Button View 
-$(document).on("click", "#viewpending", function () {
-  viewpending = true;
-  viewexpiring = false;
-  LoadTransactionData();
-  LoadStatusCounts();
-});
-
-$(document).on("click", "#viewexpiring", function () {
-  viewexpiring = true;
-  viewpending = false;
-  LoadTransactionData();
-  LoadStatusCounts();
-});
-
-//Button View 
-$(document).on("click", "#btnrefresh", function () {
-  viewpending = false;
-  viewexpiring = false;
-  $("#txtsearch").val("");
-  LoadTransactionData();
 });
 
 /*====== KEY UP ======*/
@@ -6240,6 +6228,8 @@ $(document).on("click", "#btnsubmit", function () {
       insuranceno
   }
 
+  console.log(flagValues['policy_source']);
+
   // ======================================================
   // Helper Utilities
   // ======================================================
@@ -6481,8 +6471,6 @@ $(document).on("click", "#btnsubmit", function () {
     // mortaddress: getUpper("#txtmortaddress"),
     // selectedPromo: $('input[name="promo"]:checked').val() === "YES" ? 1 : 0
   };
-
-  console.log('insurer date', insurerFields);
 
   if (!runValidation([
     { value: insurerFields.instype, selector: "#cboinstype", message: "Please fill out Insurance Type." },
@@ -7154,7 +7142,6 @@ function getTwentyFourHourTime(amPmString) {
 }
 
 function getSaveDateFormatted(DateString) {
-  console.log('Save date format',DateString);
   const d = new Date(DateString);
   if (isNaN(d.getTime())) return ""; // invalid date
 

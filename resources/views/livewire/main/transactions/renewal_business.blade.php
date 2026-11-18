@@ -2454,6 +2454,7 @@
                 <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration</a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
                 <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
+                <li class=""><a href="#completedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Completed</a></li>
               </ul>
 
               <div class="tab-content" style="mt-1">
@@ -2579,6 +2580,9 @@
                           </div>
                       </div>
                   </div>
+
+
+
               </div>
 
               
@@ -2645,8 +2649,7 @@ function printReceipt(divId) {
 
         getExpiringPolicies: @json(route('renewal-business.expiring-transactions')),
         getExpiredPolicies: @json(route('renewal-business.expired-transactions')),
-        getRenewedPolicies: @json(route('renewal-business.renewed-transactions')),
-        
+        getRenewedPolicies: @json(route('renewal-business.renewed-transactions'))
     }
 
     

@@ -61,7 +61,6 @@ class NewBusinessController extends Controller
             ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
             ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
             ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No');
-            // ->groupBy('t.Customer_No');
 
             // 2. Extract Request Inputs
             $viewPending  = $request->boolean('viewpending');
@@ -75,7 +74,7 @@ class NewBusinessController extends Controller
             if ($viewPending) {
                 $query->where('t.Trans_Status', 'PENDING');
             } elseif ($viewExpiring) {
-                $query->whereBetween('t.Policy_Expiration', [
+                $query->where('t.Trans_Status', '!=', 'COMPLETED')->whereBetween('t.Policy_Expiration', [
                     now()->startOfDay(),
                     now()->addDays(90)->endOfDay(),
                 ]);
@@ -151,7 +150,7 @@ class NewBusinessController extends Controller
                     CASE
                         WHEN Policy_Expiration BETWEEN CURDATE()
                         AND DATE_ADD(CURDATE(), INTERVAL 90 DAY)
-                        THEN 1
+                        THEN 1 WHERE Trans_Status AND != 'COMPLETED'
                     END
                 ) AS Expiring_Counts
             ")

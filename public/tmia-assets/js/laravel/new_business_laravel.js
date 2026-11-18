@@ -1352,7 +1352,8 @@ $(document).ready( function () {
 
   btnselect = 'A';
 
-  LoadStatusCounts();
+  
+  ();
 
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
@@ -1391,12 +1392,11 @@ function LoadTransactionData() {
   // };
 
   if ($.fn.DataTable.isDataTable('#table_trans')) {
-  // Dynamically reload existing table instance without destroying DOM
-    // Reload DataTables via AJAX without resetting pagination
-    $('#table_trans').DataTable().ajax.reload(null, false);
-    return;
+      // Dynamically reload existing table instance without destroying DOM
+      // Reload DataTables via AJAX without resetting pagination
+      $('#table_trans').DataTable().ajax.reload(null, false);
+      return;
   }  
-
 
   table = $('#table_trans').DataTable({
     language: {
