@@ -388,7 +388,7 @@ class RenewalBusinessController extends Controller
                     // Generate Unique Customer No
                     $yearc = date('Y');
                     $prefixc = "TMIA-{$yearc}-";
-
+ 
                     $lastCustomer = CustomerInformation::where('Customer_No', 'LIKE', "{$prefixc}%")
                         ->lockForUpdate()
                         ->orderBy('Customer_No', 'desc')
@@ -480,6 +480,9 @@ class RenewalBusinessController extends Controller
                     ]);
                 }
 
+                $startdate = Carbon::createFromFormat('d-F-Y', $request['startdate'])->format('Y-m-d');
+                $issuedate = Carbon::createFromFormat('d-F-Y', $request['issuedate'])->format('Y-m-d');
+                $policyExpiration = Carbon::createFromFormat('m/d/Y', $request->input('pexpiredate'))->format('Y-m-d');
 
 
 
@@ -497,10 +500,10 @@ class RenewalBusinessController extends Controller
                     'Month_Pay' => (float) $request->input('monthpay', 0),
                     'Insurance_Type' => $request->input('instype', ''),
                     'Insurance_Company' => $request->input('insco', ''),
-                    'Start_Date' => $request->input('startdate'),
+                    'Start_Date' => $startdate,
                     'Policy_No' => $request->input('policyno', ''),
-                    'Issue_Date' => $request->input('issuedate'),
-                    'Policy_Expiration' => $request->input('pexpiredate'),
+                    'Issue_Date' => $issuedate,
+                    'Policy_Expiration' => $policyExpiration,
                     'Mortgage' => $request->input('mortgage', ''),
                     'Customer_No' => $custNo,
                     'VIN' => $vin,

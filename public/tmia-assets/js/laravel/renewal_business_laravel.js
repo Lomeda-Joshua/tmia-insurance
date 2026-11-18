@@ -1376,7 +1376,7 @@ $(document).ready(function () {
     autoclose: true,
     format: 'dd-MM-yyyy',
     todayHighlight: true
-  });
+  }).datepicker('setDate', new Date());
 
   $("#dppexpiredate").datepicker({
     autoclose: true,
@@ -1387,7 +1387,7 @@ $(document).ready(function () {
   /*--------------------- CALL STATUS --------------------*/
   $("#dpppdate").datepicker({
     autoclose: true,
-    format: 'dd-MM-yyyy',
+    format: 'dd-mm-yyyy',
     todayHighlight: true
   });
 
@@ -1873,8 +1873,8 @@ function initExpiringTable() {
     near_expiration_flag = 1;
     $('#modal-show-expiring-policies').iziModal('close');
 
-    // $('#btncustselect').trigger('click');
     $('#btnnbselect').trigger('click');
+    // $('#btncustselect').trigger('click');
   });
 
 
@@ -2161,6 +2161,7 @@ $(document).on("change", "#cboinsco", function () {
 
 $(document).on("change", "#dpstartdate", function () {
   let value_input = $(this).val();
+  console.log('value start date',value_input);
   $("#dpstartdate_summary").val(value_input);
 });
 
@@ -2171,6 +2172,7 @@ $(document).on("change", "#txtpolicyno", function () {
 
 $(document).on("change", "#dpissuedate", function () {
   let value_input = $(this).val();
+  console.log('value issue date',value_input);
   $("#dpissuedate_summary").val(value_input);
 });
 
@@ -2611,13 +2613,14 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco, .cboinsco", value.Insurance_Desc, value.Insurance_Desc);
 
-        console.log('insurer info', value);
+        console.log("loading here for LoadInsurerInfo");
 
         $("#cboinstype_summary").val(value.Insurance_Type);
         $("#cboinsco_summary, #cboprevinsco").val(value.Insurance_Desc);
         $("#txtpolicyno_summary").val(value.Policy_No);
         $("#dpissuedate_summary").val(value.Issue_Date);
         $("#cbomortgage_summary").val(value.Mortgage);
+        $("#txtpolicyno").val(value.Policy_No);
 
 
         // Safe date handling with default to today
@@ -2627,7 +2630,7 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
           // Check if valid date format
           if (!isNaN(safeSDate.getTime())) {
             $("#dpstartdate").datepicker("setDate", safeSDate);
-          } else {
+          } else { 
             // Fallback to today if string is invalid date
             $("#dpstartdate").datepicker("setDate", new Date());
           }
@@ -2638,16 +2641,27 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
         }
 
 
-        $("#txtpolicyno").val(value.Policy_No);
+      
+        // Safe date handling with default to issue date
 
-        // Safe date handling
-        if (value.Issue_Date) {
-          const safeIDate = new Date(value.Issue_Date) ?? new Date();
-          if (!isNaN(safeIDate)) {
-            // $("#dpissuedate").datepicker("setDate", safeIDate);
+
+        if (value && value.Issue_Date) {
+          const safeSDate = new Date(value.Issue_Date);
+
+          // Check if valid date format
+          if (!isNaN(safeSDate.getTime())) {
+            $("#dpissuedate").datepicker("setDate", safeSDate);
+          } else {
+            // Fallback to today if string is invalid date
             $("#dpissuedate").datepicker("setDate", new Date());
           }
+
+        } else {
+          // Default to today if Start_Date is null/undefined/empty
+          $("#dpissuedate").datepicker("setDate", new Date());
         }
+
+
 
         // Safe date handling
         if (value.Policy_Expiration) {
@@ -2676,7 +2690,7 @@ $(document).on("change", "input[name='rdpolicyaction']", function () {
     // --- TO ENABLE THE 4 INPUTS ---
     $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
     $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
-    $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
+    // $("#dpstartdate").prop("disabled", false).val('').trigger("change.select2");
     $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
     $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
     $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
@@ -3471,12 +3485,12 @@ function LoadPreviousInsuranceCo(data) {
     $("#txtpolicyno, #txtpolicyno_summary").val(latestItem.Policy_No || "");
 
     // Set datepicker fields cleanly
-    if (latestItem.Start_Date) {
-      $("#dpstartdate").val(latestItem.Start_Date);
-      if ($.fn.datepicker) {
-        $("#dpstartdate").datepicker("setDate", new Date(latestItem.Start_Date));
-      }
-    }
+    // if (latestItem.Start_Date) {
+    //   $("#dpstartdate").val(latestItem.Start_Date);
+    //   if ($.fn.datepicker) {
+    //     $("#dpstartdate").datepicker("setDate", new Date(latestItem.Start_Date));
+    //   }
+    // }
 
     if (latestItem.Issue_Date) {
       $("#dpissuedate").val(latestItem.Issue_Date);
@@ -5243,9 +5257,9 @@ const parseSafeDate = (value) => {
 $(document).on("changeDate", "#dpreldate", function () {
   const reldate = parseSafeDate($(this).val());
 
-  if (reldate) {
-    $("#dpstartdate").datepicker("setDate", reldate);
-  }
+  // if (reldate) {
+  //   $("#dpstartdate").datepicker("setDate", reldate);
+  // }
 });
 
 $(document).on("changeDate", "#dpstartdate", function () {
@@ -6459,14 +6473,16 @@ $(document).on("click", "#btnsubmit", function () {
   const insurerFields = {
     instype: getVal("#cboinstype"),
     insco: getVal("#cboinsco"),
-    startdate: getDate("#dpstartdate"),
+    startdate: $("#dpstartdate").val(),
     policyno: getUpper("#txtpolicyno"),
-    issuedate: getDate("#dpissuedate"),
-    pexpiredate: getDate("#dppexpiredate"),
+    issuedate: $("#dpissuedate").val(),
+    pexpiredate: $("#dppexpiredate").val(),
     mortgage: getVal("#cbomortgage"),
     // mortaddress: getUpper("#txtmortaddress"),
     // selectedPromo: $('input[name="promo"]:checked').val() === "YES" ? 1 : 0
   };
+
+  console.log('insurer date', insurerFields);
 
   if (!runValidation([
     { value: insurerFields.instype, selector: "#cboinstype", message: "Please fill out Insurance Type." },
@@ -6950,13 +6966,13 @@ function FormClear() {
   // $("#chknonvat").prop("checked", false);
 
   /*============= INSURER INFO ============*/
-  $("#cboinstype").val("").trigger('change.select2');
-  $("#cboinsco").val("").trigger('change.select2');
-  $("#dpstartdate").val("");
-  $("#txtpolicyno").val("");
-  $("#dpissuedate").val("");
-  $("#dppexpiredate").val("");
-  $("#cbomortgage").val("").trigger('change.select2');
+  // $("#cboinstype").val("").trigger('change.select2');
+  // $("#cboinsco").val("").trigger('change.select2');
+  // $("#dpstartdate").val("");
+  // $("#txtpolicyno").val("");
+  // $("#dpissuedate").val("");
+  // $("#dppexpiredate").val("");
+  // $("#cbomortgage").val("").trigger('change.select2');
   // $("#txtmortaddress").val("");
   // $("input[name='rdinspromo'][value='NO']").prop("checked", true);
 
@@ -7138,6 +7154,7 @@ function getTwentyFourHourTime(amPmString) {
 }
 
 function getSaveDateFormatted(DateString) {
+  console.log('Save date format',DateString);
   const d = new Date(DateString);
   if (isNaN(d.getTime())) return ""; // invalid date
 
