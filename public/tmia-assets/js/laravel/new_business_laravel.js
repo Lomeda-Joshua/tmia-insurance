@@ -1351,9 +1351,7 @@ $(document).ready( function () {
   container.appendChild(createButton("[SPECIAL CHAR]"));
 
   btnselect = 'A';
-
   
-  ();
 
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
@@ -1485,6 +1483,9 @@ function LoadTransactionData() {
           }
           return data;
         }
+      },
+      {
+        targets: [1, 4, 5, 6, 7], className: 'copy-cell'
       }
     ]
   });
@@ -2735,6 +2736,45 @@ $('#table_trans tbody').on('click', '.btncall', function () {
   $("#txtsfcontactno").val(rowData.Contact_No || '');
   $("#txtsfvin").val(rowData.VIN || '');
 });
+
+// Event delegation: works after paging, sorting, searching, and AJAX redraws
+$('#table_trans tbody').on('click', 'td.copy-cell', function () {
+    var value = table.cell(this).data();   // raw data, not the HTML
+    copyToClipboard(value, this);
+});
+
+//============== COPY CELL delegation and function ============//
+function copyToClipboard(text, cellElement) {
+    text = String(text).trim();
+
+    function done() {
+        var $cell = $(cellElement);
+
+        // avoid stacking multiple badges on rapid clicks
+        if ($cell.find('.copied-text').length) return;
+
+        // visual feedback
+        $cell.addClass('copied');
+
+        var $msg = $('<span class="copied-text">Copied!</span>');
+        $cell.append($msg);
+
+        setTimeout(function () {
+            $msg.fadeOut(200, function () { $(this).remove(); });
+            $cell.removeClass('copied');
+        }, 1000);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done);
+    } else {
+        // Fallback for plain http:// (common on internal systems)
+        var $temp = $('<textarea>').val(text).appendTo('body').select();
+        document.execCommand('copy');
+        $temp.remove();
+        done();
+    }
+}
 ///////////////////////////////////////////////////////////////////
 
 /////////////// COMBO BOX EVENT ///////////////////

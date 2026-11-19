@@ -146,15 +146,14 @@ class NewBusinessController extends Controller
         $counts = NewBusiness::query()
             ->selectRaw("
                 COUNT(CASE WHEN Trans_Status = 'PENDING' THEN 1 END) AS Pending_Counts,
-                COUNT(
-                    CASE
-                        WHEN Policy_Expiration BETWEEN CURDATE()
-                        AND DATE_ADD(CURDATE(), INTERVAL 90 DAY)
-                        THEN 1 WHERE Trans_Status AND != 'COMPLETED'
-                    END
-                ) AS Expiring_Counts
-            ")
-            ->first();
+                COUNT(CASE
+                    WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY)
+                    AND Trans_Status != 'COMPLETED'
+                    THEN 1
+                END) AS Expiring_Counts
+            ")->first();
+
+        Log::info($counts);
 
         return response()->json([
             'Pending_Counts' => (int) $counts->Pending_Counts,

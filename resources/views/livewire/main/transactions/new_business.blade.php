@@ -146,6 +146,28 @@
         width: 100%;
       }
     }
+
+    td.copy-cell {
+          position: relative;
+          cursor: pointer;
+    }
+
+    .copied-text {
+          position: absolute;
+          top: -2px;
+          right: 6px;
+          padding: 1px 8px;
+          font-size: 12px;
+          color: #fff;
+          background: #28a745;
+          border-radius: 4px;
+          pointer-events: none;
+          z-index: 10;
+    }
+
+    td.copied { 
+        background: #d4edda !important; 
+    }
   </style>
 
   

@@ -19,7 +19,9 @@
           z-index: 10;
       }
 
-      td.copied { background: #d4edda !important; }
+      td.copied { 
+        background: #d4edda !important; 
+      }
   </style>
 
 <!-- Content Wrapper. Contains page content -->

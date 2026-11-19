@@ -227,7 +227,6 @@ $(document).ready(function () {
 
   $(document).on('closed', '#modal-add', function (e) {
     editinfo = false;
-    FormClear();
     FormDisable(true);
     $("#cboise").val("").trigger('change.select2');
     $(".box-body").validator('reset');
@@ -1475,6 +1474,8 @@ $(document).ready(function () {
   // Add "All" button first
   container.appendChild(createButton("ALL"));
 
+  loadBeforeExpirationCount();
+
   // Add A-Z buttons
   for (let i = 65; i <= 90; i++) {
     const letter = String.fromCharCode(i);
@@ -1520,9 +1521,9 @@ function LoadStatusCounts() {
     },
     dataType: "json",
     success: function (data) {
-      console.log('check expiring count', data);
-      $("#pending-counts").text(NumberFormat(data.Pending_Counts, 0));
-      $("#expiring-counts").text(NumberFormat(data.Expiring_Counts, 0));
+        console.log('check expiring count', data);
+        $("#pending-counts").text(NumberFormat(data.Pending_Counts, 0));
+        $("#expiring-counts").text(NumberFormat(data.Expiring_Counts, 0));
     }
   });
 }
@@ -1544,7 +1545,6 @@ function LoadTransactionData() {
     return;
   }
   
-
   table = $('#table_trans').DataTable({
     language: {
       processing: "Loading Transaction List..."
@@ -1655,6 +1655,9 @@ function LoadTransactionData() {
           }
           return data;
         }
+      },
+      {
+        targets: [0, 5, 7, 8, 9], className: 'copy-cell'
       }
     ]
   });
@@ -1664,7 +1667,6 @@ function LoadTransactionData() {
   viewexpiring = false;
 }
 //======================================//
-
 
 
 // * * * * * * New function added October 16, 2026 * * * * * * //
@@ -2241,26 +2243,30 @@ function LoadCustomerData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('click', 'tr').on('click', 'tr', function () {
-    // Remove selection from any previously selected row
-    table.$('tr.selected').removeClass('selected');
+        // Remove selection from any previously selected row
+        table.$('tr.selected').removeClass('selected');
 
-    // Highlight clicked row
-    $(this).addClass('selected');
+        // Highlight clicked row
+        $(this).addClass('selected');
 
-    // Optional: get Customer_No
-    xcustno = table.cell(this, 1).data();
-    console.log('Selected Customer No:', xcustno);
+        // Optional: get Customer_No
+        // console.log('Selected Customer No:', xcustno);
+        xcustno = table.cell(this, 1).data();
 
-    xcustnoupload = table.cell(this, 8).data();
-    xvin = table.cell(this, 9).data();
-    xcsno = table.cell(this, 10).data();
-    xplateno = table.cell(this, 11).data();
+        xcustnoupload = table.cell(this, 8).data();
+        xvin = table.cell(this, 9).data();
+        xcsno = table.cell(this, 10).data();
+        xplateno = table.cell(this, 11).data();
+
+        console.log('clearing formClear');
+        formClear();
   });
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-    $('#btncustselect').trigger("click");
+        $('#btncustselect').trigger("click");
   });
+
 }
 
 //============== Customer List FROM DAF/SAP ============//
@@ -2662,13 +2668,17 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
   });
 }
 
+$("input[name='rdpolicyaction']:checked").trigger("change");
 
 // Listen for changes on the radio action group
 $(document).on("change", "input[name='rdpolicyaction']", function () {
   let actionVal = $("input[name='rdpolicyaction']:checked").val();
 
+  console.log(actionVal);
+
   if (actionVal === "TRANSFER") {
-    window.showLoading("loading data...")
+
+    window.showLoading("loading data...");
 
     // --- TO ENABLE THE 4 INPUTS ---
     $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
@@ -3548,6 +3558,7 @@ $('#table_trans tbody').on('click', 'tr', function (event) {
     }
   */
   rowindex = table.row(this).index();
+
 });
 
 $('#table_trans tbody').on('click', '.btncall', function () {
@@ -3573,7 +3584,50 @@ $('#table_trans tbody').on('click', '.btncall', function () {
   $("#txtsfvin").val(rowData.VIN || '');
 });
 
+// Event delegation: works after paging, sorting, searching, and AJAX redraws
+$('#table_trans tbody').on('click', 'td.copy-cell', function () {
+    var value = table.cell(this).data();   // raw data, not the HTML
+    copyToClipboard(value, this);
+});
+
+//============== COPY CELL delegation and function ============//
+function copyToClipboard(text, cellElement) {
+    text = String(text).trim();
+
+    function done() {
+        var $cell = $(cellElement);
+
+        // avoid stacking multiple badges on rapid clicks
+        if ($cell.find('.copied-text').length) return;
+
+        // visual feedback
+        $cell.addClass('copied');
+
+        var $msg = $('<span class="copied-text">Copied!</span>');
+        $cell.append($msg);
+
+        setTimeout(function () {
+            $msg.fadeOut(200, function () { $(this).remove(); });
+            $cell.removeClass('copied');
+        }, 1000);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done);
+    } else {
+        // Fallback for plain http:// (common on internal systems)
+        var $temp = $('<textarea>').val(text).appendTo('body').select();
+        document.execCommand('copy');
+        $temp.remove();
+        done();
+    }
+}
 ///////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 /////////////// COMBO BOX EVENT ///////////////////
 $(document).on('focus', '.select2.select2-container', function (e) {
@@ -3966,6 +4020,25 @@ $(document).on("click", "#btnupdatepay", function () {
 });
 
 
+// Tab count 
+function loadBeforeExpirationCount() {
+  $.ajax({
+    url: window.loadData.policyStatus,   // <-- your endpoint
+    type: "POST",                               // or "GET"
+    dataType: "json",
+    data: { days: 90 },                         // <-- any params you need
+    success: function (res) {
+      // adjust to your response, e.g. res, res.count, res.d, res.data.length
+      $("#before_expiration_no").text(res.count ?? 0);
+    },
+    error: function () {
+      $("#before_expiration_no").text("0");
+    }
+  });
+}
+
+
+
 //Button View 
 $(document).on("click", "#viewpending", function () {
   viewpending = true;
@@ -3977,9 +4050,6 @@ $(document).on("click", "#viewpending", function () {
 $(document).on("click", "#viewexpiring", function () {
   viewexpiring = true;
   viewpending = false;
-
-  console.log('check button');
-
   LoadTransactionData();
   LoadStatusCounts();
 });
@@ -5520,7 +5590,8 @@ $(document).on("click", "#btnadd", function () {
   transid = '';
   editinfo = true;
   xnbno = '';
-  FormClear();
+  
+  console.log('step 1');
   FormDisable(false);
 
   $("#cboinstype").attr("disabled", false);
@@ -5528,8 +5599,10 @@ $(document).on("click", "#btnadd", function () {
   // renewal flag for determining the policy action and other elements existence
   renewal_flag = 0;
 
+
   $("#policy_actions").hide();
   $('.policyAction').hide();
+
 
   if (ulevel == 7) {
     $("#cboise").val(userid).trigger("change.select2");
@@ -5537,6 +5610,7 @@ $(document).on("click", "#btnadd", function () {
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
+
 
 });
 
@@ -5555,21 +5629,21 @@ $(document).on("input change", fields.join(", "), function () {
 
 $(document).on("click", "#btnselectise", function () {
   var selectise = $("#cboise").val();
-  if ($.trim(selectise) == '' || $.trim(selectise) == null || $.trim(selectise) == 'PLEASE SELECT') {
-    $("#cboise").focus();
-    swal({
-      title: "Warning",
-      text: "Please select Insurance Staff.",
-      type: "warning",
-      showCancelButton: false,
-      confirmButtonColor: "#00a65a",
-      confirmButtonText: "OK"
-    });
-    return;
-  }
+    if ($.trim(selectise) == '' || $.trim(selectise) == null || $.trim(selectise) == 'PLEASE SELECT') {
+      $("#cboise").focus();
+      swal({
+        title: "Warning",
+        text: "Please select Insurance Staff.",
+        type: "warning",
+        showCancelButton: false,
+        confirmButtonColor: "#00a65a",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
 
-  $('#modal-add').iziModal('open');
-  $('#modal-modify-ise').iziModal('close');
+    $('#modal-add').iziModal('open');
+    $('#modal-modify-ise').iziModal('close');
 });
 
 $(document).on("click", "#btncancelise", function () {
@@ -5908,10 +5982,10 @@ $(document).on("click", ".badge", function (e) {
 
     // AJAX JSON fetch
     $.ajax({
-      url: "renewal_business_status.php",
       type: "POST",
-      data: { insuranceno: insuranceno },
+      url: window.loadData.policyStatus,
       dataType: "json",
+      data: { insuranceno: insuranceno },
       success: function (data) {
         if (!tip || !data) return;
         $badge.data('loadedContent', data); // cache
@@ -6892,7 +6966,7 @@ function FormDisableCall(val) {
 
 /////////////////// ENABLED OR DISABLED /////////////////////
 function FormClear() {
-  // $("#cboise").val("").trigger('change.select2');
+  $("#cboise").val("").trigger('change.select2');
 
   /*============== CUSTOMER INFO ===========*/
   $("#txtcustno").val("");
@@ -6954,15 +7028,15 @@ function FormClear() {
   // $("#chknonvat").prop("checked", false);
 
   /*============= INSURER INFO ============*/
-  // $("#cboinstype").val("").trigger('change.select2');
-  // $("#cboinsco").val("").trigger('change.select2');
-  // $("#dpstartdate").val("");
-  // $("#txtpolicyno").val("");
-  // $("#dpissuedate").val("");
-  // $("#dppexpiredate").val("");
-  // $("#cbomortgage").val("").trigger('change.select2');
-  // $("#txtmortaddress").val("");
-  // $("input[name='rdinspromo'][value='NO']").prop("checked", true);
+  $("#cboinstype").val("").trigger('change.select2');
+  $("#cboinsco").val("").trigger('change.select2');
+  $("#dpstartdate").val("");
+  $("#txtpolicyno").val("");
+  $("#dpissuedate").val("");
+  $("#dppexpiredate").val("");
+  $("#cbomortgage").val("").trigger('change.select2');
+  $("#txtmortaddress").val("");
+  $("input[name='rdinspromo'][value='NO']").prop("checked", true);
 
   $(".box-body").validator('reset');
 }

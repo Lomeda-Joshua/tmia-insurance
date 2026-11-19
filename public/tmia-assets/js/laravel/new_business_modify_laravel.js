@@ -1300,9 +1300,11 @@ function LoadCustomerInfo(custno) {
           }
         }
 
+        console.log('loading customer',value.CMCode);
+
         $("#txtcustno").val(value.Customer_No);
         setSelectOption("#cbogroup", value.Group, value.Group);
-        if (value.Group === "INDIVIDUAL") {
+        if (value.Group == 1) {
           $(".customer-fleet-corp").fadeOut();
           $(".customer-individual").fadeIn();
           $(".birth-date").fadeIn();
@@ -1363,7 +1365,7 @@ function LoadVehicleInfo(vin) {
     url:"fetch_vehicle_info.php",
     data:{vin:vin},
     success: function(data){
-      var data = jQuery.parseJSON(data);
+      // var data = jQuery.parseJSON(data);
       $.each(data, function(i, value) {
 
         // Helper: set select option safely
@@ -2086,6 +2088,8 @@ function FetchCM(provcode,cmcode) {
       data: {provcode:provcode},
       url:window.formRoutes.cityMunicipalData,
       success: function(data) {
+
+          
             let options = '<option value="">PLEASE SELECT</option>';
 
             // Iterate over JSON objects and build <option> elements

@@ -249,16 +249,14 @@ class RenewalBusinessController extends Controller
     public function getTransactionMetrics(Request $request): JsonResponse
     {
         $current_user = Auth::user()->User_ID;
-        $from_date = Carbon::createFromFormat('m/d/Y', $request->input('datefrom'))->format('Y-m-d');
-        $to_date = Carbon::createFromFormat('m/d/Y', $request->input('dateto'))->format('Y-m-d');
+        // $from_date = Carbon::createFromFormat('m/d/Y', $request->input('datefrom'))->format('Y-m-d');
+        // $to_date = Carbon::createFromFormat('m/d/Y', $request->input('dateto'))->format('Y-m-d');
 
         $query = DB::table('transactions_rb')
             ->selectRaw("
                 COUNT(CASE WHEN Trans_Status = 'PENDING' THEN 1 END) AS Pending_Counts,
                 COUNT(CASE WHEN Policy_Expiration BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 90 DAY) THEN 1 END) AS Expiring_Counts
-            ", [ '', '', '']);
-
-            $query->where('transactions_rb.Trans_Status', '!=', 'RENEWED');
+            ");
 
         // User 1 sees everything; everyone else only sees their own records
         if ($current_user != 1) {
@@ -1357,6 +1355,61 @@ class RenewalBusinessController extends Controller
 
         // Alternatively, use download() to force immediate file download:
         // return $pdf->download("Invoice_{$insurance_no}.pdf");
+    }
+
+
+    private const STATUS_COLORS = [
+        'PENDING'            => 'label label-default',
+        'IN PROCESS'         => 'label label-primary',
+        'COMPLETED'          => 'label label-success',
+        'RENEWED'            => 'label label-success',
+        'PAYMENT PROCESSING' => 'label label-warning',
+        'PAYMENT CONFIRMED'  => 'label label-success',
+        'CANCELLED'          => 'label label-danger',
+        'PARTIALLY PAID'     => 'label bg-purple',
+        'FAILED TO ASSIGN'   => 'label bg-navy',
+    ];
+
+    public function getStatus(Request $request)
+    {
+        $request->validate(['insuranceno' => 'required',], ['insuranceno.required' => 'Missing insurance number']);
+        Log::info($request);
+        
+
+        $record = DB::table('transactions_rb as t')
+            ->leftJoin('approval_rb_status as s', 't.Insurance_No', '=', 's.Insurance_No')
+            ->leftJoin('user as u', 's.User_ID', '=', 'u.User_ID')
+            ->where('t.Insurance_No', $request->input('insuranceno'))
+            ->orderByDesc('s.Trans_Status_Date')
+            ->select(
+                't.Insurance_No',
+                's.User_ID',
+                'u.Display_Name',
+                's.Trans_Status',
+                's.Trans_Status_Remarks',
+                's.Trans_Status_Date'
+            )
+            ->first();
+
+        if (!$record) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+
+        $statusRaw  = trim($record->Trans_Status ?? '') ?: 'PENDING';
+        $labelClass = self::STATUS_COLORS[strtoupper($statusRaw)] ?? 'label label-default';
+
+        $statusDate = $record->Trans_Status_Date
+            ? Carbon::parse($record->Trans_Status_Date)->format('d M Y h:i:s A')
+            : '';
+
+        return response()->json([
+            'status'      => $statusRaw,
+            'labelClass'  => $labelClass,
+            'userId'      => $record->User_ID ?? '-',
+            'displayName' => $record->Display_Name ?? '-',
+            'statusDate'  => $statusDate,
+            'remarks'     => $record->Trans_Status_Remarks ?? 'No remarks',
+        ]);
     }
 
 

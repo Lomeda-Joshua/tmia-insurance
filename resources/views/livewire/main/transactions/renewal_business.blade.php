@@ -146,6 +146,45 @@
         width: 100%;
       }
     }
+
+    #before_expiration_no {
+        display: inline-block;
+        min-width: 20px;
+        padding: 2px 7px;
+        margin-left: 6px;
+        border-radius: 10px;
+        background: #dc3545;   /* match your header red */
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+
+
+    td.copy-cell {
+          position: relative;
+          cursor: pointer;
+    }
+
+    .copied-text {
+          position: absolute;
+          top: -2px;
+          right: 6px;
+          padding: 1px 8px;
+          font-size: 12px;
+          color: #fff;
+          background: #28a745;
+          border-radius: 4px;
+          pointer-events: none;
+          z-index: 10;
+    }
+
+    td.copied { 
+        background: #d4edda !important; 
+    }
   </style>
 
 
@@ -2451,7 +2490,7 @@
             <div class="box-body">
 
               <ul class="nav nav-tabs approvaltab">
-                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration</a></li>
+                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration <span id="before_expiration_no">0</span></a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
                 <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
                 <li class=""><a href="#completedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Completed</a></li>
@@ -2636,7 +2675,6 @@ function printReceipt(divId) {
         renewalCallLogs: @json(route("getTransactionRB.data"))
     }
 
-    
 
     window.tableRoutes = {
         renewalBusinessData: @json(route('renewal_business.data')),
@@ -2693,7 +2731,8 @@ function printReceipt(divId) {
         getInsurance: @json(route('transaction.by_insurance_no')),
         getRBCount : @json(route('getTransactions.count')),
         getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
-        getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no'))
+        getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no')),
+        policyStatus : @json(route('policy.status')),
     }
 
     window.formRoutes = {
