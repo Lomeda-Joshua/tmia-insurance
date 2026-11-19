@@ -104,12 +104,17 @@ class RenewalBusinessController extends Controller
         }
 
         // 2. Policy date Filter
-        if ($filters['viewexpiring']) {
-            $query->where('transactions_rb.Trans_Status', '!=', 'RENEWED')->whereBetween('transactions_rb.Policy_Expiration', [
-                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ])->orderBy('transactions_rb.Policy_Expiration', 'desc');
+        if (!empty($filters['viewexpiring'])) {
+
+            $query->where('transactions_rb.Trans_Status', '!=', 'RENEWED')
+                ->whereBetween('transactions_rb.Policy_Expiration', [
+                    Carbon::today()->startOfDay(),
+                    Carbon::today()->addDays(90)->endOfDay(),
+            ]);
+
+            $query->orderBy('transactions_rb.Policy_Expiration', 'desc');
         }
+
 
         if ($filters['dpFilter'] == "incep_date") {
             $query->whereBetween('transactions_rb.Start_Date', [
@@ -262,6 +267,8 @@ class RenewalBusinessController extends Controller
         if ($current_user != 1) {
             $query->where('transactions_rb.ISE_No', $current_user);
         }
+
+        $query->where('transactions_rb.Trans_Status', '!=', 'RENEWED');
 
         $metrics = $query->first();
 
@@ -1370,12 +1377,10 @@ class RenewalBusinessController extends Controller
         'FAILED TO ASSIGN'   => 'label bg-navy',
     ];
 
-    public function getStatus(Request $request)
+    public function getExpirationCategoryCount(Request $request)
     {
         $request->validate(['insuranceno' => 'required',], ['insuranceno.required' => 'Missing insurance number']);
-        Log::info($request);
-        
-
+    
         $record = DB::table('transactions_rb as t')
             ->leftJoin('approval_rb_status as s', 't.Insurance_No', '=', 's.Insurance_No')
             ->leftJoin('user as u', 's.User_ID', '=', 'u.User_ID')

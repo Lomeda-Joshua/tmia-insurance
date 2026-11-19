@@ -1559,8 +1559,8 @@ function LoadTransactionData() {
       url: window.tableRoutes.renewalBusinessData,
       type: "POST",
       data: function (d) {
-        d.viewpending = window.viewpending;
-        d.viewexpiring = window.viewexpiring;
+        d.viewpending = viewpending;
+        d.viewexpiring = viewexpiring;
         d.searchval = $('#txtsearch').val().trim();
         d.datefrom = $('#dpdatefrom').val();
         d.dateto = $('#dpdateto').val();

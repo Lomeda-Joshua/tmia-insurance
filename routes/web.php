@@ -191,7 +191,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         
         Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify.index');
         Route::post('/renewal-business/data/modify', [RenewalBusinessController::class, 'getRbTransactionsByInsuranceNo'])->name('renewal_business_modify_data.index');        
-        Route::post('/renewal-business/policy-status', [RenewalBusinessController::class, 'getStatus'])->name('policy.status');
+        Route::post('/renewal-business/expiration-status-count', [RenewalBusinessController::class, 'getExpirationCategoryCount'])->name('policy.status');
 
         // Vehicle
         Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');

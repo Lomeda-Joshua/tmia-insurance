@@ -752,12 +752,12 @@ function LoadCustomerData() {
     columns: [
         { data: "Customer_No", name: "Customer_No" },
         { data: "Group", name: "Group", defaultContent: "- - -" },
-        { data: "Full_Name", name: "Full_Name" },
+        { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
         { data: "Birth_Date", name: "Birth_Date", defaultContent: "- - -" },
         { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
         { data: "Email_Address", name: "Email_Address", defaultContent: "- - -" },
-        { data: "Address", name: "Address", defaultContent: "- - -" },
-        { data: "Remarks", name: "Remarks", defaultContent: "- - -" },
+        { data: "Address", name:"Address", defaultContent: "- - -" },
+        { data: "Remarks", name:"Remarks", defaultContent: "- - -" },
         { data: "Active_Status", name: "Active_Status" },
         { data: "Inactive_Date", name: "Inactive_Date", defaultContent: "- - -" },
         { data: "button", name: "button", orderable: false, searchable: false }

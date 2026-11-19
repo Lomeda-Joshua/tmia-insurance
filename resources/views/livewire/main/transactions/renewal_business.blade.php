@@ -2493,7 +2493,6 @@
                 <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration <span id="before_expiration_no">0</span></a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
                 <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
-                <li class=""><a href="#completedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Completed</a></li>
               </ul>
 
               <div class="tab-content" style="mt-1">
@@ -2732,7 +2731,7 @@ function printReceipt(divId) {
         getRBCount : @json(route('getTransactions.count')),
         getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
         getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no')),
-        policyStatus : @json(route('policy.status')),
+        policyStatus : @json(route('expiring.status-count')),
     }
 
     window.formRoutes = {
