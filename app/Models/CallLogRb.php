@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CallLogRb extends Model
 {
-    {
+    
     // Bind to the database view
     protected $table = 'vw_call_logs_rb';
 

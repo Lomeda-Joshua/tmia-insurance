@@ -1178,24 +1178,24 @@ $(document).ready(function () {
   }
 
   function refreshInsurer() {
-    const $opt = $("#cboinstype option:selected");
-    const name = $opt.val() ? $opt.text().trim() : "";   // "" when PLEASE SELECT
+        const $opt = $("#cboinstype option:selected");
+        const name = $opt.val() ? $opt.text().trim() : "";   // "" when PLEASE SELECT
 
-    $("#cboinstype_summary").val(name);
-    loadInsuranceCompanies($opt.val());
+        $("#cboinstype_summary").val(name);
+        loadInsuranceCompanies($opt.val());
   }
 
   // loadInsuranceCompanies();
   $(document).on("change", "#cboinstype", refreshInsurer);
 
 
-  // $(document).on("change", "#cboinstype", function () {
-  //       let instype = $(this).val();  
-  //       const instypeName = $(this).find("option:selected").text().trim();        
+  $(document).on("change", "#cboinstype", function () {
+        let instype = $(this).val();  
+        const instypeName = $(this).find("option:selected").text().trim();        
 
-  //       loadInsuranceCompanies(instype);   
-  //       $("#cboinstype_summary").val(instypeName);
-  // });
+        loadInsuranceCompanies(instype);   
+        $("#cboinstype_summary").val(instypeName);
+  });
 
 
   $("#cboinsco").select2({
@@ -1381,7 +1381,7 @@ $(document).ready(function () {
     autoclose: true,
     format: 'dd-MM-yyyy',
     todayHighlight: true
-  });
+  }).datepicker('setDate', new Date());
 
   /*--------------------- CALL STATUS --------------------*/
   $("#dpppdate").datepicker({
@@ -1398,15 +1398,31 @@ $(document).ready(function () {
   // 2. Initialize DateFrom (30 days ago)
   $("#dpdatefrom").datepicker({
     autoclose: true,
-    format: 'dd-mm-yyyy', // Lowercase mm outputs numeric months (01-12)
-    todayHighlight: true
+    format: 'dd-MM-yyyy', // Lowercase mm outputs numeric months (01-12)
+    todayHighlight: true,
+    onSelect: function () {
+      const dateFrom = parseStrictDate($(this).val());
+      $('#dpdateto').datepicker(
+        'option',
+        'minDate',
+        dateFrom
+      );
+    }
   }).datepicker("setDate", thirtyDaysAgo);
 
   // 3. Initialize DateTo (Today)
   $("#dpdateto").datepicker({
     autoclose: true,
-    format: 'dd-mm-yyyy',
-    todayHighlight: true
+    format: 'dd-MM-yyyy',
+    todayHighlight: true,
+    onSelect: function () {
+      const dateTo = parseStrictDate($(this).val());
+      $('#dpdatefrom').datepicker(
+        'option',
+        'maxDate',
+        dateTo
+      );
+    }
   }).datepicker("setDate", today);
   //==================================================//
   //================== END DATE & TIME PICKER ===================//
@@ -1538,13 +1554,32 @@ $('#txtsearch').on('keyup search', function (e) {
 });
 
 
+
+function getDateRange() {
+  const from = $('#dpdatefrom').datepicker('getDate');
+  const to   = $('#dpdateto').datepicker('getDate');
+
+  if (!from && !to) return { valid: true, datefrom: '', dateto: '' };   // show all
+
+  const mFrom = from ? moment(from) : null;
+  const mTo   = to   ? moment(to)   : null;
+
+  if (mFrom && mTo && mFrom.isAfter(mTo, 'day')) return { valid: false };
+
+  return {
+    valid: true,
+    datefrom: mFrom ? mFrom.format('DD-MM-YYYY') : '',
+    dateto:   mTo   ? mTo.format('DD-MM-YYYY')   : ''
+  };
+}
+
 //============== Transaction List ============//
 function LoadTransactionData() {
   if ($.fn.dataTable.isDataTable('#table_trans')) {
     $('#table_trans').DataTable().ajax.reload(null, false);
     return;
   }
-  
+
   table = $('#table_trans').DataTable({
     language: {
       processing: "Loading Transaction List..."
@@ -1559,11 +1594,13 @@ function LoadTransactionData() {
       url: window.tableRoutes.renewalBusinessData,
       type: "POST",
       data: function (d) {
+        const range = getDateRange();
+
         d.viewpending = viewpending;
         d.viewexpiring = viewexpiring;
+        d.datefrom = range.valid ? range.datefrom : '';
+        d.dateto = range.valid ? range.dateto : '';
         d.searchval = $('#txtsearch').val().trim();
-        d.datefrom = $('#dpdatefrom').val();
-        d.dateto = $('#dpdateto').val();
         d.chkall = $('#chkall').is(':checked') ? 1 : 0;
         d.dpFilter = $('#dpFilterSelect').val();
       }
@@ -1600,17 +1637,13 @@ function LoadTransactionData() {
               return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
             }
           },
-
           { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
           { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
-
           // Flattened Columns (Matches leftJoin backend)
           { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
           { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-
           { data: "VIN", name: "VIN", defaultContent: "- - -" },
           { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
           { data: "Model", name: "Model", defaultContent: "- - -" },
           { data: "Variant", name: "Variant", defaultContent: "- - -" },
 
@@ -1620,19 +1653,13 @@ function LoadTransactionData() {
             name: "Insurance_Company",
             defaultContent: "- - -"
           },
-
-
           {
             data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
             name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
             defaultContent: "- - -"
           },
-
-
           { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
           { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
-
-
           {
             data: "button",
             name: "button",
@@ -1662,7 +1689,6 @@ function LoadTransactionData() {
     ]
   });
 
-
   viewpending = false;
   viewexpiring = false;
 }
@@ -1674,16 +1700,26 @@ function LoadTransactionData() {
 $(document).on("click", "#btnSearch", function () {
   let dpFilter_selected = $('#dpFilterSelect').find("option:selected").text();
 
+  if (!getDateRange().valid) {
+    swal({
+      title: 'Invalid Date Range',
+      text: 'Date From cannot be later than Date To.',
+      type: 'warning',
+      confirmButtonColor: '#00a65a'
+    });
+    return;
+  }
+
   if ($.fn.dataTable.isDataTable('#table_trans')) {
-    $('#table_trans').DataTable().ajax.reload(function (json) {
-      swal({
-        title: "Search complete",
-        text: dpFilter_selected,
-        type: "info",
-        confirmButtonColor: "#00a65a",
-        confirmButtonText: "OK"
-      });
-    }, true);   // true = go back to page 1
+        $('#table_trans').DataTable().ajax.reload(function (json) {
+          swal({
+            title: "Search complete",
+            text: dpFilter_selected,
+            type: "info",
+            confirmButtonColor: "#00a65a",
+            confirmButtonText: "OK"
+          });
+        }, true);   // true = go back to page 1
   }
 });
 
@@ -1833,15 +1869,15 @@ function initExpiringTable() {
   // 2) SINGLE CLICK: select the row and load its data
   $('#table_expiring_list tbody').off('click', 'tr').on('click', 'tr', function () {
       const row = tableExpiring.row(this).data();
-      if (!row) return;                       // ignores responsive child rows
+      if (!row) return;    // ignores responsive child rows
 
       tableExpiring.$('tr.selected').removeClass('selected');
       $(this).addClass('selected');
 
-      $('.policyAction').show();
-
       renewal_flag = 1;
       near_expiration_flag = 1;
+
+      $('.policyAction').show();
 
       policy_source = row.Source
       xcustno = row.Customer_No;
@@ -1850,7 +1886,6 @@ function initExpiringTable() {
       xcsno = row.CS_No;
       xplateno = row.Plate_No;
       insuranceno = row.Insurance_No;
-
   });
 
   // 3) DOUBLE CLICK: confirm selection and close the modal
@@ -2166,7 +2201,6 @@ $(document).on("change", "#dpissuedate", function () {
 
 $(document).on("change", "#cbomortgage", function () {
   let value_input = $(this).val();
-  console.log('mortgagee', value_input);
   $("#cbomortgage_summary").val(value_input);
 });
 
@@ -2249,21 +2283,18 @@ function LoadCustomerData() {
         // Highlight clicked row
         $(this).addClass('selected');
 
-        // Optional: get Customer_No
-        // console.log('Selected Customer No:', xcustno);
         xcustno = table.cell(this, 1).data();
-
         xcustnoupload = table.cell(this, 8).data();
         xvin = table.cell(this, 9).data();
         xcsno = table.cell(this, 10).data();
-        xplateno = table.cell(this, 11).data();
+        xplateno = table.cell(this, 11).data();        
 
-        console.log('clearing formClear');
-        formClear();
+        FormClear();
   });
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
+        console.log('checking add new flag', renewal_flag);
         $('#btncustselect').trigger("click");
   });
 
@@ -2590,6 +2621,7 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
     data: { insuranceno: insuranceno },
     success: function (data) {
       $.each(data, function (i, value) {
+
         // Helper: set select option safely
         function setSelectOption(selector, text, val) {
           const select = $(selector);
@@ -2604,12 +2636,14 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
         setSelectOption("#cboinstype, .cboinstype", value.Insurance_Type, value.Insurance_Type);
         setSelectOption("#cboinsco, .cboinsco", value.Insurance_Desc, value.Insurance_Desc);
 
+        $("#txtpolicyno").val(value.Policy_No);
+
+        // Set values for Review summary step
         $("#cboinstype_summary").val(value.Insurance_Type);
         $("#cboinsco_summary, #cboprevinsco").val(value.Insurance_Desc);
         $("#txtpolicyno_summary").val(value.Policy_No);
         $("#dpissuedate_summary").val(value.Issue_Date);
         $("#cbomortgage_summary").val(value.Mortgage);
-        $("#txtpolicyno").val(value.Policy_No);
 
 
         // Safe date handling with default to today
@@ -2630,10 +2664,7 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
         }
 
 
-      
         // Safe date handling with default to issue date
-
-
         if (value && value.Issue_Date) {
           const safeSDate = new Date(value.Issue_Date);
 
@@ -2650,8 +2681,6 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
           $("#dpissuedate").datepicker("setDate", new Date());
         }
 
-
-
         // Safe date handling
         if (value.Policy_Expiration) {
           const safePEDate = new Date(value.Policy_Expiration);
@@ -2662,7 +2691,13 @@ function LoadInsurerInfo(insuranceno, loadingflag) {
 
         setSelectOption("#cbomortgage", value.Mortgage, value.Mortgage);
 
-        window.hideLoading("Loading data...")
+        // --- TO DISABLE THE 4 INPUTS ---
+        $("#cboinstype").prop("disabled", true).trigger("change.select2");
+        $("#cboinsco").prop("disabled", true).trigger("change.select2");
+        $("#cbomortgage").prop("disabled", true).trigger("change.select2");
+        $("#dppexpiredate").prop("disabled", true);
+
+        window.hideLoading("Loading data...");
       });
     }
   });
@@ -2672,14 +2707,10 @@ $("input[name='rdpolicyaction']:checked").trigger("change");
 
 // Listen for changes on the radio action group
 $(document).on("change", "input[name='rdpolicyaction']", function () {
+
   let actionVal = $("input[name='rdpolicyaction']:checked").val();
-
-  console.log(actionVal);
-
   if (actionVal === "TRANSFER") {
-
     window.showLoading("loading data...");
-
     // --- TO ENABLE THE 4 INPUTS ---
     $("#cboinstype").prop("disabled", false).val('').trigger("change.select2");
     $("#cboinsco").prop("disabled", false).val('').trigger("change.select2");
@@ -2687,6 +2718,7 @@ $(document).on("change", "input[name='rdpolicyaction']", function () {
     $("#dpissuedate").prop("disabled", false).val('').trigger("change.select2");
     $("#txtpolicyno").prop("disabled", false).val('').trigger("change.select2");
     $("#dppexpiredate").prop("disabled", false).val('').trigger("change.select2");
+    $("#cbomortgage").prop("disabled", false).val('').trigger("change.select2");
 
     $("#cboinstype_summary").val('');
     $("#cboinsco_summary").val('');
@@ -2696,22 +2728,22 @@ $(document).on("change", "input[name='rdpolicyaction']", function () {
     $("#cbomortgage_summary").val('');
     $("#dppexpiredate_summary").val('');
 
-
     setTimeout(function () {
       window.hideLoading("Loading data...")
     }, 320);
 
+  } else if(actionVal === "RETAIN"){
 
-  } else {
-
-    window.showLoading("loading data...")
-    LoadInsurerInfo(insuranceno, true);
+    window.showLoading("loading data...");
 
     // --- TO DISABLE THE 4 INPUTS ---
     $("#cboinstype").prop("disabled", true).trigger("change.select2");
     $("#cboinsco").prop("disabled", true).trigger("change.select2");
     $("#cbomortgage").prop("disabled", true).trigger("change.select2");
+    $("#dppexpiredate").prop("disabled", true);
 
+    LoadInsurerInfo(insuranceno, true);
+    
   }
 });
 ///////////////////////// FETCH VIEW OF DEVICE SCREEN ////////////////////////////////////
@@ -2740,92 +2772,97 @@ function LoadCustomerInfo() {
     success: function (data) {
       $.each(data, function (i, value) {
 
-        // Helper: set select option safely
-        function setSelectOption(selector, text, val) {
-          const select = $(selector);
-          if (select.find(`option[value="${val}"]`).length) {
-            select.val(val).trigger("change.select2");
-          } else {
-            const newOpt = new Option(text, val, true, true);
-            select.append(newOpt).trigger("change.select2");
-          }
-        }
+            // Helper: set select option safely
+            function setSelectOption(selector, text, val) {
+              const select = $(selector);
+              if (select.find(`option[value="${val}"]`).length) {
+                select.val(val).trigger("change.select2");
+              } else {
+                const newOpt = new Option(text, val, true, true);
+                select.append(newOpt).trigger("change.select2");
+              }
+            }
 
-        $("#txtcustno, .txtcustno").val(value.Customer_No);
-        xcustnoupload = value.Upload_Cust_No;
-        $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
-        setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
+            $("#txtcustno, .txtcustno").val(value.Customer_No);
+              xcustnoupload = value.Upload_Cust_No;
+            $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
+              setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
 
-        if (value.Group == 1) {
-          $(".customer-fleet-corp").fadeOut();
-          $(".customer-individual").fadeIn();
-          $(".birth-date").fadeIn();
-        } else {
-          $(".customer-fleet-corp").fadeIn();
-          $(".customer-individual").fadeOut();
-          $(".birth-date").fadeOut();
-        }
-        $("#txtcustname, .txtcustname").val(value.Full_Name);
-        $("#txtcustfname, .txtcustfname").val(value.First_Name);
-        $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
-        $("#txtcustlname, .txtcustlname").val(value.Last_Name);
-        $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
+            if (value.Group == 1) {
+              $(".customer-fleet-corp").fadeOut();
+              $(".customer-individual").fadeIn();
+              $(".birth-date").fadeIn();
+            } else {
+              $(".customer-fleet-corp").fadeIn();
+              $(".customer-individual").fadeOut();
+              $(".birth-date").fadeOut();
+            }
+            $("#txtcustname, .txtcustname").val(value.Full_Name);
+            $("#txtcustfname, .txtcustfname").val(value.First_Name);
+            $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
+            $("#txtcustlname, .txtcustlname").val(value.Last_Name);
+            $("#txtcustsname, .txtcustsname").val(value.Suffix_Name);
 
-        // Safe date handling
-        if (value.Birth_Date) {
-          const safeDate = new Date(value.Birth_Date);
-          if (!isNaN(safeDate)) {
-            $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
-          }
-        }
+            // Safe date handling
+            if (value.Birth_Date) {
+              const safeDate = new Date(value.Birth_Date);
+              if (!isNaN(safeDate)) {
+                $("#dpbirthdate, .dpbirthdate").datepicker("setDate", safeDate);
+              }
+            }
 
-        $("#txttin, .txttin").val(value.TIN);
-        $("#txtcontactno, .txtcontactno").val(value.Contact_No);
-        $("#txtemailadd, .txtemailadd").val(value.Email_Address);
-        $("#txtaddress, .txtaddress").val(value.Address);
+            $("#txttin, .txttin").val(value.TIN);
+            $("#txtcontactno, .txtcontactno").val(value.Contact_No);
+            $("#txtemailadd, .txtemailadd").val(value.Email_Address);
+            $("#txtaddress, .txtaddress").val(value.Address);
 
-        // Location: Region
-        if (value.RegCode) {
-          setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
-          FetchProv(value.RegCode, value.ProvCode);
-        }
+            $("#dpissuedate").datepicker("setDate", new Date());
+            $("#dpstartdate").datepicker("setDate", new Date());
 
-        // Province
-        if (value.ProvCode) {
-          setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
-          FetchCM(value.ProvCode, value.CMCode);
-        }
+            const startDate = $("#dpstartdate").datepicker("getDate");
 
-        // City/Municipality
-        if (value.CMCode) {
-          setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
-          FetchBrgy(value.CMCode, value.BrgyCode);
-        }
+            console.log('check date', startDate);
+            const expireDate = new Date(startDate);
+            expireDate.setFullYear(expireDate.getFullYear() + 1);
+            $("#dppexpiredate").datepicker("setDate", expireDate);
 
-        $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
-        setSelectOption("#cbocountry", value.Country, value.Country);
+            // Location: Region
+            if (value.RegCode) {
+              setSelectOption("#cboregion, .cboregion", value.Region, value.RegCode);
+              FetchProv(value.RegCode, value.ProvCode);
+            }
 
-        // Loading of previoous insurance details on the creation of Renewal business insurance
-        LoadPreviousInsuranceCo(value.renew_business_data);
+            // Province
+            if (value.ProvCode) {
+              setSelectOption("#cboprovince, .cboprovince", value.Province, value.ProvCode);
+              FetchCM(value.ProvCode, value.CMCode);
+            }
 
-        if (!newdata) {
-          $("#cboinstype").prop('disabled', true).trigger('change.select2');
-          $("#cboinsco").prop('disabled', true).trigger('change.select2');
-          $("#cbomortgage").prop('disabled', true).trigger('change.select2');
-        }
+            // City/Municipality
+            if (value.CMCode) {
+              setSelectOption("#cbocity, .cbocity", value.CityMunicipal, value.CMCode);
+              FetchBrgy(value.CMCode, value.BrgyCode);
+            }
 
-        // Condition: Disable the entire dropdown if no data or custom rule met
-        // if (data.length > 0) {
+            $("#txtzipcode, .txtzipcode").val(value.Zip_Code);
+            setSelectOption("#cbocountry", value.Country, value.Country);
 
-        // } else {
-        //     $("#cboinstype").prop('disabled', false);
-        // }
+            if (!newdata) {
+              $("#cboinstype").prop('disabled', true).trigger('change.select2');
+              $("#cboinsco").prop('disabled', true).trigger('change.select2');
+              $("#cbomortgage").prop('disabled', true).trigger('change.select2');
+            }
+
+            LoadVehicleInfo();
+
+            // Loading of previoous insurance details on the creation of Renewal business insurance
+            if(renewal_flag == 1){
+                LoadPreviousInsuranceCo(value.renew_business_data);
+            }
 
       });
     }
   });
-
-  LoadVehicleInfo();
 
   $(".box-body").validator('reset');
 }
@@ -3280,6 +3317,7 @@ function updatePaymentTotals() {
     }
   }
 }
+
 
 $(document).on("click", ".btnnetrem", function () {
   let insuranceNo = $(this).data('insurance-no');
@@ -4043,6 +4081,17 @@ function loadBeforeExpirationCount() {
 $(document).on("click", "#viewpending", function () {
   viewpending = true;
   viewexpiring = false;
+
+  if (!getDateRange().valid) {
+      swal({
+        title: 'Invalid Date Range',
+        text: 'Date From cannot be later than Date To.',
+        type: 'warning',
+        confirmButtonColor: '#00a65a'
+      });
+      return;
+  }
+
   LoadTransactionData();
   LoadStatusCounts();
 });
@@ -4050,15 +4099,38 @@ $(document).on("click", "#viewpending", function () {
 $(document).on("click", "#viewexpiring", function () {
   viewexpiring = true;
   viewpending = false;
+
+  if (!getDateRange().valid) {
+      swal({
+        title: 'Invalid Date Range',
+        text: 'Date From cannot be later than Date To.',
+        type: 'warning',
+        confirmButtonColor: '#00a65a'
+      });
+      return;
+  }
+
   LoadTransactionData();
   LoadStatusCounts();
 });
+
 
 //Button View 
 $(document).on("click", "#btnrefresh", function () {
   viewpending = false;
   viewexpiring = false;
   $("#txtsearch").val("");
+
+  if (!getDateRange().valid) {
+      swal({
+        title: 'Invalid Date Range',
+        text: 'Date From cannot be later than Date To.',
+        type: 'warning',
+        confirmButtonColor: '#00a65a'
+      });
+      return;
+  }
+
   LoadTransactionData();
 });
 
@@ -4936,18 +5008,30 @@ $(document).on("keydown", "#txtcustomersearch", function (e) {
 
 //Button Search 
 $(document).on("click", "#btnfind", function () {
-  LoadTransactionData();
+    if (!getDateRange().valid) {
+      swal({
+        title: 'Invalid Date Range',
+        text: 'Date From cannot be later than Date To.',
+        type: 'warning',
+        confirmButtonColor: '#00a65a'
+      });
+      return;
+    }
 
-  // If search button is triggered, clear specific card quick-filters if needed
-  window.viewpending = false;
-  window.viewexpiring = false;
 
-  // Trigger DataTable AJAX refresh[cite: 2]
-  if (table) {
-    table.draw();
-  } else {
-    initTable();
-  }
+    // If search button is triggered, clear specific card quick-filters if needed
+    window.viewpending = false;
+    window.viewexpiring = false;
+
+    LoadTransactionData();
+
+    // Trigger DataTable AJAX refresh[cite: 2]
+    if (table) {
+      table.draw();
+    } else {
+      initTable();
+    }
+
 });
 
 $(document).on("click", "#btnfindcust", function () {
@@ -5568,6 +5652,7 @@ $(document).on("click", "#btnnbselect", function () {
   FormDisable(false);
 
   $('#modal-nblist').iziModal('close');
+
   LoadCustomerInfo();
   LoadVehicleInfo();
   LoadInsuranceInfo(insuranceno);
@@ -5583,15 +5668,11 @@ $(document).on("click", "#btnnbselect", function () {
 
 });
 
-
-
 $(document).on("click", "#btnadd", function () {
   newdata = true;
   transid = '';
   editinfo = true;
   xnbno = '';
-  
-  console.log('step 1');
   FormDisable(false);
 
   $("#cboinstype").attr("disabled", false);
@@ -5599,19 +5680,15 @@ $(document).on("click", "#btnadd", function () {
   // renewal flag for determining the policy action and other elements existence
   renewal_flag = 0;
 
-
-  $("#policy_actions").hide();
   $('.policyAction').hide();
-
-
+  $("#dppexpiredate").attr("disabled", true);
+  
   if (ulevel == 7) {
     $("#cboise").val(userid).trigger("change.select2");
     $('#modal-add').iziModal('open');
   } else {
     $('#modal-modify-ise').iziModal('open');
   }
-
-
 });
 
 
