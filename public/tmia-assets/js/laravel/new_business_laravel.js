@@ -4483,7 +4483,7 @@ $(document).on("changeDate", "#dpstartdate", function () {
       expireDate.setFullYear(expireDate.getFullYear() + 1);
 
       $("#dppexpiredate").datepicker("setDate", expireDate);
-      // $("#dpissuedate").datepicker("setDate", startdate);
+      $("#dpissuedate").datepicker("setDate", startdate);
   }
 });
 

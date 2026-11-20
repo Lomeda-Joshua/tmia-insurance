@@ -350,8 +350,7 @@
                   <th>Customer Name</th>
                   <th>Contact No.</th>
                   <th>VIN</th>
-                  <th>CS No.</th>
-                  <th>Plate No.</th>
+                  <th>CS No. / Plate No.</th>
                   <th>Model</th>
                   <th>Variant</th>
                   <th>Insurance Partner</th>
@@ -1506,13 +1505,13 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Customer Name:</th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtcustname" class="form-control input-sm txtcustname"
+                                  <input type="text" id="txtcustname" placeholder="Error no data" class="form-control input-sm txtcustname"
                                     style="width: 100%;" required="required" readonly>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Contact No:</th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtcontactno" class="form-control input-sm"
+                                  <input type="text" id="txtcontactno" class="form-control input-sm" placeholder="optional"
                                     style="width: 100%;" required="required" data-error="Contact No. is required."
                                     disabled>
                                 </td>
@@ -1522,14 +1521,14 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Birthdate:</th>
                                 <td>
-                                  <input id="dpbirthdate" type="text" class="form-control input-sm" style="width: 100%;"
-                                    required="required" data-error="Birth Date is required." disabled>
+                                  <input id="dpbirthdate" type="text" class="form-control input-sm" placeholder="optional" style="width: 100%;"
+                                    data-error="Birth Date is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">E-Mail Address:
                                 </th>
                                 <td>
-                                  <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd"
-                                    style="width: 100%;" required="required" data-error="Email is required." readonly
+                                  <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd" placeholder="optional"
+                                    style="width: 100%;" data-error="Email is required." readonly
                                     disabled>
                                 </td>
                               </tr>
@@ -1540,14 +1539,14 @@
                                   style="font-size:15px; text-transform:uppercase; font-weight:bold; vertical-align: top;">
                                   TIN:</th>
                                 <td style="vertical-align: top;">
-                                  <input type="text" id="txttin" class="form-control input-sm txttin"
-                                    style="width: 100%;" required="required" data-error="TIN is required." disabled>
+                                  <input type="text" id="txttin" class="form-control input-sm txttin" placeholder="optional"
+                                    style="width: 100%;" data-error="TIN is required." disabled>
                                 </td>
                                 <th
                                   style="font-size:15px; text-transform:uppercase; font-weight:bold; vertical-align: top;">
                                   Address:</th>
                                 <td style="vertical-align: top;">
-                                  <textarea id="txtaddress" class="form-control input-sm txtaddress"
+                                  <textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="optional"
                                     style="width: 100%; resize: vertical;" placeholder="Address here!" rows="3"
                                     required="required" data-error="Address is required." disabled></textarea>
                                 </td>
@@ -1566,13 +1565,13 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">VIN:
                                 </th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtvin" class="form-control input-sm txtvin" style="width: 100%;"
+                                  <input type="text" id="txtvin" placeholder="optional" class="form-control input-sm txtvin" style="width: 100%;"
                                     data-error="VIN is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Make:</th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtmake" class="form-control input-sm txtmake"
+                                  <input type="text" id="txtmake" placeholder="optional" class="form-control input-sm txtmake"
                                     style="width: 100%;" data-error="Make is required." disabled>
                                 </td>
                               </tr>
@@ -1581,12 +1580,12 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model:</th>
                                 <td>
-                                  <input type="text" id="txtmodel" class="form-control input-sm txtmodel"
+                                  <input type="text" id="txtmodel" placeholder="optional" class="form-control input-sm txtmodel"
                                     style="width: 100%;" data-error="Model is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model Year:</th>
                                 <td>
-                                  <input type="text" id="txtmodelyear" class="form-control input-sm txtmodelyear"
+                                  <input type="text" id="txtmodelyear" placeholder="optional" class="form-control input-sm txtmodelyear"
                                     style="width: 100%;" data-error="Model Year is required." disabled>
                                 </td>
                               </tr>
@@ -1595,7 +1594,7 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Color:</th>
                                 <td>
-                                  <input type="text" id="txtcolor" class="form-control input-sm txtcolor"
+                                  <input type="text" id="txtcolor" placeholder="optional" class="form-control input-sm txtcolor"
                                     style="width: 100%;" data-error="Color is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
@@ -1612,8 +1611,8 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">CS No:</th>
                                 <td>
-                                  <input type="text" id="txtcsno" class="form-control input-sm txtcsno"
-                                    style="width: 100%;" required="required" data-error="CS No is required." disabled>
+                                  <input type="text" id="txtcsno" placeholder="optional" class="form-control input-sm txtcsno"
+                                    style="width: 100%;" data-error="CS No is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Plate No:</th>
@@ -1629,7 +1628,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">SRP / FMV :</th>
                                 <td colspan="3">
                                   <input type="text" id="txtsrp" class="form-control input-sm txtsrp"
-                                    style="width: 100%;" required="required" data-error="Paid Price is required."
+                                    style="width: 100%;" placeholder="optional" data-error="Paid Price is required."
                                     disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
@@ -1645,13 +1644,13 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Type:</th>
                                 <td style="width: 32%;">
-                                  <input id="cboinstype_summary" class="form-control input-sm cboinstype_summary"
+                                  <input id="cboinstype_summary" placeholder="optional" class="form-control input-sm cboinstype_summary"
                                     style="width: 100%;" data-error="Insurance Type is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Company:</th>
                                 <td style="width: 32%;">
-                                  <input id="cboinsco_summary" class="form-control input-sm cboinsco_summary"
+                                  <input id="cboinsco_summary" placeholder="Optional" class="form-control input-sm cboinsco_summary"
                                     style="width: 100%;" data-error="Insurance Company is required." disabled>
                                 </td>
                               </tr>
@@ -2493,7 +2492,6 @@
                 <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration <span id="before_expiration_no">0</span></a></li>
                 <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
                 <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
-                <li class=""><a href="#completedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Completed</a></li>
               </ul>
 
               <div class="tab-content" style="mt-1">
@@ -2520,7 +2518,6 @@
                                           <th>Contact No.</th>
                                           <th>VIN</th>
                                           <th>CS No. / Plate No.</th>
-                                          {{-- <th>Plate No.</th> --}}
                                           <th>Model</th>
                                           <th>Variant</th>
                                           <th>Insurance Partner</th>
@@ -2675,7 +2672,6 @@ function printReceipt(divId) {
         renewalCallLogs: @json(route("getTransactionRB.data"))
     }
 
-
     window.tableRoutes = {
         renewalBusinessData: @json(route('renewal_business.data')),
         customerData: @json(route('customers.data')),
@@ -2690,7 +2686,6 @@ function printReceipt(divId) {
         getRenewedPolicies: @json(route('renewal-business.renewed-transactions'))
     }
 
-    
     window.fetchData = {
       variableData : @json(route('getSession.variables')),
       callLogsData : @json(route('fetch.call.logs.rb')),

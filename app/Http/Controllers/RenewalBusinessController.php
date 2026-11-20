@@ -78,9 +78,7 @@ class RenewalBusinessController extends Controller
             ])
             ->when($user_id_info, function ($query, $user_id_info) {
                 $user_id_info == 1 ? ' ' : $query->where('transactions_rb.ISE_No', $user_id_info);
-            });
-
-        Log::info($filters['viewpending']);
+            });        
 
         // 2. Pending Filter
         if ($filters['viewpending']) {
@@ -104,11 +102,20 @@ class RenewalBusinessController extends Controller
         }
 
         // 2. Policy date Filter
-        if ($filters['viewexpiring']) {
-            $query->where('transactions_rb.Trans_Status', '!=', 'RENEWED')->whereBetween('transactions_rb.Policy_Expiration', [
-                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ])->orderBy('transactions_rb.Policy_Expiration', 'desc');
+        if (!empty($filters['viewexpiring'])) {
+            $today = 'transactions_rb.Trans_Status';
+            $ninetyDaysLater = Carbon::today()->addDays(90)->endOfDay();
+
+            $query
+                ->where('transactions_rb.Trans_Status', 'PENDING')
+                ->whereBetween('transactions_rb.Policy_Expiration', [
+                    $today,
+                    $ninetyDaysLater,
+                ])
+                ->addSelect(DB::raw(
+                    'DATEDIFF(transactions_rb.Policy_Expiration, CURDATE()) AS Days_Before_Expiration'
+                ))
+                ->orderBy('transactions_rb.Policy_Expiration', 'asc');
         }
 
         if ($filters['dpFilter'] == "incep_date") {
@@ -491,7 +498,7 @@ class RenewalBusinessController extends Controller
 
                 $startdate = Carbon::createFromFormat('d-F-Y', $request['startdate'])->format('Y-m-d');
                 $issuedate = Carbon::createFromFormat('d-F-Y', $request['issuedate'])->format('Y-m-d');
-                $policyExpiration = Carbon::createFromFormat('m/d/Y', $request->input('pexpiredate'))->format('Y-m-d');
+                $policyExpiration = Carbon::createFromFormat('d/m/Y', $request->input('pexpiredate'))->format('Y-m-d');
 
 
                 // ----------------------------
@@ -870,6 +877,7 @@ class RenewalBusinessController extends Controller
 
                 return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
             })
+            
             ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
             ->make(true);
     }
@@ -1033,7 +1041,7 @@ class RenewalBusinessController extends Controller
             ->where('t.Trans_Status', "RENEWED")
 
             ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
-                $q->where('u.ISE_No', $user_id_info);
+                $q->where('t.ISE_No', $user_id_info);
             });
        
 
