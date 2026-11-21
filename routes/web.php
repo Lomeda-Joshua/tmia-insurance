@@ -88,6 +88,8 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
 
     Route::get('/reports/detailed-excel', [GeneralReportingController::class, 'detailedExcel'])->name('reports.detailed-excel');
 
+    Route::get('/get-expiring-counts', [GeneralReportingController::class, 'getExpiringTransactionCount'])->name('get-expiring-counts');
+    Route::get('/expired-counts', [GeneralReportingController::class, 'getExpiredCount'])->name('expired-counts');
     
     // Transactions Group
     Route::prefix('transactions')->group(function () {

@@ -484,13 +484,14 @@ class RenewalBusinessController extends Controller
                 // ----------------------------
                 // E) UPDATE TRANSCATION NB
                 // ---------------------------
-                if( $policy_type == 'NB'){
+
+                if( $policy_type === 'NB'){
                     TransactionsNb::where('Insurance_No', $insurance_no)->update([
                         'Trans_Status' => 'COMPLETED'
                     ]);
                 }
 
-                if( $policy_type == 'RB'){
+                if( $policy_type === 'RB'){
                     TransactionRb::where('Insurance_No', $insurance_no)->first()->update([
                         'Trans_Status' => 'RENEWED'
                     ]);
@@ -499,7 +500,6 @@ class RenewalBusinessController extends Controller
                 $startdate = Carbon::createFromFormat('d-F-Y', $request['startdate'])->format('Y-m-d');
                 $issuedate = Carbon::createFromFormat('d-F-Y', $request['issuedate'])->format('Y-m-d');
                 $policyExpiration = Carbon::createFromFormat('d/m/Y', $request->input('pexpiredate'))->format('Y-m-d');
-
 
                 // ----------------------------
                 // D) INSERT INSURANCE RECORD
@@ -792,6 +792,7 @@ class RenewalBusinessController extends Controller
                 'r.Trans_Status',
                 'r.Customer_No',
                 'r.VIN',
+                'r.Issue_Date',
                 'r.Insurance_Company',
                 'r.Option_Type',
                 'r.Policy_Expiration',
@@ -821,6 +822,7 @@ class RenewalBusinessController extends Controller
                 't.Trans_Status',
                 't.Customer_No',
                 't.VIN',
+                't.Issue_Date',
                 't.Insurance_Company',
                 't.Option_Type',
                 't.Policy_Expiration',
@@ -1381,9 +1383,7 @@ class RenewalBusinessController extends Controller
     public function getStatus(Request $request)
     {
         $request->validate(['insuranceno' => 'required',], ['insuranceno.required' => 'Missing insurance number']);
-        Log::info($request);
         
-
         $record = DB::table('transactions_rb as t')
             ->leftJoin('approval_rb_status as s', 't.Insurance_No', '=', 's.Insurance_No')
             ->leftJoin('user as u', 's.User_ID', '=', 'u.User_ID')
@@ -1419,6 +1419,13 @@ class RenewalBusinessController extends Controller
             'remarks'     => $record->Trans_Status_Remarks ?? 'No remarks',
         ]);
     }
+
+
+
+
+
+
+
 
 
 }

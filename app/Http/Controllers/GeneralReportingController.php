@@ -13,6 +13,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 
 class GeneralReportingController extends Controller
@@ -181,6 +183,71 @@ class GeneralReportingController extends Controller
             'Cache-Control' => 'max-age=0',
         ]);
     }
+
+
+    public function getExpiringTransactionCount(): JsonResponse
+    {
+        $current_user = Auth::user()->User_ID;
+
+        $rb = DB::table('transactions_rb')
+            ->select('Insurance_No')
+            ->whereRaw(
+                'CURDATE() BETWEEN DATE_SUB(Policy_Expiration, INTERVAL 90 DAY) AND Policy_Expiration'
+            )
+            ->where('Trans_Status', 'PENDING');
+
+        $nb = DB::table('transactions_nb')
+            ->select('Insurance_No')
+            ->whereRaw(
+                'CURDATE() BETWEEN DATE_SUB(Policy_Expiration, INTERVAL 90 DAY) AND Policy_Expiration'
+            )
+            ->where('Trans_Status', 'PENDING');
+
+        if ($current_user != 1) {
+            $rb->where('ISE_No', $current_user);
+            $nb->where('ISE_No', $current_user);
+        }
+
+        $count = DB::query()
+            ->fromSub($rb->unionAll($nb), 'expiring_transactions')
+            ->count();
+
+        return response()->json([
+            'Expiring_Counts' => (int) $count,
+        ]);
+    }
+
+
+    public function getExpiredCount(): JsonResponse
+    {
+        $current_user = Auth::user()->User_ID;
+
+        $rb = DB::table('transactions_rb')
+            ->select('Insurance_No')
+            ->where('Policy_Expiration', '<', DB::raw('CURDATE()'))
+            ->where('Trans_Status', 'PENDING');
+
+        $nb = DB::table('transactions_nb')
+            ->select('Insurance_No')
+            ->where('Policy_Expiration', '<', DB::raw('CURDATE()'))
+            ->where('Trans_Status', 'PENDING');
+
+        if ($current_user != 1) {
+            $rb->where('ISE_No', $current_user);
+            $nb->where('ISE_No', $current_user);
+        }
+
+        $count = DB::query()
+            ->fromSub($rb->unionAll($nb), 'expired_transactions')
+            ->count();
+
+        return response()->json([
+            'Expired_Counts' => (int) $count,
+        ]);
+    }
+
+
+
 
 
 }
