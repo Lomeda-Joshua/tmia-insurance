@@ -153,7 +153,23 @@
         padding: 2px 7px;
         margin-left: 6px;
         border-radius: 10px;
-        background: #dc3545;   /* match your header red */
+        background: #f39c12;   /* match your header red */
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+
+    #expired_tab {
+        display: inline-block;
+        min-width: 20px;
+        padding: 2px 7px;
+        margin-left: 6px;
+        border-radius: 10px;
+        background: #cc061a;   /* match your header red */
         color: #fff;
         font-size: 12px;
         font-weight: 600;
@@ -279,6 +295,11 @@
                     <option Value="polexpire_date">Policy Expiration date</option>
                   </select>
                 </div>
+                <small class="text-muted d-block">
+                    <i class="fas fa-info-circle"></i> Filters the records base on date:
+                    <strong>From</strong>,
+                    <strong>To</strong>
+                  </small>
                 <div class="help-block with-errors"></div>
               </div>
 
@@ -329,7 +350,7 @@
                 <button type="button" id="btnnblist" class="btn btn-box-tool"
                   style="font-size: 15px !important; background-color:red; color:white;" data-toggle="tooltip"
                   title="Insurance Policies expiring & Expiring Soon (90Days)"><i class="fa fa-list"></i>
-                  Insurance policies expiring</button>
+                  Expiring Soon</button>
 
                 <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i
                     class="fa fa-plus"></i> Add New</button>
@@ -2490,8 +2511,9 @@
 
               <ul class="nav nav-tabs approvaltab">
                 <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">90 days before expiration <span id="before_expiration_no">0</span></a></li>
-                <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired</a></li>
+                <li class=""><a href="#expired" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase !important;">Expired <span id="expired_tab">0</span></a></li>
                 <li class=""><a href="#renewedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Renewed</a></li>
+                <li class=""><a href="#completedTab" data-toggle="tab" aria-expanded="true" style="text-transform:uppercase;">Completed</a></li>
               </ul>
 
               <div class="tab-content" style="mt-1">
@@ -2503,7 +2525,7 @@
                           </div>
                           <div class="box-body">
                               <div class="table-responsive">
-                                    <table id="table_expiring_list" class="table table-striped table-bordered table-hover">
+                                    <table id="table_before_expiration_list" class="table table-striped table-bordered table-hover">
                                       <thead>
                                         <tr class="tableheader">
                                           <th>Insurance No.</th>
@@ -2727,7 +2749,8 @@ function printReceipt(divId) {
         getRBCount : @json(route('getTransactions.count')),
         getVehicleByCustomer : @json(route('get.Vehicles.By.Customer')),
         getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no')),
-        policyStatus : @json(route('expiring.status-count')),
+        getExpirationCounts : @json(route('get-expiring-counts')),
+        expiredCounts : @json(route('expired-counts')),
     }
 
     window.formRoutes = {
