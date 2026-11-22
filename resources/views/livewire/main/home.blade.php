@@ -1,5 +1,18 @@
 <x-layouts.main>
 
+<style>
+  .card-box-row {
+    padding: 20px;
+  }
+
+  .dashboard-count-box {
+      background-color: #6f42c1 !important;
+      color: #fff !important;
+      border-radius: 12px;
+      overflow: hidden;
+  }
+</style>
+
 @push('styles')
 <link rel="stylesheet" href="{{ asset('tmia-assets/css/home.css') }}">
 @endpush
@@ -28,7 +41,7 @@
         
         <header class="dashboard-header">
           <h1>Client Milestones Overview</h1>
-          <p>March 2026 • Personal & Asset Milestones</p>
+          <p>{{ now()->format('F Y') }} • Personal & Asset Milestones</p>
         </header>
 
             <div id='bg'>
@@ -36,8 +49,25 @@
               <img SRC="{{ asset('tmia-assets/images/background.webp') }}">
             </div>
 
+            <div class="row card-box-row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="small-box bg-default dashboard-count-box">
+                    <div class="inner">
+                      <h3>{{ number_format($newBusinessCount ?? 0) }}</h3>
+                      <p>Total New Business</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa-solid fa-briefcase text-white"></i>
+                    </div>
+                  </div>
+                </div>
+            </div>
+ 
             <!--begin::Row-->
             <div class="box" style="padding: 5px 10px;">
+                 
+
+
               <div class="box-body" style="border: 1.5px solid #ddd; border-radius: 15px;">
                 <div class="row">
                   <div class="col-md-6">
@@ -328,6 +358,101 @@
 </div>
 
 @push('scripts')
+<script>
+    window.dataRoutes = {
+      userAccountSession: @json(route('nb.getSession.variables')),
+    }
+    
+    window.userAccount = {
+        ulevel: @json(Auth::user()?->User_Level_ID)
+    };
+
+    window.LaravelRoutes = {
+        csrfToken: "{{ csrf_token() }}",
+        nbpendingcounts: @json(route('new_business.counts')),
+        loadSelectedCustomer : @json(route('customer.get-by-no')),
+        loadVehicle: @json(route('vehicle.search')),
+        loadModifyPage: @json(route('getModifyView.data'))
+    }
+
+    window.tableRoutes = {
+        newBusinessData: @json(route('newbusiness.data')),
+        customerData: @json(route('customers.data')),
+        uploadCustomers: @json(route('uploaded.customer')),
+        uploadEDAFcustomers: @json(route('customer.getCheck-data')),
+        getPaymentData: @json(route('new-business.payments.get-data')),
+        getVehiclesByCustomer : @json(route('vehicle.get-by-customer')),
+        getEdafVehicleByCustomer : @json(route('uploaded-customers-edaf.get'))
+    }
+
+    window.deleteData = {
+        deleteEntryByInsurance : @json(route('remove-by-insurance-no.data')),
+    }
+
+    window.getData = {
+        customerInfo : @json(route('customerinfo.data')),
+        vehicleInfo: @json(route('customercvehicleinfo.data')),
+        vehicleSpecific: @json(route('vehicle.search')),
+        edafVehicleSpecific: @json(route('edaf.vehicle.search')),
+        vehicleLookUp : @json(route('vehicle.lookup'))
+    }
+
+    window.saveData = {
+        saveNbCustomerData : @json(route('newbusiness.save')),
+        saveModifyPayment : @json(route('payments.sync')),
+        saveUpdatedNetRem : @json(route('update.netrem'))
+    }
+
+    window.loadData = {
+        loadPaymentData : @json(route('getTransactionNB.data')),
+        loadNewBusinessPayment : @json(route('getNewBusinessPayment.data')),
+        loadTransactionByInsurance: @json(route('transactions.get-by-insurance-no')),
+        sessionSetTransaction : @json(route('session.set-transaction-data')),
+        getTransactionStatus : @json(route('gettransaction-status.data'))
+    }
+
+
+    window.formRoutes = {
+        insuranceStaffData: @json(route('insurance_staff.data')),
+        customerTypeData: @json(route('customers_type.data')),
+
+        // Location
+        regionData: @json(route('region.data')),
+        provinceData: @json(route('province.data')),
+        cityMunicipalData: @json(route('citymunicipal.data')),
+        barangayData: @json(route('barangay.data')),
+
+        // vehicle info
+        bodyTypeData: @json(route('bodytype.data')),
+        fuelTypeData: @json(route('fueltype.data')),
+        productClassData: @json(route('productclass.data')),
+
+        // Payment type
+        paymentTypeData: @json(route('payments.data')),
+        ewalletTypeData: @json(route('ewalletype.data')),
+
+        // Insurances
+        insuranceTypeData: @json(route('insurancetype.data')),
+        insuranceCoData: @json(route('insuranceco.data')),
+
+        // Bank
+        bankData: @json(route('banks.data')),
+
+        // Transaction status
+        transactionStatusData: @json(route('transactionstatus.data')),
+
+        // Communication type
+        communicationTypeData: @json(route('communicationtype.data')),
+
+        // Call status
+        callStatusData: @json(route('callstatus.data')),
+
+        // Change status
+        transactionSubmitStatus: @json(route('transactions.update-status')),
+    }
+
+</script>
+  <script src="{{ asset('tmia-assets/js/laravel/home_laravel.js') }}"></script>
   <script>
         window.nofiticationdata = {
           checkExpiry :  @json(route('checkExpiry.data'))
