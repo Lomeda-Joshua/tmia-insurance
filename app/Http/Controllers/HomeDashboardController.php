@@ -13,6 +13,8 @@ use App\Models\User;
 
 use App\Models\CallStatus;
 use App\Models\NewBusiness;
+use App\Models\TransactionRb;
+use App\Models\TransactionsNb;
 use App\Models\CustomerInformation;
 use App\Models\ApprovalNbStatus;
 use App\Models\ApprovalRbStatus;
@@ -27,19 +29,23 @@ class HomeDashboardController extends Controller
 
         $today = Carbon::now('Asia/Manila');
 
-        $newBusinessCount = NewBusiness::all()->count();
-        $pendingCount = NewBusiness::where('Trans_Status', 'PENDING')->count();
+        if( Auth::user()->User_ID != 1 ){
+            $auth_account = 'ISE_No';
+            $current_user = Auth::user()->User_ID;
+        }else if(Auth::user()->User_ID == 1){
+            $auth_account = 'User_ID';
+            $current_user = 1;
+        }
+        
+        $newBusinessPendingCount = NewBusiness::where('Trans_Status', 'PENDING')->where($auth_account,$current_user)->count();
+        $renewalBusinessPendingCount = TransactionRb::where('Trans_Status', 'PENDING')->where($auth_account,$current_user)->count();
 
-        if( $newBusinessCount || $pendingCount != 0 ){
-            $pendingOVerallCount = $pendingCount / $newBusinessCount * 100;
-        }else {
-            $pendingOVerallCount = 0;
-        }   
-
+        $renewedPolicies = TransactionRb::where('Trans_Status', 'RENEWED')->where($auth_account,$current_user)->count();
+        $completedPolicies = TransactionsNb::where('Trans_Status', 'COMPLETED')->where($auth_account,$current_user)->count();
+        
         $ise_staff = User::where('User_Level_ID', 7)
             ->withCount(['transactionRb as pending_count' => function ($q) {
-                $q->where('Trans_Status', 'PENDING');
-            }])
+                $q->where('Trans_Status', 'PENDING');}])
             ->get();
 
         $birthdaysThisMonth = CustomerInformation::whereMonth('Birth_Date', $today->month)
@@ -69,13 +75,16 @@ class HomeDashboardController extends Controller
             )
             ->get();
 
+        
+
         return view('livewire.main.home', [
-            'pendingCounts' => $pendingCount, 
-            'pendingOVerallCount' => $pendingOVerallCount, 
-            'pendingOVerallCounts' => $pendingOVerallCount,
             'birthdaysThisMonth' => $birthdaysThisMonth,
             'ise_staff' => $ise_staff,
             'approvalStatuses' => $approvalStatuses,
+            'newBusinessCount' => $newBusinessPendingCount,
+            'renewalBusinessCount' => $renewalBusinessPendingCount,
+            'renewedPolicies' => $renewedPolicies,
+            'completedPolicies' => $completedPolicies,
         ]);
     }
 } 

@@ -6,7 +6,7 @@
   }
 
   .dashboard-count-box {
-      background-color: #6f42c1 !important;
+      background-color: #222222 !important;
       color: #fff !important;
       border-radius: 12px;
       overflow: hidden;
@@ -54,10 +54,46 @@
                   <div class="small-box bg-default dashboard-count-box">
                     <div class="inner">
                       <h3>{{ number_format($newBusinessCount ?? 0) }}</h3>
-                      <p>Total New Business</p>
+                      <p>Pending New Business</p>
                     </div>
                     <div class="icon">
-                      <i class="fa-solid fa-briefcase text-white"></i>
+                      <i class="fa-solid fa-copy text-white"></i>
+                    </div>
+                  </div>
+                </div>
+
+                 <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="small-box bg-default dashboard-count-box">
+                    <div class="inner">
+                      <h3>{{ number_format($renewalBusinessCount ?? 0) }}</h3>
+                      <p>Pending Renewal Business</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa-solid fa-copy text-white"></i>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="small-box bg-default dashboard-count-box">
+                    <div class="inner">
+                      <h3>{{ number_format($renewedPolicies ?? 0) }}</h3>
+                      <p>Renewed Policies</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa-solid fa-copy text-white"></i>
+                    </div>
+                  </div>
+                </div>
+
+                 <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="small-box bg-default dashboard-count-box">
+                    <div class="inner">
+                      <h3>{{ number_format($completedPolicies ?? 0) }}</h3>
+                      <p>Completed Policies</p>
+                    </div>
+                    <div class="icon">
+                      <i class="fa-solid fa-copy text-white"></i>
                     </div>
                   </div>
                 </div>
@@ -97,6 +133,8 @@
                   </div>
                 </div>
                 <br>
+
+                @if(Auth::check() && Auth::user()->User_Level_ID == 1)
                 <div class="row">
                   <div class="col-md-12">
                     <div class="box">
@@ -126,6 +164,7 @@
                     </div>
                   </div>
                 </div>
+                @endif
 
                 <div class="row">
                   <div class="col-md-12">
@@ -140,8 +179,8 @@
                         <div class="row">
                           <div class="col-sm-3 col-xs-6" style="border-right: 1px solid #ddd;">
                             <div class="description-block border-right">
-                              <span class="description-percentage text-yellow" style="font-weight: bold;" id="tpendingp" >{{ round($pendingOVerallCounts, 2) . "%" }}</span>
-                              <h5 class="description-header" style="font-weight: bold;" id="tpending">{{ $pendingCounts }}</h5>
+                              {{-- <span class="description-percentage text-yellow" style="font-weight: bold;" id="tpendingp" >{{ round($pendingOVerallCounts, 2) . "%" }}</span> --}}
+                              {{-- <h5 class="description-header" style="font-weight: bold;" id="tpending">{{ $pendingCounts }}</h5> --}}
                               <span class="description-text" style="font-weight: bold;">TOTAL PENDING</span>
                             </div>
                           </div>

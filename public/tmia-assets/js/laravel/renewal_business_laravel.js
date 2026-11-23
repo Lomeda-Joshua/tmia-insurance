@@ -839,7 +839,71 @@ $(document).ready(function () {
     // Open on init for testing, comment in real use
     // onOpening: function() { console.log('Loading modal opened'); }
   });
+
+
+  /* MODAL SHOWING STATISTICS ON POLICIES */
+  $("#modal-statistics-policies").iziModal({
+    title: 'Statistics per policies',
+    subtitle: 'List of expiring policies.',
+    headerColor: '#dc3545',
+    icon: 'fa-solid fa-chart-bar',
+    iconColor: '#fcfbfb',
+    zindex: 9999,
+    width: 1500,
+    padding: 20,
+    radius: 10,
+    focusInput: true,
+    loop: true,
+    arrowKeys: true,
+    navigateCaption: true,
+    navigateArrows: true, // Boolean, 'closeToModal', 'closeScreenEdge'
+    //history: true,
+    //restoreDefaultContent: true,
+    fullscreen: true,
+    // openFullscreen: true,
+    overlay: true,
+    overlayClose: false,
+    overlayColor: 'rgba(0, 0, 0, 0.4)',
+    transitionIn: 'bounceInDown',
+    transitionOut: 'bounceOutDown',
+    transitionInOverlay: 'fadeIn',
+    transitionOutOverlay: 'fadeOut',
+    onResize: function (modal) {
+      // console.log(modal.modalHeight);
+    },
+    afterRender: function (modal) {
+      // modal.open();
+    }
+  });
+
+  $(document).on('fullscreen', '#modal-statistics-policies', function (e, modal) {
+    // console.log('Fullscreen: '+modal.isFullscreen);
+  });
+
+  $(document).on('opening', '#modal-statistics-policies', function (e) {
+    //console.dir(e);=
+  });
+
+  $(document).on('opened', '#modal-statistics-policies', function (e) {
+    $(".iziModal-wrap").scrollTop(0);
+  });
+
+  $(document).on('closing', '#modal-statistics-policies', function (e) {
+    // Fix accessibility warning: blur focused element before aria-hidden is set
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
+  });
+
+  $(document).on('closed', '#modal-statistics-policies', function (e) {
+    //console.dir(e);
+  });
+
+
+
   /////////////////////// END IZIMODAL ///////////////////////
+
+
 
   //============== COMBO BOX INITIALIZED ===========//
   //======= Insurance  Staff =====//
@@ -967,6 +1031,7 @@ $(document).ready(function () {
     url: window.formRoutes.bodyTypeData,
     success: function (data) {
       let options = '<option value="">PLEASE SELECT</option>';
+      
       // Iterate over JSON objects and build <option> elements
       $.each(data, function (index, item) {
         options += `<option value="${item.Body_TID}">${item.Body_Type}</option>`;
@@ -1510,8 +1575,8 @@ $(document).ready(function () {
   // Active listener: Listens for any change/typing on source inputs that have a corresponding _summary field
   $(document).ready(function () {
 
-    // Actively listens for user input on any element with data-summary
-    $(document).on("input change", "[data-summary]", function () {
+  // Actively listens for user input on any element with data-summary
+  $(document).on("input change", "[data-summary]", function () {
       const summaryTargetId = $(this).attr("data-summary");
 
       if (summaryTargetId) {
@@ -1519,6 +1584,67 @@ $(document).ready(function () {
       }
     });
   });
+
+
+
+      $.ajax({
+          url: '/your-chart-data-url', // Replace with your endpoint
+          method: 'GET',
+          dataType: 'json',
+          success: function (response) {
+            // Example response: { value1: 12, value2: 8, value3: 4 }
+            window.updateRenewalPieChart([
+              response.value1,
+              response.value2,
+              response.value3
+            ]);
+          },
+          error: function (xhr, status, error) {
+            console.error('Could not load chart data:', error);
+          }
+      });
+
+  
+      // Replace with your real data (e.g. from your AJAX response)
+      const labels = ['Pending', 'Expiring soon', 'Expired'];
+      const values = [1, 2, 3];
+      const colors = ['#36A2EB', '#FF6384', '#FFCE56'];
+
+      const total = values.reduce((a, b) => a + b, 0);
+      document.getElementById('chartTotal').textContent = total;
+
+      // Custom legend
+      document.getElementById('chartLegend').innerHTML = labels.map((l, i) => `<span><i style="background:${colors[i]}"></i>${l}</span>`).join('');
+
+      new Chart(document.getElementById('policyChart'), {
+        type: 'doughnut',
+          data: {
+              labels: labels,
+              datasets: [{
+                data: values,
+                backgroundColor: colors,
+                borderColor: '#fff',
+                borderWidth: 2,
+                hoverOffset: 6
+              }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,   // fills .chart-wrap instead of the whole modal
+            cutout: '68%',                // donut thickness
+            plugins: {
+              legend: { display: false }, // using the custom HTML legend
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => {
+                    const pct = total ? Math.round(ctx.parsed / total * 100) : 0;
+                    return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                  }
+                }
+              }
+            }
+          }
+      });
 
   loadBeforeExpirationCount();
   loadExpiredCount();
@@ -1608,10 +1734,10 @@ function LoadTransactionData() {
     },
     order: [[1, 'desc']],
     columns: [
-          { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+          { data: "Insurance_No", name: "transactions_rb.Insurance_No", defaultContent: "- - -" },
           {
             data: "Trans_Date",
-            name: "Trans_Date",
+            name: "transactions_rb.Trans_Date",
             defaultContent: "- - -",
             render: function (data, type) {
               if (!data) return "- - -";
@@ -1621,7 +1747,7 @@ function LoadTransactionData() {
 
           {
             data: "Policy_Expiration",
-            name: "Policy_Expiration",
+            name: "transactions_rb.Policy_Expiration",
             defaultContent: "- - -",
             render: function (data, type) {
               if (!data) return "- - -";
@@ -1631,36 +1757,32 @@ function LoadTransactionData() {
 
           {
             data: "Issue_Date",
-            name: "Issue_Date",
+            name: "transactions_rb.Issue_Date",
             defaultContent: "- - -",
             render: function (data, type) {
               if (!data) return "- - -";
               return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
             }
           },
-          { data: "Trans_Status", name: "Trans_Status", defaultContent: "- - -" },
-          { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+          { data: "Trans_Status", name: "transactions_rb.Trans_Status", defaultContent: "- - -" },
+          { data: "Customer_No", name: "transactions_rb.Customer_No", defaultContent: "- - -" },
           // Flattened Columns (Matches leftJoin backend)
-          { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
-          { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
-          { data: "VIN", name: "VIN", defaultContent: "- - -" },
-          { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
-          { data: "Model", name: "Model", defaultContent: "- - -" },
-          { data: "Variant", name: "Variant", defaultContent: "- - -" },
+          { data: "Full_Name", name: "customer_information.Full_Name", defaultContent: "- - -" },
+          { data: "Contact_No", name: "customer_information.Contact_No", defaultContent: "- - -" },
+          { data: "VIN", name: "transactions_rb.VIN", defaultContent: "- - -" },
+          { data: "CS_No", name: "vehicle_information.CS_No", defaultContent: "- - -" },
+          { data: "Model", name: "vehicle_information.Model", defaultContent: "- - -" },
+          { data: "Variant", name: "vehicle_information.Variant", defaultContent: "- - -" },
 
           // Main Table Columns
-          {
-            data: "Insurance_Company",
-            name: "Insurance_Company",
-            defaultContent: "- - -"
-          },
+          { data: "Insurance_Company", name: "transactions_rb.Insurance_Company", defaultContent: "- - -"},
           {
             data: "ise_name",             // Matches 'ise_name.Display_Name as ise_name' in select
             name: "ise_name.Display_Name", // Allows Yajra DataTables to sort/search by alias
             defaultContent: "- - -"
           },
-          { data: "MP_Name", name: "MP_Name", defaultContent: "- - -" },
-          { data: "Call_Attempts", name: "Call_Attempts", defaultContent: "- - -" },
+          { data: "MP_Name", name: "vehicle_information.MP_Name", defaultContent: "- - -" },
+          { data: "Call_Attempts", name: "vw_call_attempts_rb.Call_Attempts", defaultContent: "- - -" },
           {
             data: "button",
             name: "button",
@@ -2175,6 +2297,126 @@ function initExpiringTable() {
         });
     }
 
+
+    if ($.fn.dataTable.isDataTable('#completedTable')) {
+        $('#completedTable').DataTable().ajax.reload(null, false);
+    }else{
+        /**
+         *  
+         *  Renewed  
+         * 
+        **/
+        $('#completedTable').DataTable({
+          language: {
+            processing: "Loading Transaction List..."
+          },
+          processing: true,
+          serverSide: true,
+          searching: false,
+          pageLength: 10,
+          responsive: true,
+          autoWidth: false,
+          ajax: {
+            url: window.tableRoutes.getCompletedPolicies,
+            type: "POST",
+            data: function (d) {
+              d.viewpending = window.viewpending === true;
+              d.viewexpiring = window.viewexpiring === true;
+              d.searchval = $('#txtsearch').val().trim();
+              d.datefrom = $('#dpdatefrom').val();
+              d.dateto = $('#dpdateto').val();
+              d.chkall = $('#chkall').is(':checked') ? 1 : 0;
+              d.dpFilter = $('#dpFilterSelect').val();
+            }
+          },                                   // <-- closes ajax
+          columns: [
+            { data: "Insurance_No", name: "Insurance_No", defaultContent: "- - -" },
+            {
+              data: "Trans_Date",
+              name: "Trans_Date",
+              defaultContent: "- - -",
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY | h:mm A') : data;
+              }
+            },
+
+            {
+              data: "Start_Date",
+              name: "Start_Date",
+              defaultContent: "- - -",
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+            },
+
+
+            {
+              data: "Policy_Expiration",
+              name: "Policy_Expiration",
+              defaultContent: "- - -",
+              render: function (data, type) {
+                if (!data) return "- - -";
+                return type === 'display' ? moment(data).format('MMM D, YYYY') : data;
+              }
+            },
+
+            {
+              data: "Trans_Status",
+              name: "Trans_Status",
+              defaultContent: "- - -",
+            },
+
+            { data: "Customer_No", name: "Customer_No", defaultContent: "- - -" },
+
+            // Flattened Columns (Matches leftJoin backend)
+            { data: "Full_Name", name: "Full_Name", defaultContent: "- - -" },
+            { data: "Contact_No", name: "Contact_No", defaultContent: "- - -" },
+
+            { data: "VIN", name: "VIN", defaultContent: "- - -" },
+            { data: "CS_No", name: "CS_No", defaultContent: "- - -" },
+            { data: "Plate_No", name: "Plate_No", defaultContent: "- - -" },
+            { data: "Model", name: "Model", defaultContent: "- - -" },
+            { data: "Variant", name: "Variant", defaultContent: "- - -" },
+
+            // Main Table Columns
+            {
+              data: "Insurance_Company",
+              name: "Insurance_Company",
+              defaultContent: "- - -"
+            },
+          ],
+          columnDefs: [
+            {
+              targets: [5, 11, 12, 13],
+              render: function (data, type, row, meta) {
+                // Use plain text for sorting, searching, and export
+                if (type !== 'display') {
+                  return typeof data === 'string' ? stripHtml(data) : data;
+                }
+
+                const maxLength = 30;
+                if (typeof data !== 'string') return data;
+
+                // Cell contains HTML (e.g. status badges): return as-is, no truncation
+                if (/<[a-z][\s\S]*>/i.test(data)) {
+                  return data;
+                }
+
+                if (data.length > maxLength) {
+                  const truncated = data.substring(0, maxLength) + '...';
+                  const safe = escapeAttr(data);
+                  return `<span class="popup-data" title="${safe}" data-full="${safe}">${escapeAttr(truncated)}</span>`;
+                }
+
+                return data;
+              }
+            }
+          ]
+        });
+    }
+
 }
 
 
@@ -2299,7 +2541,6 @@ function LoadCustomerData() {
 
   // ✅ Bind row click for selection AFTER table initialization
   $('#table_customerlist tbody').off('dblclick', 'tr').on('dblclick', 'tr', function () {
-        console.log('checking add new flag', renewal_flag);
         $('#btncustselect').trigger("click");
   });
 
@@ -2779,6 +3020,8 @@ function LoadCustomerInfo() {
     success: function (data) {
       $.each(data, function (i, value) {
 
+            console.log(data);
+
             // Helper: set select option safely
             function setSelectOption(selector, text, val) {
               const select = $(selector);
@@ -2796,14 +3039,15 @@ function LoadCustomerInfo() {
               setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
 
             if (value.Group == 1) {
-              $(".customer-fleet-corp").fadeOut();
-              $(".customer-individual").fadeIn();
-              $(".birth-date").fadeIn();
+              $(".customer-fleet-corp").stop(true, true).fadeOut();
+              $(".customer-individual").stop(true, true).fadeIn();
+              $(".birth-date").stop(true, true).fadeIn();
             } else {
-              $(".customer-fleet-corp").fadeIn();
-              $(".customer-individual").fadeOut();
-              $(".birth-date").fadeOut();
+              $(".customer-fleet-corp").stop(true, true).fadeIn();
+              $(".customer-individual").stop(true, true).fadeOut();
+              $(".birth-date").stop(true, true).fadeOut();
             }
+
             $("#txtcustname, .txtcustname").val(value.Full_Name);
             $("#txtcustfname, .txtcustfname").val(value.First_Name);
             $("#txtcustmname, .txtcustmname").val(value.Middle_Name);
@@ -5657,11 +5901,18 @@ $(document).on("click", "#btnvehselect", function () {
   $('#modal-vehiclelist').iziModal('close');
 });
 
-
+// Show expiring, new and renewed policies
 $(document).on("click", "#btnnblist", function () {
   // LoadNBData();
   // $('#modal-nblist').iziModal('open');
   $('#modal-show-expiring-policies').iziModal('open');
+});
+
+// Show ticket statistics only on admin side
+$(document).on("click", "#btnStatsPolicies", function () {
+  // LoadNBData();
+  // $('#modal-nblist').iziModal('open');
+  $('#modal-statistics-policies').iziModal('open');
 });
 
 

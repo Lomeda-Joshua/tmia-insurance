@@ -1352,7 +1352,7 @@ $(document).ready( function () {
 
   btnselect = 'A';
   
-
+  LoadStatusCounts();
 });
 ///////////////////////// END FIRST LOAD SCRIPT ////////////////////////////////////
 
@@ -1360,10 +1360,13 @@ $(document).ready( function () {
 //============== COUNTS PENDING ===============//
 function LoadStatusCounts() {
   $.ajax({
-    type:"POST",
     url:window.LaravelRoutes.nbpendingcounts,
     dataType: "json",
+    type:"POST",
     success: function(data) {
+
+      console.log(data);
+
       $("#pending-counts").text(NumberFormat(data.Pending_Counts,0));
       $("#expiring-counts").text(NumberFormat(data.Expiring_Counts,0));
     }

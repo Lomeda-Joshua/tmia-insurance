@@ -90,7 +90,7 @@ class RenewalBusinessController extends Controller
             $query->whereBetween('transactions_rb.Trans_Date', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
                 Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ])->orderBy('transactions_rb.Trans_Date', 'asc');
+            ]);
         }
 
         // 2. Transaction date Filter
@@ -98,7 +98,7 @@ class RenewalBusinessController extends Controller
             $query->whereBetween('transactions_rb.Issue_Date', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
                 Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ])->orderBy('transactions_rb.Issue_Date', 'desc');
+            ]);
         }
 
         // 2. Policy date Filter
@@ -115,7 +115,7 @@ class RenewalBusinessController extends Controller
                 ->addSelect(DB::raw(
                     'DATEDIFF(transactions_rb.Policy_Expiration, CURDATE()) AS Days_Before_Expiration'
                 ))
-                ->orderBy('transactions_rb.Policy_Expiration', 'asc');
+                ;
         }
 
 
@@ -123,7 +123,7 @@ class RenewalBusinessController extends Controller
             $query->whereBetween('transactions_rb.Start_Date', [
                 Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
                 Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ])->orderBy('transactions_rb.Start_Date', 'asc');
+            ]);
         }
 
         // 4. Custom Search Filter (Runs regardless of Date Range)
@@ -462,20 +462,24 @@ class RenewalBusinessController extends Controller
                 // ----------------------------
                 // C) GENERATE INSURANCE NO
                 // ----------------------------
-                $year = date('Y');
+                $year   = date('Y');
                 $prefix = "RB-{$year}-";
 
+                // Find the highest counter by un-reversing the 7-digit sequence (starts at char 9 of "RB-YYYY-0000000")
                 $lastTransaction = RenewalBusinessTransaction::where('Insurance_No', 'LIKE', "{$prefix}%")
                     ->lockForUpdate()
-                    ->orderBy('Insurance_No', 'desc')
+                    ->orderByRaw('CAST(REVERSE(SUBSTRING(Insurance_No, 9, 7)) AS UNSIGNED) DESC')
                     ->first();
 
-                $seq = "0000001";
+                $counter = 1;
                 if ($lastTransaction && preg_match('/^RB-(\d{4})-(\d{7})$/', $lastTransaction->Insurance_No, $m)) {
                     if ($m[1] == $year) {
-                        $seq = str_pad(((int) $m[2]) + 1, 7, '0', STR_PAD_LEFT);
+                        $counter = ((int) strrev($m[2])) + 1;
                     }
                 }
+
+                // pad to 7 digits, then reverse so the digits consume the zeros from the left
+                $seq = strrev(str_pad($counter, 7, '0', STR_PAD_LEFT));
 
                 $insuranceNo = "RB-{$year}-{$seq}";
 
@@ -502,7 +506,9 @@ class RenewalBusinessController extends Controller
 
                 $startdate = Carbon::createFromFormat('d-F-Y', $request['startdate'])->format('Y-m-d');
                 $issuedate = Carbon::createFromFormat('d-F-Y', $request['issuedate'])->format('Y-m-d');
-                $policyExpiration = Carbon::createFromFormat('d/m/Y', $request->input('pexpiredate'))->format('Y-m-d');
+                $policyExpiration = Carbon::createFromFormat('m/d/Y', $request->input('pexpiredate'))->format('Y-m-d');
+
+
 
                 // ----------------------------
                 // D) INSERT INSURANCE RECORD
@@ -1088,6 +1094,82 @@ class RenewalBusinessController extends Controller
             ->make(true);
     }
 
+    public function getCompletedTransactions(Request $request): JsonResponse
+    {
+        $user_id_info = Auth::user()->User_ID;
+
+        // 1. Build Query with Joins (Flattened for DataTables searching & sorting)
+        $query = TransactionsNb::query()
+            ->from('transactions_nb as t')
+            ->leftJoin('customer_information as c', 't.Customer_No', '=', 'c.Customer_No')
+            ->leftJoin('vehicle_information as v', 't.VIN', '=', 'v.VIN')
+            ->leftJoin('vw_insurance_staff as i', 't.ISE_No', '=', 'i.ISE_No')
+            ->select([
+                DB::raw("'RB' as Source"),
+                't.Insurance_No',
+                't.Start_Date',
+                't.Trans_Date',
+                't.Trans_Status',
+                't.Customer_No',
+                't.VIN',
+                't.Insurance_Company',
+                't.Option_Type',
+                't.Policy_Expiration',
+                't.ISE_No',
+                'c.Full_Name',
+                'c.Contact_No',
+                'v.CS_No',
+                'v.Plate_No',
+                'v.Model',
+                'v.Variant',
+                'i.ISE_Name',
+            ])
+
+            ->where('t.Trans_Status', "COMPLETED")
+
+            ->when($user_id_info && $user_id_info != 1, function ($q) use ($user_id_info) {
+                $q->where('t.ISE_No', $user_id_info);
+            });
+       
+
+        $statusColors = [
+            'PENDING' => 'label label-default',
+            'IN PROCESS' => 'label label-primary',
+            'COMPLETED' => 'label label-success',
+            'PAYMENT PROCESSING' => 'label label-warning',
+            'PAYMENT CONFIRMED' => 'label label-success',
+            'CANCELLED' => 'label label-danger',
+            'PARTIALLY PAID' => 'label bg-purple',
+            'FAILED TO ASSIGN' => 'label bg-navy',
+        ];
+
+        // 2. Return Yajra Server-Side JSON Response
+        return DataTables::of($query)
+            ->addIndexColumn() // Generates 'DT_RowIndex' (replaces urutan)
+            ->editColumn('Trans_Status', function ($row) use ($statusColors) {
+                $insuranceNo = e($row->Insurance_No ?? '');
+                $statusRaw = $row->Trans_Status ?? '';
+                $status = strtoupper(trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", " ", $statusRaw))));
+                $labelClass = $statusColors[$status] ?? 'label label-default';
+
+                return '<span insuranceno="' . $insuranceNo . '" class="badge ' . $labelClass . '">' . e($statusRaw) . '</span>';
+            })
+            ->editColumn('Days_To_Expiry', function ($row) {
+                $days = (int) $row->Days_To_Expiry;
+                if ($days < 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expired ' . abs($days) . ' day(s) ago</span>';
+                } elseif ($days === 0) {
+                    return '<span class="label label-danger" style="font-size:15px">Expires today</span>';
+                } elseif ($days <= 30) {
+                    return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+                }
+
+                return '<span class="label label-warning" style="font-size:15px">' . $days . ' day(s)</span>';
+            })
+            ->rawColumns(['Trans_Status', 'Days_To_Expiry'])
+            ->make(true);
+    }
+
 
     public function renewalBusinessModify()
     {
@@ -1407,6 +1489,58 @@ class RenewalBusinessController extends Controller
         }
 
         $statusRaw  = trim($record->Trans_Status ?? '') ?: 'PENDING';
+        $labelClass = self::STATUS_COLORS[strtoupper($statusRaw)] ?? 'label label-default';
+
+        $statusDate = $record->Trans_Status_Date
+            ? Carbon::parse($record->Trans_Status_Date)->format('d M Y h:i:s A')
+            : '';
+
+        return response()->json([
+            'status'      => $statusRaw,
+            'labelClass'  => $labelClass,
+            'userId'      => $record->User_ID ?? '-',
+            'displayName' => $record->Display_Name ?? '-',
+            'statusDate'  => $statusDate,
+            'remarks'     => $record->Trans_Status_Remarks ?? 'No remarks',
+        ]);
+    }
+
+
+    public function pieChartStatus(): jsonResponse
+    {
+
+        return response()->json([
+
+        ]);
+    }
+
+
+    public function policyStatus(Request $request){
+
+        $validated = $request->validate([
+            'insuranceno' => ['required', 'string'],
+        ]);
+
+        $record = DB::table('transactions_rb as t')
+            ->leftJoin('approval_rb_status as s', 't.Insurance_No', '=', 's.Insurance_No')
+            ->leftJoin('user as u', 's.User_ID', '=', 'u.User_ID')
+            ->where('t.Insurance_No', $validated['insuranceno'])
+            ->orderByDesc('s.Trans_Status_Date')
+            ->select(
+                't.Insurance_No',
+                's.User_ID',
+                'u.Display_Name',
+                's.Trans_Status',
+                's.Trans_Status_Remarks',
+                's.Trans_Status_Date'
+            )
+            ->first();
+
+        if (!$record) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
+
+        $statusRaw  = trim($record->Trans_Status ?? 'PENDING');
         $labelClass = self::STATUS_COLORS[strtoupper($statusRaw)] ?? 'label label-default';
 
         $statusDate = $record->Trans_Status_Date

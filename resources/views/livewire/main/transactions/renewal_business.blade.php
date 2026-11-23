@@ -201,6 +201,150 @@
     td.copied { 
         background: #d4edda !important; 
     }
+
+    .action-buttons {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+
+  <style>
+      .policy-stats-card {
+          background-color: #1c1c1c;
+          border: 1px solid #2e2e2e;
+          border-radius: 6px;
+          overflow: hidden;
+          color: #f1f1f1;
+      }
+
+      .policy-stats-card .card-header {
+          background-color: #e0434e;
+          border-bottom: none;
+          padding: 0.75rem 1.25rem;
+      }
+
+      /* Override Bootstrap/AdminLTE float on card-title so flexbox aligns cleanly */
+      .policy-stats-card .card-header::after {
+          display: none;
+      }
+
+      .policy-stats-card .card-title {
+          color: #ffffff;
+          font-size: 1rem;
+          font-weight: 600;
+      }
+
+      .policy-stats-card .header-link {
+          color: #ffffff;
+          font-size: 0.875rem;
+          font-weight: 500;
+          text-decoration: none;
+      }
+
+      .policy-stats-card .header-link:hover {
+          text-decoration: underline;
+          color: #ffffff;
+      }
+
+      .policy-stats-card .card-body {
+          padding: 1.75rem 1.5rem;
+      }
+
+      .chart-wrapper {
+          position: relative;
+          width: 135px;
+          height: 135px;
+      }
+
+      .policy-legend-list {
+          width: 100%;
+      }
+
+      .policy-legend-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.65rem 0;
+          border-bottom: 1px solid #323232;
+          font-size: 0.95rem;
+      }
+
+      .legend-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 3px;
+          display: inline-block;
+          margin-right: 12px;
+          flex-shrink: 0;
+      }
+
+      .legend-label {
+          color: #000000;
+          font-weight: 500;
+      }
+
+      .legend-value {
+          color: #000000;
+          font-weight: 500;
+      }
+  </style>
+
+  <style>
+    .stat-modal {
+      width: 320px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+      font-family: system-ui, sans-serif;
+    }
+    .stat-modal__header {
+      background: #dc3545;
+      color: #fff;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stat-modal__title { font-size: 15px; font-weight: 600; margin: 0; }
+    .stat-modal__sub   { font-size: 11px; opacity: .9; margin: 2px 0 0; }
+    .stat-modal__close {
+      background: none; border: 0; color: #fff;
+      font-size: 20px; cursor: pointer; line-height: 1;
+    }
+    .stat-modal__body { padding: 16px; text-align: center; }
+
+    .chart-wrap {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+    .chart-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .chart-center__num   { font-size: 30px; font-weight: 600; line-height: 1; }
+    .chart-center__label { font-size: 12px; color: #6b7280; margin-top: 4px; }
+
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin-top: 14px;
+      font-size: 12px;
+      color: #4b5563;
+    }
+    .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .chart-legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
   </style>
 
 
@@ -296,9 +440,7 @@
                   </select>
                 </div>
                 <small class="text-muted d-block">
-                    <i class="fas fa-info-circle"></i> Filters the records base on date:
-                    <strong>From</strong>,
-                    <strong>To</strong>
+                    <i class="fas fa-info-circle"></i> Filters the records base on selection then date
                   </small>
                 <div class="help-block with-errors"></div>
               </div>
@@ -330,23 +472,27 @@
               </div>
 
               <div class="col-md-3">
-                <div class="row">
-                  <div class="col-md-3">
-                    <label id="btnrefresh" class="btn btn-box-tool"
-                      style="font-size: 15px !important; display: block;"><i class="fa-solid fa-rotate"></i>
-                      Refresh</label>
-                  </div>
-                  <div class="col-md-3">
-                    <label id="btnSearch" class="btn btn-box-tool"
-                      style="font-size: 15px !important; display: block;"><i class="fa-solid fa-magnifying-glass"></i>
-                      Search</label>
+                  <div class="form-group">
+                    <label class="control-label" aria-hidden="true">&nbsp;</label>
+                    <div class="action-buttons">
+                      <button id="btnrefresh" type="button" class="btn btn-default">
+                        <i class="fa-solid fa-rotate"></i> Refresh
+                      </button>
+                      <button id="btnSearch" type="button" class="btn btn-default">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
             </div>
             <div class="row">
               <div class="btnactionud pull-right" style="display: none;">
+                <button type="button" id="btnStatsPolicies" class="btn btn-box-tool"
+                  style="font-size: 15px !important;" data-toggle="tooltip"
+                  title="Insurance Policies ticket standing and status"><i class="fa fa-list"></i>
+                  Ticket stats</button>
+
                 <button type="button" id="btnnblist" class="btn btn-box-tool"
                   style="font-size: 15px !important; background-color:red; color:white;" data-toggle="tooltip"
                   title="Insurance Policies expiring & Expiring Soon (90Days)"><i class="fa fa-list"></i>
@@ -354,6 +500,7 @@
 
                 <button type="button" id="btnadd" class="btn btn-box-tool" style="font-size: 15px !important;"><i
                     class="fa fa-plus"></i> Add New</button>
+
               </div>
             </div>
           </div>
@@ -486,14 +633,18 @@
                                 <div class="form-group">
                                   <label for="txtcustno">Customer No. *</label>
                                   <div class="input-group input-group-sm">
+
                                     <input type="text" id="txtcustno" class="form-control input-sm"
                                       placeholder="Auto Generated" disabled>
+
                                     <input type="hidden" id="txtcustnoupload" class="form-control input-sm">
+
                                     <span class="input-group-btn">
                                       <button type="button" id="btnfindcustomer" data-toggle="tooltip"
                                         data-placement="top" title="Find Customer" class="btn btn-success btn-flat"><i
                                           class="fa fa-search"></i></button>
                                     </span>
+
                                   </div>
                                   <div class="help-block with-errors"></div>
                                 </div>
@@ -509,7 +660,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="customer-fleet-corp" hidden>
+                            <div class="customer-fleet-corp" style="display: none;">
                               <div class="row">
                                 <div class="col-md-12">
                                   <div class="form-group">
@@ -1532,7 +1683,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Contact No:</th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtcontactno" class="form-control input-sm" placeholder="optional"
+                                  <input type="text" id="txtcontactno" class="form-control input-sm" placeholder="Optional"
                                     style="width: 100%;" required="required" data-error="Contact No. is required."
                                     disabled>
                                 </td>
@@ -1542,13 +1693,13 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Birthdate:</th>
                                 <td>
-                                  <input id="dpbirthdate" type="text" class="form-control input-sm" placeholder="optional" style="width: 100%;"
+                                  <input id="dpbirthdate" type="text" class="form-control input-sm" placeholder="Optional" style="width: 100%;"
                                     data-error="Birth Date is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">E-Mail Address:
                                 </th>
                                 <td>
-                                  <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd" placeholder="optional"
+                                  <input type="text" id="txtemailadd" class="form-control input-sm txtemailadd" placeholder="Optional"
                                     style="width: 100%;" data-error="Email is required." readonly
                                     disabled>
                                 </td>
@@ -1560,14 +1711,14 @@
                                   style="font-size:15px; text-transform:uppercase; font-weight:bold; vertical-align: top;">
                                   TIN:</th>
                                 <td style="vertical-align: top;">
-                                  <input type="text" id="txttin" class="form-control input-sm txttin" placeholder="optional"
+                                  <input type="text" id="txttin" class="form-control input-sm txttin" placeholder="Optional"
                                     style="width: 100%;" data-error="TIN is required." disabled>
                                 </td>
                                 <th
                                   style="font-size:15px; text-transform:uppercase; font-weight:bold; vertical-align: top;">
                                   Address:</th>
                                 <td style="vertical-align: top;">
-                                  <textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="optional"
+                                  <textarea id="txtaddress" class="form-control input-sm txtaddress" placeholder="Optional"
                                     style="width: 100%; resize: vertical;" placeholder="Address here!" rows="3"
                                     required="required" data-error="Address is required." disabled></textarea>
                                 </td>
@@ -1586,13 +1737,13 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">VIN:
                                 </th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtvin" placeholder="optional" class="form-control input-sm txtvin" style="width: 100%;"
+                                  <input type="text" id="txtvin" placeholder="Optional" class="form-control input-sm txtvin" style="width: 100%;"
                                     data-error="VIN is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Make:</th>
                                 <td style="width: 32%;">
-                                  <input type="text" id="txtmake" placeholder="optional" class="form-control input-sm txtmake"
+                                  <input type="text" id="txtmake" placeholder="Optional" class="form-control input-sm txtmake"
                                     style="width: 100%;" data-error="Make is required." disabled>
                                 </td>
                               </tr>
@@ -1601,12 +1752,12 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model:</th>
                                 <td>
-                                  <input type="text" id="txtmodel" placeholder="optional" class="form-control input-sm txtmodel"
+                                  <input type="text" id="txtmodel" placeholder="Optional" class="form-control input-sm txtmodel"
                                     style="width: 100%;" data-error="Model is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Model Year:</th>
                                 <td>
-                                  <input type="text" id="txtmodelyear" placeholder="optional" class="form-control input-sm txtmodelyear"
+                                  <input type="text" id="txtmodelyear" placeholder="Optional" class="form-control input-sm txtmodelyear"
                                     style="width: 100%;" data-error="Model Year is required." disabled>
                                 </td>
                               </tr>
@@ -1615,7 +1766,7 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Color:</th>
                                 <td>
-                                  <input type="text" id="txtcolor" placeholder="optional" class="form-control input-sm txtcolor"
+                                  <input type="text" id="txtcolor" placeholder="Optional" class="form-control input-sm txtcolor"
                                     style="width: 100%;" data-error="Color is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
@@ -1632,7 +1783,7 @@
                               <tr>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">CS No:</th>
                                 <td>
-                                  <input type="text" id="txtcsno" placeholder="optional" class="form-control input-sm txtcsno"
+                                  <input type="text" id="txtcsno" placeholder="Optional" class="form-control input-sm txtcsno"
                                     style="width: 100%;" data-error="CS No is required." disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
@@ -1649,7 +1800,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">SRP / FMV :</th>
                                 <td colspan="3">
                                   <input type="text" id="txtsrp" class="form-control input-sm txtsrp"
-                                    style="width: 100%;" placeholder="optional" data-error="Paid Price is required."
+                                    style="width: 100%;" placeholder="Optional" data-error="Paid Price is required."
                                     disabled>
                                   <div class="help-block with-errors"></div>
                                 </td>
@@ -1665,7 +1816,7 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
                                   Type:</th>
                                 <td style="width: 32%;">
-                                  <input id="cboinstype_summary" placeholder="optional" class="form-control input-sm cboinstype_summary"
+                                  <input id="cboinstype_summary" placeholder="Optional" class="form-control input-sm cboinstype_summary"
                                     style="width: 100%;" data-error="Insurance Type is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold; width: 18%;">
@@ -1681,15 +1832,13 @@
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Inception Date:
                                 </th>
                                 <td>
-                                  <input id="dpstartdate_summary" type="text"
-                                    class="form-control input-sm dpstartdate_summary" style="width: 100%;"
+                                  <input id="dpstartdate_summary" type="text" class="form-control input-sm dpstartdate_summary" style="width: 100%;"
                                     data-error="Start / Inception Date is required." disabled>
                                 </td>
                                 <th style="font-size:15px; text-transform:uppercase; font-weight:bold;">Policy Number:
                                 </th>
                                 <td>
-                                  <input type="text" id="txtpolicyno_summary"
-                                    class="form-control input-sm txtpolicyno_summary" style="width: 100%;"
+                                  <input type="text" id="txtpolicyno_summary" class="form-control input-sm txtpolicyno_summary" style="width: 100%;"
                                     data-error="Policy No. is required." disabled>
                                 </td>
                               </tr>
@@ -2639,19 +2788,123 @@
                       </div>
                   </div>
 
+                  <div class="tab-pane" id="completedTab">
+                      <div class="box">
+                            <div class="box-body">
+                              <div class="box-header with-border">
+                              </div>
+                              <div class="box-body">
+                                  <div class="table-responsive">
+                                        <table id="completedTable" class="table table-striped table-bordered table-hover">
+                                          <thead>
+                                            <tr class="tableheader">
+                                              <th>Insurance No.</th>
+                                              <th>Trans. Date & Time</th>
+                                              <th>Issue Date</th>
+                                              <th>Policy Expiration</th>
+                                              <th>Status</th>
+                                              <th>Customer No.</th>
+                                              <th>Customer Name</th>
+                                              <th>Contact No.</th>
+                                              <th>VIN</th>
+                                              <th>CS No.</th>
+                                              <th>Plate No.</th>
+                                              <th>Model</th>
+                                              <th>Variant</th>
+                                              <th>Insurance Partner</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                          </tbody>
+                                        </table>
 
-
+                                        <p style="font-size:12px;font-style: italic;">
+                                          <b>Note:</b> The entries included within this list are expiring within 90 days.
+                                        </p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
 
-              
-              
             </div>
           </div>
         </div>
+        <!-- END MODAL SHOW EXPIRING POLICIES -->
+
+
+        <!-- MODAL SHOW EXPIRING POLICIES -->
+        <div id="modal-statistics-policies" aria-hidden="false" role="dialog" class="iziModal isAttached hasScroll">
+          <div class="box">
+            <div class="box-body">
+
+              <ul class="nav nav-tabs approvaltab">
+                <li class="active"><a href="#before_expiration" data-toggle="tab" aria-expanded="false" style="text-transform:uppercase;">Policy Statistics</a></li>
+              </ul>
+
+              <div class="tab-content" style="mt-1">
+
+                  <div class="chart-wrap">
+                    <canvas id="policyChart" role="img" aria-label="Donut chart of policies by status"> Pending 1, Expiring soon 2, Expired 3.</canvas>
+                    <div class="chart-center">
+                      <span class="chart-center__num" id="chartTotal">0</span>
+                      <span class="chart-center__label">policies</span>
+                    </div>
+                  </div>
+
+                  <div class="chart-legend" id="chartLegend"></div>
+                  
+                  <!-- Right: Custom Legend List -->
+                  <div class="col-md-5">
+                      <ul class="policy-legend-list list-unstyled mb-0">
+                          <li class="policy-legend-item">
+                              <div class="d-flex align-items-center">
+                                  <span class="legend-dot" style="background-color: #36A2EB;"></span>
+                                  <span class="legend-label">Pending</span>
+                              </div>
+                              <div class="legend-value">
+                                  <span>{{ $pendingCount ?? 1 }}</span>
+                                  <span class="mx-1">&middot;</span>
+                                  <span>{{ $pendingPercent ?? 17 }}%</span>
+                              </div>
+                          </li>
+
+                          <li class="policy-legend-item">
+                              <div class="d-flex align-items-center">
+                                  <span class="legend-dot" style="background-color: #FF6384;"></span>
+                                  <span class="legend-label">Expiring soon</span>
+                              </div>
+                              <div class="legend-value">
+                                  <span>{{ $expiringSoonCount ?? 2 }}</span>
+                                  <span class="mx-1">&middot;</span>
+                                  <span>{{ $expiringSoonPercent ?? 33 }}%</span>
+                              </div>
+                          </li>
+
+                          <li class="policy-legend-item">
+                              <div class="d-flex align-items-center">
+                                  <span class="legend-dot" style="background-color: #FFCE56;"></span>
+                                  <span class="legend-label">Expired</span>
+                              </div>
+                              <div class="legend-value">
+                                  <span>{{ $expiredCount ?? 3 }}</span>
+                                  <span class="mx-1">&middot;</span>
+                                  <span>{{ $expiredPercent ?? 50 }}%</span>
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- END MODAL SHOW EXPIRING POLICIES -->
+
       </div>
-      <!-- END MODAL SHOW EXPIRING POLICIES -->
-
-
+      
     </section>
   </div>
   <!-- /.content-wrapper -->
@@ -2660,29 +2913,32 @@
 
   @push('scripts')
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+
   <!-- JavaScript Controls -->
-<script>
-function openReceiptModal() {
-    document.getElementById('receiptModal').style.display = 'flex';
-}
-  
-function closeReceiptModal() {
-    document.getElementById('receiptModal').style.display = 'none';
-}
+  <script>
+      function openReceiptModal() {
+          document.getElementById('receiptModal').style.display = 'flex';
+      }
+        
+      function closeReceiptModal() {
+          document.getElementById('receiptModal').style.display = 'none';
+      }
 
-function printReceipt(divId) {
-    var printContents = document.getElementById(divId).innerHTML;
-    var originalContents = document.body.innerHTML;
+      function printReceipt(divId) {
+          var printContents = document.getElementById(divId).innerHTML;
+          var originalContents = document.body.innerHTML;
 
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-    window.location.reload(); // Reloads page state after print dialog closes
-}
+          document.body.innerHTML = printContents;
+          window.print();
+          document.body.innerHTML = originalContents;
+          window.location.reload(); // Reloads page state after print dialog closes
+      }
 </script>
 
 
-<script>
+  <script>
     window.LaravelRoutes = {
         nbpendingcounts: @json(route('new_business.counts')),
         loadSelectedCustomer : @json(route('customer.get-by-no')),
@@ -2705,7 +2961,8 @@ function printReceipt(divId) {
 
         getExpiringPolicies: @json(route('renewal-business.expiring-transactions')),
         getExpiredPolicies: @json(route('renewal-business.expired-transactions')),
-        getRenewedPolicies: @json(route('renewal-business.renewed-transactions'))
+        getRenewedPolicies: @json(route('renewal-business.renewed-transactions')),
+        getCompletedPolicies: @json(route('renewal-business.completed-transactions'))
     }
 
     window.fetchData = {
@@ -2751,6 +3008,7 @@ function printReceipt(divId) {
         getCallLogsByInsuranceNo : @json(route('get-call-logs.insurance-no')),
         getExpirationCounts : @json(route('get-expiring-counts')),
         expiredCounts : @json(route('expired-counts')),
+        policyStatus: @json(route('policybadge.data'))
     }
 
     window.formRoutes = {

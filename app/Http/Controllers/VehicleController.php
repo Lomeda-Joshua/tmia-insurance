@@ -21,9 +21,23 @@ class VehicleController extends Controller
 
     public function getVehicles(VehicleDatatableRequest $request): JsonResponse
     {
+        $query = VehicleInformation::with('customer');
+
+        $filter = $request->input('btnselect', $request->input('letter'));
+
+        if (!empty($filter) && $filter !== 'ALL') {
+            if ($filter === '[0-9]') {
+                $query->whereRaw("Full_Name REGEXP '^[0-9]'");
+            } elseif ($filter === '[SPECIAL CHAR]') {
+                $query->whereRaw("Full_Name REGEXP '^[^a-zA-Z0-9]'");
+            } else {
+                $query->where('Full_Name', 'like', "{$filter}%");
+            }
+        }
+
         $filters = $request->validated();
 
-        $query = VehicleInformation::query()
+       /*  $query = VehicleInformation::query()
         ->leftJoin('customer_information', 'vehicle_information.Customer_No', '=', 'customer_information.Customer_No')
         ->select([
             'vehicle_information.VIN',
@@ -34,33 +48,33 @@ class VehicleController extends Controller
             'vehicle_information.Engine_No',
             'vehicle_information.CS_No',
             'vehicle_information.Plate_No',
-            'vehicle_information.VSI_Date',
+            // 'vehicle_information.VSI_Date',
             'vehicle_information.SRP',
             'vehicle_information.Customer_No',
             'vehicle_information.Owner_Name',
             'customer_information.Full_Name',
             'customer_information.Contact_No',
-        ]);
+        ]); */
 
         // Search Filter
         if (! empty($filters['searchval'])) {
             $search = '%' . $filters['searchval'] . '%';
             $query->where(function ($q) use ($search) {
-                $q->where('VIN', 'like', $search)
-                  ->orWhere('CS_No', 'like', $search)
-                  ->orWhere('Plate_No', 'like', $search)
-                  ->orWhere('Customer_No', 'like', $search)
-                  ->orWhere('Customer_Name', 'like', $search)
-                  ->orWhere('Model', 'like', $search);
+                $q->where('vehicle_information.VIN', 'like', $search)
+                    ->orWhere('vehicle_information.CS_No', 'like', $search)
+                    ->orWhere('vehicle_information.Plate_No', 'like', $search)
+                    ->orWhere('vehicle_information.Customer_No', 'like', $search)
+                    ->orWhere('customer_information.Full_Name', 'like', $search)
+                    ->orWhere('vehicle_information.Model', 'like', $search);
             });
         } 
         // Date Range Filter
-        elseif (! empty($filters['datefrom']) && ! empty($filters['dateto'])) {
-            $query->whereBetween('VSI_Date', [
-                Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
-                Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
-            ]);
-        } 
+        // elseif (! empty($filters['datefrom']) && ! empty($filters['dateto'])) {
+        //     $query->whereBetween('vehicle_information.VSI_Date', [
+        //         Carbon::createFromFormat('d-m-Y', $filters['datefrom'])->startOfDay(),
+        //         Carbon::createFromFormat('d-m-Y', $filters['dateto'])->endOfDay(),
+        //     ]);
+        // } 
         // Default empty state unless 'All Data' is checked
         elseif (empty($filters['chkall'])) {
             $query->whereRaw('1 = 0');

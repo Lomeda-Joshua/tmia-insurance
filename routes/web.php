@@ -175,6 +175,7 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::post('/renewal-business/expiring-transactions', [RenewalBusinessController::class, 'getExpiringTransactions'])->name('renewal-business.expiring-transactions');
         Route::post('/renewal-business/expired-transactions', [RenewalBusinessController::class, 'getExpiredTransactions'])->name('renewal-business.expired-transactions');
         Route::post('/renewal-business/renewed-transactions', [RenewalBusinessController::class, 'getRenewedTransactions'])->name('renewal-business.renewed-transactions');
+        Route::post('/renewal-business/completed-transactions', [RenewalBusinessController::class, 'getCompletedTransactions'])->name('renewal-business.completed-transactions');
         
         Route::post('/renewal-business/save-new-payments', [RenewalBusinessController::class, 'savePayments'])->name('renewal-business.save-payments');
         
@@ -194,6 +195,9 @@ Route::middleware(['auth', EnsureLockscreenIsUnlocked::class])->group(function (
         Route::get('/renewal-business/modify', [RenewalBusinessController::class, 'renewalBusinessModify'])->name('renewal_business_modify.index');
         Route::post('/renewal-business/data/modify', [RenewalBusinessController::class, 'getRbTransactionsByInsuranceNo'])->name('renewal_business_modify_data.index');        
         Route::post('/renewal-business/expiration-status-count', [RenewalBusinessController::class, 'getExpirationCategoryCount'])->name('policy.status');
+
+        Route::post('/renewal-business/piechart-status', [RenewalBusinessController::class, 'getExpirationCategoryCount'])->name('chart.data');
+        Route::post('/renewal-business/policy-badge-status', [RenewalBusinessController::class, 'policyStatus'])->name('policybadge.data');
 
         // Vehicle
         Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle.index');
