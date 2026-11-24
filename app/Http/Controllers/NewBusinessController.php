@@ -166,6 +166,8 @@ class NewBusinessController extends Controller
         $userid = $user->User_ID;
         $ulevel = $user->User_Level_Description ?? '';
 
+        dd($request->input('instype', ''));
+
         try {
             DB::beginTransaction();
             /* ============================================================
@@ -266,8 +268,8 @@ class NewBusinessController extends Controller
             $prefix = "NB-{$year}-";
 
             $last = TransactionsNb::where('Insurance_No', 'LIKE', $prefix . '%')
-                ->orderBy('Insurance_No', 'desc')
                 ->lockForUpdate()
+                ->orderBy('Insurance_No', 'desc')
                 ->first();
 
             $seq = "0000001";

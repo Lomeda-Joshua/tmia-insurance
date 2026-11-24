@@ -1076,9 +1076,10 @@ $(document).ready( function () {
 
   $(document).on("change", "#cboinstype", function () {
         let instype = $(this).val();  
+        let instypeText = $(this).find("option:selected").text().trim();
 
         loadInsuranceCompanies(instype);   
-        $("#cboinstype_summary").val(instype);
+        $("#cboinstype_summary").val(instypeText);
   });
 
 
@@ -1567,7 +1568,7 @@ function LoadCustomerData() {
   $('#table_customerlist tbody').off('click', 'tr').on('click', 'tr', function () {
         // Remove selection from any previously selected row
         $('#table_customerlist tbody tr.selected').removeClass('selected');
-
+table_customerlist
         // Highlight clicked row
         $(this).addClass('selected');
 
@@ -1865,16 +1866,17 @@ function LoadCustomerInfo() {
 
         $("#txtcustno, .txtcustno").val(value.Customer_No);
         xcustnoupload = value.Upload_Cust_No;
+
         $("#txtcustnoupload, .txtcustnoupload").val(value.Upload_Cust_No);
         setSelectOption("#cbogroup, .cbogroup", value.Group, value.Group);
-        if (value.Group == 1) {
-          $(".customer-fleet-corp").fadeOut();
-          $(".customer-individual").fadeIn();
-          $(".birth-date").fadeIn();
-        } else {
-          $(".customer-fleet-corp").fadeIn();
-          $(".customer-individual").fadeOut();
-          $(".birth-date").fadeOut();
+        if(value.Group == 1) {
+            $(".customer-fleet-corp").fadeOut();
+            $(".customer-individual").fadeIn();
+            $(".birth-date").fadeIn();
+        }else {
+            $(".customer-fleet-corp").removeAttr("hidden").fadeIn();
+            $(".customer-individual").fadeOut();
+            $(".birth-date").fadeOut();
         }
         $("#txtcustname, .txtcustname").val(value.Full_Name);
         $("#txtcustfname, .txtcustfname").val(value.First_Name);
@@ -5695,37 +5697,37 @@ $(document).on("click", "#btnsubmit", function () {
   }
 
   const vehicleValidation = [
-    { key: "vin", selector: "#txtvin", message: "Please fill out VIN." },
-    { key: "make", selector: "#txtmake", message: "Please fill out Make." },
-    { key: "model", selector: "#txtmodel", message: "Please fill out Model." },
-    { key: "modelyear", selector: "#txtmodelyear", message: "Please fill out Model Year." },
-    { key: "color", selector: "#txtcolor", message: "Please fill out Color." },
-    { key: "engineno", selector: "#txtengineno", message: "Please fill out Engine No." },
+    // { key: "vin", selector: "#txtvin", message: "Please fill out VIN." },
+    // { key: "make", selector: "#txtmake", message: "Please fill out Make." },
+    // { key: "model", selector: "#txtmodel", message: "Please fill out Model." },
+    // { key: "modelyear", selector: "#txtmodelyear", message: "Please fill out Model Year." },
+    // { key: "color", selector: "#txtcolor", message: "Please fill out Color." },
+    // { key: "engineno", selector: "#txtengineno", message: "Please fill out Engine No." },
     // { key: "orderno", selector: "#txtorderno", message: "Please fill out Order No." },
     // { key: "orderstatus", selector: "#txtorderstatus", message: "Please fill out Order Status." },
-    { key: "paidprice", selector: "#txtsrp", message: "Please fill out Paid Price." },
-    { key: "vsidate", selector: "#dpvsidate", message: "Please fill out VSI Date." },
-    { key: "reldate", selector: "#dpreldate", message: "Please fill out Released Date." },
+    // { key: "paidprice", selector: "#txtsrp", message: "Please fill out Paid Price." },
+    // { key: "vsidate", selector: "#dpvsidate", message: "Please fill out VSI Date." },
+    // { key: "reldate", selector: "#dpreldate", message: "Please fill out Released Date." },
     // { key: "techdate", selector: "#dptechdate", message: "Please fill out Technical Date." },
     // { key: "msalecode", selector: "#txtmsalecode", message: "Please fill out Model Sales Code." },
-    { key: "variant", selector: "#txtvariant", message: "Please fill out Variant." },
-    { key: "bodytype", selector: "#cbobodytype", message: "Please fill out Body Type." },
-    { key: "transmission", selector: "#txttransmission", message: "Please fill out Power Transmission." },
-    { key: "fueltype", selector: "#cbofueltype", message: "Please fill out Fuel Type." },
-    { key: "seats", selector: "#txtseats", message: "Please fill out Seats." },
+    // { key: "variant", selector: "#txtvariant", message: "Please fill out Variant." },
+    // { key: "bodytype", selector: "#cbobodytype", message: "Please fill out Body Type." },
+    // { key: "transmission", selector: "#txttransmission", message: "Please fill out Power Transmission." },
+    // { key: "fueltype", selector: "#cbofueltype", message: "Please fill out Fuel Type." },
+    // { key: "seats", selector: "#txtseats", message: "Please fill out Seats." },
     // { key: "unloadweight", selector: "#txtunloadweight", message: "Please fill out Unloaded Weight." },
     // { key: "maxweight", selector: "#txtmaxweight", message: "Please fill out Maximum Weight." },
-    { key: "prodclass", selector: "#cboprodclass", message: "Please fill out Product Classification." },
-    { key: "owntype", selector: "#cboowntype", message: "Please fill out Owner Type." },
-    { key: "voname", selector: "#txtvoname", message: "Please fill out Vehicle Owner Name." },
-    { key: "mpname", selector: "#txtmpname", message: "Please fill out Marketing Professional." }
+    // { key: "prodclass", selector: "#cboprodclass", message: "Please fill out Product Classification." },
+    // { key: "owntype", selector: "#cboowntype", message: "Please fill out Owner Type." },
+    // { key: "voname", selector: "#txtvoname", message: "Please fill out Vehicle Owner Name." },
+    // { key: "mpname", selector: "#txtmpname", message: "Please fill out Marketing Professional." }
   ];
 
-  // if (!runValidation(vehicleValidation.map(v => ({
-  //   value: vehicleFields[v.key],
-  //   selector: v.selector,
-  //   message: v.message
-  // })))) return;
+  if (!runValidation(vehicleValidation.map(v => ({
+    value: vehicleFields[v.key],
+    selector: v.selector,
+    message: v.message
+  })))) return;
 
   // ======================================================
   // INSURANCE CALC
@@ -5741,7 +5743,6 @@ $(document).on("click", "#btnsubmit", function () {
     }
     allData.push(row);
   });
-
 
   const insuranceFields = {
     grosspremium: getNum("#txtgrosspremium"),
@@ -5771,17 +5772,18 @@ $(document).on("click", "#btnsubmit", function () {
   // INSURER INFO
   // ======================================================
   const insurerFields = {
+    // instype: getVal($("#cboinstype option:selected").text()),
     instype: getVal("#cboinstype"),
     insco: getVal("#cboinsco"),
     startdate: getDate("#dpstartdate"),
     policyno: getUpper("#txtpolicyno"),
     issuedate: getDate("#dpissuedate"),
     pexpiredate: getDate("#dppexpiredate"),
-    mortgage: getVal("#cbomortgage")
+    mortgage: getVal("#cbomortgage") 
     // mortaddress: getUpper("#txtmortaddress"),
     // selectedPromo: $('input[name="promo"]:checked').val() === "YES" ? 1 : 0
   };
-
+ 
   if (!runValidation([
     { value: insurerFields.instype, selector: "#cboinstype", message: "Please fill out Insurance Type." },
     { value: insurerFields.insco, selector: "#cboinsco", message: "Please fill out Insurance Company." },

@@ -1,6 +1,5 @@
 <x-layouts.main>
-
-    <style>
+<style>
     /* In-Flow Container Card */
     .receipt-card-window {
         background: #fff;
@@ -144,14 +143,11 @@
         }
     }
 </style>
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1>
-      Renewal Business Insurance Information
-    </h1>
+    <h1>Renewal Business Insurance Information</h1>
     <ol class="breadcrumb">
       <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>
       <li><a href="#"><i class="fa fa-tasks"></i> Transactions</a></li>

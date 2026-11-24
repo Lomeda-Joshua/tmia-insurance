@@ -465,21 +465,17 @@ class RenewalBusinessController extends Controller
                 $year   = date('Y');
                 $prefix = "RB-{$year}-";
 
-                // Find the highest counter by un-reversing the 7-digit sequence (starts at char 9 of "RB-YYYY-0000000")
-                $lastTransaction = RenewalBusinessTransaction::where('Insurance_No', 'LIKE', "{$prefix}%")
+                $last = RenewalBusinessTransaction::where('Insurance_No', 'LIKE', $prefix . '%')
                     ->lockForUpdate()
-                    ->orderByRaw('CAST(REVERSE(SUBSTRING(Insurance_No, 9, 7)) AS UNSIGNED) DESC')
+                    ->orderBy('Insurance_No', 'desc')
                     ->first();
 
-                $counter = 1;
-                if ($lastTransaction && preg_match('/^RB-(\d{4})-(\d{7})$/', $lastTransaction->Insurance_No, $m)) {
+                $seq = "0000001";
+                if ($last && preg_match('/^RB-(\d{4})-(\d{7})$/', $last->Insurance_No, $m)) {
                     if ($m[1] == $year) {
-                        $counter = ((int) strrev($m[2])) + 1;
+                        $seq = str_pad(intval($m[2]) + 1, 7, "0", STR_PAD_LEFT);
                     }
                 }
-
-                // pad to 7 digits, then reverse so the digits consume the zeros from the left
-                $seq = strrev(str_pad($counter, 7, '0', STR_PAD_LEFT));
 
                 $insuranceNo = "RB-{$year}-{$seq}";
 
@@ -507,7 +503,6 @@ class RenewalBusinessController extends Controller
                 $startdate = Carbon::createFromFormat('d-F-Y', $request['startdate'])->format('Y-m-d');
                 $issuedate = Carbon::createFromFormat('d-F-Y', $request['issuedate'])->format('Y-m-d');
                 $policyExpiration = Carbon::createFromFormat('m/d/Y', $request->input('pexpiredate'))->format('Y-m-d');
-
 
 
                 // ----------------------------

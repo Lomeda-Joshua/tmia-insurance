@@ -438,7 +438,7 @@
                               </div>
                             </div>
                           </div>
-                          <div class="customer-fleet-corp" hidden>
+                          <div class="customer-fleet-corp" style="display:none">
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="form-group">
